@@ -1,0 +1,185 @@
+{
+  "users": [
+    {
+      "id": "1",
+      "title": "To do 1",
+      "complete": true
+    },
+    {
+      "title": "To do 3 update",
+      "complete": true,
+      "id": "3"
+    },
+    {
+      "title": "To do 4 Update",
+      "complete": true,
+      "id": "4"
+    }
+  ],
+  "products": [
+    {
+      "name": "Áo dài tay nam",
+
+      "image": "https://cf.shopee.vn/file/0e194e64071280f0e2761102c26bac5a",
+      "price": "120.000",
+
+      "category": "ao-nam",
+
+      "id": "1"
+    },
+    {
+      "name": "Quần bò nam baggy ống rộng rách gối",
+      "image": "https://cf.shopee.vn/file/7aeb51c417c99c0c826ece180be76a29",
+      "price": "123.000",
+      "category": "quan-nam",
+      "id": "2"
+    },
+    {
+      "name": "Áo Khoác Nam Xỏ Ngón Cổ Cao AKN0110",
+      "image": "https://product.hstatic.net/1000096703/product/1_8ac262567d894d36b1cc7e3c20f643b3_master.jpg",
+      "price": "433.000",
+      "category": "ao-nam",
+      "id": "3"
+    },
+    {
+      "name": "Product quan-nam",
+      "image": "https://tse1.mm.bing.net/th?id=OIP.StcNjbyJI2ovLckduLGDUQHaJ4&pid=Api&P=0&h=220",
+      "price": "107.800",
+      "category": "quan-nam",
+      "id": "4"
+    },
+    {
+      "name": "Product quan-nam huong",
+      "image": "https://cf.shopee.vn/file/1beba25914daff3d42a9ef4f82487f0f",
+      "price": "199.000",
+      "category": "quan-nam",
+      "id": "5"
+    },
+    {
+      "name": "Product ao-nam",
+      "image": "https://tse3.mm.bing.net/th?id=OIP.63VqAaLbn4OzySjZApkY_wHaHa&pid=Api&P=0&h=220",
+      "price": "562.000",
+      "category": "ao-nam",
+      "id": "6"
+    },
+    {
+      "name": "Product ao-nam",
+      "image": "https://linhvnxk.com/wp-content/uploads/2018/11/ao-thun-nam-uniqlo-dai-tay-den.jpg",
+      "price": "100.000",
+      "category": "ao-nam",
+      "id": "7"
+    },
+    {
+      "name": "Quẩn vải baggy ống ộng nam ",
+      "image": "https://cf.shopee.vn/file/7d5a0c5c677abbbfa8ff769c460ff06b",
+      "price": "357.000",
+      "category": "quan-dai",
+      "id": "8"
+    },
+    {
+      "name": "Quần bò slim fit nam",
+      "image": "https://cf.shopee.vn/file/vn-11134207-7qukw-lf53jerlgok7b3",
+      "price": "450.000",
+      "category": "quan-nam",
+      "id": "9"
+    },
+    {
+      "name": "Quần short kaki nam",
+      "image": "https://tse1.mm.bing.net/th?id=OIP.Hcku5_f8mcS9DDq3qhX2bwHaLH&pid=Api&P=0&h=220",
+      "price": "300.000",
+      "category": "quan-nam",
+      "id": "10"
+    },
+    {
+      "name": "Áo polo nam",
+
+      "image": "https://tse3.mm.bing.net/th?id=OIP.zKx7ziwLodswnWC98QSEUwHaLH&pid=Api&P=0&h=220",
+
+      "price": "150.000",
+
+      "category": "ao-nam",
+
+      "id": "11"
+    },
+
+    {
+      "name": "Quần âu nam cạp chun",
+      "image": "https://cf.shopee.vn/file/29e92651ae599b3f0a87c0f4e3c502df",
+      "price": "251.000",
+      "category": "quan-nam",
+      "id": "12"
+    },
+
+    {
+      "name": "Áo len nam",
+
+      "image": "https://2handofficial.com/wp-content/uploads/2023/12/ao-len-dai-tay-nam-atino-2-vach-ngang-tay-al3-5037-mau-be.jpg",
+
+      "price": "200.000",
+
+      "category": "ao-nam",
+
+      "id": "13"
+    },
+    {
+      "name": "Quẩn vải baggy ống ộng nam ",
+      "image": "https://cf.shopee.vn/file/7d5a0c5c677abbbfa8ff769c460ff06b",
+      "price": "357.000",
+      "category": "quan-nam",
+      "id": "14"
+    },
+    {
+      "name": "Quần bò slim fit nam",
+      "image": "https://cf.shopee.vn/file/vn-11134207-7qukw-lf53jerlgok7b3",
+      "price": "450.000",
+      "category": "quan-nam",
+      "id": "15"
+    },
+    {
+      "name": "Áo Khoác Nỉ Có Nón Regular AKN0116",
+      "image": "https://product.hstatic.net/1000096703/product/1_49069290361b40ecb65543c835173222_master.jpg",
+      "price": "350.000",
+      "category": "ao-nam",
+      "id": "16"
+    },
+    {
+      "name": "Quần short MN nam",
+      "image": "https://www.chapi.vn/img/product/2019/8/13/quan-short-nam-cotton-mna-2-500x500.jpg",
+      "price": "99.000",
+      "category": "quan-nam",
+      "id": "17"
+    },
+    {
+      "name": "Áo Len Trơn AKL0004",
+      "image": "https://product.hstatic.net/1000096703/product/1_988d0fc5323d4310be952507a9fe85ee_master.jpg",
+      "price": "449.000",
+      "category": "ao-nam",
+      "id": "18"
+    },
+    {
+      "name": "Áo Len Sọc Nhỏ AKL0006",
+      "image": "https://product.hstatic.net/1000096703/product/1_0102c7dc9eb44d11bbdb6ad09c3f923f_master.jpg",
+      "price": "550.000",
+      "category": "ao-nam",
+      "id": "19"
+    },
+    {
+      "name": "Quần Jogger Kaki Ống Bo QJK0042",
+      "image": "https://product.hstatic.net/1000096703/product/1_5fc68c398a354615bd3e1b4efcca90e0_master.jpg",
+      "price": "650.000",
+      "category": "quan-nam",
+      "id": "20"
+    },
+    {
+      "name": "Quần Jogger Jean QJK0034",
+      "image": "https://product.hstatic.net/1000096703/product/1_26bb178a625c4c6687c7a19e63b50c56_master.jpg",
+      "price": "250.000",
+      "category": "quan-nam",
+      "id": "21"
+    }
+  ],
+  "categories": [
+    { "id": 1, "name": "Quần Nam", "slug": "quan-nam" },
+    { "id": 2, "name": "Áo Nam", "slug": "ao-nam" }
+  ]
+}
