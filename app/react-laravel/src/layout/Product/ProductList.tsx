@@ -213,10 +213,10 @@ const ProductList = (props: Props) => {
                                         100% Cotton
                                     </span>
                                     <div>
-                                        {" "}
+                                        {/* {" "}
                                         <Link to={`/product-detail/${item.id}`}>
                                             {item.name}
-                                        </Link>
+                                        </Link> */}
                                     </div>
 
                                     <div className="hot-product-item-price text-center mt-2">
@@ -270,7 +270,7 @@ const ProductList = (props: Props) => {
                             Featured Products
                         </h2>
                         <div className="grid grid-cols-4 gap-4 mt-4">
-                            {products.slice(7, 15).map((item) => (
+                            {products.slice(7, 19).map((item) => (
                                 <div className="text-center product-cart border mb-28">
                                     <img
                                         src={item.image}

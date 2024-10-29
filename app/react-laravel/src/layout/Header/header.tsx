@@ -214,12 +214,14 @@ const Header = (props: Props) => {
                             </div>
                         </div>
                         <div className="header-user mr-20">
-                            <i
-                                className="ri-user-3-fill"
-                                style={{
-                                    fontSize: "1.5rem",
-                                }}
-                            ></i>
+                            <a href="/login">
+                                <i
+                                    className="ri-user-3-fill"
+                                    style={{
+                                        fontSize: "1.5rem",
+                                    }}
+                                ></i>
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -240,6 +242,13 @@ const Header = (props: Props) => {
                     <div className="carousel-item">
                         <img
                             src="../../../public/image/banner2.jpg!bw700"
+                            className="d-block w-100"
+                            alt="..."
+                        />
+                    </div>
+                    <div className="carousel-item">
+                        <img
+                            src="../../../public/image/banner6.png"
                             className="d-block w-100"
                             alt="..."
                         />

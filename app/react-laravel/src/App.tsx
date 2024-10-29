@@ -16,6 +16,9 @@ import BuyingInstructions from "./layout/pages/BuyingInstructions";
 import ReturnPolicy from "./layout/pages/ReturnPolicy";
 import LoyalCustomers from "./layout/pages/LoyalCustomers";
 import ProductionPartners from "./layout/pages/ProductionPartners";
+import Login from "./layout/users/Login";
+import Register from "./layout/users/Register";
+import ForgotPassword from "./layout/users/ForgotPassword";
 
 function App() {
     const router = useRoutes([
@@ -31,6 +34,9 @@ function App() {
         { path: "doi-tac-san-xuat", Component: ProductionPartners },
         { path: "he-thong-cua-hang", Component: Location },
         { path: "products/:category", Component: Products },
+        { path: "login", Component: Login },
+        { path: "register", Component: Register },
+        { path: "quenmk", Component: ForgotPassword },
     ]);
     return router;
 }
