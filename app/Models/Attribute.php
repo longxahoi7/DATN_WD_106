@@ -9,9 +9,12 @@ class Attribute extends Model
 {
     use HasFactory;
 
-    
-    public function productImages()
+    protected $primaryKey = 'attribute_id';
+    protected $fillable = ['name', 'value'];
+
+    public function products()
     {
-        return $this->hasMany(ProductImage::class);
+        return $this->belongsToMany(Product::class, 'attribute_products', 'attribute_id', 'product_id')
+            ->withPivot(['image', 'in_stock', 'price']);
     }
 }

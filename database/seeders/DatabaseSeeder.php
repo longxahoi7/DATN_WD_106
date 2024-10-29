@@ -21,18 +21,18 @@ class DatabaseSeeder extends Seeder
         //     'email' => 'test@example.com',
         // ]);
         $this->call([
-            // ProductSeeder::class,
-            // UserSeeder::class, 
-            // OrderSeeder::class, 
-            // OrderItemSeeder::class,
-            // AttributeSeeder::class, 
-            // AttributeProductSeeder::class,
-            ProductImage::class,
-            // CategorySeeder::class, 
-            // BrandSeeder::class, 
-            // CartItemSeeder::class,
-            // ShoppingCartSeeder::class, 
-            // PaymentSeeder::class,
+            ProductSeeder::class,
+            UserSeeder::class, 
+            OrderSeeder::class, 
+            OrderItemSeeder::class,
+            AttributeSeeder::class, 
+            AttributeProductSeeder::class,
+            ProductImageSeeder::class,
+            CategorySeeder::class, 
+            BrandSeeder::class, 
+            CartItemSeeder::class,
+            ShoppingCartSeeder::class, 
+            PaymentSeeder::class,
         ]);
     }
 }
