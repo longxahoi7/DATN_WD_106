@@ -1,0 +1,33 @@
+.footer {
+  margin-top: 50px;
+  padding: 50px 0 0 12px;
+  background-color: rgb(230, 228, 228);
+}
+.footer .row-grid {
+  grid-template-columns: repeat(4, 25%);
+}
+.footer-item p:first-child {
+  font-weight: bolder;
+  margin-bottom: 12px;
+}
+.footer-item p {
+  font-weight: lighter;
+  line-height: 32px;
+}
+:root {
+  --header-height: 90px;
+  --main-bg: #d5d5d5;
+  --main-transition: all 0.3s ease;
+  --main-color: whitesmoke;
+  --main-font: "Open Sans", sans-serif;
+  --main-font-weight: 500;
+  --primary-color: black;
+  --hover-bg: #f0f0f0;
+}
+/* 
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: var(--main-font);
+} */
