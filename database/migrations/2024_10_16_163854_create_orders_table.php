@@ -25,7 +25,7 @@ return new class extends Migration
                 'completed',
             ])->default('pending');
             $table->decimal('total', 10, 2);
-            $table->dateTime('invoice_date');
+            $table->timestamp('invoice_date')->nullable();
             $table->enum('payment_status', [
                 'pending',     // Đang chờ xử lý
                 'paid',        // Đã thanh toán
