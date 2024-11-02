@@ -1,14 +1,34 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Footer from "../Footer/footer";
 import Header from "../Header/header";
+import SlideShow from "../slideShow/SlideShow";
 
 type Props = {};
 
-const Introduce = (props: Props) => {
+const Introduce = () => {
+    useEffect(() => {
+        const handleScroll = () => {
+            sessionStorage.setItem("scrollPosition", window.scrollY.toString()); // Chuyển đổi thành chuỗi
+        };
+
+        window.addEventListener("scroll", handleScroll);
+
+        const savedPosition = sessionStorage.getItem("scrollPosition");
+        if (savedPosition) {
+            window.scrollTo(0, parseInt(savedPosition, 10)); // Chuyển thành number khi dùng
+        }
+
+        return () => {
+            window.removeEventListener("scroll", handleScroll);
+        };
+    }, []);
+
     return (
         <>
             <Header />
-            <div className="container mx-auto p-4">
+            <SlideShow />
+
+            <div className=" p-4  " style={{ width: "100vw" }}>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                     <div className="mt-48">
                         <h1 className="text-3xl font-bold mb-2 ">
