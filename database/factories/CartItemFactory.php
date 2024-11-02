@@ -22,7 +22,6 @@ class CartItemFactory extends Factory
             //
             'shopping_cart_id' => ShoppingCart::all()->random()->id,
             'product_id' => Product::all()->random()->product_id,
-            'qty' => $this->faker->randomNumber(),
             'created_at' => $this->faker->dateTime,
             'updated_at' => $this->faker->dateTime,
         ];
