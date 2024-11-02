@@ -8,12 +8,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Product extends Model
 {
-<<<<<<< HEAD
-    use HasFactory,SoftDeletes;
-    protected $table='products';
-    protected $primaryKey='product_id ';
-    protected $fillable = [
-=======
     use HasFactory, SoftDeletes;
 
     protected $primaryKey = 'product_id';
@@ -22,19 +16,15 @@ class Product extends Model
 
     protected $fillable = [
         'product_id',
->>>>>>> Hieu
         'brand_id',
         'product_category_id',
         'name',
         'description',
         'sku',
         'subtitle',
-<<<<<<< HEAD
-        'slug','is_active'
-=======
         'slug',
         'is_active',
->>>>>>> Hieu
+
     ];
 
     public function attributes()
