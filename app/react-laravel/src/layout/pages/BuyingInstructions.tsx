@@ -9,7 +9,7 @@ const BuyingInstructions = (props: Props) => {
     return (
         <>
             <Header />
-            <div className="container mx-auto p-4">
+            <div className=" p-4" style={{ width: "100vw" }}>
                 <div className="flex">
                     <div className="w-1/4 p-4">
                         <div className="border p-4">

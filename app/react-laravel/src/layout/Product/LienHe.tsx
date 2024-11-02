@@ -1,6 +1,7 @@
 import React from "react";
 import Header from "../Header/header";
 import Footer from "../Footer/footer";
+import SlideShow from "../slideShow/SlideShow";
 
 type Props = {};
 
@@ -8,7 +9,12 @@ const LienHe = (props: Props) => {
     return (
         <>
             <Header />
-            <div className="min-h-screen bg-gray-100 mt-20">
+            <SlideShow />
+
+            <div
+                className="min-h-screen bg-gray-100 mt-20 "
+                style={{ width: "100vw" }}
+            >
                 <div className="relative">
                     <iframe
                         src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3724.702004469364!2d105.8194543154021!3d21.00311799396364!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3135ab5c5b5b5b5b%3A0x5b5b5b5b5b5b5b5b!2s313-315%20D.%20Tr%C6%B0%E1%BB%9Dng%20Chinh%2C%20Kh%C6%B0%C6%A1ng%20Th%C6%B0%E1%BB%A3ng%2C%20Thanh%20Xu%C3%A2n%2C%20H%C3%A0%20N%E1%BB%99i!5e0!3m2!1sen!2s!4v1633072800000!5m2!1sen!2s"

@@ -11,6 +11,7 @@ import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 
 import { Link, useParams } from "react-router-dom";
 import { IProduct } from "../../interface/IProduct";
+import SlideShow from "../slideShow/SlideShow";
 type Props = {};
 
 const ProductList = (props: Props) => {
@@ -61,8 +62,8 @@ const ProductList = (props: Props) => {
         fetchProducts();
     }, [category]);
     // bộ lọc
-    const [selectedSize, setSelectedSize] = useState(null);
-    const [selectedColor, setSelectedColor] = useState(null);
+    const [selectedSize, setSelectedSize] = useState<string | null>(null);
+    const [selectedColor, setSelectedColor] = useState<string | null>(null);
     const [price, setPrice] = useState(0);
 
     const sizes = ["S", "M", "L", "XL", "XXL"];
@@ -78,21 +79,27 @@ const ProductList = (props: Props) => {
         "#008000",
         "#800080",
     ];
+
     return (
         <>
             <Header />
+            <SlideShow />
             <div
                 style={{
                     display: "flex",
                     marginRight: "30px",
                     marginLeft: "30px",
                 }}
-                className="p-4 w-1200 border border-gray-300"
+                className="p-4 w-1200 border border-gray-300 mt-50"
             >
                 <div>
                     <div style={{ display: "flex" }}>
                         {/* bộ lọc */}
-                        <div className="p-4 w-64 border border-gray-300 mt-20 ml-10">
+
+                        <div
+                            className="p-4 w-64 border border-gray-300 mt-5 ml-5  "
+                            style={{ minHeight: "450px", minWidth: "300px" }}
+                        >
                             <div className="mb-4">
                                 <h2 className="text-sm font-semibold mb-2">
                                     Size
@@ -128,7 +135,9 @@ const ProductList = (props: Props) => {
                                                     ? "border-2 border-black"
                                                     : ""
                                             }`}
-                                            style={{ backgroundColor: color }}
+                                            style={{
+                                                backgroundColor: color,
+                                            }}
                                             onClick={() =>
                                                 setSelectedColor(color)
                                             }
@@ -147,11 +156,12 @@ const ProductList = (props: Props) => {
                                         max="10000000"
                                         value={price}
                                         onChange={(e) =>
-                                            setPrice(e.target.value)
-                                        }
+                                            setPrice(parseFloat(e.target.value))
+                                        } // Chuyển đổi thành số
                                         className="w-full"
                                     />
                                 </div>
+
                                 <div className="flex justify-between text-sm mt-2">
                                     <span>0đ</span>
                                     <span>{price.toLocaleString()}đ</span>
@@ -167,32 +177,30 @@ const ProductList = (props: Props) => {
                                 </button>
                             </div>
                         </div>
-                        <div className="container mx-auto">
-                            {/* danh mục sản phẩm */}
-                            <div className="grid grid-cols-3 gap-4 my-8">
-                                {products.slice(0, 3).map((item) => (
-                                    <div
-                                        className="relative product-cart"
-                                        key={item.id}
-                                    >
-                                        <img
-                                            src={`${item.image}`}
-                                            alt={item.name}
-                                            className="w-full h-full object-cover"
-                                        />
-                                        <div className="absolute bottom-4 w-full bg-white bg-opacity-75 text-center py-2">
-                                            <span className="text-2xl font-semibold">
-                                                {item.name}
-                                            </span>
-                                        </div>
+                        <div className="grid grid-cols-3 gap-4 my-8">
+                            {products.slice(0, 3).map((item) => (
+                                <div
+                                    className="relative product-cart"
+                                    key={item.id}
+                                >
+                                    <img
+                                        src={`${item.image}`}
+                                        alt={item.name}
+                                        className="w-full h-full object-cover"
+                                    />
+
+                                    <div className="absolute bottom-4 w-full bg-white bg-opacity-75 text-center py-2">
+                                        <span className="text-2xl font-semibold">
+                                            {item.name}
+                                        </span>
                                     </div>
-                                ))}
-                            </div>
+                                </div>
+                            ))}
                         </div>
                     </div>
                     <hr className="mt-20" />
                     {/* Best Selling Section */}
-                    <div className="text-center my-8">
+                    <div className="container mx-auto px-4">
                         <h2 className="text-2xl font-bold">Best Selling</h2>
                         <p className="text-gray-600">
                             Discover our best-selling products. Popular among
@@ -200,25 +208,26 @@ const ProductList = (props: Props) => {
                         </p>
                         <div className="grid grid-cols-4 gap-4 mt-4">
                             {products.slice(3, 11).map((item) => (
-                                <div className="text-center product-cart border mb-28">
-                                    <img
-                                        src={item.image}
-                                        alt={item.name}
-                                        className="w-full h-full object-cover"
-                                    />
+                                <div
+                                    key={item.id}
+                                    className="text-center product-cart border mb-28"
+                                >
+                                    <Link to={`/product-detail/${item.id}`}>
+                                        {" "}
+                                        {/* Thêm Link vào ảnh sản phẩm */}
+                                        <img
+                                            src={`${item.image}`}
+                                            alt={item.name}
+                                            className="w-full h-80 object-cover"
+                                        />
+                                    </Link>
+
                                     <p className="mt-4 text-lg font-semibold text-center">
                                         {item.name}
                                     </p>
                                     <span className="block text-gray-500 text-center">
                                         100% Cotton
                                     </span>
-                                    <div>
-                                        {/* {" "}
-                                        <Link to={`/product-detail/${item.id}`}>
-                                            {item.name}
-                                        </Link> */}
-                                    </div>
-
                                     <div className="hot-product-item-price text-center mt-2">
                                         <p className="text-red-500 font-bold">
                                             {item.price} <sup>đ</sup>{" "}
@@ -227,10 +236,13 @@ const ProductList = (props: Props) => {
                                             </span>
                                         </p>
                                     </div>
-                                    <button className="add-to-cart-btn">
-                                        {" "}
-                                        Add to Cart
-                                    </button>
+                                    <div className="">
+                                        <button className="add-to-cart-btn mt-4 bg-gray-700 flex items-center justify-center">
+                                            Add to Cart
+                                            <i className="fas fa-shopping-cart ml-2"></i>{" "}
+                                            {/* Biểu tượng giỏ hàng bên phải */}
+                                        </button>
+                                    </div>
                                 </div>
                             ))}
                         </div>
@@ -265,38 +277,51 @@ const ProductList = (props: Props) => {
                     </div>
 
                     {/* Featured Products Section */}
-                    <div className="text-center my-8">
-                        <h2 className="text-2xl font-bold">
-                            Featured Products
-                        </h2>
-                        <div className="grid grid-cols-4 gap-4 mt-4">
-                            {products.slice(7, 19).map((item) => (
-                                <div className="text-center product-cart border mb-28">
-                                    <img
-                                        src={item.image}
-                                        alt={item.name}
-                                        className="w-full h-full object-cover"
-                                    />
-                                    <p className="mt-4 text-lg font-semibold text-center">
-                                        {item.name}
-                                    </p>
-                                    <span className="block text-gray-500 text-center">
-                                        100% Cotton
-                                    </span>
-                                    <div className="hot-product-item-price text-center mt-2">
-                                        <p className="text-red-500 font-bold">
-                                            {item.price} <sup>đ</sup>{" "}
-                                            <span className="text-gray-400 line-through">
-                                                743,000 <sup>đ</sup>
-                                            </span>
+                    <div className="container mx-auto px-4">
+                        <div className="text-center my-8">
+                            <h2 className="text-2xl font-bold">
+                                Featured Products
+                            </h2>
+                            <div className="grid grid-cols-4 gap-4 mt-4">
+                                {products.slice(7, 19).map((item) => (
+                                    <div
+                                        key={item.id}
+                                        className="text-center product-cart border mb-28"
+                                    >
+                                        <Link to={`/product-detail/${item.id}`}>
+                                            {" "}
+                                            {/* Thêm Link vào ảnh sản phẩm */}
+                                            <img
+                                                src={`${item.image}`}
+                                                alt={item.name}
+                                                className="w-full h-80 object-cover"
+                                            />
+                                        </Link>
+
+                                        <p className="mt-4 text-lg font-semibold text-center">
+                                            {item.name}
                                         </p>
+                                        <span className="block text-gray-500 text-center">
+                                            100% Cotton
+                                        </span>
+                                        <div className="hot-product-item-price text-center mt-2">
+                                            <p className="text-red-500 font-bold">
+                                                {item.price} <sup>đ</sup>{" "}
+                                                <span className="text-gray-400 line-through">
+                                                    743,000 <sup>đ</sup>
+                                                </span>
+                                            </p>
+                                        </div>
+                                        <div className="">
+                                            <button className="add-to-cart-btn mt-4 bg-gray-700 flex items-center justify-center">
+                                                Add to Cart
+                                                <i className="fas fa-shopping-cart ml-2"></i>{" "}
+                                                {/* Biểu tượng giỏ hàng bên phải */}
+                                            </button>
+                                        </div>
                                     </div>
-                                    <button className="add-to-cart-btn">
-                                        {" "}
-                                        Add to Cart
-                                    </button>
-                                </div>
-                            ))}
+                                ))}
+                            </div>
                         </div>
                     </div>
                     <hr className="mt-20" />

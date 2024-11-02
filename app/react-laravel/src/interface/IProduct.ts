@@ -4,5 +4,9 @@ export interface IProduct {
     image: string;
     price: number;
     category: string;
+    mota: string;
 }
-export type FormData = Pick<IProduct, "name" | "image" | "price" | "category">;
+export type FormData = Pick<
+    IProduct,
+    "name" | "image" | "price" | "category" | "mota"
+>;

@@ -134,7 +134,7 @@
 }
 .add-to-cart-btn {
     position: absolute;
-    bottom: 10px;
+    bottom: 120px;
     left: 50%;
     transform: translateX(-50%);
     display: none;

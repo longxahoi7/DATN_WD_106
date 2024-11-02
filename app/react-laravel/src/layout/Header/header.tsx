@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./header.css";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { Category } from "../../interface/Category";
 import { IProduct } from "../../interface/IProduct";
 
@@ -8,7 +8,7 @@ type Props = {};
 
 const Header = (props: Props) => {
     const [categories, setCategories] = useState<Category[]>([]);
-
+    const navigate = useNavigate();
     useEffect(() => {
         const fetchCategories = async () => {
             try {
@@ -17,7 +17,7 @@ const Header = (props: Props) => {
                 );
                 const data = await response.json();
                 setCategories(data);
-                console.log(data);
+                // console.log(data);
             } catch (error) {
                 console.error("Failed to fetch categories", error);
             }
@@ -34,7 +34,7 @@ const Header = (props: Props) => {
                 const response = await fetch("http://localhost:3000/products");
                 const data = await response.json();
                 setProducts(data);
-                console.log(data);
+                // console.log(data);
             } catch (error) {
                 console.error("Failed to fetch products", error);
             }
@@ -50,8 +50,13 @@ const Header = (props: Props) => {
             <div className="header">
                 <div className="container">
                     <div className="row-flex">
-                        <div className="header-logo">
-                            <img src="../../../public/image/logo1.png" alt="" />
+                        <div className="header-logo mt-1">
+                            <Link to="/">
+                                <img
+                                    src="../../../public/image/logo1.png"
+                                    alt="Logo"
+                                />
+                            </Link>
                         </div>
                         <div
                             className="header-nav"
@@ -117,7 +122,7 @@ const Header = (props: Props) => {
                             <form action="" style={{ position: "relative" }}>
                                 <input
                                     type="text"
-                                    placeholder="Nhập tên sản phầm cần tìm"
+                                    placeholder="Nhập tên sản phẩm cần tìm"
                                     value={searchInput}
                                     onChange={(e) =>
                                         setSearchInput(e.target.value)
@@ -149,7 +154,13 @@ const Header = (props: Props) => {
                                                         key={index}
                                                         style={{
                                                             display: "flex",
+                                                            cursor: "pointer",
                                                         }}
+                                                        onClick={() =>
+                                                            navigate(
+                                                                `/product-detail/${item.id}`
+                                                            )
+                                                        }
                                                     >
                                                         <img
                                                             src={item.image}
@@ -162,7 +173,7 @@ const Header = (props: Props) => {
                                                                     "10px",
                                                             }}
                                                         />
-                                                        <div className="search-info  ">
+                                                        <div className="search-info">
                                                             <h5
                                                                 style={{
                                                                     marginTop:
@@ -225,66 +236,6 @@ const Header = (props: Props) => {
                         </div>
                     </div>
                 </div>
-            </div>
-            <div
-                id="carouselExampleFade"
-                className="carousel slide carousel-fade"
-                data-bs-ride="carousel"
-            >
-                <div className="carousel-inner">
-                    <div className="carousel-item active">
-                        <img
-                            src="../../../public/image/banner4.png"
-                            className="d-block w-100"
-                            alt="..."
-                        />
-                    </div>
-                    <div className="carousel-item">
-                        <img
-                            src="../../../public/image/banner2.jpg!bw700"
-                            className="d-block w-100"
-                            alt="..."
-                        />
-                    </div>
-                    <div className="carousel-item">
-                        <img
-                            src="../../../public/image/banner6.png"
-                            className="d-block w-100"
-                            alt="..."
-                        />
-                    </div>
-                    <div className="carousel-item">
-                        <img
-                            src="../../../public/image/banner3.webp"
-                            className="d-block w-100"
-                            alt="..."
-                        />
-                    </div>
-                </div>
-                <button
-                    className="carousel-control-prev"
-                    type="button"
-                    data-bs-target="#carouselExampleFade"
-                    data-bs-slide="prev"
-                >
-                    <span
-                        className="carousel-control-prev-icon"
-                        aria-hidden="true"
-                    ></span>
-                    <span className="visually-hidden">Previous</span>
-                </button>
-                <button
-                    className="carousel-control-next"
-                    type="button"
-                    data-bs-target="#carouselExampleFade"
-                    data-bs-slide="next"
-                >
-                    <span
-                        className="carousel-control-next-icon"
-                        aria-hidden="true"
-                    ></span>
-                    <span className="visually-hidden">Next</span>
-                </button>
             </div>
         </>
     );

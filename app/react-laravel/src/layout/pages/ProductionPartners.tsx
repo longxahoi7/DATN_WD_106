@@ -9,7 +9,7 @@ const ProductionPartners = (props: Props) => {
     return (
         <>
             <Header />
-            <div className="flex">
+            <div className="flex" style={{ width: "100vw" }}>
                 <div className="w-1/4 p-4">
                     <div className="border p-4">
                         <h2 className="font-bold mb-4">DANH MỤC TRANG</h2>

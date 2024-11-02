@@ -48,7 +48,7 @@ const Login = (props: Props) => {
                                 autoPlay
                                 muted
                                 loop
-                                width={"1200px"}
+                                width={"900px"}
                                 style={{
                                     marginTop: "10px",
                                     marginLeft: "20px",
