@@ -14,6 +14,10 @@ use Spatie\FlareClient\Api;
 // Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 //     return $request->user();
 // });
+
+Route::post('register', [ApiUserController::class, 'register']);
+//  http://127.0.0.1:8000/api/login
+Route::post('login', [ApiUserController::class, 'login']);
 Route::group(
     [
         'prefix' => 'admin',
@@ -63,4 +67,10 @@ Route::group(
 
     }
 );
+Route::middleware('auth:sanctum')->group(function () {
+    // Route cho thanh toán
+    Route::post('/checkout', [ApiPaymentController::class, 'checkout']);
 
+    // Route cho xuất hóa đơn
+    Route::get('/invoices/{order_id}', [InvoiceController::class, 'generateInvoice']);
+});
