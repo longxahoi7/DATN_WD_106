@@ -15,6 +15,7 @@ class Product extends Model
         'category_id',
         'image_url'
     ];
+    protected $primaryKey = 'product_id';
     public function category()
     {
         return $this->belongsTo(Category::class);

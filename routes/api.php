@@ -2,6 +2,11 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\ApiPaymentController;
+use App\Http\Controllers\Api\ApiUserController;
+use App\Http\Controllers\Api\InvoiceController;
+
+use Spatie\FlareClient\Api;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,6 +19,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+    Route::get('/invoices/{order_id}', [InvoiceController::class, 'generateInvoice']);  
+//     return $request->user();
+// });
+// Route::post('/checkout', [ApiPaymentController::class, 'checkout']);
+// Route::get('/invoice/{order_id}', [ApiPaymentController::class, 'getInvoice']);
+Route::post('/register', [ApiUserController::class, 'register']);
+Route::post('/login', [ApiUserController::class, 'login']);
+
+
+Route::middleware('auth:sanctum')->post('/checkout', [ApiPaymentController::class, 'checkout']);
