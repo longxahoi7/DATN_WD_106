@@ -9,20 +9,27 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Product extends Model
 {
     use HasFactory, SoftDeletes;
+
+    protected $primaryKey = 'product_id';
+    public $incrementing = false;
+    protected $keyType = 'string';
+
     protected $fillable = [
+        'product_id',
+        'brand_id',
+        'product_category_id',
         'name',
         'description',
-        'category_id',
-        'image_url'
-    ];
-    protected $primaryKey = 'product_id';
-    public function category()
-    {
-        return $this->belongsTo(Category::class);
-    }
+        'sku',
+        'subtitle',
+        'slug',
+        'is_active',
 
-    public function Brand()
+    ];
+
+    public function attributes()
     {
-        return $this->belongsTo(Brand::class);
+        return $this->belongsToMany(Attribute::class, 'attribute_products', 'product_id', 'attribute_id')
+            ->withPivot(['image', 'in_stock', 'price']);
     }
 }

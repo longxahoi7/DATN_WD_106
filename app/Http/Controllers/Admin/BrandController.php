@@ -1,0 +1,68 @@
+<?php
+
+namespace App\Http\Controllers\Admin;
+use App\Models\Brand;
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use App\Http\Requests\BrandsRequest;
+use Illuminate\Support\Str;
+
+class BrandController extends Controller
+{
+    //
+    public function listBrand(Request $request)
+    {
+        $products = Brand::where('name','like','%'. $request->nhap.'%')
+        ->orWhere('is_active','like','%'. $request->nhap.'%')
+        ->orWhere('slug','like','%'. $request->nhap.'%')
+        ->orWhere('description','like','%'. $request->nhap.'%')
+        ->latest()->paginate(5);
+        return response()->json($products);
+    }
+    public function addBrand(BrandsRequest $request)
+    {
+
+        $product =Brand::create([
+            'name' => $request->input('name'),
+            'description' => $request->input('description'),
+            'slug'=>str::slug($request->input('name')),
+            'is_active' => $request->has('is_active') ? 1 : 0,
+        ]);
+        return response()->json([
+                'product'=>$product, 
+            'message' => 'Brand add successfully!',
+        ], 201);
+
+}
+public function detailBrand($id)
+{
+    $product = Brand::findOrFail($id);
+    return response()->json($product);
+}
+public function updateBrand(BrandsRequest $request,$id)
+{
+
+    $product=Brand::findOrFail($id);
+    $product->name = $request->input('name');
+    $product->description = $request->input('description');
+        $product->slug = $request->input('slug') 
+            ? Str::slug($request->input('slug')) 
+            : Str::slug($request->input('name'));
+
+        $product->is_active = $request->input('is_active');
+      $product->save();
+    return response()->json([
+        'product'=>$product,
+        'message' => 'Brand updated successfully!',],200);
+
+}
+public function destroyBrand($id){
+    $product=Brand::findOrFail($id);
+    $product->delete();
+    return response()->json([
+        'message' => 'Brand soft deleted successfully'
+    ],200);
+}
+
+
+}

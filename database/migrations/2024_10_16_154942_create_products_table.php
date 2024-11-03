@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('sku');
             $table->text('subtitle');
             $table->string('slug');
-            $table->tinyInteger('is_active');
+            $table->tinyInteger('is_active')->default(1);
             $table->softDeletes();
             $table->timestamps();
         });
