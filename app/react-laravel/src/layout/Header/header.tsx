@@ -25,6 +25,10 @@ const Header = (props: Props) => {
 
         fetchCategories();
     }, []);
+    const handleCategoryClick = (slug: string) => {
+        navigate(`/products/${slug}`);
+    };
+
     // products
     const [products, setProducts] = useState<IProduct[]>([]);
     const [searchInput, setSearchInput] = useState("");
@@ -66,8 +70,8 @@ const Header = (props: Props) => {
                                 color: "black",
                             }}
                         >
-                            {categories.map((item) => (
-                                <ul>
+                            {categories.map((parent) => (
+                                <ul key={parent.id}>
                                     <li
                                         className="dropdown"
                                         style={{
@@ -76,17 +80,39 @@ const Header = (props: Props) => {
                                         }}
                                     >
                                         <Link
-                                            to={`/products/${item.slug}`}
+                                            to="#"
+                                            onClick={() =>
+                                                handleCategoryClick(parent.slug)
+                                            }
                                             style={{ color: "black" }}
                                         >
-                                            {item.name}
+                                            {parent.name}
                                         </Link>
+                                        {parent.children &&
+                                            parent.children.length > 0 && (
+                                                <ul className="dropdown-menu">
+                                                    {parent.children.map(
+                                                        (child) => (
+                                                            <li key={child.id}>
+                                                                <Link
+                                                                    to={`/products/${child.slug}`}
+                                                                    style={{
+                                                                        color: "black",
+                                                                    }}
+                                                                >
+                                                                    {child.name}
+                                                                </Link>
+                                                            </li>
+                                                        )
+                                                    )}
+                                                </ul>
+                                            )}
                                     </li>
                                 </ul>
                             ))}
                             <li>
                                 <Link
-                                    to={`/lien-he`}
+                                    to={`/contact`}
                                     style={{
                                         marginLeft: "20px",
                                         color: "black",
@@ -97,7 +123,7 @@ const Header = (props: Props) => {
                             </li>
                             <li>
                                 <Link
-                                    to={`/gioi-thieu`}
+                                    to={`/introduce`}
                                     style={{
                                         marginLeft: "20px",
                                         color: "black",
@@ -106,17 +132,6 @@ const Header = (props: Props) => {
                                     Giới Thiệu
                                 </Link>
                             </li>
-                            {/* <li>
-                                <Link
-                                    to={`/chi tiết sp`}
-                                    style={{
-                                        marginLeft: "20px",
-                                        color: "black",
-                                    }}
-                                >
-                                    chi tiet sp
-                                </Link>
-                            </li> */}
                         </div>
                         <div className="header-search">
                             <form action="" style={{ position: "relative" }}>

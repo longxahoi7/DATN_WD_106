@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 type Props = {};
 
@@ -27,6 +28,7 @@ const Login = (props: Props) => {
             <div className="flex justify-center items-center min-h-screen">
                 <div className="flex flex-col md:flex-row items-center md:items-start mt-10">
                     <div className="text-center md:text-left md:mr-16">
+                    <Link to="/">
                         <img
                             src="../../../public/image/logo1.png"
                             alt="Ecwid by Lightspeed logo"
@@ -34,6 +36,7 @@ const Login = (props: Props) => {
                             width="100"
                             height="50"
                         />
+                        </Link>
                         <h1 className="text-3xl font-bold text-gray-800 mb-4">
                             Sell online with Gentlemanor
                         </h1>
