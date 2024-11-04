@@ -24,19 +24,19 @@ function App() {
     const router = useRoutes([
         { path: "/", Component: ProductList },
         { path: "product-detail/:id", Component: ProductDetail },
-        { path: "lien-he", Component: LienHe },
-        { path: "gioi-thieu", Component: Introduce },
-        { path: "thanh-toan", Component: Pay },
-        { path: "huong-dan-bao-quan", Component: ClothingCare },
-        { path: "huong-dan-mua-hang", Component: BuyingInstructions },
-        { path: "khach-hang-than-thiet", Component: LoyalCustomers },
-        { path: "huong-dan-doi-hang", Component: ReturnPolicy },
-        { path: "doi-tac-san-xuat", Component: ProductionPartners },
-        { path: "he-thong-cua-hang", Component: Location },
+        { path: "contact", Component: LienHe },
+        { path: "introduce", Component: Introduce },
+        { path: "pay", Component: Pay },
+        { path: "clothingCare", Component: ClothingCare },//huong-dan-bao-quan
+        { path: "buyingInstructions", Component: BuyingInstructions },//huong-dan-mua-hang
+        { path: "loyalCustomers", Component: LoyalCustomers },//khach-hang-than-thiet
+        { path: "returnPolicy", Component: ReturnPolicy },//huong-dan-doi-hang
+        { path: "productionPartners", Component: ProductionPartners },//doi-tac-san-xuat
+        { path: "location", Component: Location },//he-thong-cua-hang
         { path: "products/:category", Component: Products },
         { path: "login", Component: Login },
         { path: "register", Component: Register },
-        { path: "quenmk", Component: ForgotPassword },
+        { path: "forgotPassword ", Component: ForgotPassword },
     ]);
     return router;
 }
