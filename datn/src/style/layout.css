@@ -9,3 +9,7 @@
     height: 100px;
     margin: 0;
 }
+
+.custom-contentOutlet {
+    height: 100%;
+}
