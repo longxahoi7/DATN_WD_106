@@ -3,6 +3,8 @@
 use App\Http\Controllers\Admin\AttributeController;
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\ProductsController;
+use App\Http\Controllers\CartController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\ApiPaymentController;
@@ -61,6 +63,28 @@ Route::group(
             }
         );
 
+    }
+);
+Route::group(
+    [
+        'prefix' => 'products',
+        'as' => 'products.'
+    ],
+    function () {
+        Route::get('/', [ProductsController::class, 'productList'])->name('list');
+        Route::get('/{id}', [ProductsController::class, 'showProduct'])->name('show');
+    }
+);
+
+// Nhóm route cho giỏ hàng
+Route::group(
+    [
+        'prefix' => 'cart',
+        'as' => 'cart.'
+    ],
+    function () {
+        Route::post('/add/{productId}', [CartController::class, 'addToCart'])->name('add');
+        Route::get('/', [CartController::class, 'viewCart'])->name('view');
     }
 );
 
