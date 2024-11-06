@@ -24,6 +24,7 @@ class Product extends Model
         'subtitle',
         'slug',
         'is_active',
+
     ];
 
     public function attributes()
