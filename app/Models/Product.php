@@ -11,14 +11,18 @@ class Product extends Model
     use HasFactory,SoftDeletes;
     protected $table='products';
     protected $primaryKey='product_id ';
+
     protected $fillable = [
         'brand_id',
         'product_category_id',
-        'name',
-        'description',
         'sku',
+        'name',
+        'main_image_url',
+        'view_count',
+        'description',
         'subtitle',
-        'slug','is_active'
+        'slug',
+        'is_active'
     ];
     public function category()
     {
@@ -28,5 +32,9 @@ class Product extends Model
     public function Brand()
     {
         return $this->belongsTo(Brand::class);
+    }
+    public function coupons()
+    {
+        return $this->belongsToMany(Coupon::class, 'coupon_product', 'product_id', 'coupon_id');
     }
 }

@@ -18,6 +18,8 @@ return new class extends Migration
             $table->unsignedInteger('product_category_id');
             $table->foreign('product_category_id')->references('category_id')->on('categories')->onDelete('cascade');
             $table->string('name', 255);
+            $table->string('main_image_url',255);
+            $table->bigInteger('view_count')->default(0);
             $table->text('description');
             $table->string('sku');
             $table->text('subtitle');

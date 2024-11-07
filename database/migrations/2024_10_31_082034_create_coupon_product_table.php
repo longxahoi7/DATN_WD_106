@@ -11,13 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('product_images', function (Blueprint $table) {
-            $table->increments('product_image_id');
+        Schema::create('coupon_product', function (Blueprint $table) {
+            $table->increments('coupon_product_id');
+            $table->unsignedInteger('coupon_id');
+            $table->foreign('coupon_id')->references('coupon_id')->on('coupons')->onDelete('cascade');
             $table->unsignedInteger('product_id');
             $table->foreign('product_id')->references('product_id')->on('products')->onDelete('cascade');
-            $table->unsignedInteger('attribute_product_id');
-            $table->foreign('attribute_product_id')->references('attribute_product_id')->on('attribute_products')->onDelete('cascade');
-            $table->string('url', 500);
             $table->timestamps();
         });
     }
@@ -27,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('product_images');
+        Schema::dropIfExists('coupon_product');
     }
 };
