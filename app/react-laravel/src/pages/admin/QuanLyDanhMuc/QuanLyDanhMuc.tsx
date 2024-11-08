@@ -121,7 +121,7 @@ const QuanLyDanhMuc = () => {
     };
 
     return (
-        <div className="quan-ly-danh-muc-container">
+        <div className="quan-ly-container">
             <div className="header">
                 <p className="title-css">Quản lý danh mục</p>
             </div>

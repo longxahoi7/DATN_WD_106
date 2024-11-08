@@ -8,7 +8,6 @@ type Props = {};
 const DoiTacSanXuat = (props: Props) => {
     return (
         <>
-            <Header />
             <div className="flex" style={{ width: "100vw" }}>
                 <div className="w-1/4 p-4">
                     <div className="border p-4">
@@ -115,7 +114,6 @@ const DoiTacSanXuat = (props: Props) => {
                     <p>Zalo: 0908483900</p>
                 </div>
             </div>
-            <Footer />
         </>
     );
 };

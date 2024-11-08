@@ -1,5 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import Header from "../../../layout/Header/header";
+import Footer from "../../../layout/Footer/footer";
 
 type Props = {};
 
