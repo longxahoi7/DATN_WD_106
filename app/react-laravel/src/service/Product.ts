@@ -9,7 +9,7 @@ export const GetAllProducts = async () => {
         throw new Error("Lỗi");
     }
 };
-export const GetProductByID = async (id: number | string) => {
+export const getProductByID = async (id: number | string) => {
     try {
         const { data } = await api.get(`products/${id}`);
         return data;
@@ -17,7 +17,7 @@ export const GetProductByID = async (id: number | string) => {
         throw new Error("Lỗi");
     }
 };
-export const AddProduct = async (productData: FormData) => {
+export const addProduct = async (productData: FormData) => {
     try {
         const { data } = await api.post(`products`, productData);
         return data;
@@ -25,7 +25,7 @@ export const AddProduct = async (productData: FormData) => {
         throw new Error("Lỗi");
     }
 };
-export const UpdateProduct = async (
+export const updateProduct = async (
     productData: FormData,
     id: number | string
 ) => {
@@ -36,7 +36,7 @@ export const UpdateProduct = async (
         throw new Error("Lỗi");
     }
 };
-export const DeleteProduct = async (id: number | string) => {
+export const deleteProduct = async (id: number | string) => {
     try {
         const { data } = await api.delete(`products/${id}`);
         return data;

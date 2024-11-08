@@ -1,47 +1,34 @@
 import React from "react";
+import "../../style/slide.css";
 
-type Props = {};
-
-const SlideShow = (props: Props) => {
+const SlideShow = () => {
     return (
         <>
             <div
                 id="carouselExampleFade"
-                className="carousel slide carousel-fade "
+                className="carousel slide carousel-fade"
                 data-bs-ride="carousel"
+                data-bs-interval="3000"
+                data-bs-pause="false"
             >
-                <div className="carousel-inner  object-cover">
+                <div className="carousel-inner">
                     <div className="carousel-item active">
                         <img
-                            src="../../../public/image/banner2.jpg!bw700"
+                            src="../../../public/image/banner/Banner (2).png"
                             className="d-block w-100"
                             alt="..."
                         />
                     </div>
                     <div className="carousel-item">
                         <img
-                            src="../../../public/image/banner6.png"
+                            src="../../../public/image/banner/Banner (3).png"
                             className="d-block w-100"
                             alt="..."
                         />
                     </div>
                     <div className="carousel-item">
                         <img
-                            src="../../../public/image/banner5.png"
-                            className="d-block w-100"
-                            alt="..."
-                        />
-                    </div>
-                    <div className="carousel-item">
-                        <img
-                            src="../../../public/image/banner7.png"
-                            className="d-block w-100"
-                            alt="..."
-                        />
-                    </div>
-                    <div className="carousel-item">
-                        <img
-                            src="../../../public/image/banner3.webp"
+                            src="../../../public/image/banner/Banner (1).png"
                             className="d-block w-100"
                             alt="..."
                         />
