@@ -5,8 +5,15 @@ use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\CouponController;
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\ProductsController;
+use App\Http\Controllers\CartController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\ApiPaymentController;
+use App\Http\Controllers\Api\ApiUserController;
+use App\Http\Controllers\Api\InvoiceController;
+
+use Spatie\FlareClient\Api;
 
 // Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 //     return $request->user();
@@ -96,3 +103,26 @@ Route::group(
 
     }
 );
+Route::group(
+    [
+        'prefix' => 'products',
+        'as' => 'products.'
+    ],
+    function () {
+        Route::get('/', [ProductsController::class, 'productList'])->name('list');
+        Route::get('/{id}', [ProductsController::class, 'showProduct'])->name('show');
+    }
+);
+
+// Nhóm route cho giỏ hàng
+Route::group(
+    [
+        'prefix' => 'cart',
+        'as' => 'cart.'
+    ],
+    function () {
+        Route::post('/add/{productId}', [CartController::class, 'addToCart'])->name('add');
+        Route::get('/', [CartController::class, 'viewCart'])->name('view');
+    }
+);
+

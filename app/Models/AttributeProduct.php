@@ -9,6 +9,16 @@ class AttributeProduct extends Model
 {
     use HasFactory;
    protected $table ='attribute_products';
-   protected $primaryKey='id';	
-   protected $fillable=['product_id','attribute_id','in_stock','price'.'discount'];
+   protected $primaryKey='attribute_product_id';	
+   protected $fillable=['product_id','attribute_id','in_stock','price','discount'];
+
+    public function product()
+    {
+        return $this->belongsTo(Product::class);
+    }
+
+    public function attribute()
+    {
+        return $this->belongsTo(Attribute::class);
+    }
 }
