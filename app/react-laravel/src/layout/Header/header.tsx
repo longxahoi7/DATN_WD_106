@@ -47,43 +47,22 @@ const Header = () => {
 
     const renderCategories = (categories: Category[]) => {
         return (
-            <div
-                className="header-nav"
-                style={{ display: "flex", marginLeft: "10px" }}
-            >
+            <div className="header-nav" style={{ display: "flex" }}>
                 {categories?.map((parent) => (
-                    <ul
-                        key={parent.id}
-                        style={{
-                            marginLeft: "20px",
-                            listStyle: "none",
-                            paddingLeft: "10px",
-                        }}
-                    >
-                        <li
-                            className="dropdown custom-li-menu"
-                            style={{ color: "gray" }}
-                        >
-                            <Link
-                                to="#"
+                    <ul key={parent.id}>
+                        <li className="dropdown" style={{ color: "gray" }}>
+                            <a
+                                href="#"
                                 onClick={() => handleCategoryClick(parent.slug)}
                                 style={{
                                     color: "gray",
                                     textDecoration: "none",
-                                    paddingRight: "15px",
                                 }}
                             >
                                 {parent.name}
-                            </Link>
+                            </a>
                             {parent.children && parent.children.length > 0 && (
-                                <ul
-                                    className="dropdown-menu"
-                                    style={{
-                                        paddingLeft: "10px",
-                                        listStyle: "none",
-                                        padding: 0,
-                                    }}
-                                >
+                                <ul className="dropdown-menu">
                                     {parent.children.map((child) => (
                                         <li key={child.id}>
                                             <Link
@@ -108,17 +87,7 @@ const Header = () => {
 
     return (
         <>
-            {/* Thẻ div trên header */}
-            <div className="top-bar">
-                <img
-                    src="../../../public/image/logo/logo-remove.png"
-                    alt="Logo"
-                    className="logo-small"
-                />
-                <span>GENTLEMANOR - Sáng Tạo Theo Cách Riêng</span>
-            </div>
-
-            <Container fluid className=" border-bottom">
+            <Container fluid className="border-bottom">
                 <Row className="g-0">
                     {/* Cột bên trái - Logo */}
                     <Col
@@ -127,7 +96,7 @@ const Header = () => {
                         lg={2}
                         className="d-flex align-items-center"
                     >
-                        <Navbar.Brand href="#">
+                        <Navbar.Brand href="/home">
                             <img
                                 src="../../../public/image/logo/logo-remove.png"
                                 alt="Gentle Manor"
@@ -177,7 +146,7 @@ const Header = () => {
                         <Row className="d-flex justify-content-end mb-4">
                             <Col className="mt-5">
                                 <Nav>
-                                    <Nav.Link href="#">
+                                    <Nav.Link href="/home">
                                         <FaHome className="home-icon" /> Trang
                                         chủ
                                     </Nav.Link>

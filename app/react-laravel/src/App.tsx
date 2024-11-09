@@ -26,8 +26,8 @@ import LienHe from "./pages/user/Product/LienHe";
 import Introduce from "./pages/user/Product/Introduce";
 import Pay from "./pages/user/Product/Pay";
 import Location from "./pages/user/Product/Location";
-import Products from "./pages/user/Product/Products";
 import UserLayout from "./layout/UserLayout";
+import Product from "./pages/user/Product/Product";
 
 const App: React.FC = () => {
     const themeConfig: ThemeConfig = {
@@ -78,7 +78,7 @@ const App: React.FC = () => {
                         element={<DoiTacSanXuat />}
                     />
                     <Route path="location" element={<Location />} />
-                    <Route path="products/:category" element={<Products />} />
+                    <Route path="products/:category" element={<Product />} />
                 </Route>
                 <Route path="login" element={<Login />} />
                 <Route path="register" element={<Register />} />

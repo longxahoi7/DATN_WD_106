@@ -4,7 +4,6 @@ import { Link, useParams } from "react-router-dom";
 
 import axios from "axios";
 import { IProduct } from "../../../interface/IProduct";
-import { Footer, Header } from "antd/es/layout/layout";
 import { getProductByID } from "../../../service/Product";
 type Props = {};
 const { useState } = React;
@@ -39,25 +38,6 @@ const ProductDetail = (props: any) => {
     const handleQuantityChange = (change: number) => {
         setQuantity((prevQuantity) => Math.max(1, prevQuantity + change));
     };
-
-    const { category } = useParams<{ category: string }>(); //lấy từ URL
-
-    console.log(category);
-    // const [products, setProducts] = useState<IProduct[]>([]);
-    // useEffect(() => {
-    //     const fetchProducts = async () => {
-    //         try {
-    //             const response = await fetch(`http://localhost:3000/products`);
-    //             const data = await response.json();
-    //             console.log(data);
-    //             setProducts(data);
-    //         } catch (error) {
-    //             console.error("Failed to fetch products", error);
-    //         }
-    //     };
-
-    //     fetchProducts();
-    // }, [category]);
     const param = useParams();
     //sp tuong tự
     const [relatedProducts, setRelatedProducts] = useState<IProduct[]>([]);
@@ -125,9 +105,9 @@ const ProductDetail = (props: any) => {
 
     return (
         <>
-            <div className="p-4 mt-40" style={{ width: "100vw" }}>
+            <div className="container" style={{ width: "100vw" }}>
                 {products && (
-                    <div className="flex ml-6">
+                    <div className="product-container flex">
                         <div
                             className="w-1/2 flex bg-pink"
                             style={{ marginRight: "-300px" }}
@@ -137,26 +117,14 @@ const ProductDetail = (props: any) => {
                                 alt={products.name}
                                 className="main-image"
                                 style={{
-                                    width: "500px",
-                                    height: "550px",
+                                    width: "350px",
                                     marginLeft: "80px",
                                 }}
                             />
                         </div>
-
-                        <div className="flex flex-col items-start">
-                            <img
-                                src={products.image}
-                                alt="Ảnh nhỏ 1"
-                                className="small-image mb-2"
-                                style={{ width: "100px", height: "100px" }}
-                            />
-                            {/* More small images */}
-                        </div>
-
                         <div
-                            className="w-1/2 items-start ml-4"
-                            style={{ marginLeft: "100px" }}
+                            className="w-1/2 items-start"
+                            style={{ marginLeft: "350px" }}
                         >
                             <h1 className="text-2xl font-bold mb-2">
                                 {products.name}
@@ -200,36 +168,37 @@ const ProductDetail = (props: any) => {
                         </div>
                     </div>
                 )}
-
-                <h2 className="text-xl font-bold mb-4 text-center mt-20">
+                <hr />
+                <h2 className="title-tuong-tu mb-4 text-center">
                     Sản phẩm tương tự
                 </h2>
                 <span className="block h-1 bg-gray-400 mx-auto w-1/6"></span>
                 <div className="grid grid-cols-4 gap-4 mt-4">
                     {relatedProducts.map((relatedProduct) => (
-                        <div
-                            key={relatedProduct.id}
-                            className="text-center product-cart border mb-20 p-4"
-                        >
-                            <Link to={`/product-detail/${relatedProduct.id}`}>
-                                <img
-                                    src={relatedProduct.image}
-                                    alt={relatedProduct.name}
-                                    className="w-full h-full object-cover"
-                                />
-                                <p className="mt-4 text-lg font-semibold text-center">
-                                    {relatedProduct.name}
-                                </p>
-                                <span className="block text-gray-500 text-center">
-                                    100% Cotton
-                                </span>
-                                <div className="hot-product-item-price text-center mt-2">
-                                    <p className="text-red-500 font-bold">
-                                        {relatedProduct.price.toLocaleString()}₫
-                                    </p>
-                                </div>
-                            </Link>
-                        </div>
+                        <figure className="snip1585" key={relatedProduct.id}>
+                            <img
+                                src={`${relatedProduct.image}`}
+                                alt={relatedProduct.name}
+                                className="w-full h-full object-cover"
+                            />
+                            <figcaption>
+                                <h6>
+                                    {relatedProduct.name} <br />
+                                    <span className="pt-3">
+                                        {relatedProduct.price} <sup>đ</sup>{" "}
+                                    </span>
+                                    <br />
+                                </h6>
+                                <button className="add-to-cart-button">
+                                    <i className="fa fa-shopping-cart"></i> Thêm
+                                    giỏ hàng
+                                </button>
+                            </figcaption>
+                            <Link
+                                to={`/product-detail/${relatedProduct.id}`}
+                                className="product-detail-link"
+                            />
+                        </figure>
                     ))}
                 </div>
             </div>
