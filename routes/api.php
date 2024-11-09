@@ -12,12 +12,26 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\ApiPaymentController;
 use App\Http\Controllers\Api\ApiUserController;
 use App\Http\Controllers\Api\InvoiceController;
+use App\Http\Controllers\ProductsController;
+use App\Http\Controllers\AttributeProductsController;
+use App\Http\Controllers\CartController;
+use App\Http\Controllers\HomeController;
 
 use Spatie\FlareClient\Api;
 
 // Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 //     return $request->user();
 // });
+
+Route::post('register', [ApiUserController::class, 'register']);
+//  http://127.0.0.1:8000/api/login
+Route::post('login', [ApiUserController::class, 'login']);
+Route::prefix('admin')->group(function () {
+    Route::prefix('categories')->group(function () {
+        Route::get('/list-category', [CategoryController::class, 'listCategory'])->name('api.admin.categories.list-category');
+    });
+});
+
 Route::group(
     [
         'prefix' => 'admin',
@@ -32,11 +46,11 @@ Route::group(
                 'as' => 'categories.'
             ],
             function () {
-                Route::get('/list-category', [CategoryController::class, 'listCategory']);
-                Route::post('/add-category', [CategoryController::class, 'addCategory']);
-                Route::get('/detail-category/{id}', [CategoryController::class, 'detailCategory']);
-                Route::delete('/delete-category/{id}', [CategoryController::class, 'destroyCategory']);
-                Route::put('/update-category/{id}', [CategoryController::class, 'updateCategory']);
+                Route::get('/list-category', [CategoryController::class, 'listCategory'])->name('list-category');
+                Route::post('/add-category', [CategoryController::class, 'addCategory'])->name('add-category');
+                Route::get('/detail-category/{id}', [CategoryController::class, 'detailCategory'])->name('detail-category');
+                Route::delete('/delete-category/{id}', [CategoryController::class, 'destroyCategory'])->name('delete-category');
+                Route::put('/update-category/{id}', [CategoryController::class, 'updateCategory'])->name('update-category');
             }
         );
          //CRUD BRAND
@@ -103,26 +117,12 @@ Route::group(
 
     }
 );
-Route::group(
-    [
-        'prefix' => 'products',
-        'as' => 'products.'
-    ],
-    function () {
-        Route::get('/', [ProductsController::class, 'productList'])->name('list');
-        Route::get('/{id}', [ProductsController::class, 'showProduct'])->name('show');
-    }
-);
 
-// Nhóm route cho giỏ hàng
-Route::group(
-    [
-        'prefix' => 'cart',
-        'as' => 'cart.'
-    ],
-    function () {
-        Route::post('/add/{productId}', [CartController::class, 'addToCart'])->name('add');
-        Route::get('/', [CartController::class, 'viewCart'])->name('view');
-    }
-);
+    // Route cho xuất hóa đơn
+    Route::get('/invoices/{order_id}', [InvoiceController::class, 'generateInvoice']);
+});
+Route::get('/list-cart',      [ProductsController::class, 'productList']);
+Route::get('detail/{id}',      [ProductsController::class, 'showProduct'])->name('detail');
 
+Route::post('/cart/add/{productId}', [CartController::class, 'addToCart'])->name('cart.add');
+Route::get('/cart', [CartController::class, 'viewCart'])->name('Cart');
