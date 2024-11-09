@@ -12,6 +12,13 @@ const SlideShow = () => {
                 data-bs-pause="false"
             >
                 <div className="carousel-inner">
+                    <div className="carousel-item">
+                        <img
+                            src="../../../public/image/banner/Banner (1).png"
+                            className="d-block w-100"
+                            alt="..."
+                        />
+                    </div>
                     <div className="carousel-item active">
                         <img
                             src="../../../public/image/banner/Banner (2).png"
@@ -28,7 +35,7 @@ const SlideShow = () => {
                     </div>
                     <div className="carousel-item">
                         <img
-                            src="../../../public/image/banner/Banner (1).png"
+                            src="../../../public/image/banner/Banner (4).png"
                             className="d-block w-100"
                             alt="..."
                         />

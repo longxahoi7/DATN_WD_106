@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { IProduct } from "../../../interface/IProduct";
 import SlideShow from "../../../layout/slideShow/SlideShow";
 import "../../../style/productList.css";
@@ -60,11 +60,14 @@ const ProductList = () => {
                                     <br />
                                 </h6>
                                 <button className="add-to-cart-button">
-                                    <i className="fa fa-shopping-cart"></i> Thêm
-                                    giỏ hàng
+                                    <i className="fa fa-shopping-cart"></i> Mua
+                                    Ngay
                                 </button>
                             </figcaption>
-                            <a href="#" className="product-detail-link" />
+                            <a
+                                href={`/product-detail/${item.id}`}
+                                className="product-detail-link"
+                            />
                         </figure>
                     ))
                 ) : (
