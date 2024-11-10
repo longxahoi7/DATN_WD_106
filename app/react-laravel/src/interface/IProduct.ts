@@ -10,3 +10,12 @@ export type FormData = Pick<
     IProduct,
     "name" | "image" | "price" | "category" | "mota"
 >;
+
+export interface Category {
+    id: number;
+    name: string;
+    size: string;
+    slug: string;
+    parentId: number | null;
+    children?: Category[];
+}

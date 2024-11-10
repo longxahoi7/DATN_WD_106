@@ -20,180 +20,76 @@
         {
             "name": "Áo dài tay nam",
 
-            "image": "https://cf.shopee.vn/file/0e194e64071280f0e2761102c26bac5a",
+            "image": "https://media3.coolmate.me/cdn-cgi/image/quality=80,format=auto/uploads/November2024/24CMCW.DT001_-_XAM_1.jpg",
             "price": "120.000",
 
-            "category": "ao-so-mi",
+            "category": "ao-thu-dong",
             "mota": "Sơ mi tay dài luôn sang trọng, lịch lãm. Chất vải lụa dày mango thoáng mát và chất lượng, thấm hút cực tốt, định lượng vải dày dặn chất lượng nhưng mặc lên cực mát. Đường may cuốn sườn tinh tế, form cực chuẩn. Chất vải ít nhăn, mềm mại tuyệt đối, hạn chế nhăn ra co rút và kháng khuẩn. Form dáng Slimfit ôm nhẹ, vừa vặn và tôn dáng tối đa khi mặc.Chất liệu vải lụa mango dày dặn: Giữ form dáng tốt, ít nhăn.Thân thiện với làn da. Mau khô. Hiện có 6 màu để quý khách lựa chọn",
             "id": "1"
         },
         {
-            "name": "Quần bò nam baggy ống rộng rách gối",
-            "image": "https://cf.shopee.vn/file/7aeb51c417c99c0c826ece180be76a29",
+            "name": "Áo Sweater French Terry",
+            "image": "https://media3.coolmate.me/cdn-cgi/image/quality=80,format=auto/uploads/October2024/24CMCW.ST001_-_Navy_2.JPG",
             "price": "123.000",
-            "category": "quan-bo",
+            "category": "ao-len",
             "mota": "Quần bò nam baggy ống rộng rách gối mang phong cách đường phố phóng khoáng và cá tính. Được làm từ chất liệu denim cao cấp, bền bỉ với thời gian, quần có độ rộng vừa phải ở phần ống, tạo cảm giác thoải mái và dễ di chuyển. Chi tiết rách gối tinh tế làm điểm nhấn, thể hiện sự mạnh mẽ và nổi bật. Dáng baggy hiện đại giúp người mặc dễ dàng phối hợp với nhiều kiểu áo từ áo thun đến áo hoodie. Một item không thể thiếu trong tủ đồ của những chàng trai yêu thích phong cách tự do và trẻ trung.",
             "id": "2"
         },
         {
-            "name": "Áo Khoác Nam Xỏ Ngón Cổ Cao AKN0110",
-            "image": "https://product.hstatic.net/1000096703/product/1_8ac262567d894d36b1cc7e3c20f643b3_master.jpg",
+            "name": "Áo sơ mi dài tay cổ tàu Premium Poplin",
+            "image": "https://media3.coolmate.me/cdn-cgi/image/quality=80,format=auto/uploads/October2024/24CMCW.SM008_-_Be_8.JPG",
             "price": "433.000",
-            "category": "ao-khoac",
+            "category": "ao-len",
             "mota": "Áo khoác nam xỏ ngón cổ cao được thiết kế độc đáo với phần cổ cao bảo vệ tối ưu khỏi gió lạnh, giữ ấm vùng cổ trong những ngày thời tiết se lạnh. Chất liệu vải mềm mại, co giãn và thoáng khí, đảm bảo sự thoải mái suốt cả ngày dài. Tay áo tích hợp phần xỏ ngón giúp giữ ấm bàn tay và mang lại phong cách thể thao năng động. Phom dáng slimfit thời thượng, phù hợp với nhiều kiểu phối đồ từ quần jeans đến quần thể thao",
             "id": "3"
         },
         {
-            "name": "Áo Thun Polo Cotton 100% ATP0040",
-            "image": "https://tse1.mm.bing.net/th?id=OIP.StcNjbyJI2ovLckduLGDUQHaJ4&pid=Api&P=0&h=220",
+            "name": "Áo sơ mi dài tay Modal Essential",
+            "image": "https://media3.coolmate.me/cdn-cgi/image/quality=80,format=auto/uploads/November2024/24CMCW.SM007_-_Xam_2.jpg",
             "price": "107.800",
-            "category": "ao-thun",
+            "category": "ao-du-tiec",
             "mota": "Ra mắt dòng áo thun Polo chất liệu cotton 100%, co giãn 4 chiều bo cổ dệt kim cao cấp. Đảm bảo thoáng mát và thoải mái cả ngày dài Form slimfit vừa vặn, mix match theo nhiều phong cách và item khác nhau, đến gentlemanor thử ngay để cảm nhận chất liệu.",
             "id": "4"
         },
         {
-            "name": "Áo Thun Polo Nam ATP0039",
-            "image": "https://cf.shopee.vn/file/1beba25914daff3d42a9ef4f82487f0f",
+            "name": "Quần Shorts Chạy Bộ Economy II",
+            "image": "https://media3.coolmate.me/cdn-cgi/image/width=672,height=990,quality=80,format=auto/uploads/October2024/quan-short-nam.jpg",
             "price": "199.000",
-            "category": "ao-thun",
+            "category": "quan-shorts",
             "mota": "Ra mắt dòng áo thun Polo chất liệu cotton 100%, co giãn 4 chiều bo cổ dệt kim cao cấp. Đảm bảo thoáng mát và thoải mái cả ngày dài Form slimfit vừa vặn, mix match theo nhiều phong cách và item khác nhau, đến gentlemanor thử ngay để cảm nhận chất liệu.",
             "id": "5"
         },
         {
-            "name": "Áo Thun Polo Nam Basic ATP0035",
-            "image": "https://tse3.mm.bing.net/th?id=OIP.63VqAaLbn4OzySjZApkY_wHaHa&pid=Api&P=0&h=220",
+            "name": "Quần Jogger Pants Fleece",
+            "image": "https://media3.coolmate.me/cdn-cgi/image/quality=80,format=auto/uploads/November2024/24CMCW.TN002_-_Be_2.JPG",
             "price": "562.000",
-            "category": "ao-thun",
+            "category": "quan-jogger",
             "mota": "Ra mắt dòng áo thun Polo chất liệu cotton 100%, co giãn 4 chiều bo cổ dệt kim cao cấp. Đảm bảo thoáng mát và thoải mái cả ngày dài Form slimfit vừa vặn, mix match theo nhiều phong cách và item khác nhau, đến gentlemanor thử ngay để cảm nhận chất liệu.",
             "id": "6"
         },
         {
-            "name": "Áo Thun Polo Nam Basic ATP0035-2",
-            "image": "https://dosi-in.com/file/detailed/353/dosiin-ssstutter-ao-thun-nam-dai-tay-ssstutter-co-tron-chat-lieu-cotton-thoang-mat-kind-sweatshi353495.jpg?w=1000&h=1000&fit=fill&fm=webp",
+            "name": "Quần Dài Nam ECC Warp Pants dáng Tape",
+            "image": "https://media3.coolmate.me/cdn-cgi/image/quality=80,format=auto/uploads/July2024/Quan_ECC_Tapped_Fit.16.jpg",
             "price": "100.000",
-            "category": "ao-thun",
+            "category": "quan-vai",
             "mota": "Ra mắt dòng áo thun Polo chất liệu cotton 100%, co giãn 4 chiều bo cổ dệt kim cao cấp. Đảm bảo thoáng mát và thoải mái cả ngày dài Form slimfit vừa vặn, mix match theo nhiều phong cách và item khác nhau, đến gentlemanor thử ngay để cảm nhận chất liệu.",
             "id": "7"
         },
         {
-            "name": "Quẩn vải baggy ống ộng nam ",
-            "image": "https://cf.shopee.vn/file/7d5a0c5c677abbbfa8ff769c460ff06b",
+            "name": "Quần bơi Trunk Summer Cool 5 inch cạp rời ",
+            "image": "https://media3.coolmate.me/cdn-cgi/image/quality=80,format=auto/uploads/July2024/den1_64.jpg",
             "price": "357.000",
-            "category": "quan-vai",
+            "category": "quan-boi",
             "mota": "Quần Tây nam gentlemanor với form dáng vừa vặn, sang trọng đầy lịch lãm, điểm nhấn viền ở túi trước và túi sau. Thích hợp mặc đi làm, đi chơi, lót trong sắc nét, tạo cảm giác thoải mái khi di chuyển, làm việc. Với ưu vải co giãn nhẹ, lót trong sắc nét và tinh tế, với mức giá bán cực kì hợp lý. Hiếu được nhu cầu của khách hàng, mặt trong của sản phẩm, các bạn có thể chỉnh sửa lại cho phù hợp với mọi vóc dáng. ",
             "id": "8"
         },
         {
-            "name": "Quần bò slim fit nam",
-            "image": "https://cf.shopee.vn/file/vn-11134207-7qukw-lf53jerlgok7b3",
-            "price": "450.000",
-            "category": "quan-bo",
-            "mota": "Quần bò slim fit nam với thiết kế hiện đại, ôm vừa vặn theo dáng người, tôn lên đường nét mạnh mẽ và phong cách. Chất liệu denim co giãn nhẹ, mang đến cảm giác thoải mái khi di chuyển mà không bị gò bó. Đường may tỉ mỉ, chắc chắn, giúp quần giữ được phom dáng sau nhiều lần sử dụng. Màu sắc trung tính dễ dàng phối hợp với nhiều loại áo và phụ kiện, từ áo thun năng động đến áo sơ mi thanh lịch. Sự lựa chọn hoàn hảo cho những người đàn ông muốn vừa thời trang vừa tiện dụng.",
-            "id": "9"
-        },
-        {
-            "name": "Quần short kaki nam",
-            "image": "https://product.hstatic.net/1000096703/product/kenta183_1989efd3b969422697612a4a7360bacd_master.jpg",
-            "price": "300.000",
-            "category": "quan-short",
-            "mota": "Quần Short Kaki nam năng động trẻ trung, from slim vừa vặn tôn dáng và không quá ôm sát, tạo sự thoải mái cho người mặc. Lót trong may hoàn thiện sắc nét, dây kéo YKK bền bỉ trong quá trình sử dụng. Quần short kaki dễ dàng phối với áo thun, polo đa dạng trong từng phong cách.Chất liệu: vải kaki co giãn, bền màu, vải siêu mát và ít nhăn khi mặc.",
-            "id": "10"
-        },
-        {
-            "name": "Áo polo nam",
-
-            "image": "https://tse3.mm.bing.net/th?id=OIP.zKx7ziwLodswnWC98QSEUwHaLH&pid=Api&P=0&h=220",
-
-            "price": "150.000",
-
-            "category": "ao-thun",
-            "mota": "Ra mắt dòng áo thun Polo chất liệu cotton 100%, co giãn 4 chiều bo cổ dệt kim cao cấp. Đảm bảo thoáng mát và thoải mái cả ngày dài Form slimfit vừa vặn, mix match theo nhiều phong cách và item khác nhau, đến gentlemanor thử ngay để cảm nhận chất liệu.",
-            "id": "11"
-        },
-
-        {
-            "name": "Quần âu nam cạp chun",
-            "image": "https://cf.shopee.vn/file/29e92651ae599b3f0a87c0f4e3c502df",
-            "price": "251.000",
-            "category": "quan-au",
-            "mota": "Quần Tây nam gentlemanor với form dáng vừa vặn, sang trọng đầy lịch lãm, điểm nhấn viền ở túi trước và túi sau. Thích hợp mặc đi làm, đi chơi, lót trong sắc nét, tạo cảm giác thoải mái khi di chuyển, làm việc. Với ưu vải co giãn nhẹ, lót trong sắc nét và tinh tế, với mức giá bán cực kì hợp lý. Hiếu được nhu cầu của khách hàng, mặt trong của sản phẩm, các bạn có thể chỉnh sửa lại cho phù hợp với mọi vóc dáng. ",
-            "id": "12"
-        },
-
-        {
-            "name": "Áo len nam",
-
-            "image": "https://2handofficial.com/wp-content/uploads/2023/12/ao-len-dai-tay-nam-atino-2-vach-ngang-tay-al3-5037-mau-be.jpg",
-
-            "price": "200.000",
-
-            "category": "ao-len",
-            "mota": "Mẫu áo len nam thời thượng được làm từ chất liệu len cao cấp, mềm mại và giữ ấm tốt. Thiết kế cổ tròn/kẻ sọc/thắt nút hiện đại, phù hợp với nhiều hoàn cảnh từ công sở đến dạo phố. Phom dáng vừa vặn, dễ dàng phối hợp với áo sơ mi, quần jeans hoặc quần âu, tạo nên phong cách lịch lãm và nam tính. Áo len có độ bền cao, không bị xù lông sau nhiều lần giặt, mang đến sự thoải mái và tự tin cho người mặc suốt cả ngày dài.",
-            "id": "13"
-        },
-        {
-            "name": "Quẩn vải baggy ống ộng nam ",
-            "image": "https://cf.shopee.vn/file/7d5a0c5c677abbbfa8ff769c460ff06b",
+            "name": "Áo Polo Nam Pique Fitsoft ",
+            "image": "https://media3.coolmate.me/cdn-cgi/image/quality=80,format=auto/uploads/November2021/IMG_1829_copy_90_copyvv.jpg",
             "price": "357.000",
-            "category": "quan-vai",
+            "category": "ao-xuan-ha",
             "mota": "Quần Tây nam gentlemanor với form dáng vừa vặn, sang trọng đầy lịch lãm, điểm nhấn viền ở túi trước và túi sau. Thích hợp mặc đi làm, đi chơi, lót trong sắc nét, tạo cảm giác thoải mái khi di chuyển, làm việc. Với ưu vải co giãn nhẹ, lót trong sắc nét và tinh tế, với mức giá bán cực kì hợp lý. Hiếu được nhu cầu của khách hàng, mặt trong của sản phẩm, các bạn có thể chỉnh sửa lại cho phù hợp với mọi vóc dáng. ",
-            "id": "14"
-        },
-        {
-            "name": "Quần bò slim fit nam",
-            "image": "https://cf.shopee.vn/file/vn-11134207-7qukw-lf53jerlgok7b3",
-            "price": "450.000",
-            "category": "quan-bo",
-            "mota": "Quần Jean Regular với chất liệu Jean cao cấp và kiểu dáng Regular fit, tạo nên sự thoải mái và linh hoạt cho người mặc. Quần Jean Regular không quá chật và cũng không quá rộng, tạo cảm giác thoải mái tối đa và phong cách dễ dàng kết hợp với nhiều loại trang phục khác nhau.",
-            "id": "15"
-        },
-        {
-            "name": "Áo Khoác Nỉ Có Nón Regular AKN0116",
-            "image": "https://product.hstatic.net/1000096703/product/1_49069290361b40ecb65543c835173222_master.jpg",
-            "price": "350.000",
-            "category": "ao-khoac",
-            "mota": "Áo khoác thun nỉ, đơn giản và năng động. Túi ngoài có dây kéo, mặt trong có túi tiện dụng. Mặc đi nắng hoặc trời se lạnh cực tốt. Phiên bản mới cải tiến với form dáng Regular rộng rãi, bo thun cotton ở cổ tay và eo tăng thêm sự thoải mái khi mặc.",
-            "id": "16"
-        },
-        {
-            "name": "Quần short MN nam",
-            "image": "https://www.chapi.vn/img/product/2019/8/13/quan-short-nam-cotton-mna-2-500x500.jpg",
-            "price": "99.000",
-            "category": "quan-short",
-            "mota": "Quần Short Kaki nam năng động trẻ trung, from slim vừa vặn tôn dáng và không quá ôm sát, tạo sự thoải mái cho người mặc. Lót trong may hoàn thiện sắc nét, dây kéo YKK bền bỉ trong quá trình sử dụng. Quần short kaki dễ dàng phối với áo thun, polo đa dạng trong từng phong cách.Chất liệu: vải kaki co giãn, bền màu, vải siêu mát và ít nhăn khi mặc.",
-            "id": "17"
-        },
-        {
-            "name": "Áo Len Trơn AKL0004",
-            "image": "https://product.hstatic.net/1000096703/product/1_988d0fc5323d4310be952507a9fe85ee_master.jpg",
-            "price": "449.000",
-            "category": "ao-len",
-            "mota": "Áo len trơn, cổ tròn dày dặn, thiết kế độc đáo giữ ấm tuyệt vời trong mọi thời tiết se lạnh. Chất liệu len dệt cao cấp, mềm mại và nhẹ nhàng, tạo cảm giác thoải mái và êm ái trên cơ thể. Màu sắc trơn tinh tế, dễ dàng phối hợp với nhiều trang phục khác nhau trong các chuyến đi.",
-            "id": "18"
-        },
-        {
-            "name": "Áo Len Sọc Nhỏ AKL0006",
-            "image": "https://product.hstatic.net/1000096703/product/1_0102c7dc9eb44d11bbdb6ad09c3f923f_master.jpg",
-            "price": "550.000",
-            "category": "ao-len",
-            "mota": "Áo len sọc ngang, cổ tròn dày dặn, thiết kế độc đáo giữ ấm tuyệt vời trong mọi thời tiết se lạnh. Chất liệu len dệt cao cấp, mềm mại và nhẹ nhàng, tạo cảm giác thoải mái và êm ái trên cơ thể. Màu sắc sọc ngang nổi bật và sang trọng, dễ dàng phối hợp với nhiều trang phục khác nhau trong các chuyến đi.",
-            "id": "19"
-        },
-        {
-            "name": "Quần Jogger Kaki Ống Bo QJK0042",
-            "image": "https://product.hstatic.net/1000096703/product/1_5fc68c398a354615bd3e1b4efcca90e0_master.jpg",
-            "price": "650.000",
-            "category": "quan-kaki",
-            "mota": "Quần Short Kaki nam năng động trẻ trung, from slim vừa vặn tôn dáng và không quá ôm sát, tạo sự thoải mái cho người mặc. Lót trong may hoàn thiện sắc nét, dây kéo YKK bền bỉ trong quá trình sử dụng. Quần short kaki dễ dàng phối với áo thun, polo đa dạng trong từng phong cách.Chất liệu: vải kaki co giãn, bền màu, vải siêu mát và ít nhăn khi mặc.",
-            "id": "20"
-        },
-        {
-            "name": "Quần Jogger Jean QJK0034",
-            "image": "https://product.hstatic.net/1000096703/product/1_26bb178a625c4c6687c7a19e63b50c56_master.jpg",
-            "price": "250.000",
-            "mota": "Quần Jogger Jean của mang đến sự kết hợp hoàn hảo giữa phom dáng thời trang và sự thoải mái linh hoạt. Được thiết kế từ chất liệu Jean chất lượng cao và kiểu dáng jogger hiện đại, thoải mái cho người mặc. Tận hưởng sự thoải mái mà chỉ quần jogger jean có thể mang lại. Với khả năng di chuyển dễ dàng và phong cách không kém phần cá tính, quần Jogger jean sẽ là điểm nhấn hoàn hảo cho tủ đồ của bạn.",
-            "category": "quan-jeans",
-            "id": "21"
+            "id": "9"
         }
     ],
     "categories": [
@@ -205,67 +101,100 @@
             "children": [
                 {
                     "id": 2,
-                    "name": "Quần Đùi",
-                    "slug": "quan-dui",
+                    "name": "Quần Shorts",
+                    "slug": "quan-shorts ",
                     "parentId": 1
                 },
                 {
                     "id": 3,
-                    "name": "Quần Jogger Jeans",
-                    "slug": "quan-jeans",
+                    "name": "Quần Jogger",
+                    "slug": "quan-jogger",
                     "parentId": 1
                 },
                 {
                     "id": 4,
-                    "name": "Quần Bò",
-                    "slug": "quan-bo",
+                    "name": "Quần Bơi",
+                    "slug": "quan-boi",
                     "parentId": 1
                 },
                 {
                     "id": 5,
-                    "name": "Quần Jogger Kaki",
-                    "slug": "quan-kaki",
-                    "parentId": 1
-                },
-                {
-                    "id": 6,
                     "name": "Quần Vải",
                     "slug": "quan-vai",
                     "parentId": 1
-                },
-                {
-                    "id": 7,
-                    "name": "Quần Short",
-                    "slug": "quan-short",
-                    "parentId": 1
-                },
-                { "id": 8, "name": "Quần Âu", "slug": "quan-au", "parentId": 1 }
+                }
             ]
         },
         {
-            "id": 9,
+            "id": 7,
             "name": "Áo Nam",
             "slug": "ao-nam",
             "parentId": null,
             "children": [
                 {
-                    "id": 10,
-                    "name": "Áo Thun Polo",
-                    "slug": "ao-thun",
-                    "parentId": 9
+                    "id": 8,
+                    "name": "Áo Xuân Hạ",
+                    "slug": "ao-xuan-ha",
+                    "parentId": 7
                 },
+                {
+                    "id": 9,
+                    "name": "Áo Thu Đông",
+                    "slug": "ao-thu-dong",
+                    "parentId": 7
+                },
+                { "id": 10, "name": "Áo Len", "slug": "ao-len", "parentId": 9 },
                 {
                     "id": 11,
-                    "name": "Áo Dài Tay",
-                    "slug": "ao-so-mi",
-                    "parentId": 9
-                },
-                { "id": 12, "name": "Áo Len", "slug": "ao-len", "parentId": 9 },
-                {
-                    "id": 13,
                     "name": "Áo Khoác",
                     "slug": "ao-khoac",
-                    "parentId": 9
+                    "parentId": 7
+                }
+            ]
+        },
+        {
+            "id": 12,
+            "name": "Giày Dép Nam",
+            "slug": "giay-dep-nam",
+            "parentId": null,
+            "children": [
+                {
+                    "id": 13,
+                    "name": "Thể Thao",
+                    "slug": "the-thao",
+                    "parentId": 12
+                },
+                {
+                    "id": 14,
+                    "name": "Thu Đông",
+                    "slug": "thu-dong",
+                    "parentId": 12
+                },
+                {
+                    "id": 16,
+                    "name": "Đời Thường",
+                    "slug": "doi-thuong",
+                    "parentId": 12
+                }
+            ]
+        },
+        {
+            "id": 17,
+            "name": "Mũ Nam",
+            "slug": "mu-nam",
+            "parentId": null,
+            "children": [
+                {
+                    "id": 13,
+                    "name": "Mũ Lưỡi Trai",
+                    "slug": "mu-luoi-trai",
+                    "parentId": 17
+                },
+                {
+                    "id": 13,
+                    "name": "Mũ Len",
+                    "slug": "mu-len",
+                    "parentId": 17
                 }
             ]
         }
