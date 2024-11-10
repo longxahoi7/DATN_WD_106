@@ -28,6 +28,7 @@ import Pay from "./pages/user/Product/Pay";
 import Location from "./pages/user/Product/Location";
 import UserLayout from "./layout/UserLayout";
 import Product from "./pages/user/Product/Product";
+import ChiTietGioHang from "./pages/user/ChiTietGioHang/ChiTietGioHang";
 
 const App: React.FC = () => {
     const themeConfig: ThemeConfig = {
@@ -79,6 +80,7 @@ const App: React.FC = () => {
                     />
                     <Route path="location" element={<Location />} />
                     <Route path="products/:category" element={<Product />} />
+                    <Route path="cart" element={<ChiTietGioHang />} />
                 </Route>
                 <Route path="login" element={<Login />} />
                 <Route path="register" element={<Register />} />
