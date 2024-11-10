@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-    baseURL: "http://localhost:3000/",
+    baseURL: "http://localhost:8000/",
 });
 export default api;
 
@@ -9,7 +9,7 @@ export default api;
 
 import { IProduct } from "../interface/IProduct";
 
-const API_BASE_URL = "http://localhost:3000/";
+const API_BASE_URL = "http://localhost:8000/";
 
 export const GetProductByID = async (
     id: string | undefined
