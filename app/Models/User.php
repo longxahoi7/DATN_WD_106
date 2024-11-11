@@ -20,7 +20,10 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'address',
+        'phone',
         'password',
+        'remember_token',
     ];
 
  
@@ -46,5 +49,9 @@ class User extends Authenticatable
     public function coupons()
     {
         return $this->belongsToMany(Coupon::class, 'coupon_user', 'user_id', 'coupon_id');
+    }
+    public function shoppingCart()
+    {
+        return $this->hasOne(ShoppingCart::class, 'user_id');
     }
 }
