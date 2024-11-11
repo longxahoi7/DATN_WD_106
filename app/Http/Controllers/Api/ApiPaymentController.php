@@ -14,7 +14,6 @@ use Illuminate\Support\Facades\Validator;
 
 class ApiPaymentController extends Controller
 {
-    //
     public function checkout(Request $request)
     {
         // Xác thực người dùng
@@ -39,38 +38,67 @@ class ApiPaymentController extends Controller
             ], 422);
         }
 
-        // Tạo đơn hàng
-        $order = new Order();
-        $order->user_id = Auth::id(); // Lấy ID người dùng
-        $order->order_date = now();
-        $order->total = $request->total;
-        $order->invoice_date = now();
-        $order->payment_status = 'paid'; // Hoặc cập nhật theo logic thanh toán của bạn
-        $order->status = 'pending'; // Trạng thái ban đầu
-        $order->save();
+        // Kiểm tra sự tồn tại của sản phẩm
+        $productIds = collect($request->items)->pluck('product_id')->toArray();
+        $products = Product::whereIn('product_id', $productIds)->get();
 
-        // Tạo các mục đơn hàng
-        foreach ($request->items as $item) {
-            OrderItem::create([
-                'order_id' => $order->order_id,
-                'product_id' => $item['product_id'],
-                'quantity' => $item['quantity'],
-                'price' => $item['price'], // Cần có giá
-            ]);
+        // Nếu có sản phẩm không tồn tại, trả về thông báo lỗi
+        if ($products->count() !== count($request->items)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Một hoặc nhiều sản phẩm không tồn tại.'
+            ], 404);
         }
 
-        // Phản hồi JSON
-        return response()->json([
-            'success' => true,
-            'message' => 'Thanh toán thành công.',
-            'order_id' => $order->order_id,
-            'data' => [
-                'order_date' => $order->order_date,
-                'total' => $order->total,
-                'items' => $request->items,
-            ],
-        ], 201);
-    }
+        // Bắt đầu transaction
+        DB::beginTransaction();
 
-    
+        try {
+            // Tạo đơn hàng
+            $order = new Order();
+            $order->user_id = Auth::id(); // Lấy ID người dùng
+            $order->order_date = now();
+            $order->total = $request->total;
+            $order->invoice_date = now();
+            $order->payment_status = 'paid'; // Hoặc cập nhật theo logic thanh toán của bạn
+            $order->status = 'pending'; // Trạng thái ban đầu
+            $order->save();
+
+            // Tạo các mục đơn hàng
+            foreach ($request->items as $item) {
+                OrderItem::create([
+                    'order_id' => $order->order_id,
+                    'product_id' => $item['product_id'],
+                    'quantity' => $item['quantity'],
+                    'price' => $item['price'], // Cần có giá
+                ]);
+            }
+
+            // Commit transaction nếu không có lỗi
+            DB::commit();
+
+            // Phản hồi JSON
+            return response()->json([
+                'success' => true,
+                'message' => 'Thanh toán thành công.',
+                'order_id' => $order->order_id,
+                'data' => [
+                    'order_date' => $order->order_date,
+                    'total' => $order->total,
+                    'items' => $request->items,
+                ],
+            ], 201);
+
+        } catch (\Exception $e) {
+            // Rollback transaction nếu có lỗi
+            DB::rollback();
+            
+            // Trả về thông báo lỗi
+            return response()->json([
+                'success' => false,
+                'message' => 'Đã xảy ra lỗi khi xử lý thanh toán.',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
 }
