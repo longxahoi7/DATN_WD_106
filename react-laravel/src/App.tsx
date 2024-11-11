@@ -13,8 +13,8 @@ import HuongDanMuaHang from "./pages/user/HuongDan/HuongDanMuaHang";
 import HuongDanDoiHang from "./pages/user/HuongDan/HuongDanDoiHang";
 import HuongDanBaoQuan from "./pages/user/HuongDan/HuongDanBaoQuan";
 import DoiTacSanXuat from "./pages/user/HuongDan/DoiTacSanXuat";
-import Register from "./pages/user/Register";
-import Login from "./pages/user/Login";
+import Register from "./pages/user/auth/Register";
+import Login from "./pages/user/auth/Login";
 import ForgotPassword from "./pages/user/ForgotPassword";
 import AdminLayout from "./layout/AdminLayout";
 import DashboardPage from "./pages/admin/Dashboard/DashboardPage";
@@ -28,7 +28,7 @@ import Pay from "./pages/user/Product/Pay";
 import Location from "./pages/user/Product/Location";
 import UserLayout from "./layout/UserLayout";
 import Product from "./pages/user/Product/Product";
-import ChiTietGioHang from "./pages/user/ChiTietGioHang/ChiTietGioHang";
+// import ChiTietGioHang from "./pages/user/ChiTietGioHang/ChiTietGioHang";
 
 const App: React.FC = () => {
     const themeConfig: ThemeConfig = {
@@ -80,7 +80,7 @@ const App: React.FC = () => {
                     />
                     <Route path="location" element={<Location />} />
                     <Route path="products/:category" element={<Product />} />
-                    <Route path="cart" element={<ChiTietGioHang />} />
+                    {/* <Route path="cart" element={<ChiTietGioHang />} /> */}
                 </Route>
                 <Route path="login" element={<Login />} />
                 <Route path="register" element={<Register />} />

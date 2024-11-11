@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "../../style/auth.css";
+import "../../../style/auth.css";
 
 const Login: React.FC = () => {
     const images: string[] = ["/image/login/imageAuthLogin.png"];
@@ -74,7 +74,7 @@ const Login: React.FC = () => {
                                     width: "70%",
                                 }}
                             >
-                                Đăng nhập
+                                Đăng nhâp
                             </button>
                         </form>
                     </div>
