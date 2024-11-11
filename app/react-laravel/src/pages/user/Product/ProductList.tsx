@@ -13,7 +13,7 @@ const ProductList = () => {
     useEffect(() => {
         const fetchProducts = async () => {
             try {
-                const response = await fetch(`http://localhost:3000/products`);
+                const response = await fetch(`http://localhost:8000/api/admin/categories/list-category`);
                 const data = await response.json();
                 console.log(data);
 

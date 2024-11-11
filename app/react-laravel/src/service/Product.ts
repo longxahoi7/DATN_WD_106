@@ -3,7 +3,7 @@ import { FormData } from "../interface/IProduct";
 
 export const GetAllProducts = async () => {
     try {
-        const { data } = await api.get("products");
+        const { data } = await api.get("admin/categories/list-category");
         return data;
     } catch (error) {
         throw new Error("Lỗi");

@@ -25,7 +25,7 @@ Route::post('register', [ApiUserController::class, 'register']);
 //  http://127.0.0.1:8000/api/login
 Route::post('login', [ApiUserController::class, 'login']);
 
-Route::middleware('auth:sanctum')->group(function () {
+// Route::middleware('auth:sanctum')->group(function () {
 
     Route::group(
         [
@@ -123,7 +123,7 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::get('/invoices/{order_id}', [InvoiceController::class, 'generateInvoice']);
         }
     );
-});
+// });
 Route::get('/list-cart',      [ProductsController::class, 'productList']);
 Route::get('detail/{id}',      [ProductsController::class, 'showProduct']);
 
