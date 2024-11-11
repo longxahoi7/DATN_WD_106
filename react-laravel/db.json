@@ -1,0 +1,202 @@
+{
+    "users": [
+        {
+            "id": "1",
+            "title": "To do 1",
+            "complete": true
+        },
+        {
+            "title": "To do 3 update",
+            "complete": true,
+            "id": "3"
+        },
+        {
+            "title": "To do 4 Update",
+            "complete": true,
+            "id": "4"
+        }
+    ],
+    "products": [
+        {
+            "name": "Áo dài tay nam",
+
+            "image": "https://media3.coolmate.me/cdn-cgi/image/quality=80,format=auto/uploads/November2024/24CMCW.DT001_-_XAM_1.jpg",
+            "price": "120.000",
+
+            "category": "ao-thu-dong",
+            "mota": "Sơ mi tay dài luôn sang trọng, lịch lãm. Chất vải lụa dày mango thoáng mát và chất lượng, thấm hút cực tốt, định lượng vải dày dặn chất lượng nhưng mặc lên cực mát. Đường may cuốn sườn tinh tế, form cực chuẩn. Chất vải ít nhăn, mềm mại tuyệt đối, hạn chế nhăn ra co rút và kháng khuẩn. Form dáng Slimfit ôm nhẹ, vừa vặn và tôn dáng tối đa khi mặc.Chất liệu vải lụa mango dày dặn: Giữ form dáng tốt, ít nhăn.Thân thiện với làn da. Mau khô. Hiện có 6 màu để quý khách lựa chọn",
+            "id": "1"
+        },
+        {
+            "name": "Áo Sweater French Terry",
+            "image": "https://media3.coolmate.me/cdn-cgi/image/quality=80,format=auto/uploads/October2024/24CMCW.ST001_-_Navy_2.JPG",
+            "price": "123.000",
+            "category": "ao-len",
+            "mota": "Quần bò nam baggy ống rộng rách gối mang phong cách đường phố phóng khoáng và cá tính. Được làm từ chất liệu denim cao cấp, bền bỉ với thời gian, quần có độ rộng vừa phải ở phần ống, tạo cảm giác thoải mái và dễ di chuyển. Chi tiết rách gối tinh tế làm điểm nhấn, thể hiện sự mạnh mẽ và nổi bật. Dáng baggy hiện đại giúp người mặc dễ dàng phối hợp với nhiều kiểu áo từ áo thun đến áo hoodie. Một item không thể thiếu trong tủ đồ của những chàng trai yêu thích phong cách tự do và trẻ trung.",
+            "id": "2"
+        },
+        {
+            "name": "Áo sơ mi dài tay cổ tàu Premium Poplin",
+            "image": "https://media3.coolmate.me/cdn-cgi/image/quality=80,format=auto/uploads/October2024/24CMCW.SM008_-_Be_8.JPG",
+            "price": "433.000",
+            "category": "ao-len",
+            "mota": "Áo khoác nam xỏ ngón cổ cao được thiết kế độc đáo với phần cổ cao bảo vệ tối ưu khỏi gió lạnh, giữ ấm vùng cổ trong những ngày thời tiết se lạnh. Chất liệu vải mềm mại, co giãn và thoáng khí, đảm bảo sự thoải mái suốt cả ngày dài. Tay áo tích hợp phần xỏ ngón giúp giữ ấm bàn tay và mang lại phong cách thể thao năng động. Phom dáng slimfit thời thượng, phù hợp với nhiều kiểu phối đồ từ quần jeans đến quần thể thao",
+            "id": "3"
+        },
+        {
+            "name": "Áo sơ mi dài tay Modal Essential",
+            "image": "https://media3.coolmate.me/cdn-cgi/image/quality=80,format=auto/uploads/November2024/24CMCW.SM007_-_Xam_2.jpg",
+            "price": "107.800",
+            "category": "ao-du-tiec",
+            "mota": "Ra mắt dòng áo thun Polo chất liệu cotton 100%, co giãn 4 chiều bo cổ dệt kim cao cấp. Đảm bảo thoáng mát và thoải mái cả ngày dài Form slimfit vừa vặn, mix match theo nhiều phong cách và item khác nhau, đến gentlemanor thử ngay để cảm nhận chất liệu.",
+            "id": "4"
+        },
+        {
+            "name": "Quần Shorts Chạy Bộ Economy II",
+            "image": "https://media3.coolmate.me/cdn-cgi/image/width=672,height=990,quality=80,format=auto/uploads/October2024/quan-short-nam.jpg",
+            "price": "199.000",
+            "category": "quan-shorts",
+            "mota": "Ra mắt dòng áo thun Polo chất liệu cotton 100%, co giãn 4 chiều bo cổ dệt kim cao cấp. Đảm bảo thoáng mát và thoải mái cả ngày dài Form slimfit vừa vặn, mix match theo nhiều phong cách và item khác nhau, đến gentlemanor thử ngay để cảm nhận chất liệu.",
+            "id": "5"
+        },
+        {
+            "name": "Quần Jogger Pants Fleece",
+            "image": "https://media3.coolmate.me/cdn-cgi/image/quality=80,format=auto/uploads/November2024/24CMCW.TN002_-_Be_2.JPG",
+            "price": "562.000",
+            "category": "quan-jogger",
+            "mota": "Ra mắt dòng áo thun Polo chất liệu cotton 100%, co giãn 4 chiều bo cổ dệt kim cao cấp. Đảm bảo thoáng mát và thoải mái cả ngày dài Form slimfit vừa vặn, mix match theo nhiều phong cách và item khác nhau, đến gentlemanor thử ngay để cảm nhận chất liệu.",
+            "id": "6"
+        },
+        {
+            "name": "Quần Dài Nam ECC Warp Pants dáng Tape",
+            "image": "https://media3.coolmate.me/cdn-cgi/image/quality=80,format=auto/uploads/July2024/Quan_ECC_Tapped_Fit.16.jpg",
+            "price": "100.000",
+            "category": "quan-vai",
+            "mota": "Ra mắt dòng áo thun Polo chất liệu cotton 100%, co giãn 4 chiều bo cổ dệt kim cao cấp. Đảm bảo thoáng mát và thoải mái cả ngày dài Form slimfit vừa vặn, mix match theo nhiều phong cách và item khác nhau, đến gentlemanor thử ngay để cảm nhận chất liệu.",
+            "id": "7"
+        },
+        {
+            "name": "Quần bơi Trunk Summer Cool 5 inch cạp rời ",
+            "image": "https://media3.coolmate.me/cdn-cgi/image/quality=80,format=auto/uploads/July2024/den1_64.jpg",
+            "price": "357.000",
+            "category": "quan-boi",
+            "mota": "Quần Tây nam gentlemanor với form dáng vừa vặn, sang trọng đầy lịch lãm, điểm nhấn viền ở túi trước và túi sau. Thích hợp mặc đi làm, đi chơi, lót trong sắc nét, tạo cảm giác thoải mái khi di chuyển, làm việc. Với ưu vải co giãn nhẹ, lót trong sắc nét và tinh tế, với mức giá bán cực kì hợp lý. Hiếu được nhu cầu của khách hàng, mặt trong của sản phẩm, các bạn có thể chỉnh sửa lại cho phù hợp với mọi vóc dáng. ",
+            "id": "8"
+        },
+        {
+            "name": "Áo Polo Nam Pique Fitsoft ",
+            "image": "https://media3.coolmate.me/cdn-cgi/image/quality=80,format=auto/uploads/November2021/IMG_1829_copy_90_copyvv.jpg",
+            "price": "357.000",
+            "category": "ao-xuan-ha",
+            "mota": "Quần Tây nam gentlemanor với form dáng vừa vặn, sang trọng đầy lịch lãm, điểm nhấn viền ở túi trước và túi sau. Thích hợp mặc đi làm, đi chơi, lót trong sắc nét, tạo cảm giác thoải mái khi di chuyển, làm việc. Với ưu vải co giãn nhẹ, lót trong sắc nét và tinh tế, với mức giá bán cực kì hợp lý. Hiếu được nhu cầu của khách hàng, mặt trong của sản phẩm, các bạn có thể chỉnh sửa lại cho phù hợp với mọi vóc dáng. ",
+            "id": "9"
+        }
+    ],
+    "categories": [
+        {
+            "id": 1,
+            "name": "Quần Nam",
+            "slug": "quan-nam",
+            "parentId": null,
+            "children": [
+                {
+                    "id": 2,
+                    "name": "Quần Shorts",
+                    "slug": "quan-shorts ",
+                    "parentId": 1
+                },
+                {
+                    "id": 3,
+                    "name": "Quần Jogger",
+                    "slug": "quan-jogger",
+                    "parentId": 1
+                },
+                {
+                    "id": 4,
+                    "name": "Quần Bơi",
+                    "slug": "quan-boi",
+                    "parentId": 1
+                },
+                {
+                    "id": 5,
+                    "name": "Quần Vải",
+                    "slug": "quan-vai",
+                    "parentId": 1
+                }
+            ]
+        },
+        {
+            "id": 7,
+            "name": "Áo Nam",
+            "slug": "ao-nam",
+            "parentId": null,
+            "children": [
+                {
+                    "id": 8,
+                    "name": "Áo Xuân Hạ",
+                    "slug": "ao-xuan-ha",
+                    "parentId": 7
+                },
+                {
+                    "id": 9,
+                    "name": "Áo Thu Đông",
+                    "slug": "ao-thu-dong",
+                    "parentId": 7
+                },
+                { "id": 10, "name": "Áo Len", "slug": "ao-len", "parentId": 9 },
+                {
+                    "id": 11,
+                    "name": "Áo Khoác",
+                    "slug": "ao-khoac",
+                    "parentId": 7
+                }
+            ]
+        },
+        {
+            "id": 12,
+            "name": "Giày Dép Nam",
+            "slug": "giay-dep-nam",
+            "parentId": null,
+            "children": [
+                {
+                    "id": 13,
+                    "name": "Thể Thao",
+                    "slug": "the-thao",
+                    "parentId": 12
+                },
+                {
+                    "id": 14,
+                    "name": "Thu Đông",
+                    "slug": "thu-dong",
+                    "parentId": 12
+                },
+                {
+                    "id": 16,
+                    "name": "Đời Thường",
+                    "slug": "doi-thuong",
+                    "parentId": 12
+                }
+            ]
+        },
+        {
+            "id": 17,
+            "name": "Mũ Nam",
+            "slug": "mu-nam",
+            "parentId": null,
+            "children": [
+                {
+                    "id": 13,
+                    "name": "Mũ Lưỡi Trai",
+                    "slug": "mu-luoi-trai",
+                    "parentId": 17
+                },
+                {
+                    "id": 14,
+                    "name": "Mũ Len",
+                    "slug": "mu-len",
+                    "parentId": 17
+                }
+            ]
+        }
+    ]
+}
