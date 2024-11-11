@@ -53,7 +53,7 @@ Route::group(
                 Route::put('/update-brand/{id}', [BrandController::class, 'updateBrand']);
             }
         );
-    //CRUD ATTRIBUTE
+        //CRUD ATTRIBUTE
         Route::group(
             [
                 'prefix' => 'attributes',
@@ -105,24 +105,42 @@ Route::group(
 );
 Route::group(
     [
-        'prefix' => 'products',
-        'as' => 'products.'
+        'prefix' => 'users',
+        'as' => 'users.'
     ],
     function () {
-        Route::get('/', [ProductsController::class, 'productList'])->name('list');
-        Route::get('/{id}', [ProductsController::class, 'showProduct'])->name('show');
+        Route::group(
+            [
+                'prefix' => 'products',
+                'as' => 'products.'
+            ],
+            function () {
+                Route::get('/', [ProductsController::class, 'productList'])->name('list');
+                Route::get('/{id}', [ProductsController::class, 'showProduct'])->name('show');
+            }
+        );
+        Route::group(
+            [
+                'prefix' => 'cart',
+                'as' => 'cart.'
+            ],
+            function () {
+                Route::post('/add/{productId}', [CartController::class, 'addToCart'])->name('add');
+                Route::get('/', [CartController::class, 'viewCart'])->name('view');
+            }
+        );
+        Route::group(
+            [
+                'prefix' => 'payemnt',
+                'as' => 'payemnt.'
+            ],
+            function () {
+                Route::post('/payment/{order_id}', [CartController::class, 'checkout']);
+                Route::get('/invoices', [CartController::class, 'generateInvoice']);
+            }
+        );
     }
 );
+
 
 // Nhóm route cho giỏ hàng
-Route::group(
-    [
-        'prefix' => 'cart',
-        'as' => 'cart.'
-    ],
-    function () {
-        Route::post('/add/{productId}', [CartController::class, 'addToCart'])->name('add');
-        Route::get('/', [CartController::class, 'viewCart'])->name('view');
-    }
-);
-
