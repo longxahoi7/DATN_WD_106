@@ -113,6 +113,7 @@ const Header = () => {
                                     style={{
                                         height: "35px",
                                         marginRight: "10px",
+                                        width: "750px",
                                     }}
                                 >
                                     <FormControl
@@ -124,16 +125,6 @@ const Header = () => {
                                             height: "40px",
                                         }}
                                     />
-                                    <Button
-                                        variant="outline-success"
-                                        style={{
-                                            height: "30px",
-                                            width: "35px",
-                                            fontSize: "10px",
-                                        }}
-                                    >
-                                        <FaSearch className="search-icon" />
-                                    </Button>
                                 </Form>
                             </Col>
                         </Row>
@@ -152,7 +143,7 @@ const Header = () => {
                                     </Nav.Link>
                                     <Nav.Link
                                         className="custom-Navlink"
-                                        href="#"
+                                        href="register"
                                     >
                                         <FaUser className="user-icon" /> Tài
                                         Khoản

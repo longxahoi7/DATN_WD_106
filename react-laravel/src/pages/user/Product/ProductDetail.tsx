@@ -62,27 +62,24 @@ const ProductDetail = (props: any) => {
     useEffect(() => {
         const fetchRelatedProducts = async () => {
             try {
-                const response = await instance.get("/"); // Lấy tất cả sản phẩm
-                const products: IProduct[] = response.data; // Giả sử response.data trả về mảng sản phẩm
+                const response = await instance.get("/");
+                const products: IProduct[] = response.data;
                 console.log(products);
 
-                // Kiểm tra nếu sản phẩm hiện tại đã được tải
                 if (products.length > 0) {
                     const currentProduct = products.find(
                         (p: IProduct) => p.id.toString() === id
-                    ); // Tìm sản phẩm hiện tại theo ID
+                    );
                     console.log("Current product ID:", typeof id);
                     console.log("Current product ", currentProduct);
                     if (currentProduct) {
-                        // Kiểm tra nếu category của sản phẩm hiện tại là hợp lệ
                         const relatedProducts = products.filter(
                             (p: IProduct) =>
-                                p.category === currentProduct.category && // So sánh category
-                                p.id !== currentProduct.id // Đảm bảo không lấy sản phẩm hiện tại
+                                p.category === currentProduct.category &&
+                                p.id !== currentProduct.id
                         );
                         console.log(relatedProducts);
                         console.log("category product ", currentProduct);
-                        // Kiểm tra xem có sản phẩm liên quan không
                         if (relatedProducts.length > 0) {
                             setRelatedProducts(relatedProducts);
                         } else {
@@ -99,7 +96,6 @@ const ProductDetail = (props: any) => {
             }
         };
 
-        // Gọi hàm fetchRelatedProducts khi id thay đổi
         fetchRelatedProducts();
     }, [id]);
 

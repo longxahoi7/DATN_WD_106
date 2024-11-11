@@ -1,5 +1,13 @@
 import React, { useState } from "react";
-import "../../style/auth.css";
+import {
+    FaHome,
+    FaUser,
+    FaShoppingCart,
+    FaLocationArrow,
+    FaPhoneAlt,
+    FaSearch,
+} from "react-icons/fa";
+import "../../../style/auth.css";
 
 const Register: React.FC = () => {
     const images: string[] = ["/image/login/imageAuth.png"];
@@ -21,7 +29,7 @@ const Register: React.FC = () => {
             <div className="row h-100">
                 {/* Bên trái */}
                 <div className="col-md-8 p-5 flex-column justify-content-center align-items-center">
-                    <div className="logo mb-4">
+                    <div className="logo">
                         <img
                             src="/image/logo/logo-remove.png"
                             alt="Gentlemanor Logo"
@@ -36,14 +44,6 @@ const Register: React.FC = () => {
                         <form>
                             <div>
                                 <input
-                                    type="text"
-                                    className="form-control mb-4"
-                                    id="username"
-                                    placeholder="Tên tài khoản"
-                                />
-                            </div>
-                            <div>
-                                <input
                                     type="email"
                                     className="form-control mb-4"
                                     id="email"
@@ -52,10 +52,26 @@ const Register: React.FC = () => {
                             </div>
                             <div>
                                 <input
+                                    type="phone"
+                                    className="form-control mb-4"
+                                    id="phone"
+                                    placeholder="Phone"
+                                />
+                            </div>
+                            <div>
+                                <input
                                     type="password"
                                     className="form-control mb-4"
                                     id="password"
                                     placeholder="Mật khẩu"
+                                />
+                            </div>
+                            <div>
+                                <input
+                                    type="password"
+                                    className="form-control mb-4"
+                                    id="password"
+                                    placeholder="Nhập lại mật khẩu"
                                 />
                             </div>
                             <div
@@ -107,11 +123,17 @@ const Register: React.FC = () => {
                     </div>
                     <div className="mt-3 text-center">
                         <p>
-                            Bạn chưa có tài khoản?{" "}
+                            Bạn đã có tài khoản?{" "}
                             <a href="/login" className="register-link">
                                 Đăng nhập ngay
                             </a>
                         </p>
+                        <a>
+                            Quay về{" "}
+                            <a href="/home" className="register-link">
+                                trang chủ
+                            </a>
+                        </a>
                     </div>
                 </div>
 
