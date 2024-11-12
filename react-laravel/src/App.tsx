@@ -28,6 +28,7 @@ import Pay from "./pages/user/Product/Pay";
 import Location from "./pages/user/Product/Location";
 import UserLayout from "./layout/UserLayout";
 import Product from "./pages/user/Product/Product";
+import NotFound from "./pages/404NotFound";
 // import ChiTietGioHang from "./pages/user/ChiTietGioHang/ChiTietGioHang";
 
 const App: React.FC = () => {
@@ -56,7 +57,7 @@ const App: React.FC = () => {
 
                 {/* Routes cho trang người dùng */}
                 <Route path="" element={<UserLayout />}>
-                    <Route path="home" element={<ProductList />} />
+                    <Route path="" element={<ProductList />} />
                     <Route
                         path="product-detail/:id"
                         element={<ProductDetail />}
@@ -85,6 +86,7 @@ const App: React.FC = () => {
                 <Route path="login" element={<Login />} />
                 <Route path="register" element={<Register />} />
                 <Route path="forgotPassword" element={<ForgotPassword />} />
+                <Route path="*" element={<NotFound />} />
             </Routes>
         </ConfigProvider>
     );

@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Space, Table, Button, Modal, message } from "antd";
 import { EditOutlined, DeleteOutlined, PlusOutlined } from "@ant-design/icons";
 import "../../../style/quanLy.css";
 import FormDanhMuc from "./FormDanhMuc";
+import api from "../../../config/axios";
+import { Category } from "../../../interface/IProduct";
 
 const columns = (handleEdit, handleDelete) => [
     {
@@ -13,7 +15,6 @@ const columns = (handleEdit, handleDelete) => [
                 {index + 1}
             </span>
         ),
-
         align: "center" as "center",
     },
     {
@@ -21,14 +22,12 @@ const columns = (handleEdit, handleDelete) => [
         dataIndex: "name",
         key: "name",
         render: (text) => <a style={{ color: "green" }}>{text}</a>,
-
         align: "center" as "center",
     },
     {
         title: "Mô tả",
         dataIndex: "description",
         key: "description",
-
         align: "center" as "center",
     },
     {
@@ -40,7 +39,15 @@ const columns = (handleEdit, handleDelete) => [
                 <img src={text} alt="Category" style={{ width: "50px" }} />
             </div>
         ),
-
+        align: "center" as "center",
+    },
+    {
+        title: "Trạng thái",
+        dataIndex: "is_active",
+        key: "is_active",
+        render: (text) => (
+            <span>{text === 1 ? "Hoạt động" : "Không hoạt động"}</span>
+        ),
         align: "center" as "center",
     },
     {
@@ -53,56 +60,63 @@ const columns = (handleEdit, handleDelete) => [
                 />
                 <DeleteOutlined
                     style={{ color: "red" }}
-                    onClick={() => handleDelete(record.key)}
+                    onClick={() => handleDelete(record.category_id)}
                 />
             </Space>
         ),
-
         align: "center" as "center",
-    },
-];
-
-const data = [
-    {
-        key: "1",
-        name: "Danh mục A",
-        description: "Mô tả danh mục A",
-        image: "https://via.placeholder.com/50",
-    },
-    {
-        key: "2",
-        name: "Danh mục B",
-        description: "Mô tả danh mục B",
-        image: "https://via.placeholder.com/50",
-    },
-    {
-        key: "3",
-        name: "Danh mục C",
-        description: "Mô tả danh mục C",
-        image: "https://via.placeholder.com/50",
     },
 ];
 
 const QuanLyDanhMuc = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [currentCategory, setCurrentCategory] = useState(null);
+    const [currentCategory, setCurrentCategory] = useState<Category | null>(
+        null
+    ); // Định nghĩa kiểu cho category hiện tại
+    const [categories, setCategories] = useState<Category[]>([]); // Định nghĩa kiểu cho mảng danh mục
+
+    useEffect(() => {
+        // Lấy danh sách danh mục từ API khi component được render
+        const fetchCategories = async () => {
+            try {
+                const response = await api.get(
+                    "admin/categories/list-category"
+                );
+                setCategories(response.data); // Gán dữ liệu từ API vào state
+            } catch (error) {
+                console.error("Lỗi khi lấy danh mục:", error);
+                message.error("Không thể tải danh mục.");
+            }
+        };
+        fetchCategories();
+    }, []);
 
     const handleAddCategory = () => {
         setCurrentCategory(null);
         setIsModalOpen(true);
     };
 
-    const handleEdit = (record) => {
+    const handleEdit = (record: Category) => {
         setCurrentCategory(record);
         setIsModalOpen(true);
     };
 
-    const handleDelete = (key) => {
+    const handleDelete = (category_id: number) => {
         Modal.confirm({
             title: "Bạn có chắc chắn muốn xóa danh mục này?",
-            onOk: () => {
-                console.log(`Đã xóa danh mục với key: ${key}`);
-                message.success("Xóa danh mục thành công");
+            onOk: async () => {
+                try {
+                    await api.delete(`admin/categories/${category_id}`); // Gửi yêu cầu xóa
+                    setCategories(
+                        categories.filter(
+                            (category) => category.category_id !== category_id
+                        )
+                    ); // Cập nhật lại danh sách
+                    message.success("Xóa danh mục thành công");
+                } catch (error) {
+                    console.error("Xóa danh mục thất bại:", error);
+                    message.error("Không thể xóa danh mục.");
+                }
             },
         });
     };
@@ -111,13 +125,28 @@ const QuanLyDanhMuc = () => {
         setIsModalOpen(false);
     };
 
-    const handleOk = (values) => {
-        if (currentCategory) {
-            console.log("Cập nhật danh mục:", values);
-        } else {
-            console.log("Dữ liệu danh mục mới:", values);
+    const handleOk = async (values: Category) => {
+        try {
+            if (currentCategory) {
+                // Cập nhật danh mục
+                await api.put(
+                    `admin/categories/${currentCategory.category_id}`,
+                    values
+                );
+                message.success("Cập nhật danh mục thành công");
+            } else {
+                // Thêm mới danh mục
+                await api.post("admin/categories", values);
+                message.success("Thêm danh mục thành công");
+            }
+            setIsModalOpen(false);
+            // Cập nhật lại danh sách danh mục
+            const response = await api.get("admin/categories");
+            setCategories(response.data);
+        } catch (error) {
+            console.error("Lỗi khi thêm/sửa danh mục:", error);
+            message.error("Không thể thêm hoặc sửa danh mục.");
         }
-        setIsModalOpen(false);
     };
 
     return (
@@ -136,7 +165,7 @@ const QuanLyDanhMuc = () => {
                 </Button>
                 <Table
                     columns={columns(handleEdit, handleDelete)}
-                    dataSource={data}
+                    dataSource={categories}
                     pagination={{ pageSize: 4 }}
                 />
 
