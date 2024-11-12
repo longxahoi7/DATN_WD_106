@@ -7,7 +7,6 @@ import {
     Nav,
     Form,
     FormControl,
-    Button,
 } from "react-bootstrap";
 import {
     FaHome,
@@ -15,7 +14,6 @@ import {
     FaShoppingCart,
     FaLocationArrow,
     FaPhoneAlt,
-    FaSearch,
 } from "react-icons/fa";
 import { Category } from "../../interface/IProduct";
 import "../../style/header.css";
@@ -23,23 +21,30 @@ import { Link, useNavigate } from "react-router-dom";
 
 const Header = () => {
     const navigate = useNavigate();
-
     const [categories, setCategories] = useState<Category[]>([]);
-    useEffect(() => {
-        const fetchCategories = async () => {
-            try {
-                const response = await fetch(
-                    " http://localhost:3000/categories"
-                );
-                const data = await response.json();
-                setCategories(data);
-            } catch (error) {
-                console.error("Failed to fetch categories", error);
-            }
-        };
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [userName, setUserName] = useState("");
 
-        fetchCategories();
+    useEffect(() => {
+        // Kiểm tra token để xác định trạng thái đăng nhập
+        const token = localStorage.getItem("token");
+        if (token) {
+            // Giả sử lấy tên người dùng từ localStorage hoặc gọi API
+            const storedUserName =
+                localStorage.getItem("userName") || "Tài Khoản";
+            setUserName(storedUserName);
+            setIsLoggedIn(true);
+        }
     }, []);
+
+    const handleLogout = () => {
+        // Xóa token và tên tài khoản khỏi localStorage khi đăng xuất
+        localStorage.removeItem("token");
+        localStorage.removeItem("userName");
+        setIsLoggedIn(false);
+        setUserName("Tài Khoản");
+        navigate("/login"); // Chuyển hướng tới trang đăng nhập
+    };
 
     const handleCategoryClick = (slug: string) => {
         navigate(`/products/${slug}`);
@@ -49,7 +54,7 @@ const Header = () => {
         return (
             <div className="header-nav" style={{ display: "flex" }}>
                 {categories?.map((parent) => (
-                    <ul key={parent.id}>
+                    <ul key={parent.category_id}>
                         <li className="dropdown" style={{ color: "gray" }}>
                             <a
                                 href="#"
@@ -64,7 +69,7 @@ const Header = () => {
                             {parent.children && parent.children.length > 0 && (
                                 <ul className="dropdown-menu">
                                     {parent.children.map((child) => (
-                                        <li key={child.id}>
+                                        <li key={child.category_id}>
                                             <Link
                                                 to={`/products/${child.slug}`}
                                                 style={{
@@ -93,14 +98,14 @@ const Header = () => {
                     <Col
                         xs={2}
                         md={2}
-                        lg={2}
+                        lg={1}
                         className="d-flex align-items-center"
                     >
-                        <Navbar.Brand href="/home">
+                        <Navbar.Brand href="/">
                             <img
                                 src="../../../public/image/logo/logo-remove.png"
                                 alt="Gentle Manor"
-                                style={{ width: "120px", marginLeft: "50px" }}
+                                style={{ width: "120px", marginLeft: "150px" }}
                             />
                         </Navbar.Brand>
                     </Col>
@@ -111,9 +116,9 @@ const Header = () => {
                                 <Form
                                     className="d-flex align-items-center"
                                     style={{
-                                        height: "35px",
-                                        marginRight: "10px",
-                                        width: "750px",
+                                        height: "45px",
+                                        marginRight: "50px",
+                                        width: "100%",
                                     }}
                                 >
                                     <FormControl
@@ -134,20 +139,54 @@ const Header = () => {
                     </Col>
                     {/* Cột bên phải - Icon và địa chỉ */}
                     <Col xs={2} md={3} lg={3} className="ms-auto">
-                        <Row className="d-flex justify-content-end mb-4">
+                        <Row className="d-flex justify-content-end mb-4 ml-5">
                             <Col className="mt-5">
                                 <Nav>
-                                    <Nav.Link href="/home">
+                                    <Nav.Link href="/">
                                         <FaHome className="home-icon" /> Trang
                                         chủ
                                     </Nav.Link>
-                                    <Nav.Link
-                                        className="custom-Navlink"
-                                        href="register"
-                                    >
-                                        <FaUser className="user-icon" /> Tài
-                                        Khoản
-                                    </Nav.Link>
+                                    <div className="dropdown">
+                                        <Nav.Link className="custom-Navlink">
+                                            <FaUser className="user-icon" />{" "}
+                                            {isLoggedIn
+                                                ? userName
+                                                : "Tài Khoản"}
+                                        </Nav.Link>
+                                        <div className="dropdown-menu">
+                                            {isLoggedIn ? (
+                                                <>
+                                                    <Link
+                                                        to="/profile"
+                                                        className="dropdown-item"
+                                                    >
+                                                        Thông tin chung
+                                                    </Link>
+                                                    <span
+                                                        className="dropdown-item"
+                                                        onClick={handleLogout}
+                                                    >
+                                                        Đăng xuất
+                                                    </span>
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <Link
+                                                        to="/login"
+                                                        className="dropdown-item"
+                                                    >
+                                                        Đăng nhập
+                                                    </Link>
+                                                    <Link
+                                                        to="/register"
+                                                        className="dropdown-item"
+                                                    >
+                                                        Đăng ký
+                                                    </Link>
+                                                </>
+                                            )}
+                                        </div>
+                                    </div>
                                     <Nav.Link href="#">
                                         <FaShoppingCart className="shop-icon" />
                                     </Nav.Link>
@@ -156,7 +195,6 @@ const Header = () => {
                         </Row>
                         <Row>
                             <Col className="text-start custom-text d-flex">
-                                {/* Địa chỉ có thể nhấn và mở Google Maps */}
                                 <a
                                     href="https://www.google.com/maps/search/13+P.+Trịnh+Văn+Bô,+Xuân+Phương,+Nam+Từ+Liêm,+Hà+Nội"
                                     target="_blank"

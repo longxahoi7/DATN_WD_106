@@ -12,10 +12,14 @@ export type FormData = Pick<
 >;
 
 export interface Category {
-    id: number;
+    category_id: number;
     name: string;
-    size: string;
+    description: string;
+    image: string;
     slug: string;
-    parentId: number | null;
+    is_active: number;
+    parent_id: number;
+    created_at: string;
+    updated_at: string;
     children?: Category[];
 }

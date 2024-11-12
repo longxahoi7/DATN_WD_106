@@ -58,3 +58,8 @@
     margin-bottom: 10px;
     font-size: 14px;
 }
+
+button.ant-btn .anticon {
+    background-color: transparent; /* Xóa nền mặc định của icon */
+    color: white; /* Đảm bảo icon có màu đồng nhất với nền button */
+}

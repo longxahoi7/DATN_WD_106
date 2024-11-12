@@ -1,26 +1,96 @@
 import React, { useState } from "react";
 import "../../../style/auth.css";
+import { useNavigate } from "react-router-dom";
+import api from "../../../config/axios";
 
 const Login: React.FC = () => {
-    const images: string[] = ["/image/login/imageAuthLogin.png"];
+    const navigate = useNavigate();
+    const [remember, setRemember] = useState(false); // Thêm state để theo dõi trạng thái checkbox
+    const [loading, setLoading] = useState(false);
+    const [formData, setFormData] = useState({
+        email: "",
+        password: "",
+    });
+    const [errors, setErrors] = useState({
+        email: "",
+        password: "",
+        general: "",
+    });
 
-    const [currentIndex, setCurrentIndex] = useState(0);
+    const validateInput = (id: string, value: string) => {
+        let errorMessage = "";
 
-    const nextSlide = () => {
-        setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
+        if (id === "email" && value.trim() === "") {
+            errorMessage = "Email không được để trống.";
+        } else if (
+            id === "email" &&
+            !/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(value)
+        ) {
+            errorMessage = "Email không hợp lệ.";
+        }
+
+        if (id === "password" && value.length < 6) {
+            errorMessage = "Mật khẩu phải có ít nhất 6 ký tự.";
+        }
+
+        setErrors((prevErrors) => ({
+            ...prevErrors,
+            [id]: errorMessage,
+        }));
     };
 
-    const prevSlide = () => {
-        setCurrentIndex(
-            (prevIndex) => (prevIndex - 1 + images.length) % images.length
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { id, value } = e.target;
+        setFormData({ ...formData, [id]: value });
+        validateInput(id, value);
+    };
+
+    const handleLogin = async (e: React.FormEvent) => {
+        setLoading(true);
+        e.preventDefault();
+
+        if (!isFormValid()) {
+            setLoading(false);
+            return;
+        }
+
+        try {
+            const response = await api.post("login", {
+                email: formData.email,
+                password: formData.password,
+            });
+
+            if (response.status === 200 && response.data.token) {
+                if (remember) {
+                    localStorage.setItem("token", response.data.token); // Lưu token vào localStorage nếu chọn "Ghi nhớ"
+                } else {
+                    sessionStorage.setItem("token", response.data.token); // Nếu không, lưu token vào sessionStorage
+                }
+
+                alert("Đăng nhập thành công!");
+                navigate("/"); // Chuyển hướng đến trang chủ
+            }
+        } catch (error: any) {
+            setErrors({
+                ...errors,
+                general: "Đăng nhập thất bại. Vui lòng thử lại.",
+            });
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const isFormValid = () => {
+        return (
+            /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(formData.email) &&
+            formData.password.length >= 6
         );
     };
 
     return (
         <div className="container-fluid h-100">
             <div className="row h-100">
-                {/* Bên trái */}
-                <div className="col-md-8 p-5 flex-column justify-content-center align-items-center">
+                <div className="col-md-8 p-3 flex-column justify-content-center align-items-center">
                     <div className="logo mb-4">
                         <img
                             src="/image/logo/logo-remove.png"
@@ -33,31 +103,47 @@ const Login: React.FC = () => {
                         <p className="text-muted mb-4">
                             Vui lòng nhập đầy đủ thông tin để sử dụng.
                         </p>
-                        <form>
+                        <form onSubmit={handleLogin}>
                             <div>
                                 <input
                                     type="text"
-                                    className="form-control mb-4"
-                                    id="username"
-                                    placeholder="Tên tài khoản"
+                                    className={`form-control ${
+                                        errors.email ? "is-invalid" : ""
+                                    }`}
+                                    id="email"
+                                    placeholder="Email"
+                                    value={formData.email}
+                                    onChange={handleChange}
+                                    required
+                                    autoComplete="username"
                                 />
                             </div>
                             <div>
                                 <input
                                     type="password"
-                                    className="form-control mb-4"
+                                    className={`form-control ${
+                                        errors.password ? "is-invalid" : ""
+                                    }`}
                                     id="password"
                                     placeholder="Mật khẩu"
+                                    value={formData.password}
+                                    onChange={handleChange}
+                                    required
+                                    autoComplete="current-password"
                                 />
                             </div>
                             <div
-                                className="form-check mb-3 "
+                                className="form-check mb-3"
                                 style={{ textAlign: "left" }}
                             >
                                 <input
                                     type="checkbox"
                                     className="form-check-input"
                                     id="remember"
+                                    checked={remember}
+                                    onChange={(e) =>
+                                        setRemember(e.target.checked)
+                                    }
                                 />
                                 <label
                                     className="form-check-label"
@@ -73,10 +159,20 @@ const Login: React.FC = () => {
                                     backgroundColor: "#0f6d5e",
                                     width: "70%",
                                 }}
+                                disabled={!isFormValid() || loading}
                             >
-                                Đăng nhâp
+                                {loading ? "Đang đăng nhập..." : "Đăng nhập"}
                             </button>
                         </form>
+
+                        {errors.general && (
+                            <div
+                                className="alert alert-danger mt-3"
+                                role="alert"
+                            >
+                                {errors.general}
+                            </div>
+                        )}
                     </div>
                     <div className="mt-4">
                         <div className="or-divider">
@@ -104,19 +200,23 @@ const Login: React.FC = () => {
                                 Đăng ký ngay
                             </a>
                         </p>
+                        <p>
+                            Quay về{" "}
+                            <a href="/" className="register-link">
+                                trang chủ
+                            </a>
+                        </p>
                     </div>
                 </div>
 
-                {/* Bên phải */}
                 <div className="col-md-4 p-0">
                     <div className="carousel-container relative">
                         <div className="carousel-slide">
                             <img
-                                src={images[currentIndex]}
+                                src="/image/login/imageAuthLogin.png"
                                 alt="Slide"
                                 className="carousel-image"
                             />
-                            {/* <div className="gradient"></div> */}
                             <div className="carousel-content absolute z-5">
                                 <h2 className="carousel-title text-white">
                                     Tăng cường tin cậy & minh bạch
@@ -130,33 +230,6 @@ const Login: React.FC = () => {
                                 </p>
                             </div>
                         </div>
-
-                        {/* Nút điều khiển slide */}
-                        {/* <button
-                            className="carousel-control prev"
-                            onClick={prevSlide}
-                        >
-                            &#10094;
-                        </button>
-                        <button
-                            className="carousel-control next"
-                            onClick={nextSlide}
-                        >
-                            &#10095;
-                        </button> */}
-
-                        {/* Chỉ báo slide */}
-                        {/* <div className="carousel-indicators">
-                            {images.map((_, index) => (
-                                <span
-                                    key={index}
-                                    className={`indicator ${
-                                        currentIndex === index ? "active" : ""
-                                    }`}
-                                    onClick={() => setCurrentIndex(index)}
-                                ></span>
-                            ))}
-                        </div> */}
                     </div>
                 </div>
             </div>

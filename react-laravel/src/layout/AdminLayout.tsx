@@ -44,11 +44,13 @@ const AdminLayout: React.FC = () => {
                 },
                 {
                     key: "4",
-                    label: "Quản lý thuộc tính",
+                    label: (
+                        <Link to="attributemanagement">Quản lý thuộc tính</Link>
+                    ),
                 },
                 {
                     key: "5",
-                    label: "Quản lý đơn hàng",
+                    label: <Link to="/">Quản lý đơn hàng</Link>,
                 },
             ],
         },
