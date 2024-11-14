@@ -55,24 +55,33 @@ class CartController extends Controller
     // API để xem giỏ hàng
     public function viewCart()
     {
-        // Get the currently authenticated user
-        $user = Auth::user();
-
+        // Lấy ID người dùng đã đăng nhập
+        $userId = Auth::id();
+    
+        // Kiểm tra nếu người dùng chưa đăng nhập
+        // if (!$userId) {
+        //     return response()->json([
+        //         'success' => false,
+        //         'message' => 'User is not authenticated.'
+        //     ], 401);
+        // }
+    
         // Lấy giỏ hàng của người dùng đã đăng nhập
-        $shoppingCart = ShoppingCart::where('user_id', $user->id) // Find the cart for the logged-in user
-            ->with('cartItems.product') // Eager load the cart items and their associated products
-            ->first(); // Get the first cart (there should be only one cart per user)
-
-        // If no cart is found for the user
+        $shoppingCart = ShoppingCart::where('user_id', $userId)
+            ->with('cartItems.product') // Eager load các sản phẩm trong giỏ hàng
+            ->get(); // Lấy giỏ hàng đầu tiên (mỗi người dùng chỉ có một giỏ hàng)
+    
+        // Nếu không tìm thấy giỏ hàng
         if (!$shoppingCart) {
             return response()->json([
                 'success' => false,
                 'message' => 'No cart found for the logged-in user.'
             ], 404);
         }
-
-        // Return the cart data along with the items and their associated products
+    
+        // Trả về dữ liệu giỏ hàng cùng với các sản phẩm
         return response()->json([
+            'success' => true,
             'cart' => $shoppingCart
         ], 200);
     }
