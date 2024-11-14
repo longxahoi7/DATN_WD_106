@@ -18,7 +18,10 @@
 }
 
 .custom-form {
-    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column; /* Đảm bảo các phần tử trong form xếp theo chiều dọc */
 }
 
 .custom-form-control {
@@ -100,17 +103,11 @@
 }
 
 .form-control {
-    width: 70% !important;
     border-radius: 4px;
     margin: 0 auto;
     margin-bottom: 15px;
     border: 1px solid #ddd;
     background-color: #f0f0f0 !important;
-}
-
-.form-check {
-    width: 70% !important;
-    margin: 0 auto;
 }
 
 .form-control:focus {
@@ -150,4 +147,30 @@
 
 .input-error {
     border: 1px solid red;
+}
+
+.custom-form-auth {
+    width: 70%; /* Đảm bảo form chiếm hết chiều rộng của container */
+    box-sizing: border-box; /* Đảm bảo padding không làm rộng form */
+    background-color: #fff; /* Tạo nền cho form */
+    border-radius: 8px; /* Tạo các góc bo cho form */
+}
+
+.password-input-wrapper {
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.password-input-wrapper input {
+    flex: 1;
+    padding-right: 2.5rem;
+}
+
+.eye-icon {
+    position: absolute;
+    right: 35px;
+    height: 47px;
+    color: #888;
+    font-size: 1.2rem;
 }

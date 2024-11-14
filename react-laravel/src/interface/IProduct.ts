@@ -1,14 +1,25 @@
 export interface IProduct {
-    id: number;
+    product_id: number;
+    brandId: number;
+    product_category_id: number;
     name: string;
-    image: string;
-    price: number;
-    category: string;
-    mota: string;
+    description: string;
+    sku: string;
+    subtitle: string;
+    slug: string;
+    isActive: boolean;
+    deletedAt?: Date | null;
+    createdAt?: Date | null;
+    updatedAt?: Date | null;
+    image?: string;
+    price: number | null;
+    category?: string;
+    mota?: string;
 }
+
 export type FormData = Pick<
     IProduct,
-    "name" | "image" | "price" | "category" | "mota"
+    "name" | "description" | "sku" | "subtitle" | "slug"
 >;
 
 export interface Category {
@@ -21,5 +32,5 @@ export interface Category {
     parent_id: number;
     created_at: string;
     updated_at: string;
-    children?: Category[];
+    delete_at: string;
 }
