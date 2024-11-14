@@ -7,7 +7,7 @@ import {
     TagsOutlined,
 } from "@ant-design/icons";
 import { Button, Layout, Menu, theme } from "antd";
-import { Outlet, Link } from "react-router-dom";
+import { Outlet, Link, useLocation } from "react-router-dom";
 import type { MenuProps } from "antd";
 import logo from "../../public/image/logo/logo-remove.png";
 import "../style/layout.css";
@@ -16,6 +16,7 @@ const { Header, Sider, Content } = Layout;
 
 const AdminLayout: React.FC = () => {
     const [collapsed, setCollapsed] = useState<boolean>(false);
+    const location = useLocation();
 
     const {
         token: { colorBgContainer, borderRadiusLG },
@@ -99,9 +100,11 @@ const AdminLayout: React.FC = () => {
                         type="text"
                         icon={
                             collapsed ? (
-                                <MenuUnfoldOutlined />
+                                <MenuUnfoldOutlined
+                                    style={{ color: "black" }}
+                                />
                             ) : (
-                                <MenuFoldOutlined />
+                                <MenuFoldOutlined style={{ color: "black" }} />
                             )
                         }
                         onClick={() => setCollapsed(!collapsed)}
