@@ -59,9 +59,9 @@ class CartController extends Controller
         $user = Auth::user();
 
         // Lấy giỏ hàng của người dùng đã đăng nhập
-        $shoppingCart = ShoppingCart::where('user_id', $user->id) // Find the cart for the logged-in user
+        $shoppingCart = ShoppingCart::where('user_id', 4) // Find the cart for the logged-in user
             ->with('cartItems.product') // Eager load the cart items and their associated products
-            ->first(); // Get the first cart (there should be only one cart per user)
+            ->get(); // Get the first cart (there should be only one cart per user)
 
         // If no cart is found for the user
         if (!$shoppingCart) {
