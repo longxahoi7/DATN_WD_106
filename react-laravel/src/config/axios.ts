@@ -1,23 +1,45 @@
 import axios from "axios";
 
 const api = axios.create({
-    baseURL: "http://localhost:3000/",
+    baseURL: "http://localhost:8000/api/",
+    headers: {
+        "Content-Type": "application/json",
+    },
 });
-export default api;
 
-// src/api/product.ts
+// Thêm token Authorization cho từng request
+api.interceptors.request.use(
+    (config) => {
+        const userType = localStorage.getItem("userType"); // 'admin' hoặc 'user'
+        const token = localStorage.getItem("token");
 
-import { IProduct } from "../interface/IProduct";
+        if (token) {
+            config.headers.Authorization = `Bearer ${token}`;
+        }
 
-const API_BASE_URL = "http://localhost:8000/";
+        // Gán header riêng cho admin
+        if (userType === "admin") {
+            config.headers["Admin-Access"] = "true";
+        }
 
-export const GetProductByID = async (
-    id: string | undefined
-): Promise<IProduct> => {
-    try {
-        const response = await axios.get(`${API_BASE_URL}/products/${id}`);
-        return response.data;
-    } catch (error) {
-        throw new Error("Lỗi");
+        return config;
+    },
+    (error) => {
+        return Promise.reject(error);
     }
-};
+);
+
+// Xử lý lỗi phản hồi
+api.interceptors.response.use(
+    (response) => response,
+    (error) => {
+        if (error.response && error.response.status === 401) {
+            // Token không hợp lệ hoặc hết hạn, có thể chuyển hướng đến trang đăng nhập
+            localStorage.clear();
+            window.location.href = "/login"; // Hoặc trang phù hợp với ứng dụng của bạn
+        }
+        return Promise.reject(error);
+    }
+);
+
+export default api;

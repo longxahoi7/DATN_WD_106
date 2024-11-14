@@ -102,3 +102,7 @@
     color: gray;
     text-decoration: none;
 }
+
+.custom-dropdown-user:hover {
+    background-color: #00cd66;
+}
