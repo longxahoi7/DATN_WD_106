@@ -69,7 +69,7 @@ class CartController extends Controller
         // Lấy giỏ hàng của người dùng đã đăng nhập
         $shoppingCart = ShoppingCart::where('user_id', $userId)
             ->with('cartItems.product') // Eager load các sản phẩm trong giỏ hàng
-            ->first(); // Lấy giỏ hàng đầu tiên (mỗi người dùng chỉ có một giỏ hàng)
+            ->get(); // Lấy giỏ hàng đầu tiên (mỗi người dùng chỉ có một giỏ hàng)
     
         // Nếu không tìm thấy giỏ hàng
         if (!$shoppingCart) {
