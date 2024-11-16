@@ -34,3 +34,11 @@ export interface Category {
     updated_at: string;
     delete_at: string;
 }
+export interface Attributes {
+    attribute_id: number;
+    name: string;
+    value: string;
+    created_at: string;
+    updated_at: string;
+    deleted_at: string;
+}
