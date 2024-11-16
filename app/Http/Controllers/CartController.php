@@ -43,7 +43,6 @@ class CartController extends Controller
         }
 
         $cartItem->save();
-
         // Return a success response with the cart item data
         return response()->json([
             'message' => 'Đã thêm sản phẩm vào giỏ hàng!',
