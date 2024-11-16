@@ -1,11 +1,16 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 import "../../../style/auth.css";
 import { useNavigate } from "react-router-dom";
 import api from "../../../config/axios";
+import Swal from "sweetalert2";
 
 const Login: React.FC = () => {
     const navigate = useNavigate();
-    const [remember, setRemember] = useState(false); // Thêm state để theo dõi trạng thái checkbox
+
+    const [rememberMe, setRememberMe] = useState(false);
+
+    const [passwordVisible, setPasswordVisible] = useState(false);
     const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState({
         email: "",
@@ -61,24 +66,64 @@ const Login: React.FC = () => {
             });
 
             if (response.status === 200 && response.data.token) {
-                if (remember) {
-                    localStorage.setItem("token", response.data.token); // Lưu token vào localStorage nếu chọn "Ghi nhớ"
+                localStorage.setItem("token", response.data.token); // Lưu token vào localStorage
+                if (rememberMe) {
+                    // Lưu email và mật khẩu nếu chọn "Ghi nhớ"
+                    localStorage.setItem("rememberedEmail", formData.email);
+                    localStorage.setItem(
+                        "rememberedPassword",
+                        formData.password
+                    );
                 } else {
-                    sessionStorage.setItem("token", response.data.token); // Nếu không, lưu token vào sessionStorage
+                    // Xóa email và mật khẩu nếu không chọn "Ghi nhớ"
+                    localStorage.removeItem("rememberedEmail");
+                    localStorage.removeItem("rememberedPassword");
                 }
 
-                alert("Đăng nhập thành công!");
-                navigate("/"); // Chuyển hướng đến trang chủ
+                Swal.fire({
+                    icon: "success",
+                    title: "Đăng nhập thành công",
+                    text: "Chào mừng bạn đến với GENTLEMANOR!",
+                    confirmButtonText: "Đóng",
+                }).then(() => {
+                    // Sau khi nhấn OK, điều hướng về trang login
+                    navigate("/");
+                });
             }
         } catch (error: any) {
             setErrors({
                 ...errors,
                 general: "Đăng nhập thất bại. Vui lòng thử lại.",
             });
+
+            Swal.fire({
+                icon: "error",
+                title: "Lỗi đăng nhập",
+                text: "Đăng nhập thất bại. Vui lòng kiểm tra lại email và mật khẩu.",
+                confirmButtonText: "Đóng",
+            });
         } finally {
             setLoading(false);
         }
     };
+
+    useEffect(() => {
+        const savedEmail = localStorage.getItem("rememberedEmail");
+        const savedPassword = localStorage.getItem("rememberedPassword");
+        const token = localStorage.getItem("token");
+
+        if (savedEmail && savedPassword) {
+            setFormData({
+                email: savedEmail,
+                password: savedPassword,
+            });
+            setRememberMe(true); // Đặt checkbox ghi nhớ nếu có thông tin đã lưu
+        }
+        if (token) {
+            // Nếu có token, chuyển hướng người dùng đến trang chủ hoặc một trang khác
+            navigate("/", { replace: true });
+        }
+    }, [navigate]);
 
     const isFormValid = () => {
         return (
@@ -87,11 +132,15 @@ const Login: React.FC = () => {
         );
     };
 
+    const togglePasswordVisibility = () => {
+        setPasswordVisible(!passwordVisible);
+    };
+
     return (
         <div className="container-fluid h-100">
             <div className="row h-100">
-                <div className="col-md-8 p-3 flex-column justify-content-center align-items-center">
-                    <div className="logo mb-4">
+                <div className="col-md-8 p-1 flex-column justify-content-center align-items-center">
+                    <div className="logo mt-5">
                         <img
                             src="/image/logo/logo-remove.png"
                             alt="Gentlemanor Logo"
@@ -103,34 +152,58 @@ const Login: React.FC = () => {
                         <p className="text-muted mb-4">
                             Vui lòng nhập đầy đủ thông tin để sử dụng.
                         </p>
-                        <form onSubmit={handleLogin}>
+                        <form
+                            className="custom-form-auth"
+                            onSubmit={handleLogin}
+                        >
                             <div>
                                 <input
-                                    type="text"
-                                    className={`form-control ${
+                                    type="email"
+                                    className={`form-control  ${
                                         errors.email ? "is-invalid" : ""
                                     }`}
                                     id="email"
                                     placeholder="Email"
                                     value={formData.email}
                                     onChange={handleChange}
+                                    onBlur={(e) =>
+                                        validateInput(
+                                            e.target.id,
+                                            e.target.value
+                                        )
+                                    }
                                     required
-                                    autoComplete="username"
                                 />
                             </div>
-                            <div>
+                            <div className="password-input-wrapper">
                                 <input
-                                    type="password"
-                                    className={`form-control ${
+                                    type={passwordVisible ? "text" : "password"}
+                                    className={`form-control  ${
                                         errors.password ? "is-invalid" : ""
                                     }`}
                                     id="password"
                                     placeholder="Mật khẩu"
                                     value={formData.password}
                                     onChange={handleChange}
+                                    onBlur={(e) =>
+                                        validateInput(
+                                            e.target.id,
+                                            e.target.value
+                                        )
+                                    }
                                     required
-                                    autoComplete="current-password"
                                 />
+                                <div
+                                    className="eye-icon"
+                                    onClick={togglePasswordVisibility}
+                                    style={{ cursor: "pointer" }}
+                                >
+                                    {passwordVisible ? (
+                                        <FaEye />
+                                    ) : (
+                                        <FaEyeSlash />
+                                    )}
+                                </div>
                             </div>
                             <div
                                 className="form-check mb-3"
@@ -140,9 +213,9 @@ const Login: React.FC = () => {
                                     type="checkbox"
                                     className="form-check-input"
                                     id="remember"
-                                    checked={remember}
+                                    checked={rememberMe}
                                     onChange={(e) =>
-                                        setRemember(e.target.checked)
+                                        setRememberMe(e.target.checked)
                                     }
                                 />
                                 <label
@@ -157,25 +230,16 @@ const Login: React.FC = () => {
                                 className="btn btn-success"
                                 style={{
                                     backgroundColor: "#0f6d5e",
-                                    width: "70%",
+                                    width: "100%",
                                 }}
-                                disabled={!isFormValid() || loading}
+                                disabled={!isFormValid()}
                             >
                                 {loading ? "Đang đăng nhập..." : "Đăng nhập"}
                             </button>
                         </form>
-
-                        {errors.general && (
-                            <div
-                                className="alert alert-danger mt-3"
-                                role="alert"
-                            >
-                                {errors.general}
-                            </div>
-                        )}
                     </div>
-                    <div className="mt-4">
-                        <div className="or-divider">
+                    <div className="mt-5">
+                        <div className="or-divider mt-5">
                             <span>hoặc</span>
                         </div>
                         <div className="d-flex justify-content-center mt-3">

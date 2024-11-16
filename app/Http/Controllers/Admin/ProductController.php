@@ -18,7 +18,7 @@ class ProductController extends Controller
         $products = Product::where('name', 'like', '%' . $request->nhap . '%')
             ->orWhere('is_active', 'like', '%' . $request->nhap . '%')
             ->orWhere('sku', 'like', '%' . $request->nhap . '%')
-            ->orWhere('	subtitle', 'like', '%' . $request->nhap . '%')
+            ->orWhere('subtitle', 'like', '%' . $request->nhap . '%')
             ->orWhere('slug', 'like', '%' . $request->nhap . '%')
             ->orWhere('description', 'like', '%' . $request->nhap . '%')
             ->latest()->paginate(5);
@@ -84,17 +84,17 @@ class ProductController extends Controller
             foreach ($request->file('url') as $index => $additionalImage) {
         if ($existingImageCount + $index >= 4){
             $errorImg='Ảnh không được vượt quá 4 ảnh';
-                    break;   
+                    break;
                 }
                      $additionalImageName = time() . $index . "." . $additionalImage->getClientOriginalExtension();
                     $storedImage = $additionalImage->storeAs('images', $additionalImageName, 'public');
-    
+
                     $imgAttPro = ProductImage::create([
                         'attribute_product_id' => $attPro->attribute_product_id,
                         'product_id' => $product->product_id,
                         'imagePros' => $storedImage,
                     ]);
-    
+
                     $imgAttPros[] = $imgAttPro;
             }
         }
@@ -165,11 +165,11 @@ class ProductController extends Controller
                 // Kiểm tra và thêm ảnh phụ cho từng thuộc tính
                 $existingImageCount = ProductImage::where('attribute_product_id', $attPro->id)->count();
 
-               
+
                 foreach ($request->file('url') as $index => $additionalImage) {
                     if ($existingImageCount + $index >= 4){
                         $errorImg='Ảnh không được vượt quá 4 ảnh';
-                                break;   
+                                break;
                             }
                     $additionalImageName = time() . $index . "." . $additionalImage->getClientOriginalExtension();
                     $storedImage = $additionalImage->storeAs('images', $additionalImageName, 'public');
