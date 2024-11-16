@@ -1,0 +1,214 @@
+@import url(https://fonts.googleapis.com/css?family=Roboto:100,700;);
+
+.product-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 80%;
+    margin: 0 auto;
+    gap: 20px;
+}
+
+.snip1585 {
+    background-color: rgb(41, 46, 57);
+    color: #fff;
+    display: inline-block;
+    font-family: "Roboto", sans-serif;
+    font-size: 24px;
+    margin: 10px;
+    max-width: 315px;
+    min-width: 230px;
+    overflow: hidden;
+    position: relative;
+    text-align: center;
+    width: 100%;
+}
+
+.snip1585 * {
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    -webkit-transition: all 0.45s ease;
+    transition: all 0.45s ease;
+}
+
+.snip1585:before,
+.snip1585:after {
+    background-color: rgba(46, 64, 60, 0.5);
+    border-top: 50px solid rgba(46, 64, 60, 0.5);
+    border-bottom: 50px solid rgba(46, 64, 60, 0.5);
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    content: "";
+    -webkit-transition: all 0.3s ease;
+    transition: all 0.3s ease;
+    z-index: 1;
+    opacity: 0;
+}
+
+.snip1585:before {
+    -webkit-transform: scaleY(2);
+    transform: scaleY(2);
+}
+
+.snip1585:after {
+    -webkit-transform: scaleY(2);
+    transform: scaleY(2);
+}
+
+.snip1585 img {
+    vertical-align: top;
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    max-height: 400px;
+}
+
+.snip1585 figcaption {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    align-items: center;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    line-height: 1.1em;
+    opacity: 0;
+    z-index: 2;
+    -webkit-transition-delay: 0s;
+    transition-delay: 0s;
+}
+
+.snip1585 h6 {
+    font-size: 18px;
+    font-weight: 500;
+    margin: 0;
+    padding: 15px;
+    text-transform: uppercase;
+}
+
+.snip1585 h6 span {
+    display: block;
+    font-weight: 500;
+    color: #ff6347;
+    font-size: 0.85em;
+}
+
+.snip1585 a {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 3;
+}
+
+.snip1585:hover > img,
+.snip1585.hover > img {
+    opacity: 0.7;
+}
+
+.snip1585:hover:before,
+.snip1585.hover:before,
+.snip1585:hover:after,
+.snip1585.hover:after {
+    -webkit-transform: scale(1);
+    transform: scale(1);
+    opacity: 1;
+}
+
+.snip1585:hover figcaption,
+.snip1585.hover figcaption {
+    opacity: 1;
+    -webkit-transition-delay: 0.1s;
+    transition-delay: 0.1s;
+}
+
+.product-list p {
+    text-align: center;
+    font-size: 16px;
+    color: #51caa2;
+}
+
+.add-to-cart-button {
+    margin-top: 60px;
+    background-color: #51caa2;
+    color: #000000;
+    border: none;
+    padding: 10px 20px;
+    font-size: 14px;
+    text-transform: uppercase;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.add-to-cart-button i {
+    font-size: 18px;
+}
+.product-detail-link {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 3;
+}
+
+.button-header {
+    width: 80%;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+}
+
+.button-header button {
+    background-color: black;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-radius: 75px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.button-header button i {
+    font-size: 18px;
+}
+
+.button-header button .fa-star {
+    font-size: 18px;
+}
+
+.product-container {
+    display: flex;
+    gap: 20px;
+}
+
+.product-container .main-image {
+    max-height: 600px;
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+}
+
+.container {
+    width: 80%;
+}
+
+.title-tuong-tu {
+    margin-top: 50px;
+}

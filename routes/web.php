@@ -16,9 +16,3 @@ use App\Http\Controllers\HomeController;
 |
 */
 
-Route::get('/',      [ProductsController::class, 'productList']);
-Route::get('detail/{id}',      [ProductsController::class, 'showProduct'])->name('detail');
-
-Route::post('/cart/add/{productId}', [CartController::class, 'addToCart'])->name('cart.add');
-Route::get('/cart', [CartController::class, 'viewCart'])->name('Cart');
-

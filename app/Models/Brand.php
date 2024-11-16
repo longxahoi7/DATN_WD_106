@@ -16,5 +16,9 @@ protected $primaryKey ='brand_id';
     public function isActive(){
         return  $this->is_active==1   ; 
     }
+    public function products()
+    {
+        return $this->hasMany(Product::class);
+    }
 
 }
