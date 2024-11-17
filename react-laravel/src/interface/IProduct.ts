@@ -42,3 +42,13 @@ export interface Attributes {
     updated_at: string;
     deleted_at: string;
 }
+export interface Brand {
+    brand_id: number;
+    name: string;
+    description: string;
+    slug: string;
+    is_active: number;
+    created_at: string;
+    updated_at: string;
+    deleted_at: string;
+}
