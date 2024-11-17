@@ -30,6 +30,7 @@ import UserLayout from "./layout/UserLayout";
 import Product from "./pages/user/Product/Product";
 import NotFound from "./pages/404NotFound";
 import ChiTietGioHang from "./pages/user/ChiTietGioHang/ChiTietGioHang";
+import QuanLyThuocTinh from "./pages/admin/QuanLyThuocTinh/QuanLyThuocTinh";
 // import ChiTietGioHang from "./pages/user/ChiTietGioHang/ChiTietGioHang";
 
 const App: React.FC = () => {
@@ -53,6 +54,10 @@ const App: React.FC = () => {
                     <Route
                         path="productmanagement"
                         element={<QuanLySanPham />}
+                    />
+                    <Route
+                        path="attributetmanagement"
+                        element={<QuanLyThuocTinh />}
                     />
                 </Route>
 
