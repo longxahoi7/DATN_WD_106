@@ -36,6 +36,9 @@ class ProductController extends Controller
     }
     private function imgPro(Request $request, $imageField)
     {
+        if ($request->input($imageField) && filter_var($request->input($imageField), FILTER_VALIDATE_URL)) {
+            return $request->input($imageField);
+        }
         if ($request->hasFile($imageField)) {
             $anh = $request->file($imageField);
             $newAnh = time() . "." . $anh->getClientOriginalExtension();
@@ -75,7 +78,7 @@ class ProductController extends Controller
 
             $attPros[] = $attPro;
         }
-
+        $errorImg=null;
         // Loop for additional images per attribute product, with limit check
         if ($request->hasFile('url')) {
             $existingImageCount = ProductImage::where('attribute_product_id', $attPro->id)->count();
