@@ -30,13 +30,20 @@ class ProductController extends Controller
     {
         $categories = Category::all();
         $brands = Brand::all();
+        $attribute_products = AttributeProduct::all();
+        $products = Product::query()
+            ->join('attribute_products', 'attribute_products.attribute_product_id', '=', 'products.product_id')
+            ->join('attributes', 'attributes.attribute_id', '=', 'products.product_id')
+            ->get();
         $sizes = Attribute::where('name', 'size')->pluck('value');
         $colors = Attribute::where('name', 'color')->pluck('value');
         return response()->json([
             'categories' => $categories,
             'brands' => $brands,
             'sizes' => $sizes,
-            'colors' => $colors
+            'colors' => $colors,
+            'attribute_products' => $attribute_products,
+            'products' => $products
         ]);
     }
     private function imgPro(Request $request, $imageField)
@@ -64,38 +71,39 @@ class ProductController extends Controller
             'slug' => str::slug($request->input('name')),
             'is_active' => $request->has('is_active') ? 1 : 0,
         ]);
-        $attPro=null;
+        $attPro = null;
         if ($request->has('attribute_id') && is_array($request->attribute_id)) {
-        foreach($request->attribute_id as $attributeId) {
-            // Create an attribute product
-            $exists = Attribute::where('id', $attributeId)->exists();
-            if ($exists) {
-                // Nếu tồn tại, tạo bản ghi mới trong bảng 'attribute_products'
-                $attPro = AttributeProduct::create([
-                    'product_id' => $product->product_id, 
-                    'attribute_id' => $attributeId,       
-                ]);
-            } 
+            foreach ($request->attribute_id as $attributeId) {
+                // Create an attribute product
+                $exists = Attribute::where('id', $attributeId)->exists();
+                if ($exists) {
+                    // Nếu tồn tại, tạo bản ghi mới trong bảng 'attribute_products'
+                    $attPro = AttributeProduct::create([
+                        'product_id' => $product->product_id,
+                        'attribute_id' => $attributeId,
+                    ]);
+                }
+            }
         }
-    }
 
         return response()->json([
             'product' => $product,
             'attPro' => $attPro,
             // 'errorImg'=>$errorImg,
             // 'message' => $errorImg ? 'Product added with warnings.' : 'Product added successfully!',
-            'message' =>'Product added successfully!',
+            'message' => 'Product added successfully!',
         ], 201);
 
     }
-    public function getDataAtrPro(Request $request){
+    public function getDataAtrPro(Request $request)
+    {
         $products = Product::with(['attributeProducts.attribute'])
-        ->get()
-        ->groupBy(function ($product) {
-            // Lấy màu sắc từ thuộc tính của sản phẩm
-            $colorAttribute = $product->attributeProducts->firstWhere('attribute.name', 'color');
-            return $colorAttribute ? $colorAttribute->attribute->value : 'Unknown';
-        });
+            ->get()
+            ->groupBy(function ($product) {
+                // Lấy màu sắc từ thuộc tính của sản phẩm
+                $colorAttribute = $product->attributeProducts->firstWhere('attribute.name', 'color');
+                return $colorAttribute ? $colorAttribute->attribute->value : 'Unknown';
+            });
         return response()->json($products);
     }
     public function updateMultipleAttributeProducts(Request $request)
@@ -108,11 +116,11 @@ class ProductController extends Controller
             'attribute_product.*.in_stock' => 'nullable|integer|min:0',
             'attribute_product.*.discount' => 'nullable|numeric|min:0|max:100',
         ]);
-    
+
         // Cập nhật từng sản phẩm thuộc tính trong danh sách
         foreach ($validatedData['attribute_product'] as $productData) {
             $attributeProduct = AttributeProduct::find($productData['attribute_product_id']);
-    
+
             if ($attributeProduct) {
                 // Cập nhật các trường dữ liệu của sản phẩm thuộc tính
                 $attributeProduct->update([
@@ -121,21 +129,21 @@ class ProductController extends Controller
                     'discount' => $productData['discount'] ?? $attributeProduct->discount,
                 ]);
             }
-    
+
             // Kiểm tra và cập nhật ảnh cho từng sản phẩm thuộc tính
             if ($request->hasFile('url')) {
                 $existingImageCount = ProductImage::where('attribute_product_id', $attributeProduct->attribute_product_id)->count();
-                
+
                 // Giới hạn số ảnh tối đa là 6 ảnh
                 foreach ($request->file('url') as $index => $additionalImage) {
                     if ($existingImageCount + $index >= 6) {
                         return response()->json(['error' => 'Ảnh không được vượt quá 6 ảnh'], 400);
                     }
-    
+
                     // Tạo tên ảnh và lưu vào thư mục images
                     $additionalImageName = time() . $index . "." . $additionalImage->getClientOriginalExtension();
                     $storedImage = $additionalImage->storeAs('images', $additionalImageName, 'public');
-    
+
                     // Lưu ảnh vào bảng product_images
                     ProductImage::create([
                         'attribute_product_id' => $attributeProduct->attribute_product_id,
@@ -144,7 +152,7 @@ class ProductController extends Controller
                 }
             }
         }
-    
+
         // Trả về kết quả
         return response()->json([
             'message' => 'Product attributes and images updated successfully',
@@ -155,26 +163,26 @@ class ProductController extends Controller
     {
         $category = Category::findOrFail($id);
         $brand = Brand::findOrFail($id);
-        $attribute=Attribute::all();
+        $attribute = Attribute::all();
 
-   
+
         return response()->json(['category' => $category, 'brand' => $brand,]);
     }
     public function destroyProduct($id)
-{
-    $product = Product::findOrFail($id);
-    $product->delete();
-    return response()->json([
-        'message' => 'Product deleted successfully!',
-    ], 200);
-}
-public function restoreProduct($id)
-{
-    $product = Product::withTrashed()->findOrFail($id);
-    $product->restore();
+    {
+        $product = Product::findOrFail($id);
+        $product->delete();
+        return response()->json([
+            'message' => 'Product deleted successfully!',
+        ], 200);
+    }
+    public function restoreProduct($id)
+    {
+        $product = Product::withTrashed()->findOrFail($id);
+        $product->restore();
 
-    return response()->json([
-        'message' => 'Product restored successfully!',
-    ], 200);
-}
+        return response()->json([
+            'message' => 'Product restored successfully!',
+        ], 200);
+    }
 }

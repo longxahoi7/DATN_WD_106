@@ -7,11 +7,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Product extends Model
 {
-    use HasFactory,SoftDeletes;
-    protected $table='products';
-    protected $primaryKey='product_id';
+    use HasFactory, SoftDeletes;
+    protected $table = 'products';
+    protected $primaryKey = 'product_id';
     protected $with = ['category', 'attributes', 'coupons'];
-    protected $fillable =[
+    protected $fillable = [
         'product_id',
         'brand_id',
         'product_category_id',
@@ -26,7 +26,7 @@ class Product extends Model
     ];
     public function category()
     {
-        return $this->belongsTo(Category::class,'product_category_id');
+        return $this->belongsTo(Category::class, 'product_category_id');
     }
 
     public function attributes()

@@ -42,3 +42,23 @@ export interface Attributes {
     updated_at: string;
     deleted_at: string;
 }
+export interface Brands {
+    brand_id: number;
+    name: string;
+    description: string;
+    slug: string;
+    is_active: number;
+    created_at: string;
+    updated_at: string;
+    deleted_at: string;
+}
+export interface Attribute_Products {
+    attribute_product_id: number;
+    product_id: number;
+    attribute_id: number;
+    in_stock: number;
+    price: number;
+    discount: number;
+    created_at: string;
+    updated_at: string;
+}
