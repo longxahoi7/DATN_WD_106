@@ -19,7 +19,6 @@ return new class extends Migration
             $table->foreign('attribute_id')->references('attribute_id')->on('attributes')->onDelete('cascade');
             $table->integer('in_stock');
             $table->double('price', 16, 2);
-            $table->double('discount', 16, 2);
             $table->timestamps();
         });
     }

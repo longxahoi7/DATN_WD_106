@@ -20,6 +20,9 @@ return new class extends Migration
             $table->string('name', 255);
             $table->string('main_image_url',255);
             $table->bigInteger('view_count')->default(0);
+            $table->double('discount', 16, 2);
+            $table->date('start_date')->nullable();
+            $table->date('end_date')->nullable();
             $table->text('description');
             $table->string('sku');
             $table->text('subtitle');

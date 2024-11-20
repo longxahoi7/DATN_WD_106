@@ -10,7 +10,7 @@ class AttributeProduct extends Model
     use HasFactory;
    protected $table ='attribute_products';
    protected $primaryKey='attribute_product_id';	
-   protected $fillable=['product_id','attribute_id','in_stock','price','discount'];
+   protected $fillable=['product_id','attribute_id','in_stock','price'];
 
     public function product()
     {

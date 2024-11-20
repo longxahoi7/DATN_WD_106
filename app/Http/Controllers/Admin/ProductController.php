@@ -58,6 +58,9 @@ class ProductController extends Controller
             'product_category_id' => $request->input('product_category_id'),
             'main_image_url' => $main_image,
             'view_count' => 0,
+            'discount'=>$request->input('discount'),
+            'start_date'=>$request->input('start_date'),
+            'end_date'=>$request->input('end_date'),
             'sku' => $request->input('sku'),
             'description' => $request->input('description'),
             'subtitle' => $request->input('subtitle'),
@@ -118,7 +121,6 @@ class ProductController extends Controller
                 $attributeProduct->update([
                     'price' => $productData['price'] ?? $attributeProduct->price,
                     'in_stock' => $productData['in_stock'] ?? $attributeProduct->in_stock,
-                    'discount' => $productData['discount'] ?? $attributeProduct->discount,
                 ]);
             }
     
