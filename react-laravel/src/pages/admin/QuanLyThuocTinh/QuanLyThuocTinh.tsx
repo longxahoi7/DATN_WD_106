@@ -2,12 +2,12 @@ import React, { useState, useEffect, useMemo } from "react";
 import { Space, Table, Button, Modal, message, Tooltip } from "antd";
 import { EditOutlined, DeleteOutlined, PlusOutlined } from "@ant-design/icons";
 import "../../../style/quanLy.css";
-import FormDanhMuc from "./FormDanhMuc";
+import FormThuocTinh from "./FormThuocTinh";
 import type { TooltipProps } from "antd";
 import api from "../../../config/axios";
-import { Category } from "../../../interface/IProduct";
+import { Attributes } from "../../../interface/IProduct";
 
-const QuanLyDanhMuc = () => {
+const QuanLyThuocTinh = () => {
     const columns = (handleEdit, handleDelete) => [
         {
             title: "STT",
@@ -21,31 +21,13 @@ const QuanLyDanhMuc = () => {
             width: "5%",
         },
         {
-            title: "Tên Danh Mục",
+            title: "Tên Thuộc Tính",
             dataIndex: "name",
             key: "name",
             render: (text) => <a style={{ color: "green" }}>{text}</a>,
             align: "center" as "center",
         },
-        {
-            title: "Mô tả",
-            dataIndex: "description",
-            key: "description",
-            align: "center" as "center",
-            width: "40%",
-        },
-        {
-            title: "Hình ảnh",
-            dataIndex: "image",
-            key: "image",
-            render: (text) => (
-                <div style={{ display: "flex", justifyContent: "center" }}>
-                    <img src={text} alt="Category" style={{ width: "50px" }} />
-                </div>
-            ),
-            align: "center" as "center",
-            width: "20%",
-        },
+
         {
             key: "action",
             render: (text, record) => (
@@ -63,7 +45,7 @@ const QuanLyDanhMuc = () => {
                     <Tooltip placement="top" title="xóa" arrow={mergedArrow}>
                         <DeleteOutlined
                             style={{ color: "red" }}
-                            onClick={() => handleDelete(record.category_id)}
+                            onClick={() => handleDelete(record.attribute_id)}
                         />
                     </Tooltip>
                 </Space>
@@ -72,35 +54,37 @@ const QuanLyDanhMuc = () => {
         },
     ];
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [currentCategory, setCurrentCategory] = useState<Category | null>(
-        null
-    );
+    const [currentAttributes, setCurrentAttributes] =
+        useState<Attributes | null>(null);
     const [loading, setLoading] = useState(true);
     const [arrow, setArrow] = useState<"Show" | "Hide" | "Center">("Show");
     const [formLoading, setFormLoading] = useState(false); // Thêm state formLoading
-    const [categories, setCategories] = useState<Category[]>([]);
+    const [attattributes, setattattributes] = useState<Attributes[]>([]);
 
     useEffect(() => {
-        const fetchCategories = async () => {
+        const fetchAttributes = async () => {
             setLoading(true); // Bắt đầu tải dữ liệu
             try {
                 const response = await api.get(
-                    "admin/categories/list-category"
+                    "admin/attributes/list-attribute"
                 );
-                console.log("Dữ liệu danh mục nhận được:", response.data.data);
-                const categoriesData = Array.isArray(response.data.data)
+                console.log(
+                    "Dữ liệu thuộc tính nhận được:",
+                    response.data.data
+                );
+                const attributeData = Array.isArray(response.data.data)
                     ? response.data.data
                     : [];
-                setCategories(categoriesData); // Cập nhật state với dữ liệu nhận được
+                setattattributes(attributeData); // Cập nhật state với dữ liệu nhận được
             } catch (error) {
-                console.error("Lỗi khi lấy danh mục:", error);
-                message.error("Không thể tải danh mục.");
+                console.error("Lỗi khi lấy thuộc tính:", error);
+                message.error("Không thể tải thuộc tính.");
             } finally {
                 setLoading(false); // Kết thúc tải dữ liệu
             }
         };
 
-        fetchCategories();
+        fetchAttributes();
     }, []);
 
     const mergedArrow = useMemo<TooltipProps["arrow"]>(() => {
@@ -117,33 +101,34 @@ const QuanLyDanhMuc = () => {
         };
     }, [arrow]);
 
-    const handleAddCategory = () => {
-        setCurrentCategory(null);
+    const handleAddAttributes = () => {
+        setCurrentAttributes(null);
         setIsModalOpen(true);
     };
 
-    const handleEdit = (record: Category) => {
-        setCurrentCategory(record);
+    const handleEdit = (record: Attributes) => {
+        setCurrentAttributes(record);
         setIsModalOpen(true);
     };
 
-    const handleDelete = (category_id: number) => {
+    const handleDelete = (attribute_id: number) => {
         Modal.confirm({
             title: "Bạn có chắc chắn muốn xóa danh mục này?",
             onOk: async () => {
                 try {
                     await api.delete(
-                        `admin/categories/delete-category/${category_id}`
+                        `admin/attributes/destroy-attribute/${attribute_id}`
                     ); // Gửi yêu cầu xóa
-                    setCategories(
-                        categories.filter(
-                            (category) => category.category_id !== category_id
+                    setattattributes(
+                        attattributes.filter(
+                            (attribute) =>
+                                attribute.attribute_id !== attribute_id
                         )
                     ); // Cập nhật lại danh sách
-                    message.success("Xóa danh mục thành công");
+                    message.success("Xóa thuộc tính thành công");
                 } catch (error) {
-                    console.error("Xóa danh mục thất bại:", error);
-                    message.error("Không thể xóa danh mục.");
+                    console.error("Xóa thuộc tính thất bại:", error);
+                    message.error("Không thể xóa thuộc tính.");
                 }
             },
         });
@@ -153,62 +138,69 @@ const QuanLyDanhMuc = () => {
         setIsModalOpen(false);
     };
 
-    const handleOk = async (values: Category) => {
-        setFormLoading(true);
+    const handleOk = async (values: Attributes) => {
+        setFormLoading(true); // Bắt đầu quá trình lưu
         try {
-            if (currentCategory) {
-                await api.post(`admin/categories/add-category`, values);
-                setCategories(
-                    categories.map((category) =>
-                        category.category_id === currentCategory.category_id
-                            ? { ...category, ...values }
-                            : category
-                    )
-                );
-                message.success("Cập nhật danh mục thành công");
-            } else {
-                const response = await api.post(
-                    "admin/categories/add-category",
+            if (currentAttributes) {
+                // Nếu có thuộc tính đang chỉnh sửa, sử dụng PUT hoặc PATCH
+                await api.put(
+                    `admin/attributes/update-attribute/${currentAttributes.attribute_id}`,
                     values
                 );
-                setCategories([...categories, response.data]);
-                message.success("Thêm danh mục thành công");
+                // Cập nhật danh sách thuộc tính sau khi sửa
+                setattattributes(
+                    attattributes.map((attribute) =>
+                        attribute.attribute_id ===
+                        currentAttributes.attribute_id
+                            ? { ...attribute, ...values }
+                            : attribute
+                    )
+                );
+                message.success("Cập nhật thuộc tính thành công");
+            } else {
+                // Nếu không có thuộc tính đang chỉnh sửa, thêm mới thuộc tính
+                const response = await api.post(
+                    "admin/attributes/add-attribute",
+                    values
+                );
+                setattattributes([...attattributes, response.data]);
+                message.success("Thêm thuộc tính thành công");
             }
-            setIsModalOpen(false);
+            setIsModalOpen(false); // Đóng modal sau khi lưu thành công
         } catch (error) {
-            console.error("Lỗi khi thêm/sửa danh mục:", error);
-            message.error("Không thể thêm hoặc sửa danh mục.");
+            console.error("Lỗi khi thêm/sửa thuộc tính:", error);
+            message.error("Không thể thêm hoặc sửa thuộc tính.");
         } finally {
-            setFormLoading(false);
+            setFormLoading(false); // Kết thúc quá trình lưu
         }
     };
 
     return (
         <div className="quan-ly-container">
             <div className="header">
-                <p className="title-css">Quản lý danh mục</p>
+                <p className="title-css">Quản lý thuộc tính</p>
             </div>
             <div className="table">
                 <Button
                     type="primary"
                     icon={<PlusOutlined />}
-                    onClick={handleAddCategory}
+                    onClick={handleAddAttributes}
                     style={{ marginBottom: "10px", float: "right" }}
                 >
                     Thêm mới
                 </Button>
                 <Table
                     columns={columns(handleEdit, handleDelete)}
-                    dataSource={categories.length > 0 ? categories : []}
+                    dataSource={attattributes.length > 0 ? attattributes : []}
                     loading={loading}
                     pagination={{ pageSize: 5 }}
                 />
 
-                <FormDanhMuc
+                <FormThuocTinh
                     open={isModalOpen}
                     onOk={handleOk}
                     onCancel={handleCancel}
-                    initialValues={currentCategory}
+                    initialValues={currentAttributes}
                     loading={formLoading}
                 />
             </div>
@@ -216,4 +208,4 @@ const QuanLyDanhMuc = () => {
     );
 };
 
-export default QuanLyDanhMuc;
+export default QuanLyThuocTinh;

@@ -105,7 +105,7 @@ const Header = () => {
                             <img
                                 src="../../../public/image/logo/logo-remove.png"
                                 alt="Gentle Manor"
-                                style={{ width: "120px", marginLeft: "150px" }}
+                                style={{ width: "120px", marginLeft: "50px" }}
                             />
                         </Navbar.Brand>
                     </Col>
@@ -113,14 +113,7 @@ const Header = () => {
                     <Col xs={8} md={7} lg={7} className="mx-auto">
                         <Row>
                             <Col className="mb-2 pt-5">
-                                <Form
-                                    className="d-flex align-items-center"
-                                    style={{
-                                        height: "45px",
-                                        marginRight: "50px",
-                                        width: "100%",
-                                    }}
-                                >
+                                <Form>
                                     <FormControl
                                         type="search"
                                         placeholder="Tìm kiếm sản phẩm"
@@ -128,6 +121,7 @@ const Header = () => {
                                         aria-label="Search"
                                         style={{
                                             height: "40px",
+                                            minWidth: "95%",
                                         }}
                                     />
                                 </Form>
@@ -162,12 +156,12 @@ const Header = () => {
                                                     >
                                                         Thông tin chung
                                                     </Link>
-                                                    <span
+                                                    <div
                                                         className="dropdown-item"
                                                         onClick={handleLogout}
                                                     >
                                                         Đăng xuất
-                                                    </span>
+                                                    </div>
                                                 </>
                                             ) : (
                                                 <>

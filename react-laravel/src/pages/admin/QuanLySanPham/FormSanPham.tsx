@@ -1,5 +1,5 @@
 // QuanLySanPham/FormSanPham.jsx
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
     Modal,
     Form,
@@ -12,12 +12,33 @@ import {
     Col,
 } from "antd";
 import { UploadOutlined, DeleteOutlined } from "@ant-design/icons";
+import moment from "moment";
 
 const { Option } = Select;
 
 const FormSanPham = ({ open, onOk, onCancel, initialValues }) => {
     const [form] = Form.useForm();
     const [previewImage, setPreviewImage] = useState<string | null>(null);
+
+    // Khi form mở và nhận giá trị ban đầu, xử lý hình ảnh
+    useEffect(() => {
+        if (initialValues) {
+            form.setFieldsValue({
+                name: initialValues.name,
+                price: initialValues.price,
+                category: initialValues.product_category_id,
+                brand: initialValues.brand,
+                createdAt: initialValues.created_at
+                    ? moment(initialValues.created_at)
+                    : null,
+                updatedAt: initialValues.updated_at
+                    ? moment(initialValues.updated_at)
+                    : null,
+            });
+            // Cập nhật hình ảnh khi có giá trị
+            setPreviewImage(initialValues.image || null);
+        }
+    }, [initialValues, form]);
 
     const handleOk = () => {
         form.validateFields()
@@ -46,7 +67,7 @@ const FormSanPham = ({ open, onOk, onCancel, initialValues }) => {
 
     return (
         <Modal
-            title="Thêm mới sản phẩm"
+            title={initialValues ? "Cập nhật sản phẩm" : "Thêm mới sản phẩm"}
             open={open}
             onOk={handleOk}
             onCancel={() => {
@@ -116,6 +137,7 @@ const FormSanPham = ({ open, onOk, onCancel, initialValues }) => {
                             ]}
                         >
                             <Select placeholder="Chọn danh mục">
+                                {/* Dữ liệu danh mục có thể lấy từ API */}
                                 <Option value="danh_muc_a">Danh mục A</Option>
                                 <Option value="danh_muc_b">Danh mục B</Option>
                                 <Option value="danh_muc_c">Danh mục C</Option>

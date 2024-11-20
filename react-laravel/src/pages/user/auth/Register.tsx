@@ -1,11 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import "../../../style/auth.css";
 import api from "../../../config/axios";
+import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 
 const Register: React.FC = () => {
     const images: string[] = ["/image/login/imageAuth.png"];
-
+    const navigate = useNavigate();
+    const [passwordVisible, setPasswordVisible] = useState(false);
     const [loading, setLoading] = useState(false);
     const [currentIndex, setCurrentIndex] = useState(0);
     const [formData, setFormData] = useState({
@@ -65,20 +68,17 @@ const Register: React.FC = () => {
     };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setLoading(true);
         const { id, value } = e.target;
         setFormData({ ...formData, [id]: value });
         validateInput(id, value);
-        if (!isFormValid()) {
-            setLoading(false);
-            return;
-        }
     };
 
     const handleRegister = async (e: React.FormEvent) => {
+        setLoading(true);
         e.preventDefault();
 
         if (!isFormValid()) {
+            setLoading(false);
             return;
         }
 
@@ -87,19 +87,58 @@ const Register: React.FC = () => {
                 name: formData.name,
                 email: formData.email,
                 password: formData.password,
+                phone: formData.phone,
+                address: formData.address,
             });
 
             if (response.status === 200) {
-                alert("Đăng ký thành công!");
-                window.location.href = "/login";
+                // Hiển thị SweetAlert và điều hướng sau khi nhấn OK
+                Swal.fire({
+                    icon: "success",
+                    title: "Đăng ký thành công!",
+                    text: "Bạn có thể đăng nhập ngay bây giờ.",
+                    confirmButtonText: "Đồng ý",
+                }).then(() => {
+                    // Sau khi nhấn OK, điều hướng về trang login
+                    navigate("/login");
+                });
             }
         } catch (error: any) {
-            setErrors({
-                ...errors,
-                general: "Đăng ký thất bại. Vui lòng thử lại.",
-            });
+            if (error.response) {
+                const { message } = error.response.data;
+                let errorMessage = "Đăng ký thất bại. Email đã được đăng ký.";
+
+                if (message === "Email already exists") {
+                    errorMessage = "Email này đã được đăng ký.";
+                } else if (message === "Account already exists") {
+                    errorMessage = "Tài khoản này đã tồn tại.";
+                }
+
+                Swal.fire({
+                    icon: "error",
+                    title: "Lỗi đăng ký",
+                    text: errorMessage,
+                    confirmButtonText: "Đóng",
+                });
+            } else {
+                Swal.fire({
+                    icon: "error",
+                    title: "Lỗi đăng ký",
+                    text: "Đã xảy ra sự cố, vui lòng thử lại.",
+                    confirmButtonText: "Đóng",
+                });
+            }
         }
     };
+
+    useEffect(() => {
+        // Kiểm tra xem đã có token trong localStorage hay chưa
+        const token = localStorage.getItem("token");
+        if (token) {
+            // Nếu có token, chuyển hướng người dùng đến trang chủ hoặc một trang khác
+            navigate("/", { replace: true });
+        }
+    }, [navigate]); // Chạy effect khi trang login được render
 
     const isFormValid = () => {
         return (
@@ -111,12 +150,16 @@ const Register: React.FC = () => {
         );
     };
 
+    const togglePasswordVisibility = () => {
+        setPasswordVisible(!passwordVisible);
+    };
+
     return (
         <div className="container-fluid h-100">
             <div className="row h-100">
                 {/* bên trái */}
                 <div className="col-md-8 p-1 flex-column justify-content-center align-items-center">
-                    <div className="logo">
+                    <div className="logo mt-5">
                         <img
                             src="/image/logo/logo-remove.png"
                             alt="Gentlemanor Logo"
@@ -128,7 +171,10 @@ const Register: React.FC = () => {
                         <p className="text-muted mb-4">
                             Vui lòng nhập đầy đủ thông tin để sử dụng.
                         </p>
-                        <form onSubmit={handleRegister}>
+                        <form
+                            className="custom-form-auth"
+                            onSubmit={handleRegister}
+                        >
                             <div>
                                 <input
                                     type="text"
@@ -167,9 +213,9 @@ const Register: React.FC = () => {
                                     required
                                 />
                             </div>
-                            <div>
+                            <div className="password-input-wrapper">
                                 <input
-                                    type="password"
+                                    type={passwordVisible ? "text" : "password"}
                                     className={`form-control  ${
                                         errors.password ? "is-invalid" : ""
                                     }`}
@@ -185,12 +231,23 @@ const Register: React.FC = () => {
                                     }
                                     required
                                 />
+                                <div
+                                    className="eye-icon"
+                                    onClick={togglePasswordVisibility}
+                                    style={{ cursor: "pointer" }}
+                                >
+                                    {passwordVisible ? (
+                                        <FaEye />
+                                    ) : (
+                                        <FaEyeSlash />
+                                    )}
+                                </div>
                             </div>
-                            <div className="d-flex">
-                                <div className="w-50">
+                            <div className="row">
+                                <div className="col-md-6">
                                     <input
                                         type="text"
-                                        className={`form-control custom-input-user-left  ${
+                                        className={`form-control  ${
                                             errors.phone ? "is-invalid" : ""
                                         }`}
                                         id="phone"
@@ -206,10 +263,10 @@ const Register: React.FC = () => {
                                         required
                                     />
                                 </div>
-                                <div className="w-50">
+                                <div className="col-md-6">
                                     <input
                                         type="text"
-                                        className={`form-control custom-input-user-right  ${
+                                        className={`form-control  ${
                                             errors.address ? "is-invalid" : ""
                                         }`}
                                         id="address"
@@ -226,28 +283,12 @@ const Register: React.FC = () => {
                                     />
                                 </div>
                             </div>
-                            {/* <div
-                                className="form-check mb-3"
-                                style={{ textAlign: "left" }}
-                            >
-                                <input
-                                    type="checkbox"
-                                    className="form-check-input"
-                                    id="remember"
-                                />
-                                <label
-                                    className="form-check-label"
-                                    htmlFor="remember"
-                                >
-                                    Ghi nhớ
-                                </label>
-                            </div> */}
                             <button
                                 type="submit"
                                 className="btn btn-success"
                                 style={{
                                     backgroundColor: "#0f6d5e",
-                                    width: "70%",
+                                    width: "100%",
                                 }}
                                 disabled={!isFormValid()}
                             >

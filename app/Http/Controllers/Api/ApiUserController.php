@@ -52,7 +52,7 @@ class ApiUserController extends Controller
             'email' => $request->email,
             'address' => $request->address,
             'phone' => $request->phone,
-            'password' => Hash::make('password'),
+            'password' => Hash::make($request->password),
         ];
         $newUser = User::create($data);
         return response()->json([
