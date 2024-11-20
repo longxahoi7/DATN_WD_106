@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\AttributeProduct;
+use App\Models\Attribute;
 use App\Models\ProductImage;
 use Illuminate\Support\Facades\Storage;
 class ProductController extends Controller
@@ -18,20 +19,24 @@ class ProductController extends Controller
         $products = Product::where('name', 'like', '%' . $request->nhap . '%')
             ->orWhere('is_active', 'like', '%' . $request->nhap . '%')
             ->orWhere('sku', 'like', '%' . $request->nhap . '%')
-            ->orWhere('	subtitle', 'like', '%' . $request->nhap . '%')
+            ->orWhere('subtitle', 'like', '%' . $request->nhap . '%')
             ->orWhere('slug', 'like', '%' . $request->nhap . '%')
             ->orWhere('description', 'like', '%' . $request->nhap . '%')
             ->latest()->paginate(5);
         return response()->json($products);
     }
 
-    public function getData()
+    public function getData(Request $request)
     {
         $categories = Category::all();
         $brands = Brand::all();
+        $sizes = Attribute::where('name', 'size')->pluck('value');
+        $colors = Attribute::where('name', 'color')->pluck('value');
         return response()->json([
             'categories' => $categories,
-            'brands' => $brands
+            'brands' => $brands,
+            'sizes' => $sizes,
+            'colors' => $colors
         ]);
     }
     private function imgPro(Request $request, $imageField)
@@ -60,137 +65,183 @@ class ProductController extends Controller
             'is_active' => $request->has('is_active') ? 1 : 0,
         ]);
 
-        $attPros = [];
-        $imgAttPros = [];
+      
+        // // $imgAttPros = [];
         // Loop over attributes
-        foreach ($request->attribute_id as $attributeId) {
+        $attPro=null;
+        if ($request->has('attribute_id') && is_array($request->attribute_id)) {
+        foreach($request->attribute_id as $attributeId) {
             // Create an attribute product
-            $attPro = AttributeProduct::create([
-                'product_id' => $product->product_id,
-                'attribute_id' => $attributeId,
-                'discount' => $request->input('discount'),
-                'in_stock' => $request->input('in_stock'),
-                'price' => $request->input('price')
-            ]);
-
-            $attPros[] = $attPro;
+            $exists = Attribute::where('id', $attributeId)->exists();
+            if ($exists) {
+                // Nếu tồn tại, tạo bản ghi mới trong bảng 'attribute_products'
+                $attPro = AttributeProduct::create([
+                    'product_id' => $product->product_id, 
+                    'attribute_id' => $attributeId,       
+                ]);
+            } 
         }
+    }
 
-        // Loop for additional images per attribute product, with limit check
-        if ($request->hasFile('url')) {
-            $existingImageCount = ProductImage::where('attribute_product_id', $attPro->id)->count();
-
-            // Allow only if total images will be 6 or fewer
-            foreach ($request->file('url') as $index => $additionalImage) {
-        if ($existingImageCount + $index >= 4){
-            $errorImg='Ảnh không được vượt quá 4 ảnh';
-                    break;   
-                }
-                     $additionalImageName = time() . $index . "." . $additionalImage->getClientOriginalExtension();
-                    $storedImage = $additionalImage->storeAs('images', $additionalImageName, 'public');
-    
-                    $imgAttPro = ProductImage::create([
-                        'attribute_product_id' => $attPro->attribute_product_id,
-                        'product_id' => $product->product_id,
-                        'imagePros' => $storedImage,
-                    ]);
-    
-                    $imgAttPros[] = $imgAttPro;
-            }
-        }
+        
         return response()->json([
             'product' => $product,
-            'attPros' => $attPros,
-            'imgAttPros' => $imgAttPros,
-            'errorImg'=>$errorImg,
-            'message' => $errorImg ? 'Product added with warnings.' : 'Product added successfully!',
+            'attPro' => $attPro,
+           
+            // 'imgAttPros' => $imgAttPros,
+            // 'errorImg'=>$errorImg,
+            // 'message' => $errorImg ? 'Product added with warnings.' : 'Product added successfully!',
+            'message' =>'Product added successfully!',
         ], 201);
 
     }
+    public function getDataAtrPro(Request $request){
+        $products = Product::with(['attributeProducts.attribute'])
+        ->get()
+        ->groupBy(function ($product) {
+            // Lấy màu sắc từ thuộc tính của sản phẩm
+            $colorAttribute = $product->attributeProducts->firstWhere('attribute.name', 'color');
+            return $colorAttribute ? $colorAttribute->attribute->value : 'Unknown';
+        });
+        return response()->json($products);
+    }
+    public function updateMultipleAttributeProducts(Request $request)
+    {
+        // Xác thực dữ liệu đầu vào (danh sách các sản phẩm thuộc tính)
+        $validatedData = $request->validate([
+            'attribute_product' => 'required|array', // Danh sách sản phẩm thuộc tính
+            'attribute_product.*.attribute_product_id' => 'required|integer|exists:attribute_products,attribute_product_id', // ID của từng sản phẩm thuộc tính
+            'attribute_product.*.price' => 'nullable|numeric|min:0',
+            'attribute_product.*.in_stock' => 'nullable|integer|min:0',
+            'attribute_product.*.discount' => 'nullable|numeric|min:0|max:100',
+        ]);
+    
+        // Cập nhật từng sản phẩm thuộc tính trong danh sách
+        foreach ($validatedData['attribute_product'] as $productData) {
+            $attributeProduct = AttributeProduct::find($productData['attribute_product_id']);
+    
+            if ($attributeProduct) {
+                // Cập nhật các trường dữ liệu của sản phẩm thuộc tính
+                $attributeProduct->update([
+                    'price' => $productData['price'] ?? $attributeProduct->price,
+                    'in_stock' => $productData['in_stock'] ?? $attributeProduct->in_stock,
+                    'discount' => $productData['discount'] ?? $attributeProduct->discount,
+                ]);
+            }
+    
+            // Kiểm tra và cập nhật ảnh cho từng sản phẩm thuộc tính
+            if ($request->hasFile('url')) {
+                $existingImageCount = ProductImage::where('attribute_product_id', $attributeProduct->attribute_product_id)->count();
+                
+                // Giới hạn số ảnh tối đa là 6 ảnh
+                foreach ($request->file('url') as $index => $additionalImage) {
+                    if ($existingImageCount + $index >= 6) {
+                        return response()->json(['error' => 'Ảnh không được vượt quá 6 ảnh'], 400);
+                    }
+    
+                    // Tạo tên ảnh và lưu vào thư mục images
+                    $additionalImageName = time() . $index . "." . $additionalImage->getClientOriginalExtension();
+                    $storedImage = $additionalImage->storeAs('images', $additionalImageName, 'public');
+    
+                    // Lưu ảnh vào bảng product_images
+                    ProductImage::create([
+                        'attribute_product_id' => $attributeProduct->attribute_product_id,
+                        'url' => $storedImage, // Đảm bảo trường này khớp với cột trong bảng
+                    ]);
+                }
+            }
+        }
+    
+        // Trả về kết quả
+        return response()->json([
+            'message' => 'Product attributes and images updated successfully',
+        ], 200);
+    }
+
     public function getDataId($id)
     {
         $category = Category::findOrFail($id);
         $brand = Brand::findOrFail($id);
-        return response()->json(['category' => $category, 'brand' => $brand]);
+        $attribute=Attribute::all();
+
+   
+        return response()->json(['category' => $category, 'brand' => $brand,]);
     }
-    public function updateProduct(Request $request, $id)
-    {
-        // Tìm sản phẩm theo ID
-        $product = Product::findOrFail($id);
+    // public function updateProduct(Request $request, $id)
+    // {
+    //     // Tìm sản phẩm theo ID
+    //     $product = Product::findOrFail($id);
+    //     // Cập nhật thông tin sản phẩm
+    //     $main_image = $this->imgPro($request, 'main_image_url');
+    //     $oldMainImage = $product->main_image_url;
+    //     $product->update([
+    //         'brand_id' => $request->input('brand_id'),
+    //         'name' => $request->input('name'),
+    //         'product_category_id' => $request->input('product_category_id'),
+    //         'main_image_url' => $main_image ?? $oldMainImage,
+    //         'sku' => $request->input('sku'),
+    //         'description' => $request->input('description'),
+    //         'subtitle' => $request->input('subtitle'),
+    //         'slug' => Str::slug($request->input('name')),
+    //         'is_active' => $request->has('is_active') ? 1 : 0,
+    //     ]);
+    //     if ($main_image && $oldMainImage) {
+    //         Storage::disk('public')->delete($oldMainImage);
+    //     }
 
-        // Cập nhật thông tin sản phẩm
+    //     $attPros = [];
+    //     $imgAttPros = [];
 
-        $main_image = $this->imgPro($request, 'main_image_url');
-        $oldMainImage = $product->main_image_url;
+    //     // Cập nhật thuộc tính sản phẩm
+    //     if ($request->has('attribute_id')) {
+    //         // Xóa các thuộc tính hiện tại nếu có
+    //         AttributeProduct::where('product_id', $product->id)->delete();
+    //         // Tạo lại thuộc tính sản phẩm
+    //         foreach ($request->attribute_id as $attributeId) {
+    //             $attPro = AttributeProduct::create([
+    //                 'product_id' => $product->id,
+    //                 'attribute_id' => $attributeId,
+    //                 'discount' => $request->input('discount'),
+    //                 'in_stock' => $request->input('in_stock'),
+    //                 'price' => $request->input('price')
+    //             ]);
 
-        $product->update([
-            'brand_id' => $request->input('brand_id'),
-            'name' => $request->input('name'),
-            'product_category_id' => $request->input('product_category_id'),
-            'main_image_url' => $main_image ?? $oldMainImage,
-            'sku' => $request->input('sku'),
-            'description' => $request->input('description'),
-            'subtitle' => $request->input('subtitle'),
-            'slug' => Str::slug($request->input('name')),
-            'is_active' => $request->has('is_active') ? 1 : 0,
-        ]);
-        if ($main_image && $oldMainImage) {
-            Storage::disk('public')->delete($oldMainImage);
-        }
+    //             $attPros[] = $attPro;
+    //         }
+    //     }
 
-        $attPros = [];
-        $imgAttPros = [];
-
-        // Cập nhật thuộc tính sản phẩm
-        if ($request->has('attribute_id')) {
-            // Xóa các thuộc tính hiện tại nếu có
-            AttributeProduct::where('product_id', $product->id)->delete();
-            // Tạo lại thuộc tính sản phẩm
-            foreach ($request->attribute_id as $attributeId) {
-                $attPro = AttributeProduct::create([
-                    'product_id' => $product->id,
-                    'attribute_id' => $attributeId,
-                    'discount' => $request->input('discount'),
-                    'in_stock' => $request->input('in_stock'),
-                    'price' => $request->input('price')
-                ]);
-
-                $attPros[] = $attPro;
-            }
-        }
-
-        // Cập nhật ảnh phụ cho thuộc tính
-        if ($request->hasFile('url')) {
-            foreach ($attPros as $attPro) {
-                // Kiểm tra và thêm ảnh phụ cho từng thuộc tính
-                $existingImageCount = ProductImage::where('attribute_product_id', $attPro->id)->count();
+    //     // Cập nhật ảnh phụ cho thuộc tính
+    //     if ($request->hasFile('url')) {
+    //         foreach ($attPros as $attPro) {
+    //             // Kiểm tra và thêm ảnh phụ cho từng thuộc tính
+    //             $existingImageCount = ProductImage::where('attribute_product_id', $attPro->id)->count();
 
                
-                foreach ($request->file('url') as $index => $additionalImage) {
-                    if ($existingImageCount + $index >= 4){
-                        $errorImg='Ảnh không được vượt quá 4 ảnh';
-                                break;   
-                            }
-                    $additionalImageName = time() . $index . "." . $additionalImage->getClientOriginalExtension();
-                    $storedImage = $additionalImage->storeAs('images', $additionalImageName, 'public');
-                    $imgAttPro = ProductImage::create([
-                        'attribute_product_id' => $attPro->id,
-                        'product_id' => $product->id,
-                        'imagePros' => $storedImage,
-                    ]);
+    //             foreach ($request->file('url') as $index => $additionalImage) {
+    //                 if ($existingImageCount + $index >= 4){
+    //                     $errorImg='Ảnh không được vượt quá 4 ảnh';
+    //                             break;   
+    //                         }
+    //                 $additionalImageName = time() . $index . "." . $additionalImage->getClientOriginalExtension();
+    //                 $storedImage = $additionalImage->storeAs('images', $additionalImageName, 'public');
+    //                 $imgAttPro = ProductImage::create([
+    //                     'attribute_product_id' => $attPro->id,
+    //                     'product_id' => $product->id,
+    //                     'imagePros' => $storedImage,
+    //                 ]);
 
-                    $imgAttPros[] = $imgAttPro;
-                }
-            }
-        }
-        return response()->json([
-            'product' => $product,
-            'attPros' => $attPros,
-            'imgAttPros' => $imgAttPros,
-            'errorImg'=>$errorImg,
-            'message' => $errorImg ? 'Product added with warnings.' : 'Product updated successfully!',
-        ], 200);
-    }
+    //                 $imgAttPros[] = $imgAttPro;
+    //             }
+    //         }
+    //     }
+    //     return response()->json([
+    //         'product' => $product,
+    //         'attPros' => $attPros,
+    //         'imgAttPros' => $imgAttPros,
+    //         'errorImg'=>$errorImg,
+    //         'message' => $errorImg ? 'Product added with warnings.' : 'Product updated successfully!',
+    //     ], 200);
+    // }
     public function destroyProduct($id)
 {
     $product = Product::findOrFail($id);
