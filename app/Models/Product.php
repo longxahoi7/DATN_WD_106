@@ -12,7 +12,6 @@ class Product extends Model
     protected $primaryKey='product_id';
     protected $with = ['category', 'attributes', 'coupons'];
     protected $fillable =[
-        'product_id',
         'brand_id',
         'product_category_id',
         'sku',
@@ -28,11 +27,10 @@ class Product extends Model
     {
         return $this->belongsTo(Category::class,'product_category_id');
     }
-
-    public function attributes()
-    {
-        return $this->belongsToMany(Attribute::class, 'attribute_products', 'product_id', 'attribute_id');
-    }
+    public function attributeProducts()
+{
+    return $this->hasMany(AttributeProduct::class, 'product_id', 'product_id');
+}
     public function coupons()
     {
         return $this->belongsToMany(Coupon::class, 'coupon_product', 'product_id', 'coupon_id');

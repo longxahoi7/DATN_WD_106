@@ -15,10 +15,10 @@ use App\Http\Controllers\Api\InvoiceController;
 
 use Spatie\FlareClient\Api;
 
-Route::post('register', [ApiUserController::class, 'register']);
-//  http://127.0.0.1:8000/api/login
-Route::post('login', [ApiUserController::class, 'login']);
-Route::middleware('auth:sanctum')->group(function () {
+// Route::post('register', [ApiUserController::class, 'register']);
+// //  http://127.0.0.1:8000/api/login
+// // Route::post('login', [ApiUserController::class, 'login']);
+// Route::middleware('auth:sanctum')->group(function () {
     Route::group(
         [
             'prefix' => 'admin',
@@ -76,8 +76,10 @@ Route::middleware('auth:sanctum')->group(function () {
                 ],
                 function () {
                     Route::get('/list-product', [ProductController::class, 'listProduct']);
-                    Route::post('/add-product', [ProductController::class, 'addProduct']);
                     Route::get('/get-data', [ProductController::class, 'getData']);
+                    Route::post('/add-product', [ProductController::class, 'addProduct']);
+                    Route::get('/get-data-atrpro', [ProductController::class, 'getDataAtrPro']);
+                    Route::put('/update-atrPro', [ProductController::class, 'updateMultipleAttributeProducts']);
                     Route::get('/get-dataId/{id}', [ProductController::class, 'getDataId']);
                     Route::get('/detail-product/{id}', [ProductController::class, 'detailProduct']);
                     Route::delete('/destroy-product/{id}', [ProductController::class, 'destroyProduct']);
@@ -142,7 +144,7 @@ Route::middleware('auth:sanctum')->group(function () {
             );
         }
     );
-});
+// });
 
 
 

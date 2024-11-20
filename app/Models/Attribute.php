@@ -13,10 +13,8 @@ class Attribute extends Model
     protected $primaryKey = 'attribute_id';
     protected $fillable = ['name', 'value'];
 
-    public function products()
-
+    public function attributeProducts()
     {
-        return $this->belongsToMany(Product::class, 'attribute_products', 'attribute_id', 'product_id')
-            ->withPivot(['image', 'in_stock', 'price']);
+        return $this->hasMany(AttributeProduct::class, 'attribute_id', 'attribute_id');
     }
 }
