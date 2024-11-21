@@ -11,10 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('size', function (Blueprint $table) {
-            $table->increments('color_id');
-            $table->string('name',255);
-            $table->string('hex_color',10);
+        Schema::create('sizes', function (Blueprint $table) {
+            $table->increments('size_id');
+            $table->string('name',50);
             $table->timestamps();
         });
     }
@@ -24,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('size');
+        Schema::dropIfExists('sizes');
     }
 };

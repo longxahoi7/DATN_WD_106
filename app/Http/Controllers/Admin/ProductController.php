@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 use App\Models\Brand;
 use App\Models\Category;
+use App\Models\Size;
+use App\Models\Color;
 use Illuminate\Support\Str;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -16,12 +18,20 @@ class ProductController extends Controller
     //
     public function listProduct(Request $request)
     {
-        $products = Product::where('name', 'like', '%' . $request->nhap . '%')
-            ->orWhere('is_active', 'like', '%' . $request->nhap . '%')
-            ->orWhere('sku', 'like', '%' . $request->nhap . '%')
-            ->orWhere('subtitle', 'like', '%' . $request->nhap . '%')
-            ->orWhere('slug', 'like', '%' . $request->nhap . '%')
-            ->orWhere('description', 'like', '%' . $request->nhap . '%')
+        $products = Product::with('category:category_id,name','brand:brand_id,name')
+        // ->where('category.name', 'like', '%' . $request->nhap.'%')
+        ->where('name', 'like', '%' . $request->nhap.'%')
+        ->orWhereHas('category', function ($query) use ($request) {
+            $query->where('name', 'like', '%' . $request->input('nhap', '') . '%');
+        })
+        ->orWhereHas('brand', function ($query) use ($request) {
+            $query->where('name', 'like', '%' . $request->input('nhap', '') . '%');
+        })
+            ->orWhere('is_active','like', '%' . $request->nhap . '%')
+            ->orWhere('sku','like', '%' . $request->nhap . '%')
+            ->orWhere('subtitle','like', '%' . $request->nhap . '%')
+            ->orWhere('slug','like', '%' . $request->nhap . '%')
+            ->orWhere('description','like', '%' . $request->nhap . '%')
             ->latest()->paginate(5);
         return response()->json($products);
     }
@@ -30,8 +40,8 @@ class ProductController extends Controller
     {
         $categories = Category::all();
         $brands = Brand::all();
-        $sizes = Attribute::where('name', 'size')->pluck('value');
-        $colors = Attribute::where('name', 'color')->pluck('value');
+        $sizes = Size::where('name', 'size')->get();
+        $colors = Color::where('name', 'color')->get();
         return response()->json([
             'categories' => $categories,
             'brands' => $brands,
@@ -56,7 +66,7 @@ class ProductController extends Controller
             'brand_id' => $request->input('brand_id'),
             'name' => $request->input('name'),
             'product_category_id' => $request->input('product_category_id'),
-            'main_image_url' => $main_image,
+            'main_image_url' =>$main_image,
             'view_count' => 0,
             'discount'=>$request->input('discount'),
             'start_date'=>$request->input('start_date'),
@@ -67,39 +77,45 @@ class ProductController extends Controller
             'slug' => str::slug($request->input('name')),
             'is_active' => $request->has('is_active') ? 1 : 0,
         ]);
-        $attPro=null;
-        if ($request->has('attribute_id') && is_array($request->attribute_id)) {
-        foreach($request->attribute_id as $attributeId) {
-            // Create an attribute product
-            $exists = Attribute::where('id', $attributeId)->exists();
-            if ($exists) {
-                // Nếu tồn tại, tạo bản ghi mới trong bảng 'attribute_products'
-                $attPro = AttributeProduct::create([
-                    'product_id' => $product->product_id, 
-                    'attribute_id' => $attributeId,       
-                ]);
-            } 
+        $validated = $request->validate([
+            'colors' => 'required|array', // Kiểm tra trường colors là một mảng
+            'colors.*' => 'exists:colors,color_id', // Kiểm tra từng phần tử trong mảng colors có tồn tại trong bảng colors
+            'sizes' => 'required|array', // Kiểm tra trường sizes là một mảng
+            'sizes.*' => 'exists:sizes,size_id', // Kiểm tra từng phần tử trong mảng sizes có tồn tại trong bảng sizes
+            // 'stock' => 'nullable|integer|min:0', // Kho có thể null nhưng nếu có thì phải là số nguyên và không nhỏ hơn 0
+            // 'price' => 'nullable|numeric|min:0', // Giá có thể null nhưng nếu có thì phải là số và không nhỏ hơn 0
+        ]);
+        $productColorSizeData = [];
+        foreach ($validated['colors'] as $colorId) {
+            foreach ($validated['sizes'] as $sizeId) {
+                $productColorSizeData[] = [
+                    'product_id' => $product->product_id,
+                    'color_id' => $colorId,
+                    'size_id' => $sizeId,
+                ];
+            }
         }
-    }
+        $attPro=AttributeProduct::insert($productColorSizeData);
+    
+
 
         return response()->json([
             'product' => $product,
-            'attPro' => $attPro,
-            // 'errorImg'=>$errorImg,
-            // 'message' => $errorImg ? 'Product added with warnings.' : 'Product added successfully!',
+            'attPro'=>$attPro,
             'message' =>'Product added successfully!',
         ], 201);
 
     }
     public function getDataAtrPro(Request $request){
-        $products = Product::with(['attributeProducts.attribute'])
-        ->get()
-        ->groupBy(function ($product) {
-            // Lấy màu sắc từ thuộc tính của sản phẩm
-            $colorAttribute = $product->attributeProducts->firstWhere('attribute.name', 'color');
-            return $colorAttribute ? $colorAttribute->attribute->value : 'Unknown';
-        });
-        return response()->json($products);
+        // Lấy tất cả các sản phẩm và thông tin của chúng cùng với màu sắc, kích thước, giá và tồn kho
+    $products = Product::with(['colors.sizes' => function ($query) {
+        // Lọc các màu và size theo từng sản phẩm
+        $query->select('sizes.size_id', 'sizes.name', 'attribute_products.price', 'attribute_products.in_stock');
+    }])
+    ->get();
+
+    // Trả về kết quả
+    return response()->json($products);
     }
     public function updateMultipleAttributeProducts(Request $request)
     {
@@ -109,7 +125,6 @@ class ProductController extends Controller
             'attribute_product.*.attribute_product_id' => 'required|integer|exists:attribute_products,attribute_product_id', // ID của từng sản phẩm thuộc tính
             'attribute_product.*.price' => 'nullable|numeric|min:0',
             'attribute_product.*.in_stock' => 'nullable|integer|min:0',
-            'attribute_product.*.discount' => 'nullable|numeric|min:0|max:100',
         ]);
     
         // Cập nhật từng sản phẩm thuộc tính trong danh sách
@@ -157,7 +172,6 @@ class ProductController extends Controller
     {
         $category = Category::findOrFail($id);
         $brand = Brand::findOrFail($id);
-        $attribute=Attribute::all();
 
    
         return response()->json(['category' => $category, 'brand' => $brand,]);
