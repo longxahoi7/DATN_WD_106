@@ -15,6 +15,26 @@ export interface IProduct {
     price: number | null;
     category?: string;
     mota?: string;
+    brand?: string;
+}
+
+export interface IProductUser {
+    product_id: number;
+    brandId: number;
+    product_category_id: number;
+    name: string;
+    description: string;
+    sku: string;
+    subtitle: string;
+    slug: string;
+    isActive: boolean;
+    deletedAt?: Date | null;
+    createdAt?: Date | null;
+    updatedAt?: Date | null;
+    main_image_url: string;
+    price: number | null;
+    category?: string;
+    mota?: string;
 }
 
 export type FormData = Pick<

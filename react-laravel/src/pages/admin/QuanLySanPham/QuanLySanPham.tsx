@@ -20,11 +20,11 @@ const QuanLySanPham = () => {
 
     const [currentProduct, setCurrentProduct] = useState<IProduct | null>(null);
     const [products, setProducts] = useState<IProduct[]>([]);
-    const [brands, setBrands] = useState<Brands[]>([]);
-    const [categories, setCategories] = useState<Category[]>([]);
+    // const [brands, setBrands] = useState<Brands[]>([]);
+    // const [categories, setCategories] = useState<Category[]>([]);
 
-    const [attributeColors, setAttributeColors] = useState<[]>([]);
-    const [attributesSizes, setAttributeSizes] = useState<[]>([]);
+    // const [attributeColors, setAttributeColors] = useState<[]>([]);
+    // const [attributesSizes, setAttributeSizes] = useState<[]>([]);
 
     // const [attributeColors, setAttributeColors] = useState<Attributes[]>([]);
     // const [attributesSizes, setAttributeSizes] = useState<Attributes[]>([]);
@@ -32,36 +32,13 @@ const QuanLySanPham = () => {
     const fetchProducts = async () => {
         setLoading(true);
         try {
-            const response = await api.get("admin/products/get-data");
+            const response = await api.get("admin/products/list-product");
             console.log(response, "response");
 
-            const parseProducts = Array.isArray(response.data.products)
-                ? response.data.products
+            const parseProducts = Array.isArray(response.data.data)
+                ? response.data.data
                 : [];
             setProducts(parseProducts);
-
-            const parseBrands = Array.isArray(response.data.brands)
-                ? response.data.brands
-                : [];
-            setBrands(parseBrands);
-
-            const parseCategories = Array.isArray(response.data.categories)
-                ? response.data.categories
-                : [];
-            setCategories(parseCategories);
-            // console.log(categories, "categories");
-
-            const parseAttributeColors = Array.isArray(response.data.colors)
-                ? response.data.colors
-                : [];
-            setAttributeColors(parseAttributeColors);
-            // console.log(attributeColors, "attributeColors");
-
-            const parseAttributeSizes = Array.isArray(response.data.sizes)
-                ? response.data.sizes
-                : [];
-            setAttributeSizes(parseAttributeSizes);
-            // console.log(attributesSizes, "attributesSizes");
         } catch (error) {
             console.error("Lỗi khi lấy sản phẩm:", error);
             message.error("Không thể tải sản phẩm.");
@@ -133,6 +110,13 @@ const QuanLySanPham = () => {
             width: "30%",
         },
         {
+            title: "Số lượng",
+            dataIndex: "in_stock",
+            key: "in_stock",
+            render: (in_stock) => <span>{in_stock}</span>,
+            align: "center" as const,
+        },
+        {
             title: "Giá",
             dataIndex: "price",
             key: "price",
@@ -143,13 +127,13 @@ const QuanLySanPham = () => {
             ),
             align: "center" as const,
         },
-        {
-            title: "Danh mục",
-            dataIndex: "category",
-            key: "category",
-            render: (category) => <span>{category.name}</span>,
-            align: "center" as const,
-        },
+        // {
+        //     title: "Danh mục",
+        //     dataIndex: "category",
+        //     key: "category",
+        //     render: (category) => <span>{category.name}</span>,
+        //     align: "center" as const,
+        // },
         {
             key: "action",
             render: (text, record: IProduct) => (
@@ -272,16 +256,11 @@ const QuanLySanPham = () => {
                     onOk={handleOk}
                     onCancel={() => setIsModalOpen(false)}
                     initialValues={currentProduct}
-                    brands={brands}
-                    categories={categories}
-                    attributeColors={attributeColors}
-                    attributesSizes={attributesSizes}
                 />
                 <DetailSanPham
                     open={isDetailOpen}
                     onClose={handleDetailClose}
                     product={currentProduct}
-                    brand={brands}
                 />
             </div>
         </div>

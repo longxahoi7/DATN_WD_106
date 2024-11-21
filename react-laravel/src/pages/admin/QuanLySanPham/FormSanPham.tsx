@@ -9,116 +9,87 @@ import {
     Select,
     Row,
     Col,
+    message,
 } from "antd";
 import { UploadOutlined, DeleteOutlined } from "@ant-design/icons";
 import { ColorPicker, Space } from "antd";
 import moment from "moment";
 import { Attributes, Brands, Category } from "../../../interface/IProduct";
+import api from "../../../config/axios";
 
 const { Option } = Select;
 
-const FormSanPham = ({
-    open,
-    onOk,
-    onCancel,
-    initialValues,
-    brands,
-    categories,
-    attributeColors,
-    attributesSizes,
-}) => {
+const FormSanPham = ({ open, onOk, onCancel, initialValues }) => {
     const [form] = Form.useForm();
+    const [loading, setLoading] = useState(true);
     const [previewImage, setPreviewImage] = useState<string | null>(null);
     const token = localStorage.getItem("token");
 
-    // const [brands, setBrands] = useState<Array<Brands> | null>(null);
-    // const [category, setCategory] = useState<Array<Category> | null>(null);
-    // const [attribute, setAttribute] = useState<Array<Attributes> | null>(null);
+    const [brands, setBrands] = useState<Brands[]>([]);
+    const [categories, setCategories] = useState<Category[]>([]);
 
-    // Fetch data for brands, categories, and attributes on component mount
-    // useEffect(() => {
-    //     const fetchBrands = async () => {
-    //         try {
-    //             const response = await fetch(
-    //                 "http://localhost:8000/api/admin/brands/list-brand",
-    //                 {
-    //                     method: "GET",
-    //                     headers: {
-    //                         Authorization: `Bearer ${token}`,
-    //                         "Content-Type": "application/json",
-    //                     },
-    //                 }
-    //             );
-    //             const data = await response.json();
-    //             setBrands(data.data);
-    //         } catch (error) {
-    //             console.error("Failed to fetch brands", error);
-    //         }
-    //     };
+    const [attributeColors, setAttributeColors] = useState<[]>([]);
+    const [attributesSizes, setAttributeSizes] = useState<[]>([]);
 
-    //     const fetchCategories = async () => {
-    //         try {
-    //             const response = await fetch(
-    //                 "http://localhost:8000/api/admin/categories/list-category",
-    //                 {
-    //                     method: "GET",
-    //                     headers: {
-    //                         Authorization: `Bearer ${token}`,
-    //                         "Content-Type": "application/json",
-    //                     },
-    //                 }
-    //             );
-    //             const data = await response.json();
-    //             setCategory(data.data);
-    //         } catch (error) {
-    //             console.error("Failed to fetch categories", error);
-    //         }
-    //     };
+    const fetchData = async () => {
+        setLoading(true);
+        try {
+            const response = await api.get("admin/products/get-data");
+            console.log(response, "getData");
 
-    //     const fetchAttributes = async () => {
-    //         try {
-    //             const response = await fetch(
-    //                 "http://localhost:8000/api/admin/attributes/list-attribute",
-    //                 {
-    //                     method: "GET",
-    //                     headers: {
-    //                         Authorization: `Bearer ${token}`,
-    //                         "Content-Type": "application/json",
-    //                     },
-    //                 }
-    //             );
-    //             const data = await response.json();
-    //             setAttribute(data.data);
-    //         } catch (error) {
-    //             console.error("Failed to fetch attributes", error);
-    //         }
-    //     };
+            const parseBrands = Array.isArray(response.data.brands)
+                ? response.data.brands
+                : [];
+            setBrands(parseBrands);
 
-    //     fetchBrands();
-    //     fetchCategories();
-    //     fetchAttributes();
-    // }, [token]);
+            const parseCategories = Array.isArray(response.data.categories)
+                ? response.data.categories
+                : [];
+            setCategories(parseCategories);
+
+            const parseAttributeColors = Array.isArray(response.data.colors)
+                ? response.data.colors
+                : [];
+            setAttributeColors(parseAttributeColors);
+            console.log(attributeColors, "attributeColors");
+
+            const parseAttributeSizes = Array.isArray(response.data.sizes)
+                ? response.data.sizes
+                : [];
+            setAttributeSizes(parseAttributeSizes);
+        } catch (error) {
+            console.error("Lỗi khi lấy sản phẩm:", error);
+            message.error("Không thể tải sản phẩm.");
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchData();
+    }, []);
 
     // Set initial values when initialValues prop changes
     useEffect(() => {
         if (initialValues) {
             form.setFieldsValue({
-                brand_id: initialValues.brand_id,
-                product_category_id: initialValues.product_category_id,
                 name: initialValues.name,
-                // price: initialValues.price,
                 sku: initialValues.sku,
-                description: initialValues.description,
                 subtitle: initialValues.subtitle,
+                description: initialValues.description,
                 attribute_id: initialValues.attribute_id,
                 discount: initialValues.discount,
-                // in_stock: initialValues.in_stock,
+                in_stock: initialValues.in_stock,
+                price: initialValues.price,
+                brand_id: initialValues.brand_id,
+                product_category_id: initialValues.product_category_id,
                 createdAt: initialValues.created_at
                     ? moment(initialValues.created_at)
                     : null,
                 updatedAt: initialValues.updated_at
                     ? moment(initialValues.updated_at)
                     : null,
+                main_image_url: initialValues.main_image_url,
             });
             setPreviewImage(initialValues.main_image_url);
 
@@ -132,17 +103,16 @@ const FormSanPham = ({
             const formData = new FormData();
 
             // Ensure form values are appended to FormData
-            formData.append("brand_id", values.brand_id);
-            formData.append("product_category_id", values.product_category_id);
             formData.append("name", values.name);
-            // formData.append("price", values.price);
             formData.append("sku", values.sku);
-            formData.append("description", values.description);
             formData.append("subtitle", values.subtitle);
+            formData.append("description", values.description);
             formData.append("attribute_id", values.attribute_id);
             formData.append("discount", values.discount);
-            formData.append("size", values.size);
-            // formData.append("in_stock", values.in_stock);
+            formData.append("in_stock", values.in_stock);
+            formData.append("price", values.price);
+            formData.append("brand_id", values.brand_id);
+            formData.append("product_category_id", values.product_category_id);
 
             // Handle created_at and updated_at fields as dates
             if (values.createdAt) {
@@ -161,8 +131,8 @@ const FormSanPham = ({
             if (previewImage) {
                 const response = await fetch(previewImage);
                 const blob = await response.blob();
-                formData.append("main_image_url", blob);
-                // formData.append("main_image_url", blob, "uploaded_image.jpg");
+                // formData.append("main_image_url", blob);
+                formData.append("main_image_url", blob, "uploaded_image.jpg");
             }
 
             // Logging FormData to inspect its contents
@@ -182,6 +152,8 @@ const FormSanPham = ({
                 }
             );
 
+            console.log(formData, "formData");
+
             if (response.ok) {
                 onOk(values);
                 form.resetFields();
@@ -200,11 +172,9 @@ const FormSanPham = ({
         reader.onload = (e) => {
             if (e.target) {
                 setPreviewImage(e.target.result as string);
-                console.log(previewImage, "previewImage");
             }
         };
         reader.readAsDataURL(file);
-        // const blobUrl = URL.createObjectURL(file);
     };
 
     // Handle image removal
@@ -305,9 +275,9 @@ const FormSanPham = ({
                         </Form.Item>
                     </Col>
 
-                    <Col span={6}>
+                    <Col span={12}>
                         <Form.Item
-                            name="size"
+                            name="attribute_id"
                             label="Chọn Size"
                             rules={[
                                 {
@@ -320,17 +290,23 @@ const FormSanPham = ({
                                 placeholder="Chọn thuộc tính"
                                 mode="multiple"
                             >
-                                {attributesSizes?.map((size, index) => (
-                                    <Option value={size} key={index}>
-                                        {size}
-                                    </Option>
-                                ))}
+                                {attributesSizes.map((size, index) => {
+                                    const { attribute_id, name, value } = size;
+                                    return (
+                                        <Option
+                                            value={attribute_id}
+                                            key={index}
+                                        >
+                                            {value}
+                                        </Option>
+                                    );
+                                })}
                             </Select>
                         </Form.Item>
                     </Col>
-                    <Col span={6}>
+                    {/* <Col span={6}>
                         <Form.Item
-                            name="colors"
+                            name="attribute_id"
                             label="Chọn màu"
                             rules={[
                                 {
@@ -343,21 +319,27 @@ const FormSanPham = ({
                                 placeholder="Chọn thuộc tính"
                                 mode="multiple"
                             >
-                                {attributeColors?.map((color, index) => (
-                                    <Option value={color} key={index}>
-                                        <i
-                                            className="fa-solid fa-ice-cream"
-                                            style={{
-                                                color: color,
-                                                marginRight: "8px",
-                                            }}
-                                        ></i>
-                                        {color}
-                                    </Option>
-                                ))}
+                                {attributeColors?.map((color, index) => {
+                                    const { attribute_id, name, value } = color;
+                                    return (
+                                        <Option
+                                            value={attribute_id}
+                                            key={index}
+                                        >
+                                            <i
+                                                className="fa-solid fa-ice-cream"
+                                                style={{
+                                                    color: value,
+                                                    marginRight: "8px",
+                                                }}
+                                            ></i>
+                                            {value}
+                                        </Option>
+                                    );
+                                })}
                             </Select>
                         </Form.Item>
-                    </Col>
+                    </Col> */}
 
                     <Col span={12}>
                         <Form.Item
@@ -380,7 +362,7 @@ const FormSanPham = ({
                         </Form.Item>
                     </Col>
 
-                    {/* <Col span={12}>
+                    <Col span={12}>
                         <Form.Item
                             name="in_stock"
                             label="Stock sản phẩm"
@@ -398,9 +380,9 @@ const FormSanPham = ({
                         >
                             <Input placeholder="Stock sản phẩm" />
                         </Form.Item>
-                    </Col> */}
+                    </Col>
 
-                    {/* <Col span={12}>
+                    <Col span={12}>
                         <Form.Item
                             name="price"
                             label="Giá sản phẩm"
@@ -416,7 +398,7 @@ const FormSanPham = ({
                                 placeholder="Nhập giá sản phẩm"
                             />
                         </Form.Item>
-                    </Col> */}
+                    </Col>
 
                     <Col span={12}>
                         <Form.Item

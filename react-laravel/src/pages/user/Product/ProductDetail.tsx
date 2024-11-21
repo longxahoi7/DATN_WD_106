@@ -1,3 +1,4 @@
+
 import React, { useEffect } from "react";
 
 import { Link, useParams } from "react-router-dom";
@@ -68,7 +69,7 @@ const ProductDetail = (props: any) => {
 
                 if (products.length > 0) {
                     const currentProduct = products.find(
-                        (p: IProduct) => p.id.toString() === id
+                        (p: IProduct) => p.product_id.toString() === id
                     );
                     console.log("Current product ID:", typeof id);
                     console.log("Current product ", currentProduct);
@@ -76,7 +77,7 @@ const ProductDetail = (props: any) => {
                         const relatedProducts = products.filter(
                             (p: IProduct) =>
                                 p.category === currentProduct.category &&
-                                p.id !== currentProduct.id
+                                p.product_id !== currentProduct.product_id
                         );
                         console.log(relatedProducts);
                         console.log("category product ", currentProduct);
@@ -171,7 +172,7 @@ const ProductDetail = (props: any) => {
                 <span className="block h-1 bg-gray-400 mx-auto w-1/6"></span>
                 <div className="grid grid-cols-4 gap-4 mt-4">
                     {relatedProducts.map((relatedProduct) => (
-                        <figure className="snip1585" key={relatedProduct.id}>
+                        <figure className="snip1585" key={relatedProduct.product_id}>
                             <img
                                 src={`${relatedProduct.image}`}
                                 alt={relatedProduct.name}
@@ -191,7 +192,7 @@ const ProductDetail = (props: any) => {
                                 </button>
                             </figcaption>
                             <Link
-                                to={`/product-detail/${relatedProduct.id}`}
+                                to={`/product-detail/${relatedProduct.product_id}`}
                                 className="product-detail-link"
                             />
                         </figure>

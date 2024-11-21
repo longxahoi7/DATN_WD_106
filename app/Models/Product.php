@@ -10,14 +10,18 @@ class Product extends Model
     use HasFactory, SoftDeletes;
     protected $table = 'products';
     protected $primaryKey = 'product_id';
-    protected $with = ['category', 'attributes', 'coupons'];
+    // protected $with = ['category', 'attributes', 'coupons'];
     protected $fillable = [
-        'product_id',
         'brand_id',
         'product_category_id',
         'sku',
         'name',
         'main_image_url',
+        'in_stock',
+        'price',
+        'discount',
+        'start_date',
+        'end_date',
         'view_count',
         'description',
         'subtitle',
@@ -28,10 +32,9 @@ class Product extends Model
     {
         return $this->belongsTo(Category::class, 'product_category_id');
     }
-
-    public function attributes()
+    public function attributeProducts()
     {
-        return $this->belongsToMany(Attribute::class, 'attribute_products', 'product_id', 'attribute_id');
+        return $this->hasMany(AttributeProduct::class, 'product_id', 'product_id');
     }
     public function coupons()
     {

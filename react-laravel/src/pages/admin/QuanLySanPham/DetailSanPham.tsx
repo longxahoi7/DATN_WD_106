@@ -2,7 +2,12 @@ import React from "react";
 import { Modal } from "antd";
 import "../../../style/quanLy.css";
 
-const DetailSanPham = ({ open, onClose, product, brand }) => {
+const DetailSanPham = ({
+    open,
+    onClose,
+    product,
+    // , brand
+}) => {
     // Định dạng ngày tháng
     const formatDate = (date) => {
         if (date) {
@@ -35,7 +40,7 @@ const DetailSanPham = ({ open, onClose, product, brand }) => {
                                 ? `Giá: ${product.price.toLocaleString()} VNĐ`
                                 : "Chưa có giá"}{" "}
                         </p>
-                        {brand.map((brd, index) => {
+                        {/* {brand.map((brd, index) => {
                             if (brd.brand_id === product.brand_id) {
                                 return (
                                     <p key={brd.brand_id}>
@@ -43,8 +48,8 @@ const DetailSanPham = ({ open, onClose, product, brand }) => {
                                     </p>
                                 );
                             }
-                        })}
-                        <p>Danh mục: {product.category?.name}</p>
+                        })} */}
+                        {/* <p>Danh mục: {product.category?.name}</p> */}
                         <div className="date-container">
                             <p>Ngày tạo: {formatDate(product.created_at)}</p>
                             <p>
