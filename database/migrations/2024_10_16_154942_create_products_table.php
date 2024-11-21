@@ -19,8 +19,6 @@ return new class extends Migration {
             $table->string('name', 255);
             $table->string('main_image_url', 255);
             $table->bigInteger('view_count')->default(0);
-            $table->integer('in_stock');
-            $table->double('price', 16, 2);
             $table->double('discount', 16, 2);
             $table->date('start_date')->nullable();
             $table->date('end_date')->nullable();

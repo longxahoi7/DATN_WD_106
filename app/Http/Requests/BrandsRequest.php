@@ -27,6 +27,11 @@ class BrandsRequest extends FormRequest
             'description'=>'required|string|max:255',
             'is_active'=>'boolean',
             'slug'=>'required|alpha_dash|unique:brands,slug',
+            function ($attribute, $value, $fail) {
+                if ($value !== $this->input('name')) {
+                    $fail('Slug phải giống với Name.');
+                }
+            }
         ];
     }
     public function messages():array{

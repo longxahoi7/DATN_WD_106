@@ -14,8 +14,12 @@ return new class extends Migration {
             $table->increments('attribute_product_id');
             $table->unsignedInteger('product_id');
             $table->foreign('product_id')->references('product_id')->on('products')->onDelete('cascade');
-            $table->unsignedInteger('attribute_id');
-            $table->foreign('attribute_id')->references('attribute_id')->on('attributes')->onDelete('cascade');
+            $table->unsignedInteger('color_id');
+            $table->foreign('color_id')->references('color_id')->on('colors')->onDelete('cascade');
+            $table->unsignedInteger('size_id');
+            $table->foreign('size_id')->references('size_id')->on('sizes')->onDelete('cascade');
+            $table->integer('in_stock');
+            $table->double('price', 16, 2);
             $table->timestamps();
         });
     }

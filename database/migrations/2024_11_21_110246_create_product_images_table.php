@@ -13,10 +13,8 @@ return new class extends Migration
     {
         Schema::create('product_images', function (Blueprint $table) {
             $table->increments('product_image_id');
-            $table->unsignedInteger('product_id');
-            $table->foreign('product_id')->references('product_id')->on('products')->onDelete('cascade');
-            $table->unsignedInteger('attribute_product_id');
-            $table->foreign('attribute_product_id')->references('attribute_product_id')->on('attribute_products')->onDelete('cascade');
+            $table->unsignedInteger('color_id');
+            $table->foreign('color_id')->references('color_id')->on('colors')->onDelete('cascade');
             $table->string('url', 500);
             $table->timestamps();
         });
