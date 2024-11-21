@@ -11,9 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('attributes', function (Blueprint $table) {
-            //
-            $table->softDeletes();
+        Schema::create('colors', function (Blueprint $table) {
+            $table->increments('color_id');
+            $table->string('name',50);
+            $table->string('color_code',7);
+            $table->timestamps();
         });
     }
 
@@ -22,9 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('attributes', function (Blueprint $table) {
-            //
-            $table->dropSoftDeletes();
-        });
+        Schema::dropIfExists('colors');
     }
 };
