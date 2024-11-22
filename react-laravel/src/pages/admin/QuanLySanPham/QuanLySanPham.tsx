@@ -110,23 +110,30 @@ const QuanLySanPham = () => {
             width: "30%",
         },
         {
-            title: "Số lượng",
-            dataIndex: "in_stock",
-            key: "in_stock",
-            render: (in_stock) => <span>{in_stock}</span>,
+            title: "Danh mục",
+            dataIndex: "category",
+            key: "category",
+            render: (category) => <span>{category.name}</span>,
             align: "center" as const,
         },
         {
-            title: "Giá",
-            dataIndex: "price",
-            key: "price",
-            render: (price) => (
-                <span>
-                    {price ? `${price.toLocaleString()} VND` : "chưa có giá"}
-                </span>
-            ),
+            title: "Thương hiệu",
+            dataIndex: "brand",
+            key: "brand",
+            render: (brand) => <span>{brand.name}</span>,
             align: "center" as const,
         },
+        // {
+        //     title: "Giá",
+        //     dataIndex: "price",
+        //     key: "price",
+        //     render: (price) => (
+        //         <span>
+        //             {price ? `${price.toLocaleString()} VND` : "chưa có giá"}
+        //         </span>
+        //     ),
+        //     align: "center" as const,
+        // },
         // {
         //     title: "Danh mục",
         //     dataIndex: "category",

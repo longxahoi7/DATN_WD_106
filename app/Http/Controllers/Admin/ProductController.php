@@ -39,8 +39,8 @@ class ProductController extends Controller
     {
         $categories = Category::all();
         $brands = Brand::all();
-        $sizes = Size::where('name', 'size')->get();
-        $colors = Color::where('name', 'color')->get();
+        $sizes = Size::get();
+        $colors = Color::get();
         return response()->json([
             'categories' => $categories,
             'brands' => $brands,
@@ -50,24 +50,32 @@ class ProductController extends Controller
             // 'products' => $products
         ]);
     }
-    private function imgPro(Request $request, $imageField)
-    {
-        if ($request->hasFile($imageField)) {
-            $anh = $request->file($imageField);
-            $newAnh = time() . "." . $anh->getClientOriginalExtension();
-            return $image = $anh->storeAs('images', $newAnh, 'public');
-        }
-        return null;
-
-    }
+    // private function imgPro(Request $request, $imageField)
+    // {
+    //     if ($request->hasFile($imageField)) {
+    //         $anh = $request->file($imageField);
+    //         $newAnh = time() . "." . $anh->getClientOriginalExtension();
+    //         return $image = $anh->storeAs('images', $newAnh, 'public');
+    //     }
+    //     return null;
+    // }
     public function addProduct(Request $request)
     {
-        $main_image = $this->imgPro($request, 'main_image_url');
+        // if ($request->hasFile('main_image_url')) {
+        //     $anh = $request->file('main_image_url');
+        //     if ($anh->isValid()) {
+        //         $newAnh = time() . "." . $anh->getClientOriginalExtension();
+        //         $image = $anh->move(public_path('imagePro/'), $newAnh);
+        //     } else {
+        //         $image = null;
+        //     }
+        // }
+        // $image = $anh->storeAs('images', $newAnh, 'public');
         $product = Product::create([
             'brand_id' => $request->input('brand_id'),
             'name' => $request->input('name'),
             'product_category_id' => $request->input('product_category_id'),
-            'main_image_url' => $main_image,
+            'main_image_url' => $request->input('main_image_url'),
             'view_count' => 0,
             'discount' => $request->input('discount'),
             'start_date' => $request->input('start_date'),
@@ -78,17 +86,11 @@ class ProductController extends Controller
             'slug' => str::slug($request->input('name')),
             'is_active' => $request->has('is_active') ? 1 : 0,
         ]);
-        $validated = $request->validate([
-            'colors' => 'required|array', // Kiểm tra trường colors là một mảng
-            'colors.*' => 'exists:colors,color_id', // Kiểm tra từng phần tử trong mảng colors có tồn tại trong bảng colors
-            'sizes' => 'required|array', // Kiểm tra trường sizes là một mảng
-            'sizes.*' => 'exists:sizes,size_id', // Kiểm tra từng phần tử trong mảng sizes có tồn tại trong bảng sizes
-            // 'stock' => 'nullable|integer|min:0', // Kho có thể null nhưng nếu có thì phải là số nguyên và không nhỏ hơn 0
-            // 'price' => 'nullable|numeric|min:0', // Giá có thể null nhưng nếu có thì phải là số và không nhỏ hơn 0
-        ]);
+        $colors = is_array($request->input('color_id')) ? $request->input('color_id') : explode(',', $request->input('color_id'));
+        $sizes = is_array($request->input('size_id')) ? $request->input('size_id') : explode(',', $request->input('size_id'));
         $productColorSizeData = [];
-        foreach ($validated['colors'] as $colorId) {
-            foreach ($validated['sizes'] as $sizeId) {
+        foreach ($colors as $colorId) {
+            foreach ($sizes as $sizeId) {
                 $productColorSizeData[] = [
                     'product_id' => $product->product_id,
                     'color_id' => $colorId,
