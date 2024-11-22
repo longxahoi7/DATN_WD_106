@@ -1,9 +1,9 @@
-import React, { useEffect } from "react";
-import { Modal, Form, Input, Upload, Button, InputNumber } from "antd";
-import { UploadOutlined, DeleteOutlined } from "@ant-design/icons";
+import React, { useEffect, useState } from "react";
+import { Modal, Form, Input, Button, Select } from "antd";
 
 const FormThuocTinh = ({ open, onOk, onCancel, initialValues, loading }) => {
     const [form] = Form.useForm();
+    const [attributeType, setAttributeType] = useState('color'); // state để lưu loại thuộc tính ('color' hoặc 'size')
 
     useEffect(() => {
         if (initialValues) {
@@ -20,11 +20,14 @@ const FormThuocTinh = ({ open, onOk, onCancel, initialValues, loading }) => {
         });
     };
 
+    // Hàm xử lý khi người dùng thay đổi loại thuộc tính
+    const handleAttributeChange = (value) => {
+        setAttributeType(value);
+    };
+
     return (
         <Modal
-            title={
-                initialValues ? "Cập nhật thuộc tính" : "Thêm mới thuộc tính"
-            }
+            title={initialValues ? "Cập nhật thuộc tính" : "Thêm mới thuộc tính"}
             open={open}
             onOk={handleOk}
             onCancel={() => {
@@ -46,18 +49,33 @@ const FormThuocTinh = ({ open, onOk, onCancel, initialValues, loading }) => {
                         },
                     ]}
                 >
-                    <Input placeholder="Nhập tên thuộc tính" />
+                    <Select
+                        defaultValue="color"
+                        onChange={handleAttributeChange}
+                    >
+                        <Select.Option value="color">Màu sắc</Select.Option>
+                        <Select.Option value="size">Kích thước</Select.Option>
+                    </Select>
                 </Form.Item>
 
-                <Form.Item
-                    label="Giá trị thuộc tính"
-                    name="value"
-                    rules={[
-                        { required: true, message: "Vui lòng nhập giá trị!" },
-                    ]}
-                >
-                    <Input />
-                </Form.Item>
+                {/* Input cho giá trị của thuộc tính */}
+                {attributeType === 'color' ? (
+                    <Form.Item
+                        label="Giá trị thuộc tính"
+                        name="value"
+                        rules={[{ required: true, message: "Vui lòng chọn giá trị!" }]}
+                    >
+                        <Input type="color" />
+                    </Form.Item>
+                ) : (
+                    <Form.Item
+                        label="Giá trị thuộc tính"
+                        name="value"
+                        rules={[{ required: true, message: "Vui lòng nhập giá trị!" }]}
+                    >
+                        <Input placeholder="Nhập giá trị thuộc tính (X, M, L, XL...)" />
+                    </Form.Item>
+                )}
             </Form>
         </Modal>
     );

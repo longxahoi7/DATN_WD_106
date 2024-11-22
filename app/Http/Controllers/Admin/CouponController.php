@@ -76,62 +76,62 @@ class CouponController extends Controller
 
     }
     public function updateCoupon(Request $request, $id)
-{
-    $coupon = Coupon::findOrFail($id);
-    // Update coupon details
-    $coupon->update([
-        'code' => $request->input('code', $coupon->code),
-        'discount_amount' => $request->input('discount_amount', $coupon->discount_amount),
-        'discount_percentage' => $request->input('discount_percentage', $coupon->discount_percentage),
-        'quantity' => $request->input('quantity', $coupon->quantity),
-        'min_order_value' => $request->input('min_order_value', $coupon->min_order_value),
-        'max_order_value' => $request->input('max_order_value', $coupon->max_order_value),
-        'condition' => $request->input('condition', $coupon->condition),
-        'is_public' => $request->input('is_public', $coupon->is_public),
-        'start_date' => $request->input('start_date', $coupon->start_date),
-        'end_date' => $request->input('end_date', $coupon->end_date),
-        'is_active' => $request->input('is_active', $coupon->is_active),
-    ]);
+    {
+        $coupon = Coupon::findOrFail($id);
+        // Update coupon details
+        $coupon->update([
+            'code' => $request->input('code', $coupon->code),
+            'discount_amount' => $request->input('discount_amount', $coupon->discount_amount),
+            'discount_percentage' => $request->input('discount_percentage', $coupon->discount_percentage),
+            'quantity' => $request->input('quantity', $coupon->quantity),
+            'min_order_value' => $request->input('min_order_value', $coupon->min_order_value),
+            'max_order_value' => $request->input('max_order_value', $coupon->max_order_value),
+            'condition' => $request->input('condition', $coupon->condition),
+            'is_public' => $request->input('is_public', $coupon->is_public),
+            'start_date' => $request->input('start_date', $coupon->start_date),
+            'end_date' => $request->input('end_date', $coupon->end_date),
+            'is_active' => $request->input('is_active', $coupon->is_active),
+        ]);
 
-    $couponUsers = [];
-    $couponProducts = [];
+        $couponUsers = [];
+        $couponProducts = [];
 
-    // Update user associations if provided
-    if ($request->has('user_id')) {
-        // Remove old associations
-        CouponUser::where('coupon_id', $id)->delete();
-        
-        // Add new associations and collect updated data
-        foreach ($request->input('user_id') as $userId) {
-            $couponUser = CouponUser::create([
-                'coupon_id' => $id,
-                'user_id' => $userId,
-            ]);
-            $couponUsers[] = $couponUser;
+        // Update user associations if provided
+        if ($request->has('user_id')) {
+            // Remove old associations
+            CouponUser::where('coupon_id', $id)->delete();
+
+            // Add new associations and collect updated data
+            foreach ($request->input('user_id') as $userId) {
+                $couponUser = CouponUser::create([
+                    'coupon_id' => $id,
+                    'user_id' => $userId,
+                ]);
+                $couponUsers[] = $couponUser;
+            }
         }
-    }
 
-    // Update product associations if provided
-    if ($request->has('product_id')) {
-        // Remove old associations
-        CouponProduct::where('coupon_id', $id)->delete();
-        
-        // Add new associations and collect updated data
-        foreach ($request->input('product_id') as $productId) {
-            $couponPro = CouponProduct::create([
-                'coupon_id' => $id,
-                'product_id' => $productId,
-            ]);
-            $couponProducts[] = $couponPro;
+        // Update product associations if provided
+        if ($request->has('product_id')) {
+            // Remove old associations
+            CouponProduct::where('coupon_id', $id)->delete();
+
+            // Add new associations and collect updated data
+            foreach ($request->input('product_id') as $productId) {
+                $couponPro = CouponProduct::create([
+                    'coupon_id' => $id,
+                    'product_id' => $productId,
+                ]);
+                $couponProducts[] = $couponPro;
+            }
         }
-    }
 
-    // Return updated coupon with associated users and products
-    return response()->json([
-        'coupon' => $coupon,
-        'couponUsers' => $couponUsers,
-        'couponProducts' => $couponProducts,
-        'message' => 'Coupon updated successfully!',
-    ], 200);
-}
+        // Return updated coupon with associated users and products
+        return response()->json([
+            'coupon' => $coupon,
+            'couponUsers' => $couponUsers,
+            'couponProducts' => $couponProducts,
+            'message' => 'Coupon updated successfully!',
+        ], 200);
+    }
 }

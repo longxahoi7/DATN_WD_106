@@ -56,7 +56,7 @@ const App: React.FC = () => {
                         element={<QuanLySanPham />}
                     />
                     <Route
-                        path="attributetmanagement"
+                        path="attributemanagement"
                         element={<QuanLyThuocTinh />}
                     />
                 </Route>
