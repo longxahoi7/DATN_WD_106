@@ -54,7 +54,8 @@ class ProductController extends Controller
         if ($request->hasFile($imageField)) {
             $anh = $request->file($imageField);
             $newAnh = time() . "." . $anh->getClientOriginalExtension();
-            return $image = $anh->storeAs('images', $newAnh, 'public');
+             $image = $anh->storeAs('images', $newAnh, 'public');
+             return $image;
         }
         return null;
 
@@ -77,17 +78,17 @@ class ProductController extends Controller
             'slug' => str::slug($request->input('name')),
             'is_active' => $request->has('is_active') ? 1 : 0,
         ]);
-        $validated = $request->validate([
-            'colors' => 'required|array', // Kiểm tra trường colors là một mảng
-            'colors.*' => 'exists:colors,color_id', // Kiểm tra từng phần tử trong mảng colors có tồn tại trong bảng colors
-            'sizes' => 'required|array', // Kiểm tra trường sizes là một mảng
-            'sizes.*' => 'exists:sizes,size_id', // Kiểm tra từng phần tử trong mảng sizes có tồn tại trong bảng sizes
-            // 'stock' => 'nullable|integer|min:0', // Kho có thể null nhưng nếu có thì phải là số nguyên và không nhỏ hơn 0
-            // 'price' => 'nullable|numeric|min:0', // Giá có thể null nhưng nếu có thì phải là số và không nhỏ hơn 0
-        ]);
+        // $validated = $request->validate([
+        //     'colors' => 'required|array', // Kiểm tra trường colors là một mảng
+        //     'colors.*' => 'exists:colors,color_id', // Kiểm tra từng phần tử trong mảng colors có tồn tại trong bảng colors
+        //     'sizes' => 'required|array', // Kiểm tra trường sizes là một mảng
+        //     'sizes.*' => 'exists:sizes,size_id', // Kiểm tra từng phần tử trong mảng sizes có tồn tại trong bảng sizes
+        //     // 'stock' => 'nullable|integer|min:0', // Kho có thể null nhưng nếu có thì phải là số nguyên và không nhỏ hơn 0
+        //     // 'price' => 'nullable|numeric|min:0', // Giá có thể null nhưng nếu có thì phải là số và không nhỏ hơn 0
+        // ]);
         $productColorSizeData = [];
-        foreach ($validated['colors'] as $colorId) {
-            foreach ($validated['sizes'] as $sizeId) {
+        foreach ($request->input('color_id') as $colorId) {
+            foreach ($request->input('size_id') as $sizeId) {
                 $productColorSizeData[] = [
                     'product_id' => $product->product_id,
                     'color_id' => $colorId,
