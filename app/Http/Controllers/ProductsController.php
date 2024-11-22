@@ -22,7 +22,7 @@ class ProductsController extends Controller
     public function showProduct($productId)
     {
         // Tìm sản phẩm theo ID và kèm theo các thuộc tính của sản phẩm
-        $product = Product::with('attributes')->findOrFail($productId);
+        $product = Product::with('brand', 'category', 'colors', 'sizes','attributeProducts')->findOrFail($productId);
 
         // Trả về thông tin sản phẩm dưới dạng JSON
         return response()->json([

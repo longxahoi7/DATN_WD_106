@@ -11,27 +11,41 @@ use Illuminate\Support\Facades\Auth;
 class CartController extends Controller
 {
     // API để thêm sản phẩm vào giỏ hàng
-    public function addToCart(Request $request, $productId)
-{
-    $userId = auth()->id(); // Lấy ID của người dùng đang đăng nhập
+    public function addToCart(Request $request)
+    {
+        // Lấy thông tin sản phẩm
+        $product = Product::findOrFail($request->product_id);
 
-    if (!$userId) {
-        return response()->json(['message' => 'User not authenticated'], 401);
+        // Tìm hoặc tạo giỏ hàng cho người dùng
+        $cart = ShoppingCart::firstOrCreate([
+            'user_id' => auth()->id() // Nếu người dùng đã đăng nhập
+        ]);
+
+        // Kiểm tra nếu sản phẩm đã tồn tại trong giỏ hàng
+        $cartItem = CartItem::where('shopping_cart_id', $cart->id)
+            ->where('product_id', $product->product_id)
+            ->where('color_id', $request->color_id)
+            ->where('size_id', $request->size_id)
+            ->first();
+
+        if ($cartItem) {
+            // Nếu sản phẩm đã tồn tại, tăng số lượng
+            $cartItem->qty += $request->qty;
+            $cartItem->save();
+        } else {
+            // Thêm sản phẩm mới
+            CartItem::create([
+                'shopping_cart_id' => $cart->id,
+                'product_id' => $product->product_id,
+                'color_id' => $request->color_id,
+                'size_id' => $request->size_id,
+                'qty' => $request->qty,
+                'price' => $product->price, // Giá hiện tại
+            ]);
+        }
+
+        return response()->json(['success' => 'Sản phẩm đã được thêm vào giỏ hàng.']);
     }
-
-    // Thêm sản phẩm vào giỏ hàng với user_id đã xác định
-    $cart = ShoppingCart::create([
-        'user_id' => $userId,
-        'product_id' => $productId,
-        'quantity' => $request->input('quantity', 1),
-    ]);
-
-    return response()->json([
-        'message' => 'Product added to cart successfully', 
-        'cart' => $cart
-    ], 201);
-}
-
 
     // API để xem giỏ hàng
     public function viewCart()
