@@ -192,7 +192,7 @@ const ProductDetail = (props: any) => {
                             <p className="text-2xl font-bold mb-4">
                                 {formatPrice(price)}
                             </p>
-                            {/* Size and color selectors */}
+                            {/* size and color */}
                             <div className="flex space-x-4 mb-4">
                                 <button className="bg-black text-white px-4 py-2">
                                     THÊM VÀO GIỎ
