@@ -21,7 +21,7 @@ const QuanLyThuongHieu = () => {
     const [formLoading, setFormLoading] = useState(false);
 
     const [currentBrand, setCurrentBrand] = useState<Brands | null>(null);
-   
+
     const [brands, setBrands] = useState<Brands[]>([]);
 
     const fetchBrands = async () => {
@@ -66,31 +66,18 @@ const QuanLyThuongHieu = () => {
             align: "center" as const,
         },
         {
-            title: "Hình ảnh",
-            dataIndex: "main_image_url",
-            key: "main_image_url",
-            render: (imageURL) => (
-                <div
-                    style={{
-                        display: "flex",
-                        justifyContent: "center",
-                    }}
-                >
-                    <Image
-                        src={imageURL}
-                        alt="Brand"
-                        width={50}
-                        preview={false}
-                    />
-                </div>
-            ),
-            align: "center" as const,
-        },
-        {
             title: "Mô tả",
             dataIndex: "description",
             key: "description",
             render: (description) => <a>{description}</a>,
+            align: "center" as const,
+            width: "30%",
+        },
+        {
+            title: "Slug",
+            dataIndex: "slug",
+            key: "slug",
+            render: (slug) => <a>{slug}</a>,
             align: "center" as const,
             width: "30%",
         },

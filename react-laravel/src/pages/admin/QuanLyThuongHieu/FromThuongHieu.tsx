@@ -26,7 +26,6 @@ const FormThuongHieu = ({ open, onOk, onCancel, initialValues }) => {
     const token = localStorage.getItem("token");
 
     const [brands, setBrands] = useState<Brands[]>([]);
-    const [categories, setCategories] = useState<Category[]>([]);
 
     const fetchData = async () => {
         setLoading(true);
@@ -55,11 +54,16 @@ const FormThuongHieu = ({ open, onOk, onCancel, initialValues }) => {
         if (initialValues) {
             form.setFieldsValue({
                 name: initialValues.name,
+                slug: initialValues.slug,
                 description: initialValues.description,
                 brand_id: initialValues.brand_id,
-                main_image_url: initialValues.main_image_url,
+                createdAt: initialValues.created_at
+                    ? moment(initialValues.created_at)
+                    : null,
+                updatedAt: initialValues.updated_at
+                    ? moment(initialValues.updated_at)
+                    : null,
             });
-            setPreviewImage(initialValues.main_image_url);
 
             console.log("initialValues", initialValues);
         }
@@ -73,6 +77,7 @@ const FormThuongHieu = ({ open, onOk, onCancel, initialValues }) => {
             // Ensure form values are appended to FormData
             formData.append("name", values.name);
             formData.append("description", values.description);
+            formData.append("slug", values.slug);
             if (values.createdAt) {
                 formData.append(
                     "created_at",
@@ -85,8 +90,6 @@ const FormThuongHieu = ({ open, onOk, onCancel, initialValues }) => {
                     values.updatedAt.format("YYYY-MM-DD")
                 );
             }
-
-            formData.append("main_image_url", values.main_image_url);
 
             // Logging FormData to inspect its contents
             for (let pair of formData.entries()) {
@@ -115,17 +118,6 @@ const FormThuongHieu = ({ open, onOk, onCancel, initialValues }) => {
         } catch (error) {
             console.error("Validation failed:", error);
         }
-    };
-
-    // Handle image upload
-    const handleImageUpload = ({ file }) => {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            if (e.target) {
-                setPreviewImage(e.target.result as string);
-            }
-        };
-        reader.readAsDataURL(file);
     };
 
     // Handle image removal
@@ -170,7 +162,21 @@ const FormThuongHieu = ({ open, onOk, onCancel, initialValues }) => {
                             <Input placeholder="Nhập tên thương hiệu" />
                         </Form.Item>
                     </Col>
-
+                    <Col span={12}>
+                        <Form.Item
+                            name="slug"
+                            label="Tên đường dẫn thương hiệu"
+                            rules={[
+                                {
+                                    required: true,
+                                    message:
+                                        "Vui lòng nhập đường dẫn thương hiệu",
+                                },
+                            ]}
+                        >
+                            <Input placeholder="Nhập mô tả" />
+                        </Form.Item>
+                    </Col>
                     <Col span={12}>
                         <Form.Item
                             name="description"
@@ -188,11 +194,6 @@ const FormThuongHieu = ({ open, onOk, onCancel, initialValues }) => {
                             ]}
                         >
                             <Input placeholder="Mô tả thương hiệu" />
-                        </Form.Item>
-                    </Col>
-                    <Col span={12}>
-                        <Form.Item name="main_image_url" label="ảnh">
-                            <Input placeholder="ảnh" />
                         </Form.Item>
                     </Col>
                 </Row>

@@ -23,7 +23,7 @@ const DetailThuongHieu = ({ open, onClose, brand }) => {
                 <div className="detail-container">
                     <div className="info-container">
                         <p className="product-name">{brand.name}</p>
-
+                        <p className="product-slug">{brand.slug}</p>
                         <div className="date-container">
                             <p>Ngày tạo: {formatDate(brand.created_at)}</p>
                             <p>Ngày cập nhật: {formatDate(brand.updated_at)}</p>
