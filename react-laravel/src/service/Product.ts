@@ -11,7 +11,7 @@ export const GetAllProducts = async () => {
 };
 export const getProductByID = async (id: number | string) => {
     try {
-        const { data } = await api.get(`products/${id}`);
+        const { data } = await api.get(`users/products/show-product/${id}`);
         return data;
     } catch (error) {
         throw new Error("Lỗi");

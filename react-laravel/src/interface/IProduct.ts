@@ -1,4 +1,6 @@
 export interface IProduct {
+    sizes: any;
+    colors: any;
     product_id: number;
     brandId: number;
     product_category_id: number;
@@ -6,6 +8,7 @@ export interface IProduct {
     description: string;
     sku: string;
     subtitle: string;
+    main_image_url: string;
     slug: string;
     isActive: boolean;
     deletedAt?: Date | null;

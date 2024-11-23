@@ -31,6 +31,7 @@ import Product from "./pages/user/Product/Product";
 import NotFound from "./pages/404NotFound";
 import ChiTietGioHang from "./pages/user/ChiTietGioHang/ChiTietGioHang";
 import QuanLyThuocTinh from "./pages/admin/QuanLyThuocTinh/QuanLyThuocTinh";
+import QuanLyThuongHieu from "./pages/admin/QuanLyThuongHieu/QuanLyThuongHieu";
 // import ChiTietGioHang from "./pages/user/ChiTietGioHang/ChiTietGioHang";
 
 const App: React.FC = () => {
@@ -58,6 +59,10 @@ const App: React.FC = () => {
                     <Route
                         path="attributemanagement"
                         element={<QuanLyThuocTinh />}
+                    />
+                    <Route
+                        path="brandmanagement"
+                        element={<QuanLyThuongHieu />}
                     />
                 </Route>
 

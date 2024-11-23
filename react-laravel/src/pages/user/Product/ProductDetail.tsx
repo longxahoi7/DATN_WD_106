@@ -1,4 +1,3 @@
-
 import React, { useEffect } from "react";
 
 import { Link, useParams } from "react-router-dom";
@@ -6,10 +5,11 @@ import { Link, useParams } from "react-router-dom";
 import axios from "axios";
 import { IProduct } from "../../../interface/IProduct";
 import { getProductByID } from "../../../service/Product";
+import { formatPrice } from "../../../untils/formatMoney";
 type Props = {};
 const { useState } = React;
 const ProductDetail = (props: any) => {
-    const [price, setPrice] = useState(1290000);
+    const [price, setPrice] = useState();
     const [size, setSize] = useState("M");
     const [quantity, setQuantity] = useState(1);
     const [color, setColor] = useState("Đen");
@@ -29,11 +29,9 @@ const ProductDetail = (props: any) => {
     const { id } = useParams<{ id: string }>();
     const handleSizeChange = (newSize: keyof typeof sizePrices) => {
         setSize(newSize);
-        setPrice(sizePrices[newSize]);
     };
     const handleColorChange = (newColor: keyof typeof colorPrices) => {
         setColor(newColor);
-        setPrice(colorPrices[newColor]);
     };
 
     const handleQuantityChange = (change: number) => {
@@ -51,8 +49,8 @@ const ProductDetail = (props: any) => {
             (async () => {
                 try {
                     const data = await getProductByID(id);
-                    setProducts(data);
-                    setPrice(data.price);
+                    setProducts(data?.product);
+                    // setPrice(data.price);
                 } catch (error) {
                     console.error("Failed to fetch product:", error);
                 }
@@ -110,11 +108,15 @@ const ProductDetail = (props: any) => {
                             style={{ marginRight: "-300px" }}
                         >
                             <img
-                                src={products.image}
+                                src={
+                                    products?.main_image_url
+                                        ? products?.main_image_url
+                                        : "https://placehold.co/276x350?text=%22No%20Image%22"
+                                }
                                 alt={products.name}
                                 className="main-image"
                                 style={{
-                                    width: "350px",
+                                    width: "550px",
                                     marginLeft: "80px",
                                 }}
                             />
@@ -139,17 +141,63 @@ const ProductDetail = (props: any) => {
                                 </span>
                             </div>
                             <p className="text-gray-500 mb-4">
-                                Màu sắc: {color}
+                                <span className="font-semibold">Màu sắc:</span>
+                                <div className="">
+                                    {products.colors.map((color) => (
+                                        <p
+                                            key={color.name}
+                                            className="w-7 h-8 px-3 py-2 border border-[#000]"
+                                            onClick={() =>
+                                                setPrice(color.pivot.price)
+                                            }
+                                        >
+                                            {color.name}
+                                        </p>
+                                    ))}
+                                </div>
                             </p>
+
+                            <p className="text-gray-500 mb-4">
+                                <span>Kích thước:</span>
+                                <div className="flex space-x-4 mt-2">
+                                    {products.sizes.map((size) => (
+                                        <p
+                                            key={size.size_id} // Đảm bảo rằng mỗi phần tử có key duy nhất
+                                            className="border border-[#000]"
+                                            onClick={() =>
+                                                setPrice(size.pivot.price)
+                                            }
+                                        >
+                                            {size.name}
+                                        </p>
+                                    ))}
+                                </div>
+                            </p>
+                            <div className="flex items-center mb-4">
+                                <span className="mr-2">Số lượng:</span>
+                                <button
+                                    className="px-2 py-1 border border-gray-400 rounded hover:bg-gray-100 ml-20"
+                                    onClick={() => handleQuantityChange(-1)}
+                                >
+                                    -
+                                </button>
+                                <span className="mx-4">{quantity}</span>
+                                <button
+                                    className="px-2 py-1 border border-gray-400 rounded hover:bg-gray-100"
+                                    onClick={() => handleQuantityChange(1)}
+                                >
+                                    +
+                                </button>
+                            </div>
                             <p className="text-2xl font-bold mb-4">
-                                {price.toLocaleString()}₫
+                                {formatPrice(price)}
                             </p>
                             {/* Size and color selectors */}
                             <div className="flex space-x-4 mb-4">
                                 <button className="bg-black text-white px-4 py-2">
                                     THÊM VÀO GIỎ
                                 </button>
-                                <button className="border border-black px-4 py-2">
+                                <button className="border border-black px-4 py-2 ml-10">
                                     MUA HÀNG
                                 </button>
                             </div>
@@ -159,7 +207,7 @@ const ProductDetail = (props: any) => {
                                 </p>
                                 <hr className="border-t border-gray-700 mb-2" />
                                 <p className="mb-2 break-words">
-                                    {products.mota}
+                                    {products.description}
                                 </p>
                             </div>
                         </div>
@@ -172,7 +220,10 @@ const ProductDetail = (props: any) => {
                 <span className="block h-1 bg-gray-400 mx-auto w-1/6"></span>
                 <div className="grid grid-cols-4 gap-4 mt-4">
                     {relatedProducts.map((relatedProduct) => (
-                        <figure className="snip1585" key={relatedProduct.product_id}>
+                        <figure
+                            className="snip1585"
+                            key={relatedProduct.product_id}
+                        >
                             <img
                                 src={`${relatedProduct.image}`}
                                 alt={relatedProduct.name}
