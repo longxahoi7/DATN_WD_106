@@ -8,9 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class AttributeProduct extends Model
 {
     use HasFactory;
-   protected $table ='attribute_products';
-   protected $primaryKey='attribute_product_id';	
-   protected $fillable=['product_id','color_id','size_id','in_stock','price'];
+    protected $table = 'attribute_products';
+    protected $primaryKey = 'attribute_product_id';
+    protected $fillable = ['product_id', 'color_id', 'size_id', 'in_stock', 'price'];
 
     public function product()
     {

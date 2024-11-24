@@ -12,7 +12,9 @@ const Product = () => {
     useEffect(() => {
         const fetchProducts = async () => {
             try {
-                const response = await fetch(`http://localhost:3000/products`);
+                const response = await fetch(
+                    `http://localhost:8000/api/users/products/list-product`
+                );
                 const data = await response.json();
                 console.log(data);
 
@@ -43,7 +45,7 @@ const Product = () => {
             <div className="product-list">
                 {products.length > 0 ? (
                     products.map((item) => (
-                        <figure className="snip1585" key={item.id}>
+                        <figure className="snip1585" key={item.product_id}>
                             <img
                                 src={`${item.image}`}
                                 alt={item.name}
@@ -63,7 +65,7 @@ const Product = () => {
                                 </button>
                             </figcaption>
                             <a
-                                href={`/product-detail/${item.id}`}
+                                href={`/product-detail/${item.product_id}`}
                                 className="product-detail-link"
                             />
                         </figure>
