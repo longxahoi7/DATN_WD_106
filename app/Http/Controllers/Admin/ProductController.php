@@ -45,20 +45,11 @@ class ProductController extends Controller
             'categories' => $categories,
             'brands' => $brands,
             'sizes' => $sizes,
-            'colors' => $colors,
-            // 'attribute_products' => $attribute_products,
-            // 'products' => $products
+            'colors' => $colors
         ]);
-    }
-    // private function imgPro(Request $request, $imageField)
-    // {
-    //     if ($request->hasFile($imageField)) {
-    //         $anh = $request->file($imageField);
-    //         $newAnh = time() . "." . $anh->getClientOriginalExtension();
-    //         return $image = $anh->storeAs('images', $newAnh, 'public');
-    //     }
-    //     return null;
-    // }
+    
+  
+
     public function addProduct(Request $request)
     {
         // if ($request->hasFile('main_image_url')) {
