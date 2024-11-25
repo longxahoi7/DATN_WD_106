@@ -34,6 +34,12 @@ import QuanLyThuocTinh from "./pages/admin/QuanLyThuocTinh/QuanLyThuocTinh";
 import QuanLyThuongHieu from "./pages/admin/QuanLyThuongHieu/QuanLyThuongHieu";
 import DetailDonHang from "./pages/admin/QuanLyDonHang/DetailDonHang";
 import FormDonHang from "./pages/admin/QuanLyDonHang/FormDonHang";
+import DoanhThu from "./pages/admin/Dashboard/DoanhThu";
+import KHMuaNhieu from "./pages/admin/Dashboard/KHMuaNhieu";
+import SPBanChay from "./pages/admin/Dashboard/SPBanChay";
+import DoangThuTuan from "./pages/admin/Dashboard/DoanhThuTuan";
+import OrderNew from "./pages/admin/Dashboard/OrderNew";
+import DoanhThuTuan from "./pages/admin/Dashboard/DoanhThuTuan";
 // import ChiTietGioHang from "./pages/user/ChiTietGioHang/ChiTietGioHang";
 
 const App: React.FC = () => {
@@ -69,6 +75,12 @@ const App: React.FC = () => {
                     {/* fix cứng tạm order */}
                     <Route path="detailorder" element={<DetailDonHang />} />
                     <Route path="formoder" element={<FormDonHang />} />
+                    {/* fix cứng tạm thống kê */}
+                    <Route path="doanhthu" element={<DoanhThu />} />
+                    <Route path="khmuanhieu" element={<KHMuaNhieu />} />
+                    <Route path="doanhthutuan" element={<DoanhThuTuan />} />
+                    <Route path="sanphambanchay" element={<SPBanChay />} />
+                    <Route path="ordernew" element={<OrderNew />} />
                 </Route>
 
                 {/* Routes cho trang người dùng */}

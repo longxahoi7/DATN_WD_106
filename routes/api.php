@@ -125,10 +125,10 @@ Route::group(
                 'as' => 'orders.'
             ],
             function () {
-                Route::get('/orders', [OrderController::class, 'index']);         // Lấy danh sách đơn hàng
-                Route::get('/orders/{id}', [OrderController::class, 'show']);    // Lấy chi tiết đơn hàng
-                Route::put('/orders/{id}', [OrderController::class, 'updateStatus']); // Cập nhật trạng thái đơn hàng
-                Route::delete('/orders/{id}', [OrderController::class, 'destroy']);  // Xóa đơn hàng
+            Route::get('/orders', [OrderController::class, 'index']);         // Lấy danh sách đơn hàng
+            Route::get('/orders/{id}', [OrderController::class, 'show']);    // Lấy chi tiết đơn hàng
+            Route::put('/orders/{id}', [OrderController::class, 'updateStatus']); // Cập nhật trạng thái đơn hàng
+            Route::delete('/orders/{id}', [OrderController::class, 'destroy']);  // Xóa đơn hàng
         }
         );
 

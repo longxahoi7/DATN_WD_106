@@ -113,14 +113,14 @@ const QuanLySanPham = () => {
             title: "Danh mục",
             dataIndex: "category",
             key: "category",
-            render: (category) => <span>{category.name}</span>,
+            render: (category) => <span>{category?.name}</span>,
             align: "center" as const,
         },
         {
             title: "Thương hiệu",
             dataIndex: "brand",
             key: "brand",
-            render: (brand) => <span>{brand.name}</span>,
+            render: (brand) => <span>{brand?.name}</span>,
             align: "center" as const,
         },
         // {
