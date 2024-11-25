@@ -49,7 +49,7 @@ class ProductController extends Controller
         ]);
     
   
-
+    }
     public function addProduct(Request $request)
     {
         // if ($request->hasFile('main_image_url')) {

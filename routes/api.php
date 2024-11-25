@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\ApiPaymentController;
 use App\Http\Controllers\Api\ApiUserController;
 use App\Http\Controllers\Api\InvoiceController;
-
+use App\Http\Controllers\Admin\OrderController;
 use Spatie\FlareClient\Api;
 
 // Route::post('register', [ApiUserController::class, 'register']);
@@ -116,6 +116,19 @@ Route::group(
             Route::delete('/destroy-coupon/{id}', [CouponController::class, 'destroyCoupon']);
             Route::put('/update-coupon/{id}', [CouponController::class, 'updateCoupon']);
 
+        }
+        );
+        //Quản lý đơn hàng
+        Route::group(
+            [
+                'prefix' => 'orders',
+                'as' => 'orders.'
+            ],
+            function () {
+                Route::get('/orders', [OrderController::class, 'index']);         // Lấy danh sách đơn hàng
+                Route::get('/orders/{id}', [OrderController::class, 'show']);    // Lấy chi tiết đơn hàng
+                Route::put('/orders/{id}', [OrderController::class, 'updateStatus']); // Cập nhật trạng thái đơn hàng
+                Route::delete('/orders/{id}', [OrderController::class, 'destroy']);  // Xóa đơn hàng
         }
         );
 
