@@ -140,13 +140,20 @@ const ProductDetail = (props: any) => {
                                     (0 đánh giá)
                                 </span>
                             </div>
-                            <p className="text-gray-500 mb-4">
+                            <p className="text-gray-500 mb-4 flex flex-wrap">
                                 <span className="font-semibold">Màu sắc:</span>
-                                <div className="">
+                                <div
+                                    className=""
+                                    style={{
+                                        display: "flex",
+                                        flexWrap: "wrap",
+                                        gap: "20px",
+                                    }}
+                                >
                                     {products.colors.map((color) => (
                                         <p
                                             key={color.name}
-                                            className="w-7 h-8 px-3 py-2 border border-[#000]"
+                                            className="w-7 h-8 px-3 py-2 border border-[#000] flex flex-wrap"
                                             onClick={() =>
                                                 setPrice(color.pivot.price)
                                             }
@@ -159,11 +166,18 @@ const ProductDetail = (props: any) => {
 
                             <p className="text-gray-500 mb-4">
                                 <span>Kích thước:</span>
-                                <div className="flex space-x-4 mt-2">
+                                <div
+                                    className="flex space-x-4 mt-2"
+                                    style={{
+                                        display: "flex",
+                                        flexWrap: "wrap",
+                                        gap: "20px",
+                                    }}
+                                >
                                     {products.sizes.map((size) => (
                                         <p
                                             key={size.size_id} // Đảm bảo rằng mỗi phần tử có key duy nhất
-                                            className="border border-[#000]"
+                                            className=" w-7 h-8 px-3 py-2 border border-[#000]"
                                             onClick={() =>
                                                 setPrice(size.pivot.price)
                                             }
@@ -193,7 +207,14 @@ const ProductDetail = (props: any) => {
                                 {formatPrice(price)}
                             </p>
                             {/* size and color */}
-                            <div className="flex space-x-4 mb-4">
+                            <div
+                                className="flex space-x-4 mb-4 "
+                                style={{
+                                    display: "flex",
+                                    flexWrap: "wrap",
+                                    gap: "20px",
+                                }}
+                            >
                                 <button className="bg-black text-white px-4 py-2">
                                     THÊM VÀO GIỎ
                                 </button>
