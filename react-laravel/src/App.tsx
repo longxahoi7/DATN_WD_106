@@ -32,6 +32,8 @@ import NotFound from "./pages/404NotFound";
 import ChiTietGioHang from "./pages/user/ChiTietGioHang/ChiTietGioHang";
 import QuanLyThuocTinh from "./pages/admin/QuanLyThuocTinh/QuanLyThuocTinh";
 import QuanLyThuongHieu from "./pages/admin/QuanLyThuongHieu/QuanLyThuongHieu";
+import DetailDonHang from "./pages/admin/QuanLyDonHang/DetailDonHang";
+import FormDonHang from "./pages/admin/QuanLyDonHang/FormDonHang";
 // import ChiTietGioHang from "./pages/user/ChiTietGioHang/ChiTietGioHang";
 
 const App: React.FC = () => {
@@ -64,6 +66,9 @@ const App: React.FC = () => {
                         path="brandmanagement"
                         element={<QuanLyThuongHieu />}
                     />
+                    {/* fix cứng tạm order */}
+                    <Route path="detailorder" element={<DetailDonHang />} />
+                    <Route path="formoder" element={<FormDonHang />} />
                 </Route>
 
                 {/* Routes cho trang người dùng */}
