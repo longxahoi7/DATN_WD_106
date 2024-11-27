@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { TruckOutlined } from "@ant-design/icons";
 import {
     MenuFoldOutlined,
     MenuUnfoldOutlined,
@@ -59,6 +60,11 @@ const AdminLayout: React.FC = () => {
             key: "6",
             icon: <TagsOutlined />,
             label: "Thương hiệu",
+        },
+        {
+            key: "7",
+            icon: <TruckOutlined />,
+            label: "Shipper",
         },
     ];
 

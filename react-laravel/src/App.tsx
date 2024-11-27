@@ -40,6 +40,7 @@ import SPBanChay from "./pages/admin/Dashboard/SPBanChay";
 import DoangThuTuan from "./pages/admin/Dashboard/DoanhThuTuan";
 import OrderNew from "./pages/admin/Dashboard/OrderNew";
 import DoanhThuTuan from "./pages/admin/Dashboard/DoanhThuTuan";
+import FormShipper from "./pages/admin/Shipper/FormShipper";
 // import ChiTietGioHang from "./pages/user/ChiTietGioHang/ChiTietGioHang";
 
 const App: React.FC = () => {
@@ -81,6 +82,8 @@ const App: React.FC = () => {
                     <Route path="doanhthutuan" element={<DoanhThuTuan />} />
                     <Route path="sanphambanchay" element={<SPBanChay />} />
                     <Route path="ordernew" element={<OrderNew />} />
+                    <Route path="shipper" element={<FormShipper />} />
+                    {/* fix cứng shipper */}
                 </Route>
 
                 {/* Routes cho trang người dùng */}
