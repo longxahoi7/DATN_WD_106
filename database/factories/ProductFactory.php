@@ -33,6 +33,9 @@ class ProductFactory extends Factory
             'sku' => $this->faker->text,
             'slug' => $this->faker->text,
             'is_active' => $this->faker->randomNumber(1, 500),
+            'is_hot' => $this->faker->boolean(30), // 30% cơ hội hiển thị
+            'is_sale' => $this->faker->boolean(50), // 50% cơ hội là sản phẩm sale
+            'sold_count' => $this->faker->numberBetween(0, 500), // Số lượng đã bán
             'created_at' => $this->faker->dateTime,
             'updated_at' => $this->faker->dateTime,
         ];
