@@ -15,4 +15,7 @@ use App\Http\Controllers\HomeController;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-
+Route::get('/sale', [ProductsController::class, 'saleProducts']);
+Route::get('/hot', [ProductsController::class, 'hotProducts']);
+Route::get('/best-selling', [ProductsController::class, 'bestSellingProducts']);
+Route::get('/show-product/{id}', [ProductsController::class, 'showProduct']);
