@@ -29,7 +29,7 @@ class BrandController extends Controller
             'is_active' => $request->has('is_active') ? 1 : 0,
         ]);
         return response()->json([
-                'product'=>$product, 
+                'product'=>$product,
             'message' => 'Brand add successfully!',
         ], 201);
 
@@ -39,21 +39,40 @@ public function detailBrand($id)
     $product = Brand::findOrFail($id);
     return response()->json($product);
 }
-public function updateBrand(BrandsRequest $request,$id)
+public function updateBrand(Request $request, $id)
 {
-    $brand=Brand::findOrFail($id);
-    $brand->name =$request->input('name');
-    $brand->description = $request->input('description');
-        $brand->slug = $request->input('slug') 
-            ? Str::slug($request->input('slug')) 
-            : Str::slug($request->input('name'));
-        $brand->is_active = $request->input('is_active');
-      $brand->save();
-    return response()->json([
-        'product'=>$brand,
-        'message' => 'Brand updated successfully!',],200);
+    $brand = Brand::findOrFail($id);
 
+    // Không cần kiểm tra trùng 'slug' khi cập nhật
+    $validated = $request->validate([
+        'name' => 'required|string|max:255',
+        'description' => 'required|string|max:255',
+        'slug' => 'nullable|string|max:255', // Đảm bảo slug không bị kiểm tra trùng
+        'is_active' => 'required|boolean', // Kiểm tra trạng thái hoạt động
+    ]);
+
+    // Nếu có slug mới, cập nhật lại slug
+    if ($request->input('slug')) {
+        $brand->slug = Str::slug($request->input('slug'));
+    } else {
+        // Nếu không có slug, dùng slug từ 'name'
+        $brand->slug = Str::slug($request->input('name'));
+    }
+
+    // Cập nhật các thông tin khác
+    $brand->name = $request->input('name');
+    $brand->description = $request->input('description');
+    $brand->is_active = $request->input('is_active');
+
+    $brand->save();
+
+    return response()->json([
+        'message' => 'Brand updated successfully!',
+        'product' => $brand
+    ], 200);
 }
+
+
 public function destroyBrand($id){
     $product=Brand::findOrFail($id);
     $product->delete();

@@ -1,214 +1,72 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import { Modal, Form, Input, Switch, Select, Row, Col } from "antd";
 import {
-    Modal,
-    Form,
-    Input,
-    Upload,
-    Button,
-    DatePicker,
-    Select,
-    Row,
-    Col,
-    message,
-} from "antd";
-import { UploadOutlined, DeleteOutlined } from "@ant-design/icons";
-import { ColorPicker, Space } from "antd";
-import moment from "moment";
-import { Brands, Category } from "../../../interface/IProduct";
+    IProduct,
+    Category,
+    Brands,
+    Size,
+    Color,
+} from "../../../interface/IProduct";
 import api from "../../../config/axios";
 
-const { Option } = Select;
+interface FormSanPhamProps {
+    open: boolean;
+    onCancel: () => void;
+    onOk: (values: IProduct) => void;
+    initialValues: IProduct | null;
+    loading: boolean;
+}
 
-const FormSanPham = ({ open, onOk, onCancel, initialValues }) => {
+const FormSanPham: React.FC<FormSanPhamProps> = ({
+    open,
+    onCancel,
+    onOk,
+    initialValues,
+    loading,
+}) => {
     const [form] = Form.useForm();
-    const [loading, setLoading] = useState(true);
-    const [previewImage, setPreviewImage] = useState<string | null>(null);
-    const token = localStorage.getItem("token");
-
-    const [brands, setBrands] = useState<Brands[]>([]);
     const [categories, setCategories] = useState<Category[]>([]);
-
-    const [attributeColors, setAttributeColors] = useState<[]>([]);
-    const [attributesSizes, setAttributeSizes] = useState<[]>([]);
-
-    const fetchData = async () => {
-        setLoading(true);
-        try {
-            const response = await api.get("admin/products/get-data");
-            console.log(response, "getData");
-
-            const parseBrands = Array.isArray(response.data.brands)
-                ? response.data.brands
-                : [];
-            setBrands(parseBrands);
-
-            const parseCategories = Array.isArray(response.data.categories)
-                ? response.data.categories
-                : [];
-            setCategories(parseCategories);
-
-            const parseAttributeColors = Array.isArray(response.data.colors)
-                ? response.data.colors
-                : [];
-            setAttributeColors(parseAttributeColors);
-            // console.log(attributeColors, "attributeColors");
-
-            const parseAttributeSizes = Array.isArray(response.data.sizes)
-                ? response.data.sizes
-                : [];
-            setAttributeSizes(parseAttributeSizes);
-        } catch (error) {
-            console.error("Lỗi khi lấy sản phẩm:", error);
-            message.error("Không thể tải sản phẩm.");
-        } finally {
-            setLoading(false);
-        }
-    };
+    const [brands, setBrands] = useState<Brands[]>([]);
+    const [sizes, setSizes] = useState<Size[]>([]);
+    const [colors, setColors] = useState<Color[]>([]);
 
     useEffect(() => {
-        fetchData();
-    }, []);
+        if (open) {
+            // Lấy dữ liệu từ API khi modal được mở
+            api.get("http://localhost:8000/api/admin/products/get-data")
+                .then((response) => {
+                    const { categories, brands, sizes, colors } = response.data;
+                    setCategories(categories);
+                    setBrands(brands);
+                    setSizes(sizes);
+                    setColors(colors);
+                })
+                .catch((error) => {
+                    console.error("Error fetching data:", error);
+                });
+        }
+    }, [open]);
 
-    // Set initial values when initialValues prop changes
     useEffect(() => {
         if (initialValues) {
             form.setFieldsValue({
-                name: initialValues.name,
-                sku: initialValues.sku,
-                subtitle: initialValues.subtitle,
-                description: initialValues.description,
-                attribute_id: initialValues.attribute_id,
-                discount: initialValues.discount,
-                in_stock: initialValues.in_stock,
-                price: initialValues.price,
-                brand_id: initialValues.brand_id,
-                product_category_id: initialValues.product_category_id,
-                createdAt: initialValues.created_at
-                    ? moment(initialValues.created_at)
-                    : null,
-                updatedAt: initialValues.updated_at
-                    ? moment(initialValues.updated_at)
-                    : null,
-                main_image_url: initialValues.main_image_url,
+                ...initialValues,
+                is_active: initialValues.is_active === 1,
             });
-            setPreviewImage(initialValues.main_image_url);
-
-            console.log("initialValues", initialValues);
+        } else {
+            form.resetFields();
         }
     }, [initialValues, form]);
 
-    const handleOk = async () => {
-        try {
-            const values = await form.validateFields();
-            const formData = new FormData();
-
-            // Ensure form values are appended to FormData
-            formData.append("name", values.name);
-            formData.append("sku", values.sku);
-            formData.append("subtitle", values.subtitle);
-            formData.append("description", values.description);
-            formData.append(
-                "color_id",
-                Array.isArray(values.color_id)
-                    ? values.color_id
-                    : [values.color_id]
-            );
-
-            formData.append(
-                "size_id",
-                Array.isArray(values.size_id)
-                    ? values.size_id
-                    : [values.size_id]
-            );
-            formData.append("discount", values.discount);
-            // formData.append("in_stock", values.in_stock);
-            // formData.append("price", values.price);
-            // formData.append("brand_id", values.brand_id);
-            // formData.append("product_category_id", values.product_category_id);
-            // formData.append("main_image_url", previewImage as string);
-            // console.log(previewImage, "previewImage form data");
-
-            // Handle created_at and updated_at fields as dates
-            if (values.createdAt) {
-                formData.append(
-                    "created_at",
-                    values.createdAt.format("YYYY-MM-DD")
-                );
-            }
-            if (values.updatedAt) {
-                formData.append(
-                    "updated_at",
-                    values.updatedAt.format("YYYY-MM-DD")
-                );
-            }
-
-            // if (previewImage) {
-            //     const response = await fetch(previewImage);
-            //     const blob = await response.blob();
-            //     const file = new File([blob], "uploaded_image.jpg", {
-            //         type: "image/jpeg",
-            //     });
-
-            //     formData.append("main_image_url", file);
-            // }
-
-            formData.append("main_image_url", values.main_image_url);
-
-            // if (previewImage) {
-            //     const response = await fetch(previewImage);
-            //     console.log(response, "response_image");
-            //     let main_image_url = await response.blob();
-            //     formData.append("main_image_url", main_image_url);
-            //     // formData.append(
-            //     //     "main_image_url",
-            //     //     main_image_url,
-            //     //     "uploaded_image.jpg"
-            //     // );
-            // }
-
-            // Logging FormData to inspect its contents
-            for (let pair of formData.entries()) {
-                console.log(pair[0], pair[1]);
-            }
-
-            // Submit the form data to the server
-            const response = await fetch(
-                "http://localhost:8000/api/admin/products/add-product",
-                {
-                    method: "POST",
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                    body: formData,
-                }
-            );
-
-            if (response.ok) {
-                onOk(values);
-                form.resetFields();
-                setPreviewImage(null);
-            } else {
-                console.error("Failed to save product:", await response.text());
-            }
-        } catch (error) {
-            console.error("Validation failed:", error);
-        }
-    };
-
-    // Handle image upload
-    const handleImageUpload = ({ file }) => {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            if (e.target) {
-                setPreviewImage(e.target.result as string);
-            }
-        };
-        reader.readAsDataURL(file);
-    };
-
-    // Handle image removal
-    const handleRemoveImage = () => {
-        setPreviewImage(null);
+    const handleOk = () => {
+        form.validateFields().then((values) => {
+            const updatedValues = {
+                ...values,
+                is_active: values.is_active ? 1 : 0,
+            };
+            onOk(updatedValues);
+            form.resetFields();
+        });
     };
 
     return (
@@ -219,11 +77,21 @@ const FormSanPham = ({ open, onOk, onCancel, initialValues }) => {
             onCancel={() => {
                 onCancel();
                 form.resetFields();
-                setPreviewImage(null);
             }}
+            confirmLoading={loading}
             okText="Lưu"
             cancelText="Hủy"
-            width={800}
+            width={1000}
+            style={{
+                maxHeight: "90vh",
+                marginTop: "20px",
+                marginBottom: "20px",
+            }}
+            bodyStyle={{
+                overflowY: "auto",
+                maxHeight: "400px",
+                padding: "20px",
+            }}
         >
             <Form form={form} layout="vertical">
                 <Row gutter={16}>
@@ -236,11 +104,6 @@ const FormSanPham = ({ open, onOk, onCancel, initialValues }) => {
                                     required: true,
                                     message: "Vui lòng nhập tên sản phẩm",
                                 },
-                                {
-                                    max: 50,
-                                    message:
-                                        "Tên sản phẩm không được vượt quá 50 ký tự",
-                                },
                             ]}
                         >
                             <Input placeholder="Nhập tên sản phẩm" />
@@ -248,157 +111,8 @@ const FormSanPham = ({ open, onOk, onCancel, initialValues }) => {
                     </Col>
                     <Col span={12}>
                         <Form.Item
-                            name="sku"
-                            label="Mã sản phẩm"
-                            rules={[
-                                {
-                                    required: true,
-                                    message: "Vui lòng nhập mã sản phẩm",
-                                },
-                                {
-                                    max: 50,
-                                    message:
-                                        "Mã sản phẩm không được vượt quá 50 ký tự",
-                                },
-                            ]}
-                        >
-                            <Input placeholder="Nhập mã sản phẩm" />
-                        </Form.Item>
-                    </Col>
-                    <Col span={12}>
-                        <Form.Item
-                            name="subtitle"
-                            label="Subtitle sản phẩm"
-                            rules={[
-                                {
-                                    required: true,
-                                    message: "Vui lòng nhập subtitle sản phẩm",
-                                },
-                                {
-                                    max: 50,
-                                    message:
-                                        "Subtitle sản phẩm không được vượt quá 50 ký tự",
-                                },
-                            ]}
-                        >
-                            <Input placeholder="Nhập subtitle sản phẩm" />
-                        </Form.Item>
-                    </Col>
-                    <Col span={12}>
-                        <Form.Item
-                            name="description"
-                            label="Mô tả sản phẩm"
-                            rules={[
-                                {
-                                    required: true,
-                                    message: "Vui lòng nhập mô tả sản phẩm",
-                                },
-                                {
-                                    max: 50,
-                                    message:
-                                        "Mô tả sản phẩm không được vượt quá 50 ký tự",
-                                },
-                            ]}
-                        >
-                            <Input placeholder="Mô tả sản phẩm" />
-                        </Form.Item>
-                    </Col>
-
-                    <Col span={6}>
-                        <Form.Item
-                            name="color_id"
-                            label="Chọn màu"
-                            rules={[
-                                {
-                                    required: true,
-                                    message: "Vui lòng chọn mã màu",
-                                },
-                            ]}
-                        >
-                            <Select
-                                placeholder="Chọn thuộc tính"
-                                mode="multiple"
-                            >
-                                {attributeColors?.map((color, index) => {
-                                    const {
-                                        color_id,
-                                        color_code,
-                                        created_at,
-                                        name,
-                                        updated_at,
-                                    } = color;
-                                    return (
-                                        <Option value={color_id} key={color_id}>
-                                            <i
-                                                className="fa-solid fa-ice-cream"
-                                                style={{
-                                                    color: color_code,
-                                                    marginRight: "8px",
-                                                }}
-                                            ></i>
-                                            {name}
-                                        </Option>
-                                    );
-                                })}
-                            </Select>
-                        </Form.Item>
-                    </Col>
-                    <Col span={6}>
-                        <Form.Item
-                            name="size_id"
-                            label="Chọn Size"
-                            rules={[
-                                {
-                                    required: true,
-                                    message: "Vui lòng chọn size",
-                                },
-                            ]}
-                        >
-                            <Select
-                                placeholder="Chọn thuộc tính"
-                                mode="multiple"
-                            >
-                                {attributesSizes.map((size, index) => {
-                                    const {
-                                        size_id,
-                                        name,
-                                        created_at,
-                                        updated_at,
-                                    } = size;
-                                    return (
-                                        <Option value={size_id} key={size_id}>
-                                            {name}
-                                        </Option>
-                                    );
-                                })}
-                            </Select>
-                        </Form.Item>
-                    </Col>
-
-                    <Col span={12}>
-                        <Form.Item
-                            name="discount"
-                            label="Mã giảm giá"
-                            rules={[
-                                {
-                                    required: true,
-                                    message:
-                                        "Vui lòng nhập mã giảm giá sản phẩm",
-                                },
-                                {
-                                    max: 50,
-                                    message:
-                                        "Mã giảm giá sản phẩm không được vượt quá 50 ký tự",
-                                },
-                            ]}
-                        >
-                            <Input placeholder="Mã giảm giá sản phẩm" />
-                        </Form.Item>
-                    </Col>
-                    {/* <Col span={12}>
-                        <Form.Item
                             name="price"
-                            label="Giá sản phẩm"
+                            label="Giá"
                             rules={[
                                 {
                                     required: true,
@@ -408,49 +122,36 @@ const FormSanPham = ({ open, onOk, onCancel, initialValues }) => {
                         >
                             <Input
                                 type="number"
+                                min={0}
                                 placeholder="Nhập giá sản phẩm"
                             />
-                        </Form.Item>
-                    </Col> */}
-
-                    {/* <Col span={12}>
-                        <Form.Item
-                            name="in_stock"
-                            label="Stock sản phẩm"
-                            rules={[
-                                {
-                                    required: true,
-                                    message: "Vui lòng nhập Stock sản phẩm",
-                                },
-                                {
-                                    max: 50,
-                                    message:
-                                        "Stock sản phẩm không được vượt quá 50 ký tự",
-                                },
-                            ]}
-                        >
-                            <Input placeholder="Stock sản phẩm" />
                         </Form.Item>
                     </Col>
-
+                </Row>
+                <Row gutter={16}>
                     <Col span={12}>
                         <Form.Item
-                            name="price"
-                            label="Giá sản phẩm"
+                            name="product_category_id"
+                            label="Danh mục sản phẩm"
                             rules={[
                                 {
                                     required: true,
-                                    message: "Vui lòng nhập giá sản phẩm",
+                                    message: "Vui lòng chọn danh mục sản phẩm",
                                 },
                             ]}
                         >
-                            <Input
-                                type="number"
-                                placeholder="Nhập giá sản phẩm"
-                            />
+                            <Select placeholder="Chọn danh mục sản phẩm">
+                                {categories.map((category) => (
+                                    <Select.Option
+                                        key={category.category_id}
+                                        value={category.category_id}
+                                    >
+                                        {category.name}
+                                    </Select.Option>
+                                ))}
+                            </Select>
                         </Form.Item>
-                    </Col> 
-
+                    </Col>
                     <Col span={12}>
                         <Form.Item
                             name="brand_id"
@@ -463,110 +164,134 @@ const FormSanPham = ({ open, onOk, onCancel, initialValues }) => {
                             ]}
                         >
                             <Select placeholder="Chọn thương hiệu">
-                                {brands?.map((brand) => (
-                                    <Option
+                                {brands.map((brand) => (
+                                    <Select.Option
                                         key={brand.brand_id}
                                         value={brand.brand_id}
                                     >
                                         {brand.name}
-                                    </Option>
+                                    </Select.Option>
                                 ))}
                             </Select>
                         </Form.Item>
                     </Col>
-
                     <Col span={12}>
                         <Form.Item
-                            name="product_category_id"
-                            label="Danh mục sản phẩm"
+                            name="color_id"
+                            label="Màu sắc"
                             rules={[
                                 {
                                     required: true,
-                                    message: "Vui lòng chọn danh mục",
+                                    message: "Vui lòng chọn màu sắc sản phẩm",
                                 },
                             ]}
                         >
-                            <Select placeholder="Chọn danh mục">
-                                {categories?.map((category) => (
-                                    <Option
-                                        key={category.category_id}
-                                        value={category.category_id}
+                            <Select placeholder="Chọn màu sắc sản phẩm">
+                                {colors.map((color) => (
+                                    <Select.Option
+                                        key={color.color_id}
+                                        value={color.color_id}
                                     >
-                                        {category.name}
-                                    </Option>
+                                        {color.name}
+                                    </Select.Option>
                                 ))}
                             </Select>
                         </Form.Item>
                     </Col>
-
                     <Col span={12}>
-                        <div
-                            style={{
-                                display: "flex",
-                                justifyContent: "space-between",
-                                gap: "16px",
-                            }}
-                        >
-                            <Form.Item
-                                name="createdAt"
-                                label="Ngày tạo"
-                                style={{ flex: 1 }}
-                            >
-                                <DatePicker format="YYYY-MM-DD" />
-                            </Form.Item>
-
-                            <Form.Item
-                                name="updatedAt"
-                                label="Ngày cập nhật"
-                                style={{ flex: 1 }}
-                            >
-                                <DatePicker format="YYYY-MM-DD" />
-                            </Form.Item>
-                        </div>
-                    </Col>
-
-                    {/* <Col span={12}>
                         <Form.Item
-                            label="Hình ảnh sản phẩm"
-                            valuePropName="fileList"
-                            getValueFromEvent={({ fileList }) => fileList}
+                            name="size_id"
+                            label="Size"
+                            rules={[
+                                {
+                                    required: true,
+                                    message:
+                                        "Vui lòng chọn các size của sản phẩm",
+                                },
+                            ]}
                         >
-                            <Upload
-                                listType="picture-card"
-                                showUploadList={false}
-                                customRequest={handleImageUpload}
-                            >
-                                {previewImage ? (
-                                    <img
-                                        src={previewImage}
-                                        alt="product"
-                                        style={{ width: "100%" }}
-                                    />
-                                ) : (
-                                    <div>
-                                        <UploadOutlined />
-                                        <div>Chọn hình ảnh</div>
-                                    </div>
-                                )}
-                            </Upload>
-                            {previewImage && (
-                                <Button
-                                    icon={<DeleteOutlined />}
-                                    type="link"
-                                    onClick={handleRemoveImage}
-                                >
-                                    Xóa hình ảnh
-                                </Button>
-                            )}
-                        </Form.Item>
-                    </Col> */}
-
-                    <Col span={12}>
-                        <Form.Item name="main_image_url" label="ảnh">
-                            <Input placeholder="ảnh" />
+                            <Select mode="multiple" placeholder="Chọn size">
+                                {sizes.map((size) => (
+                                    <Select.Option
+                                        key={size.size_id}
+                                        value={size.size_id}
+                                    >
+                                        {size.name}
+                                    </Select.Option>
+                                ))}
+                            </Select>
                         </Form.Item>
                     </Col>
                 </Row>
+                <Row gutter={16}>
+                    <Col span={12}>
+                        <Form.Item
+                            name="description"
+                            label="Mô tả"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: "Vui lòng nhập mô tả sản phẩm",
+                                },
+                            ]}
+                        >
+                            <Input.TextArea placeholder="Nhập mô tả sản phẩm" />
+                        </Form.Item>
+                    </Col>
+                    <Col span={12}>
+                        <Form.Item
+                            name="sku"
+                            label="Mã sản phẩm"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: "Vui lòng nhập mã sản phẩm",
+                                },
+                            ]}
+                        >
+                            <Input placeholder="Nhập mã sản phẩm" />
+                        </Form.Item>
+                    </Col>
+                </Row>
+                <Row gutter={16}>
+                    <Col span={12}>
+                        <Form.Item name="subtitle" label="Phụ đề">
+                            <Input placeholder="Nhập phụ đề sản phẩm" />
+                        </Form.Item>
+                    </Col>
+                    <Col span={12}>
+                        <Form.Item
+                            name="slug"
+                            label="Tên đường dẫn"
+                            rules={[
+                                {
+                                    required: true,
+                                    message:
+                                        "Vui lòng nhập tên đường dẫn sản phẩm",
+                                },
+                            ]}
+                        >
+                            <Input placeholder="Nhập slug sản phẩm" />
+                        </Form.Item>
+                    </Col>
+                </Row>
+                <Form.Item
+                    name="is_active"
+                    label="Trạng thái"
+                    valuePropName="checked"
+                    rules={[
+                        { required: true, message: "Vui lòng chọn trạng thái" },
+                    ]}
+                >
+                    <Switch
+                        checked={initialValues?.is_active === 1}
+                        onChange={(checked) =>
+                            form.setFieldsValue({ is_active: checked ? 1 : 0 })
+                        }
+                        checkedChildren="Hoạt động"
+                        unCheckedChildren="Không hoạt động"
+                    />
+                </Form.Item>
             </Form>
         </Modal>
     );

@@ -1,10 +1,11 @@
 import React, { useEffect } from "react";
 import { Modal, Form, Input, Upload, Button, InputNumber } from "antd";
-import { UploadOutlined, DeleteOutlined } from "@ant-design/icons";
+import { UploadOutlined } from "@ant-design/icons";
 
 const FormDanhMuc = ({ open, onOk, onCancel, initialValues, loading }) => {
     const [form] = Form.useForm();
 
+    // Reset form when initialValues change
     useEffect(() => {
         if (initialValues) {
             form.setFieldsValue(initialValues);
@@ -63,7 +64,7 @@ const FormDanhMuc = ({ open, onOk, onCancel, initialValues, loading }) => {
                         },
                     ]}
                 >
-                    <Input placeholder="Nhập mô tả" />
+                    <Input placeholder="Nhập tên đường dẫn sản phẩm" />
                 </Form.Item>
                 <Form.Item
                     name="parent_id"
@@ -71,11 +72,11 @@ const FormDanhMuc = ({ open, onOk, onCancel, initialValues, loading }) => {
                     rules={[
                         {
                             required: true,
-                            message: "Vui lòng nhập đường dẫn sản phẩm",
+                            message: "Vui lòng nhập ID danh mục cha",
                         },
                     ]}
                 >
-                    <InputNumber placeholder="Nhập id Danh Mục" />
+                    <InputNumber placeholder="Nhập ID danh mục cha" />
                 </Form.Item>
                 <Form.Item
                     name="is_active"
@@ -83,14 +84,18 @@ const FormDanhMuc = ({ open, onOk, onCancel, initialValues, loading }) => {
                     rules={[
                         {
                             required: true,
-                            message: "Vui lòng nhập đường dẫn sản phẩm",
+                            message: "Vui lòng nhập trạng thái hoạt động",
                         },
                     ]}
                 >
-                    <InputNumber placeholder="Nhập id hoạt động" />
+                    <InputNumber placeholder="Nhập ID trạng thái hoạt động" />
                 </Form.Item>
                 <Form.Item name="image" label="Hình ảnh">
-                    <Upload>
+                    <Upload
+                        action="/upload" // Thêm action để xử lý việc tải ảnh lên
+                        showUploadList={false} // Tắt hiển thị danh sách ảnh tải lên
+                        maxCount={1} // Giới hạn số lượng ảnh tải lên
+                    >
                         <Button icon={<UploadOutlined />}>Tải ảnh lên</Button>
                     </Upload>
                 </Form.Item>

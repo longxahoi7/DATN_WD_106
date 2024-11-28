@@ -30,7 +30,10 @@ import UserLayout from "./layout/UserLayout";
 import Product from "./pages/user/Product/Product";
 import NotFound from "./pages/404NotFound";
 import ChiTietGioHang from "./pages/user/ChiTietGioHang/ChiTietGioHang";
-import QuanLyThuocTinh from "./pages/admin/QuanLyThuocTinh/QuanLyThuocTinh";
+import QuanLyMauVaSize from "./pages/admin/QuanLyMauVaSize/QuanLyColor";
+import QuanLyColor from "./pages/admin/QuanLyMauVaSize/QuanLyColor";
+import QuanLySize from "./pages/admin/QuanLyMauVaSize/QuanLySize";
+import QuanLyBrand from "./pages/admin/QuanLyThuongHieu/QuanLyBrand";
 // import ChiTietGioHang from "./pages/user/ChiTietGioHang/ChiTietGioHang";
 
 const App: React.FC = () => {
@@ -55,10 +58,9 @@ const App: React.FC = () => {
                         path="productmanagement"
                         element={<QuanLySanPham />}
                     />
-                    <Route
-                        path="attributemanagement"
-                        element={<QuanLyThuocTinh />}
-                    />
+                    <Route path="colormanagement" element={<QuanLyColor />} />
+                    <Route path="sizemanagement" element={<QuanLySize />} />
+                    <Route path="brandmanagement" element={<QuanLyBrand />} />
                 </Route>
 
                 {/* Routes cho trang người dùng */}
