@@ -172,7 +172,9 @@ const QuanLyColor = () => {
                                         height: "20px",
                                         backgroundColor: text,
                                     }}
-                                ></span>
+                                >
+                                    {text}
+                                </span>
                             ),
                             align: "center" as "center",
                         },

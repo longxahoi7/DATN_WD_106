@@ -199,7 +199,11 @@ const QuanLyBrand = () => {
                                 dataIndex: "is_active",
                                 key: "is_active",
                                 render: (text) => (
-                                    <span>
+                                    <span
+                                        style={{
+                                            color: text ? "green" : "red",
+                                        }}
+                                    >
                                         {text === 1
                                             ? "Hoạt động"
                                             : "Không hoạt động"}

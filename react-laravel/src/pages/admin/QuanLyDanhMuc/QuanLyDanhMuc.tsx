@@ -182,21 +182,21 @@ const QuanLyDanhMuc = () => {
                             ),
                             align: "center",
                         },
-                        {
-                            title: "Tên đường dẫn sản phẩm",
-                            dataIndex: "slug",
-                            key: "slug",
-                            render: (text) => (
-                                <span style={{ color: "blue" }}>{text}</span>
-                            ),
-                            align: "center",
-                        },
-                        {
-                            title: "Danh mục thuộc",
-                            dataIndex: "parent_id",
-                            key: "parent_id",
-                            align: "center",
-                        },
+                        // {
+                        //     title: "Tên đường dẫn sản phẩm",
+                        //     dataIndex: "slug",
+                        //     key: "slug",
+                        //     render: (text) => (
+                        //         <span style={{ color: "blue" }}>{text}</span>
+                        //     ),
+                        //     align: "center",
+                        // },
+                        // {
+                        //     title: "Danh mục thuộc",
+                        //     dataIndex: "parent_id",
+                        //     key: "parent_id",
+                        //     align: "center",
+                        // },
                         {
                             title: "Hoạt động",
                             dataIndex: "is_active",

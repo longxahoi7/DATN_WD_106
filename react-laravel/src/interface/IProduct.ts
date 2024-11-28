@@ -14,6 +14,7 @@ export interface IProduct {
     price: number | null;
     size?: Size;
     color?: Color;
+    image: string;
 }
 
 export interface IProductUser {
