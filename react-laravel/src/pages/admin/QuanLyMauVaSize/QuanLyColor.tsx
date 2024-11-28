@@ -3,127 +3,116 @@ import { Space, Table, Button, Modal, message, Tooltip } from "antd";
 import { EditOutlined, DeleteOutlined, PlusOutlined } from "@ant-design/icons";
 import "../../../style/quanLy.css";
 import api from "../../../config/axios";
-import { Category } from "../../../interface/IProduct";
-import FormDanhMuc from "./FormDanhMuc";
+import { Color } from "../../../interface/IProduct";
+import FormColor from "./FormColor";
 
-const QuanLyDanhMuc = () => {
+const QuanLyColor = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [modalLoading, setModalLoading] = useState(false); // Loading riêng cho modal
     const [loading, setLoading] = useState(true);
-    const [categories, setCategories] = useState<Category[]>([]); // Dữ liệu danh mục
-    const [currentCategory, setCurrentCategory] = useState<Category | null>(
-        null
-    );
+    const [colors, setColors] = useState<Color[]>([]);
+    const [currentColor, setCurrentColor] = useState<Color | null>(null);
     const [pagination, setPagination] = useState({
         current: 1,
         pageSize: 10,
         total: 0,
     });
 
-    // Lấy danh sách danh mục
-    const fetchCategories = async (page = 1) => {
+    // Fetch list of colors
+    const fetchColors = async (page = 1) => {
         setLoading(true);
         try {
             const response = await api.get(
-                `admin/categories/list-category?page=${page}`
+                `admin/colors/list-color?page=${page}`
             );
             const { data, total, per_page, current_page } = response.data;
-            setCategories(data?.filter((item) => item?.category_id) || []);
+            setColors(data?.filter((item) => item?.color_id) || []);
             setPagination({
                 current: current_page,
                 pageSize: per_page,
                 total: total,
             });
         } catch (error) {
-            console.error("Lỗi khi lấy danh sách danh mục:", error);
-            message.error("Không thể tải danh sách danh mục.");
+            console.error("Lỗi khi lấy danh sách màu:", error);
+            message.error("Không thể tải danh sách màu.");
         } finally {
             setLoading(false);
         }
     };
 
     useEffect(() => {
-        fetchCategories(pagination.current);
+        fetchColors(pagination.current);
     }, [pagination.current]);
 
-    // Mở modal thêm danh mục
-    const handleAddCategory = () => {
-        setCurrentCategory(null);
+    const handleAddColor = () => {
+        setCurrentColor(null);
         setIsModalOpen(true);
     };
 
-    // Mở modal chỉnh sửa danh mục
-    const handleEdit = (record) => {
-        setCurrentCategory(record);
+    const handleEdit = (record: Color) => {
+        setCurrentColor(record);
         setIsModalOpen(true);
     };
 
-    // Xóa danh mục
-    const handleDelete = (category_id) => {
+    const handleDelete = (color_id: number) => {
         Modal.confirm({
-            title: "Bạn có chắc chắn muốn xóa danh mục này?",
+            title: "Bạn có chắc chắn muốn xóa màu này?",
             onOk: async () => {
                 try {
-                    await api.delete(
-                        `admin/categories/delete-category/${category_id}`
-                    );
-                    setCategories((prev) =>
-                        prev.filter(
-                            (category) => category.category_id !== category_id
-                        )
+                    await api.delete(`admin/colors/destroy-color/${color_id}`);
+                    setColors((prev) =>
+                        prev.filter((color) => color.color_id !== color_id)
                     );
                     setPagination((prev) => ({
                         ...prev,
                         total: prev.total - 1,
                     }));
-                    await fetchCategories(pagination.current);
-                    message.success("Xóa danh mục thành công");
+                    await fetchColors(pagination.current);
+                    message.success("Xóa màu thành công");
                 } catch (error) {
-                    console.error("Xóa danh mục thất bại:", error);
-                    message.error("Không thể xóa danh mục.");
+                    console.error("Xóa màu thất bại:", error);
+                    message.error("Không thể xóa màu.");
                 }
             },
         });
     };
 
-    // Lưu thêm hoặc cập nhật danh mục
-    const handleOk = async (values) => {
+    const handleOk = async (values: Color) => {
         setModalLoading(true);
         try {
-            if (currentCategory) {
+            if (currentColor) {
                 const response = await api.put(
-                    `admin/categories/update-category/${currentCategory.category_id}`,
+                    `admin/colors/update-color/${currentColor.color_id}`,
                     values
                 );
-                const updatedCategory = response.data;
+                const updatedColor = response.data;
 
-                setCategories((prevCategories) =>
-                    prevCategories.map((category) =>
-                        category.category_id === updatedCategory.category_id
-                            ? { ...category, ...updatedCategory }
-                            : category
+                setColors((prevColors) =>
+                    prevColors.map((color) =>
+                        color.color_id === updatedColor.color_id
+                            ? { ...color, ...updatedColor }
+                            : color
                     )
                 );
-                await fetchCategories(pagination.current);
-                message.success("Cập nhật danh mục thành công");
+                await fetchColors(pagination.current);
+                message.success("Cập nhật màu thành công");
             } else {
                 const response = await api.post(
-                    "admin/categories/add-category",
+                    "admin/colors/add-color",
                     values
                 );
-                await fetchCategories(pagination.current);
-                message.success("Thêm danh mục thành công");
+                await fetchColors(pagination.current);
+                message.success("Thêm màu thành công");
             }
             setIsModalOpen(false);
         } catch (error) {
-            console.error("Lỗi khi thêm/sửa danh mục:", error);
-            message.error("Không thể thêm hoặc sửa danh mục.");
+            console.error("Lỗi khi thêm/sửa màu:", error);
+            message.error("Không thể thêm hoặc sửa màu.");
         } finally {
             setModalLoading(false);
         }
     };
 
-    // Hủy modal
     const handleCancel = () => {
         setIsModalOpen(false);
     };
@@ -131,22 +120,20 @@ const QuanLyDanhMuc = () => {
     return (
         <div className="quan-ly-container">
             <div className="header">
-                <p className="title-css">Quản lý danh mục</p>
+                <p className="title-css">Quản lý màu sắc</p>
             </div>
             <div className="table">
                 <Button
                     type="primary"
                     icon={<PlusOutlined />}
-                    onClick={handleAddCategory}
+                    onClick={handleAddColor}
                     style={{ marginBottom: "10px", float: "right" }}
                 >
                     Thêm mới
                 </Button>
 
                 <Table
-                    rowKey={(record) =>
-                        record.category_id || `temp-${Date.now()}`
-                    }
+                    rowKey={(record) => record.color_id || `temp-${Date.now()}`}
                     columns={[
                         {
                             title: "STT",
@@ -161,52 +148,33 @@ const QuanLyDanhMuc = () => {
                                     {index + 1}
                                 </span>
                             ),
-                            align: "center",
+                            align: "center" as "center",
                             width: "5%",
                         },
                         {
-                            title: "Tên danh mục",
+                            title: "Tên Màu",
                             dataIndex: "name",
                             key: "name",
                             render: (text) => (
                                 <a style={{ color: "green" }}>{text}</a>
                             ),
-                            align: "center",
+                            align: "center" as "center",
                         },
                         {
-                            title: "Mô tả",
-                            dataIndex: "description",
-                            key: "description",
+                            title: "Mã Màu",
+                            dataIndex: "color_code",
+                            key: "color_code",
                             render: (text) => (
-                                <span style={{ color: "gray" }}>{text}</span>
+                                <span
+                                    style={{
+                                        display: "inline-block",
+                                        width: "40px",
+                                        height: "20px",
+                                        backgroundColor: text,
+                                    }}
+                                ></span>
                             ),
-                            align: "center",
-                        },
-                        {
-                            title: "Tên đường dẫn sản phẩm",
-                            dataIndex: "slug",
-                            key: "slug",
-                            render: (text) => (
-                                <span style={{ color: "blue" }}>{text}</span>
-                            ),
-                            align: "center",
-                        },
-                        {
-                            title: "Danh mục thuộc",
-                            dataIndex: "parent_id",
-                            key: "parent_id",
-                            align: "center",
-                        },
-                        {
-                            title: "Hoạt động",
-                            dataIndex: "is_active",
-                            key: "is_active",
-                            render: (text) => (
-                                <span style={{ color: text ? "green" : "red" }}>
-                                    {text ? "Hoạt động" : "Không hoạt động"}
-                                </span>
-                            ),
-                            align: "center",
+                            align: "center" as "center",
                         },
                         {
                             key: "action",
@@ -222,16 +190,16 @@ const QuanLyDanhMuc = () => {
                                         <DeleteOutlined
                                             style={{ color: "red" }}
                                             onClick={() =>
-                                                handleDelete(record.category_id)
+                                                handleDelete(record.color_id)
                                             }
                                         />
                                     </Tooltip>
                                 </Space>
                             ),
-                            align: "center",
+                            align: "center" as "center",
                         },
                     ]}
-                    dataSource={categories}
+                    dataSource={colors}
                     loading={loading}
                     pagination={{
                         current: pagination.current,
@@ -246,15 +214,15 @@ const QuanLyDanhMuc = () => {
                 />
             </div>
 
-            <FormDanhMuc
+            <FormColor
                 open={isModalOpen}
                 onCancel={handleCancel}
                 onOk={handleOk}
-                initialValues={currentCategory}
+                initialValues={currentColor}
                 loading={modalLoading}
             />
         </div>
     );
 };
 
-export default QuanLyDanhMuc;
+export default QuanLyColor;

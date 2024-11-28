@@ -16,10 +16,10 @@ use App\Http\Controllers\Api\InvoiceController;
 use App\Http\Controllers\Admin\OrderController;
 use Spatie\FlareClient\Api;
 
-// Route::post('register', [ApiUserController::class, 'register']);
-// //  http://127.0.0.1:8000/api/login
-// // Route::post('login', [ApiUserController::class, 'login']);
-// Route::middleware('auth:sanctum')->group(function () {
+Route::post('register', [ApiUserController::class, 'register']);
+//  http://127.0.0.1:8000/api/login
+Route::post('login', [ApiUserController::class, 'login']);
+Route::middleware('auth:sanctum')->group(function () {
 Route::group(
     [
         'prefix' => 'admin',
@@ -173,7 +173,7 @@ Route::group(
         );
     }
 );
-// });
+});
 
 
 

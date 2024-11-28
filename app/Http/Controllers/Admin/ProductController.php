@@ -47,9 +47,10 @@ class ProductController extends Controller
             'sizes' => $sizes,
             'colors' => $colors
         ]);
-    
-  
     }
+
+
+
     public function addProduct(Request $request)
     {
         // if ($request->hasFile('main_image_url')) {
@@ -66,11 +67,11 @@ class ProductController extends Controller
             'brand_id' => $request->input('brand_id'),
             'name' => $request->input('name'),
             'product_category_id' => $request->input('product_category_id'),
-            'main_image_url' => $request->input('main_image_url'),
-            'view_count' => 0,
-            'discount' => $request->input('discount'),
-            'start_date' => $request->input('start_date'),
-            'end_date' => $request->input('end_date'),
+            // 'main_image_url' => $request->input('main_image_url'),
+            // 'view_count' => 0,
+            // 'discount' => $request->input('discount'),
+            // 'start_date' => $request->input('start_date'),
+            // 'end_date' => $request->input('end_date'),
             'sku' => $request->input('sku'),
             'description' => $request->input('description'),
             'subtitle' => $request->input('subtitle'),

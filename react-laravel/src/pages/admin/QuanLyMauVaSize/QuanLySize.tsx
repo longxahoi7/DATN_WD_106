@@ -3,114 +3,107 @@ import { Space, Table, Button, Modal, message, Tooltip } from "antd";
 import { EditOutlined, DeleteOutlined, PlusOutlined } from "@ant-design/icons";
 import "../../../style/quanLy.css";
 import api from "../../../config/axios";
-import FormSanPham from "./FormSanPham";
-import { IProduct } from "../../../interface/IProduct";
+import { Size } from "../../../interface/IProduct";
+import FormSize from "./FormSize";
 
-const QuanLySanPham = () => {
+const QuanLySize = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [modalLoading, setModalLoading] = useState(false); // Loading riêng cho modal
     const [loading, setLoading] = useState(true);
-    const [products, setProducts] = useState<IProduct[]>([]);
-    const [currentProduct, setCurrentProduct] = useState<IProduct | null>(null);
+    const [sizes, setSizes] = useState<Size[]>([]);
+    const [currentSize, setCurrentSize] = useState<Size | null>(null);
     const [pagination, setPagination] = useState({
         current: 1,
         pageSize: 10,
         total: 0,
     });
 
-    const fetchProducts = async (page = 1) => {
+    const fetchSizes = async (page = 1) => {
         setLoading(true);
         try {
             const response = await api.get(
-                `admin/products/list-product?page=${page}`
+                `admin/sizes/list-size?page=${page}`
             );
             const { data, total, per_page, current_page } = response.data;
-            setProducts(data || []);
+            setSizes(data?.filter((item) => item?.size_id) || []);
             setPagination({
                 current: current_page,
                 pageSize: per_page,
                 total: total,
             });
         } catch (error) {
-            console.error("Lỗi khi lấy danh sách sản phẩm:", error);
-            message.error("Không thể tải danh sách sản phẩm.");
+            console.error("Lỗi khi lấy danh sách size:", error);
+            message.error("Không thể tải danh sách size.");
         } finally {
             setLoading(false);
         }
     };
 
     useEffect(() => {
-        fetchProducts(pagination.current);
+        fetchSizes(pagination.current);
     }, [pagination.current]);
 
-    const handleAddProduct = () => {
-        setCurrentProduct(null);
+    const handleAddSize = () => {
+        setCurrentSize(null);
         setIsModalOpen(true);
     };
 
-    const handleEdit = (record: IProduct) => {
-        setCurrentProduct(record);
+    const handleEdit = (record: Size) => {
+        setCurrentSize(record);
         setIsModalOpen(true);
     };
 
-    const handleDelete = (product_id: number) => {
+    const handleDelete = (size_id: number) => {
         Modal.confirm({
-            title: "Bạn có chắc chắn muốn xóa sản phẩm này?",
+            title: "Bạn có chắc chắn muốn xóa size này?",
             onOk: async () => {
                 try {
-                    await api.delete(
-                        `admin/products/destroy-product/${product_id}`
-                    );
-                    setProducts((prev) =>
-                        prev.filter(
-                            (product) => product.product_id !== product_id
-                        )
+                    await api.delete(`admin/sizes/destroy-size/${size_id}`);
+                    setSizes((prev) =>
+                        prev.filter((size) => size.size_id !== size_id)
                     );
                     setPagination((prev) => ({
                         ...prev,
                         total: prev.total - 1,
                     }));
-                    await fetchProducts(pagination.current);
-                    message.success("Xóa sản phẩm thành công");
+                    await fetchSizes(pagination.current);
+                    message.success("Xóa size thành công");
                 } catch (error) {
-                    console.error("Xóa sản phẩm thất bại:", error);
-                    message.error("Không thể xóa sản phẩm.");
+                    console.error("Xóa size thất bại:", error);
+                    message.error("Không thể xóa size.");
                 }
             },
         });
     };
 
-    const handleOk = async (values: IProduct) => {
+    const handleOk = async (values: Size) => {
         setModalLoading(true);
         try {
-            if (currentProduct) {
+            if (currentSize) {
                 const response = await api.put(
-                    `admin/products/update-product/${currentProduct.product_id}`,
+                    `admin/sizes/update-size/${currentSize.size_id}`,
                     values
                 );
-                const updatedProduct = response.data;
+                const updatedSize = response.data;
 
-                setProducts((prevProducts) =>
-                    prevProducts.map((product) =>
-                        product.product_id === updatedProduct.product_id
-                            ? { ...product, ...updatedProduct }
-                            : product
+                setSizes((prevSizes) =>
+                    prevSizes.map((size) =>
+                        size.size_id === updatedSize.size_id
+                            ? { ...size, ...updatedSize }
+                            : size
                     )
                 );
-                await fetchProducts(pagination.current);
-                message.success("Cập nhật sản phẩm thành công");
+                await fetchSizes(pagination.current);
+                message.success("Cập nhật size thành công");
             } else {
-                const response = await api.post(
-                    "admin/products/add-product",
-                    values
-                );
-                await fetchProducts(pagination.current);
-                message.success("Thêm sản phẩm thành công");
+                const response = await api.post("admin/sizes/add-size", values);
+                await fetchSizes(pagination.current); // Gọi lại API
+                message.success("Thêm size thành công");
             }
             setIsModalOpen(false);
         } catch (error) {
-            // console.error("Lỗi khi thêm/sửa sản phẩm:", error);
-            // message.error("Không thể thêm hoặc sửa sản phẩm.");
+            console.error("Lỗi khi thêm/sửa size:", error);
+            message.error("Không thể thêm hoặc sửa size.");
         } finally {
             setModalLoading(false);
         }
@@ -123,22 +116,20 @@ const QuanLySanPham = () => {
     return (
         <div className="quan-ly-container">
             <div className="header">
-                <p className="title-css">Quản lý sản phẩm</p>
+                <p className="title-css">Quản lý kích thước (Size)</p>
             </div>
             <div className="table">
                 <Button
                     type="primary"
                     icon={<PlusOutlined />}
-                    onClick={handleAddProduct}
+                    onClick={handleAddSize}
                     style={{ marginBottom: "10px", float: "right" }}
                 >
                     Thêm mới
                 </Button>
 
                 <Table
-                    rowKey={(record) =>
-                        record.product_id || `temp-${Date.now()}`
-                    }
+                    rowKey={(record) => record.size_id || `temp-${Date.now()}`}
                     columns={[
                         {
                             title: "STT",
@@ -157,36 +148,11 @@ const QuanLySanPham = () => {
                             width: "5%",
                         },
                         {
-                            title: "Tên sản phẩm",
+                            title: "Tên Size",
                             dataIndex: "name",
                             key: "name",
                             render: (text) => (
                                 <a style={{ color: "green" }}>{text}</a>
-                            ),
-                            align: "center" as "center",
-                        },
-                        {
-                            title: "Mô tả",
-                            dataIndex: "description",
-                            key: "description",
-                            render: (text) => <span>{text}</span>,
-                            align: "center" as "center",
-                        },
-                        {
-                            title: "Mã sản phẩm",
-                            dataIndex: "sku",
-                            key: "sku",
-                            render: (text) => <span>{text}</span>,
-                            align: "center" as "center",
-                        },
-                        {
-                            title: "Trạng thái",
-                            dataIndex: "is_active",
-                            key: "is_active",
-                            render: (text) => (
-                                <span>
-                                    {text ? "Hoạt động" : "Không hoạt động"}
-                                </span>
                             ),
                             align: "center" as "center",
                         },
@@ -204,7 +170,7 @@ const QuanLySanPham = () => {
                                         <DeleteOutlined
                                             style={{ color: "red" }}
                                             onClick={() =>
-                                                handleDelete(record.product_id)
+                                                handleDelete(record.size_id)
                                             }
                                         />
                                     </Tooltip>
@@ -213,7 +179,7 @@ const QuanLySanPham = () => {
                             align: "center" as "center",
                         },
                     ]}
-                    dataSource={products}
+                    dataSource={sizes}
                     loading={loading}
                     pagination={{
                         current: pagination.current,
@@ -228,15 +194,15 @@ const QuanLySanPham = () => {
                 />
             </div>
 
-            <FormSanPham
+            <FormSize
                 open={isModalOpen}
                 onCancel={handleCancel}
                 onOk={handleOk}
-                initialValues={currentProduct}
+                initialValues={currentSize}
                 loading={modalLoading}
             />
         </div>
     );
 };
 
-export default QuanLySanPham;
+export default QuanLySize;

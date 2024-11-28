@@ -1,27 +1,25 @@
 export interface IProduct {
     product_id: number;
-    brandId: number;
-    product_category_id: number;
+    brand_id: Brands;
+    product_category_id: Category;
     name: string;
     description: string;
     sku: string;
     subtitle: string;
     slug: string;
-    isActive: boolean;
+    is_active: number;
     deletedAt?: Date | null;
     createdAt?: Date | null;
     updatedAt?: Date | null;
-    image?: string;
     price: number | null;
-    category?: string;
-    mota?: string;
-    brand?: string;
+    size?: Size;
+    color?: Color;
 }
 
 export interface IProductUser {
     product_id: number;
-    brandId: number;
-    product_category_id: number;
+    brand: Brands;
+    category: Category;
     name: string;
     description: string;
     sku: string;
@@ -33,14 +31,26 @@ export interface IProductUser {
     updatedAt?: Date | null;
     main_image_url: string;
     price: number | null;
-    category?: string;
-    mota?: string;
+    size?: string;
+    color?: string;
 }
 
-export type FormData = Pick<
-    IProduct,
-    "name" | "description" | "sku" | "subtitle" | "slug"
->;
+export interface Size {
+    size_id: number;
+    name: string;
+    created_at: string;
+    updated_at: string;
+    deleted_at?: string;
+}
+
+export interface Color {
+    color_id: number;
+    name: string;
+    color_code: string;
+    created_at: string;
+    updated_at: string;
+    deleted_at?: string;
+}
 
 export interface Category {
     category_id: number;
@@ -54,14 +64,7 @@ export interface Category {
     updated_at: string;
     delete_at: string;
 }
-export interface Attributes {
-    attribute_id: number;
-    name: string;
-    value: string;
-    created_at: string;
-    updated_at: string;
-    deleted_at: string;
-}
+
 export interface Brands {
     brand_id: number;
     name: string;
@@ -72,6 +75,7 @@ export interface Brands {
     updated_at: string;
     deleted_at: string;
 }
+
 export interface Attribute_Products {
     attribute_product_id: number;
     product_id: number;
