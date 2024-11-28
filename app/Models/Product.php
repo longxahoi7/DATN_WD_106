@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Models;
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -24,7 +25,10 @@ class Product extends Model
         'description',
         'subtitle',
         'slug',
-        'is_active'
+        'is_active',
+        'is_hot',        // Sản phẩm hot
+        'is_sale',       // Sản phẩm đang sale
+        'sold_count'   // Số lượng đã bán
     ];
     public function colors()
     {

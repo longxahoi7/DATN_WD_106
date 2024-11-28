@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\ApiPaymentController;
 use App\Http\Controllers\Api\ApiUserController;
 use App\Http\Controllers\Api\InvoiceController;
-
+use App\Http\Controllers\Admin\OrderController;
 use Spatie\FlareClient\Api;
 
 Route::post('register', [ApiUserController::class, 'register']);
@@ -48,12 +48,12 @@ Route::group(
                 'as' => 'brands.'
             ],
             function () {
-            Route::get('/list-brand', [BrandController::class, 'listBrand']);
-            Route::post('/add-brand', [BrandController::class, 'addBrand']);
-            Route::get('/detail-brand/{id}', [BrandController::class, 'detailBrand']);
-            Route::delete('/destroy-brand/{id}', [BrandController::class, 'destroyBrand']);
-            Route::put('/update-brand/{id}', [BrandController::class, 'updateBrand']);
-        }
+                Route::get('/list-brand', [BrandController::class, 'listBrand']);
+                Route::post('/add-brand', [BrandController::class, 'addBrand']);
+                Route::get('/detail-brand/{id}', [BrandController::class, 'detailBrand']);
+                Route::delete('/destroy-brand/{id}', [BrandController::class, 'destroyBrand']);
+                Route::put('/update-brand/{id}', [BrandController::class, 'updateBrand']);
+            }
         );
         //CRUD color
         Route::group(
@@ -62,12 +62,12 @@ Route::group(
                 'as' => 'colors.'
             ],
             function () {
-            Route::get('/list-color', [ColorController::class, 'listColor']);
-            Route::post('/add-color', [ColorController::class, 'addColor']);
-            Route::get('/detail-color/{id}', [ColorController::class, 'detailColor']);
-            Route::delete('/destroy-color/{id}', [ColorController::class, 'destroyColor']);
-            Route::put('/update-color/{id}', [ColorController::class, 'updateColor']);
-        }
+                Route::get('/list-color', [ColorController::class, 'listColor']);
+                Route::post('/add-color', [ColorController::class, 'addColor']);
+                Route::get('/detail-color/{id}', [ColorController::class, 'detailColor']);
+                Route::delete('/destroy-color/{id}', [ColorController::class, 'destroyColor']);
+                Route::put('/update-color/{id}', [ColorController::class, 'updateColor']);
+            }
         );
         //CRUD size
         Route::group(
@@ -76,12 +76,12 @@ Route::group(
                 'as' => 'sizes.'
             ],
             function () {
-            Route::get('/list-size', [SizeController::class, 'listSize']);
-            Route::post('/add-size', [SizeController::class, 'addSize']);
-            Route::get('/detail-size/{id}', [SizeController::class, 'detailSize']);
-            Route::delete('/destroy-size/{id}', [SizeController::class, 'destroySize']);
-            Route::put('/update-size/{id}', [SizeController::class, 'updateSize']);
-        }
+                Route::get('/list-size', [SizeController::class, 'listSize']);
+                Route::post('/add-size', [SizeController::class, 'addSize']);
+                Route::get('/detail-size/{id}', [SizeController::class, 'detailSize']);
+                Route::delete('/destroy-size/{id}', [SizeController::class, 'destroySize']);
+                Route::put('/update-size/{id}', [SizeController::class, 'updateSize']);
+            }
         );
         //CRUD PRODUCT
         Route::group(
@@ -90,18 +90,18 @@ Route::group(
                 'as' => 'products.'
             ],
             function () {
-            Route::get('/list-product', [ProductController::class, 'listProduct']);
-            Route::get('/get-data', [ProductController::class, 'getData']);
-            Route::post('/add-product', [ProductController::class, 'addProduct']);
-            Route::get('/get-data-atrpro', [ProductController::class, 'getDataAtrPro']);
-            Route::put('/update-atrPro', [ProductController::class, 'updateMultiplecolorProducts']);
-            Route::get('/get-dataId/{id}', [ProductController::class, 'getDataId']);
-            Route::get('/detail-product/{id}', [ProductController::class, 'detailProduct']);
-            Route::delete('/destroy-product/{id}', [ProductController::class, 'destroyProduct']);
-            Route::post('/products/{id}/restore', [ProductController::class, 'restoreProduct']);
-            Route::put('/update-product/{id}', [ProductController::class, 'updateProduct']);
-
-        }
+                
+                Route::get('/list-product', [ProductController::class, 'listProduct']);
+                Route::get('/get-data', [ProductController::class, 'getData']);
+                Route::post('/add-product', [ProductController::class, 'addProduct']);
+                Route::get('/get-data-atrpro', [ProductController::class, 'getDataAtrPro']);
+                Route::put('/update-atrPro', [ProductController::class, 'updateMultiplecolorProducts']);
+                Route::get('/get-dataId/{id}', [ProductController::class, 'getDataId']);
+                Route::get('/detail-product/{id}', [ProductController::class, 'detailProduct']);
+                Route::delete('/destroy-product/{id}', [ProductController::class, 'destroyProduct']);
+                Route::post('/products/{id}/restore', [ProductController::class, 'restoreProduct']);
+                Route::put('/update-product/{id}', [ProductController::class, 'updateProduct']);
+            }
         );
         //CRUD COUPON
         Route::group(
@@ -110,15 +110,26 @@ Route::group(
                 'as' => 'coupons.'
             ],
             function () {
-            Route::get('/list-coupon', [CouponController::class, 'listCoupon']);
-            Route::post('/add-coupon', [CouponController::class, 'addCoupon']);
-            Route::get('/detail-coupon/{id}', [CouponController::class, 'detailCoupon']);
-            Route::delete('/destroy-coupon/{id}', [CouponController::class, 'destroyCoupon']);
-            Route::put('/update-coupon/{id}', [CouponController::class, 'updateCoupon']);
-
-        }
+                Route::get('/list-coupon', [CouponController::class, 'listCoupon']);
+                Route::post('/add-coupon', [CouponController::class, 'addCoupon']);
+                Route::get('/detail-coupon/{id}', [CouponController::class, 'detailCoupon']);
+                Route::delete('/destroy-coupon/{id}', [CouponController::class, 'destroyCoupon']);
+                Route::put('/update-coupon/{id}', [CouponController::class, 'updateCoupon']);
+            }
         );
-
+        //Quản lý đơn hàng
+        Route::group(
+            [
+                'prefix' => 'orders',
+                'as' => 'orders.'
+            ],
+            function () {
+                Route::get('/orders', [OrderController::class, 'index']);         // Lấy danh sách đơn hàng
+                Route::get('/orders/{id}', [OrderController::class, 'show']);    // Lấy chi tiết đơn hàng
+                Route::put('/orders/{id}', [OrderController::class, 'updateStatus']); // Cập nhật trạng thái đơn hàng
+                Route::delete('/orders/{id}', [OrderController::class, 'destroy']);  // Xóa đơn hàng
+            }
+        );
     }
 );
 Route::group(
@@ -133,6 +144,9 @@ Route::group(
                 'as' => 'products.'
             ],
             function () {
+                Route::get('/sale', [ProductController::class, 'saleProducts']);
+                Route::get('/hot', [ProductController::class, 'hotProducts']);
+                Route::get('/best-selling', [ProductController::class, 'bestSellingProducts']);
                 Route::get('/list-product', [ProductsController::class, 'productList']);
                 Route::get('/show-product/{id}', [ProductsController::class, 'showProduct']);
             }
