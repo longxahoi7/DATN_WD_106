@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\StatsController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\AttributeProductsController;
@@ -19,3 +20,4 @@ use App\Http\Controllers\HomeController;
 // Route::get('/hot', [ProductsController::class, 'hotProducts']);
 // Route::get('/best-selling', [ProductsController::class, 'bestSellingProducts']);
 // Route::get('/show-product/{id}', [ProductsController::class, 'showProduct']);
+//Route::get('stats', [StatsController::class, 'index']);

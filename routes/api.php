@@ -14,6 +14,7 @@ use App\Http\Controllers\Api\ApiPaymentController;
 use App\Http\Controllers\Api\ApiUserController;
 use App\Http\Controllers\Api\InvoiceController;
 use App\Http\Controllers\Admin\OrderController;
+use App\Http\Controllers\Admin\StatsController;
 use Spatie\FlareClient\Api;
 
 // Route::post('register', [ApiUserController::class, 'register']);
@@ -25,9 +26,12 @@ Route::group(
         'prefix' => 'admin',
         'as' => 'admin.'
     ],
+    
     function () {
+        
+        //Thống kê
+        Route::get('stats', [StatsController::class, 'index']);
         //CRUD CATẺGORY
-
         Route::group(
             [
                 'prefix' => 'categories',
@@ -41,6 +45,15 @@ Route::group(
                 Route::put('/update-category/{id}', [CategoryController::class, 'updateCategory']);
             }
         );
+        // Route::group(
+        //     [
+        //         'prefix' => 'stats',
+        //         'as' => 'stats.'
+        //     ],
+        //     function () {
+        //         Route::get('stats', [StatsController::class, 'index']);
+        //     }
+        // );
         //CRUD BRAND
         Route::group(
             [
