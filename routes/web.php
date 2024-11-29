@@ -15,4 +15,12 @@ use App\Http\Controllers\HomeController;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-
+Route::get('/sizes', function () {
+    return view('size_management');
+});
+Route::get('/colors', function () {
+    return view('color_management');
+});
+Route::get('/categories', function () {
+    return view('category_management');
+});
