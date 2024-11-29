@@ -1,10 +1,11 @@
 <?php
 
-use App\Http\Controllers\Admin\AttributeController;
+use App\Http\Controllers\Admin\ColorController;
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\CouponController;
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\SizeController;
 use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\CartController;
 use Illuminate\Http\Request;
@@ -15,10 +16,10 @@ use App\Http\Controllers\Api\InvoiceController;
 
 use Spatie\FlareClient\Api;
 
-Route::post('register', [ApiUserController::class, 'register']);
-//  http://127.0.0.1:8000/api/login
-Route::post('login', [ApiUserController::class, 'login']);
-//Route::middleware('auth:sanctum')->group(function () {
+// Route::post('register', [ApiUserController::class, 'register']);
+// //  http://127.0.0.1:8000/api/login
+// // Route::post('login', [ApiUserController::class, 'login']);
+// Route::middleware('auth:sanctum')->group(function () {
 Route::group(
     [
         'prefix' => 'admin',
@@ -54,18 +55,32 @@ Route::group(
             Route::put('/update-brand/{id}', [BrandController::class, 'updateBrand']);
         }
         );
-        //CRUD ATTRIBUTE
+        //CRUD color
         Route::group(
             [
-                'prefix' => 'attributes',
-                'as' => 'attributes.'
+                'prefix' => 'colors',
+                'as' => 'colors.'
             ],
             function () {
-            Route::get('/list-attribute', [AttributeController::class, 'listAttribute']);
-            Route::post('/add-attribute', [AttributeController::class, 'addAttribute']);
-            Route::get('/detail-attribute/{id}', [AttributeController::class, 'detailAttribute']);
-            Route::delete('/destroy-attribute/{id}', [AttributeController::class, 'destroyAttribute']);
-            Route::put('/update-attribute/{id}', [AttributeController::class, 'updateAttribute']);
+            Route::get('/list-color', [ColorController::class, 'listColor']);
+            Route::post('/add-color', [ColorController::class, 'addColor']);
+            Route::get('/detail-color/{id}', [ColorController::class, 'detailColor']);
+            Route::delete('/destroy-color/{id}', [ColorController::class, 'destroyColor']);
+            Route::put('/update-color/{id}', [ColorController::class, 'updateColor']);
+        }
+        );
+        //CRUD size
+        Route::group(
+            [
+                'prefix' => 'sizes',
+                'as' => 'sizes.'
+            ],
+            function () {
+            Route::get('/list-size', [SizeController::class, 'listSize']);
+            Route::post('/add-size', [SizeController::class, 'addSize']);
+            Route::get('/detail-size/{id}', [SizeController::class, 'detailSize']);
+            Route::delete('/destroy-size/{id}', [SizeController::class, 'destroySize']);
+            Route::put('/update-size/{id}', [SizeController::class, 'updateSize']);
         }
         );
         //CRUD PRODUCT
@@ -76,8 +91,10 @@ Route::group(
             ],
             function () {
             Route::get('/list-product', [ProductController::class, 'listProduct']);
-            Route::post('/add-product', [ProductController::class, 'addProduct']);
             Route::get('/get-data', [ProductController::class, 'getData']);
+            Route::post('/add-product', [ProductController::class, 'addProduct']);
+            Route::get('/get-data-atrpro', [ProductController::class, 'getDataAtrPro']);
+            Route::put('/update-atrPro', [ProductController::class, 'updateMultiplecolorProducts']);
             Route::get('/get-dataId/{id}', [ProductController::class, 'getDataId']);
             Route::get('/detail-product/{id}', [ProductController::class, 'detailProduct']);
             Route::delete('/destroy-product/{id}', [ProductController::class, 'destroyProduct']);
@@ -142,7 +159,7 @@ Route::group(
         );
     }
 );
-//});
+// });
 
 
 

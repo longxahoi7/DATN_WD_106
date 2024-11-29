@@ -9,17 +9,66 @@ import {
 import "../../../style/quanLy.css";
 import FormSanPham from "./FormSanPham";
 import DetailSanPham from "./DetailSanPham";
-import { IProduct } from "../../../interface/IProduct";
+import { Brands, Category, IProduct } from "../../../interface/IProduct";
 import api from "../../../config/axios";
 
 const QuanLySanPham = () => {
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isDetailOpen, setIsDetailOpen] = useState(false);
+    const [loading, setLoading] = useState(true);
+    const [formLoading, setFormLoading] = useState(false);
+
+    const [currentProduct, setCurrentProduct] = useState<IProduct | null>(null);
+    const [products, setProducts] = useState<IProduct[]>([]);
+    // const [brands, setBrands] = useState<Brands[]>([]);
+    // const [categories, setCategories] = useState<Category[]>([]);
+
+    // const [attributeColors, setAttributeColors] = useState<[]>([]);
+    // const [attributesSizes, setAttributeSizes] = useState<[]>([]);
+
+    // const [attributeColors, setAttributeColors] = useState<Attributes[]>([]);
+    // const [attributesSizes, setAttributeSizes] = useState<Attributes[]>([]);
+
+    const fetchProducts = async () => {
+        setLoading(true);
+        try {
+            const response = await api.get("admin/products/list-product");
+            console.log(response, "response");
+
+            const parseProducts = Array.isArray(response.data.data)
+                ? response.data.data
+                : [];
+            setProducts(parseProducts);
+        } catch (error) {
+            console.error("Lỗi khi lấy sản phẩm:", error);
+            message.error("Không thể tải sản phẩm.");
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchProducts();
+    }, []);
+
     const columns = (handleEdit, handleDelete, handleDetail) => [
+        // {
+        //     title: "STT",
+        //     key: "index",
+        //     render: (text, record, index) => (
+        //         <span style={{ display: "flex", justifyContent: "center" }}>
+        //             {index + 1}
+        //         </span>
+        //     ),
+        //     align: "center" as const,
+        // },
         {
-            title: "STT",
-            key: "index",
-            render: (text, record, index) => (
+            title: "Mã sản phẩm",
+            dataIndex: "product_id",
+            key: "product_id",
+            render: (product_id) => (
                 <span style={{ display: "flex", justifyContent: "center" }}>
-                    {index + 1}
+                    {product_id}
                 </span>
             ),
             align: "center" as const,
@@ -28,14 +77,14 @@ const QuanLySanPham = () => {
             title: "Tên Sản Phẩm",
             dataIndex: "name",
             key: "name",
-            render: (text) => <a style={{ color: "green" }}>{text}</a>,
+            render: (name) => <a style={{ color: "green" }}>{name}</a>,
             align: "center" as const,
         },
         {
             title: "Hình ảnh",
-            dataIndex: "image",
-            key: "image",
-            render: (text) => (
+            dataIndex: "main_image_url",
+            key: "main_image_url",
+            render: (imageURL) => (
                 <div
                     style={{
                         display: "flex",
@@ -43,10 +92,10 @@ const QuanLySanPham = () => {
                     }}
                 >
                     <Image
-                        src={text || "default-image-url"} // Thay "default-image-url" bằng URL mặc định bạn muốn
+                        src={imageURL}
                         alt="Product"
                         width={50}
-                        preview={false} // Không cần preview khi click vào hình
+                        preview={false}
                     />
                 </div>
             ),
@@ -56,28 +105,42 @@ const QuanLySanPham = () => {
             title: "Mô tả",
             dataIndex: "description",
             key: "description",
-            render: (text) => <a>{text}</a>,
+            render: (description) => <a>{description}</a>,
             align: "center" as const,
             width: "30%",
         },
         {
-            title: "Giá",
-            dataIndex: "price",
-            key: "price",
-            render: (text) => (
-                <span>
-                    {text ? `${text.toLocaleString()} VND` : "chưa có giá"}
-                </span>
-            ),
+            title: "Danh mục",
+            dataIndex: "category",
+            key: "category",
+            render: (category) => <span>{category.name}</span>,
             align: "center" as const,
         },
         {
-            title: "Danh mục",
-            dataIndex: "product_category_id",
-            key: "product_category_id",
-            render: (text) => <span>{text?.product_category_id}</span>,
+            title: "Thương hiệu",
+            dataIndex: "brand",
+            key: "brand",
+            render: (brand) => <span>{brand.name}</span>,
             align: "center" as const,
         },
+        // {
+        //     title: "Giá",
+        //     dataIndex: "price",
+        //     key: "price",
+        //     render: (price) => (
+        //         <span>
+        //             {price ? `${price.toLocaleString()} VND` : "chưa có giá"}
+        //         </span>
+        //     ),
+        //     align: "center" as const,
+        // },
+        // {
+        //     title: "Danh mục",
+        //     dataIndex: "category",
+        //     key: "category",
+        //     render: (category) => <span>{category.name}</span>,
+        //     align: "center" as const,
+        // },
         {
             key: "action",
             render: (text, record: IProduct) => (
@@ -99,34 +162,6 @@ const QuanLySanPham = () => {
             align: "center" as const,
         },
     ];
-
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [currentProduct, setCurrentProduct] = useState<IProduct | null>(null);
-    const [loading, setLoading] = useState(true);
-    const [formLoading, setFormLoading] = useState(false);
-    const [products, setProducts] = useState<IProduct[]>([]);
-    const [isDetailOpen, setIsDetailOpen] = useState(false);
-
-    const fetchProducts = async () => {
-        setLoading(true);
-        try {
-            const response = await api.get("admin/products/list-product"); // Đúng API sản phẩm
-            const productsData = Array.isArray(response.data.data)
-                ? response.data.data
-                : [];
-            setProducts(productsData);
-            console.log(response.data.data);
-        } catch (error) {
-            console.error("Lỗi khi lấy sản phẩm:", error);
-            message.error("Không thể tải sản phẩm.");
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    useEffect(() => {
-        fetchProducts();
-    }, []);
 
     const handleAddProduct = () => {
         setCurrentProduct(null);
@@ -221,7 +256,7 @@ const QuanLySanPham = () => {
                     dataSource={products}
                     pagination={{ pageSize: 5 }}
                     loading={loading}
-                    rowKey={(record) => record.product_id} // Sử dụng product_id làm khóa
+                    rowKey={(record) => record.product_id}
                 />
                 <FormSanPham
                     open={isModalOpen}

@@ -77,12 +77,13 @@ class CategoryController extends Controller
         ], 200);
 
     }
-    public function destroyCategory($id){
-        $category=Category::findOrFail($id);
+    public function destroyCategory($id)
+    {
+        $category = Category::findOrFail($id);
         $category->delete();
         return response()->json([
             'message' => 'Category soft deleted successfully'
-        ],200);
+        ], 200);
     }
 
 }

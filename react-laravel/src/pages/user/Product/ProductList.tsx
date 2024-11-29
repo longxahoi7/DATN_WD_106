@@ -1,30 +1,25 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { IProduct } from "../../../interface/IProduct";
+import { IProduct, IProductUser } from "../../../interface/IProduct";
 import SlideShow from "../../../layout/slideShow/SlideShow";
 import "../../../style/productList.css";
 
 const ProductList = () => {
     const { category } = useParams<{ category: string }>(); // lấy từ URL
-    console.log(category);
+    // console.log(category);
 
-    const [products, setProducts] = useState<IProduct[]>([]);
+    const [products, setProducts] = useState<IProductUser[]>([]);
 
     useEffect(() => {
         const fetchProducts = async () => {
             try {
-                const response = await fetch(`http://localhost:8000/api/admin/categories/list-category`);
+                const response = await fetch(
+                    `http://localhost:8000/api/users/products/list-product`
+                );
                 const data = await response.json();
-                console.log(data);
+                console.log(data.products, "data");
 
-                // Lọc sản phẩm nếu có danh mục (category)
-                const filteredProducts = category
-                    ? data.filter(
-                          (product: IProduct) => product.category === category
-                      )
-                    : data;
-
-                setProducts(filteredProducts); // Cập nhật danh sách sản phẩm
+                setProducts(data.products); // Cập nhật danh sách sản phẩm
             } catch (error) {
                 console.error("Failed to fetch products", error);
             }
@@ -45,9 +40,13 @@ const ProductList = () => {
             <div className="product-list">
                 {products.length > 0 ? (
                     products.map((item) => (
-                        <figure className="snip1585" key={item.id}>
+                        <figure className="snip1585" key={item.product_id}>
                             <img
-                                src={`${item.image}`}
+                                src={`${
+                                    item.main_image_url
+                                        ? item.main_image_url
+                                        : "https://placehold.co/276x350?text=%22Kh%C3%B4ng%20c%C3%B3%20%E1%BA%A3nh%22"
+                                }`}
                                 alt={item.name}
                                 className="w-full h-full object-cover"
                             />
@@ -65,7 +64,7 @@ const ProductList = () => {
                                 </button>
                             </figcaption>
                             <a
-                                href={`/product-detail/${item.id}`}
+                                href={`/product-detail/${item.product_id}`}
                                 className="product-detail-link"
                             />
                         </figure>

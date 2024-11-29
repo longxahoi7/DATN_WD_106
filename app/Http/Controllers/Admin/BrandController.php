@@ -41,18 +41,16 @@ public function detailBrand($id)
 }
 public function updateBrand(BrandsRequest $request,$id)
 {
-
-    $product=Brand::findOrFail($id);
-    $product->name = $request->input('name');
-    $product->description = $request->input('description');
-        $product->slug = $request->input('slug') 
+    $brand=Brand::findOrFail($id);
+    $brand->name =$request->input('name');
+    $brand->description = $request->input('description');
+        $brand->slug = $request->input('slug') 
             ? Str::slug($request->input('slug')) 
             : Str::slug($request->input('name'));
-
-        $product->is_active = $request->input('is_active');
-      $product->save();
+        $brand->is_active = $request->input('is_active');
+      $brand->save();
     return response()->json([
-        'product'=>$product,
+        'product'=>$brand,
         'message' => 'Brand updated successfully!',],200);
 
 }
