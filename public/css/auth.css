@@ -1,31 +1,72 @@
-#auth-page {
-    display: flex;
+
+/* Tổng quan */
+.container-fluid {
     height: 100vh;
+    display: flex;
     align-items: center;
     justify-content: center;
-    flex-direction: row;
 }
 
+.GentlemanorLogo {
+    width: 130px;
+    height: auto;
+}
+.iconSocial{
+    width: 30px;
+    height: auto;}
+
+/* Cột trái - Form */
 .col-md-8 {
-    padding: 50px;
-    background-color: white !important;
-    border-right: 2px solid #ddd;
-}
-
-.col-md-4 {
-    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     background-color: #fff;
+    padding: 50px;
+    border-right: 1px solid #ddd;
 }
 
 .custom-form {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
-    flex-direction: column; /* Đảm bảo các phần tử trong form xếp theo chiều dọc */
+    width: 100%;
+    max-width: 500px;
 }
 
-.custom-form-control {
-    text-align: center;
+.custom-form-auth {
+    width: 100%;
+}
+
+.form-control {
+    width: 100%;
+    margin-bottom: 15px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    background-color: #f9f9f9;
+}
+
+.password-input-wrapper {
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.eye-icon {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+}
+
+/* Cột phải - Slide */
+.col-md-4 {
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #000;
 }
 
 .carousel-container {
@@ -36,12 +77,11 @@
 
 .carousel-slide {
     width: 100%;
-    height: 100vh;
+    height: 100%;
     display: flex;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
     position: relative;
-    transition: transform 0.5s ease-in-out;
 }
 
 .carousel-image {
@@ -52,125 +92,194 @@
 
 .carousel-content {
     position: absolute;
-    bottom: 16%;
+    bottom: 20%;
     left: 50%;
     transform: translateX(-50%);
     text-align: center;
+    color: #fff;
+    z-index: 5;
     opacity: 0;
     transition: opacity 0.5s ease-in-out;
 }
 
-.carousel-slide.active .carousel-content {
+.carousel-slide:hover .carousel-content {
     opacity: 1;
 }
 
 .carousel-title {
-    font-size: 32px;
-    font-family: "SVN-Bold", sans-serif;
-    color: white;
-    margin-bottom: 15px;
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 10px;
 }
 
 .carousel-description {
-    font-size: 18px;
-    font-family: "SVN-Regular", sans-serif;
-    color: white;
+    font-size: 16px;
+    line-height: 1.5;
     text-align: justify;
+    max-width: 80%;
+    margin: 0 auto;
 }
 
+/* Responsive */
+@media (max-width: 768px) {
+    .row {
+        flex-direction: column;
+    }
+
+    .col-md-8,
+    .col-md-4 {
+        width: 100%;
+        height: 50%;
+        padding: 20px;
+        border-right: none;
+    }
+
+    .carousel-content {
+        bottom: 10%;
+        font-size: 14px;
+    }
+
+    .carousel-title {
+        font-size: 20px;
+    }
+
+    .carousel-description {
+        font-size: 14px;
+    }
+}
+
+/* Tạo kiểu cho các ô input */
+.formControl {
+    width: 100%; /* Các ô input sẽ kéo dài hết cỡ */
+    padding: 10px;
+    margin: 5px 0;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-sizing: border-box;
+    font-size: 14px;
+}
+
+/* Khi người dùng điền vào input, hiển thị viền xanh lá */
+.formControl:focus {
+    border-color: #28a745; /* Màu viền xanh lá */
+    box-shadow: #28a745;
+    outline: none;
+}
+
+/* Nút đăng ký kéo dài hết cỡ */
+.btn-block {
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px;
+    font-size: 16px;
+}
+
+/* Chỉnh cho các ô input có thẻ row căn giữa */
+.custom-form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Đặt các icon mắt vào đúng vị trí */
+.password-input-wrapper {
+    position: relative;
+}
+
+/* Tùy chỉnh icon mắt */
+.eye-icon {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+}
+
+.row .col-md-6 input {
+    width: 100%;
+}
+
+/* Đảm bảo các phần tử bên trong .custom-form căn giữa */
+.custom-form h5, .custom-form p {
+    text-align: center;
+    width: 100%;
+}
+
+/* Các style khác cho các phần tử bên ngoài */
+.custom-form-auth {
+    width: 100%;
+}
+
+/* Nút đăng ký */
+.btn-success {
+    background-color: #28a745;
+    border: none;
+    color: white;
+    font-size: 16px;
+    text-align: center;
+}
+
+.btn-success:hover {
+    background-color: #218838;
+}
+
+/* Định dạng cho chữ "hoặc" với đường kẻ */
 .or-divider {
     display: flex;
     align-items: center;
     justify-content: center;
+    margin: 20px 0;
     position: relative;
-    margin-top: 30px;
-    margin-bottom: 30px;
+}
+
+.or-divider span {
+    background-color: white; /* Đặt nền trắng cho chữ "hoặc" */
+    padding: 0 10px;
+    font-size: 14px;
+    font-weight: bold;
+    color: #6c757d; /* Màu chữ xám nhạt */
 }
 
 .or-divider:before,
 .or-divider:after {
     content: "";
     flex: 1;
-    border-top: 1px solid #ccc;
-    margin: 0 10px;
+    height: 1px;
+    background-color: #ddd; /* Màu đường kẻ */
 }
 
-.or-divider span {
-    position: absolute;
-    top: -12px;
-    background: #fff;
-    padding: 0 10px;
+.or-divider:before {
+    margin-right: 10px;
 }
 
-.form-control {
-    border-radius: 4px;
-    margin: 0 auto;
-    margin-bottom: 15px;
-    border: 1px solid #ddd;
-    background-color: #f0f0f0 !important;
+.or-divider:after {
+    margin-left: 10px;
 }
 
-.form-control:focus {
-    border-color: #0f6d5e !important;
-    box-shadow: 0 0 5px rgba(15, 109, 94, 0.5) !important;
+/* Định dạng cho icon Google và Facebook */
+.iconSocial {
+    width: 40px; /* Kích thước icon */
+    height: 40px;
+    margin: 0 5px; /* Cách đều 5px */
+    cursor: pointer; /* Biểu thị có thể click */
 }
 
-.form-check-input:checked {
-    background-color: #0d5b4d !important;
-    border-color: #28a745 !important;
-}
-
-.btn-success {
-    background-color: #0f6d5e;
-    border: none;
-}
-
-.btn-success:hover {
-    background-color: #0d5b4d;
-    transition: background-color 0.3s;
+.d-flex {
+    justify-content: center;
+    gap: 5px; /* Cách đều giữa các icon và chữ "hoặc" */
+    align-items: center;
 }
 
 .register-link {
-    color: #0f6d5e;
-    text-decoration: none;
+    color: #28a745; /* Màu xanh lá */
+    font-weight: 400; /* Tăng độ dày chữ một chút */
+    text-decoration: none; /* Loại bỏ gạch chân */
 }
 
-.custom-input-user-right {
-    float: left;
-    width: 90%;
-}
-
-.custom-input-user-left {
-    float: right;
-    width: 90%;
-}
-
-.input-error {
-    border: 1px solid red;
-}
-
-.custom-form-auth {
-    width: 70%; /* Đảm bảo form chiếm hết chiều rộng của container */
-    box-sizing: border-box; /* Đảm bảo padding không làm rộng form */
-    background-color: #fff; /* Tạo nền cho form */
-    border-radius: 8px; /* Tạo các góc bo cho form */
-}
-
-.password-input-wrapper {
-    display: flex;
-    align-items: center;
-    position: relative;
-}
-
-.password-input-wrapper input {
-    flex: 1;
-    padding-right: 2.5rem;
-}
-
-.eye-icon {
-    position: absolute;
-    right: 35px;
-    height: 47px;
-    color: #888;
-    font-size: 1.2rem;
+.register-link:hover {
+    color: #218838; /* Màu xanh lá đậm hơn khi hover */
 }
