@@ -1,0 +1,12 @@
+#carouselExampleFade {
+    max-width: 90%;
+    margin: 0 auto;
+    padding-bottom: 20px;
+    position: relative;
+    overflow: hidden;
+}
+.carousel-item img {
+    max-height: 500px;
+    object-fit: cover;
+}
+

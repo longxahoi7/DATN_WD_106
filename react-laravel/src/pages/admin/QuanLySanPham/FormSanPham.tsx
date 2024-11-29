@@ -123,10 +123,10 @@ const FormSanPham = ({ open, onOk, onCancel, initialValues }) => {
             formData.append("discount", values.discount);
             // formData.append("in_stock", values.in_stock);
             // formData.append("price", values.price);
-            // formData.append("brand_id", values.brand_id);
-            // formData.append("product_category_id", values.product_category_id);
-            // formData.append("main_image_url", previewImage as string);
-            // console.log(previewImage, "previewImage form data");
+            formData.append("brand_id", values.brand_id);
+            formData.append("product_category_id", values.product_category_id);
+            formData.append("main_image_url", previewImage as string);
+            console.log(previewImage, "previewImage form data");
 
             // Handle created_at and updated_at fields as dates
             if (values.createdAt) {
@@ -142,17 +142,17 @@ const FormSanPham = ({ open, onOk, onCancel, initialValues }) => {
                 );
             }
 
-            // if (previewImage) {
-            //     const response = await fetch(previewImage);
-            //     const blob = await response.blob();
-            //     const file = new File([blob], "uploaded_image.jpg", {
-            //         type: "image/jpeg",
-            //     });
+            if (previewImage) {
+                const response = await fetch(previewImage);
+                const blob = await response.blob();
+                const file = new File([blob], "uploaded_image.jpg", {
+                    type: "image/jpeg",
+                });
 
-            //     formData.append("main_image_url", file);
-            // }
+                formData.append("main_image_url", file);
+            }
 
-            formData.append("main_image_url", values.main_image_url);
+            // formData.append("main_image_url", values.main_image_url);
 
             // if (previewImage) {
             //     const response = await fetch(previewImage);
@@ -411,7 +411,7 @@ const FormSanPham = ({ open, onOk, onCancel, initialValues }) => {
                                 placeholder="Nhập giá sản phẩm"
                             />
                         </Form.Item>
-                    </Col> */}
+                    </Col>  */}
 
                     {/* <Col span={12}>
                         <Form.Item
@@ -431,25 +431,7 @@ const FormSanPham = ({ open, onOk, onCancel, initialValues }) => {
                         >
                             <Input placeholder="Stock sản phẩm" />
                         </Form.Item>
-                    </Col>
-
-                    <Col span={12}>
-                        <Form.Item
-                            name="price"
-                            label="Giá sản phẩm"
-                            rules={[
-                                {
-                                    required: true,
-                                    message: "Vui lòng nhập giá sản phẩm",
-                                },
-                            ]}
-                        >
-                            <Input
-                                type="number"
-                                placeholder="Nhập giá sản phẩm"
-                            />
-                        </Form.Item>
-                    </Col> 
+                    </Col> */}
 
                     <Col span={12}>
                         <Form.Item
@@ -525,7 +507,7 @@ const FormSanPham = ({ open, onOk, onCancel, initialValues }) => {
                         </div>
                     </Col>
 
-                    {/* <Col span={12}>
+                    <Col span={12}>
                         <Form.Item
                             label="Hình ảnh sản phẩm"
                             valuePropName="fileList"
@@ -559,13 +541,13 @@ const FormSanPham = ({ open, onOk, onCancel, initialValues }) => {
                                 </Button>
                             )}
                         </Form.Item>
-                    </Col> */}
+                    </Col>
 
-                    <Col span={12}>
+                    {/* <Col span={12}>
                         <Form.Item name="main_image_url" label="ảnh">
                             <Input placeholder="ảnh" />
                         </Form.Item>
-                    </Col>
+                    </Col> */}
                 </Row>
             </Form>
         </Modal>

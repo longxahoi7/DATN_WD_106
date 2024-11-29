@@ -1,145 +1,82 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect } from "react";
 import { Space, Table, Button, Modal, message, Tooltip } from "antd";
 import { EditOutlined, DeleteOutlined, PlusOutlined } from "@ant-design/icons";
 import "../../../style/quanLy.css";
-import FormDanhMuc from "./FormDanhMuc";
-import type { TooltipProps } from "antd";
 import api from "../../../config/axios";
 import { Category } from "../../../interface/IProduct";
+import FormDanhMuc from "./FormDanhMuc";
 
 const QuanLyDanhMuc = () => {
-    const columns = (handleEdit, handleDelete) => [
-        {
-            title: "STT",
-            key: "index",
-            render: (text, record, index) => (
-                <span style={{ display: "flex", justifyContent: "center" }}>
-                    {index + 1}
-                </span>
-            ),
-            align: "center" as "center",
-            width: "5%",
-        },
-        {
-            title: "Tên Danh Mục",
-            dataIndex: "name",
-            key: "name",
-            render: (text) => <a style={{ color: "green" }}>{text}</a>,
-            align: "center" as "center",
-        },
-        {
-            title: "Mô tả",
-            dataIndex: "description",
-            key: "description",
-            align: "center" as "center",
-            width: "40%",
-        },
-        {
-            title: "Hình ảnh",
-            dataIndex: "image",
-            key: "image",
-            render: (text) => (
-                <div style={{ display: "flex", justifyContent: "center" }}>
-                    <img src={text} alt="Category" style={{ width: "50px" }} />
-                </div>
-            ),
-            align: "center" as "center",
-            width: "20%",
-        },
-        {
-            key: "action",
-            render: (text, record) => (
-                <Space size="middle">
-                    <Tooltip
-                        placement="top"
-                        title="chỉnh sửa"
-                        arrow={mergedArrow}
-                    >
-                        <EditOutlined
-                            style={{ color: "orange" }}
-                            onClick={() => handleEdit(record)}
-                        />
-                    </Tooltip>
-                    <Tooltip placement="top" title="xóa" arrow={mergedArrow}>
-                        <DeleteOutlined
-                            style={{ color: "red" }}
-                            onClick={() => handleDelete(record.category_id)}
-                        />
-                    </Tooltip>
-                </Space>
-            ),
-            align: "center" as "center",
-        },
-    ];
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [modalLoading, setModalLoading] = useState(false); // Loading riêng cho modal
+    const [loading, setLoading] = useState(true);
+    const [categories, setCategories] = useState<Category[]>([]); // Dữ liệu danh mục
     const [currentCategory, setCurrentCategory] = useState<Category | null>(
         null
     );
-    const [loading, setLoading] = useState(true);
-    const [arrow, setArrow] = useState<"Show" | "Hide" | "Center">("Show");
-    const [formLoading, setFormLoading] = useState(false); // Thêm state formLoading
-    const [categories, setCategories] = useState<Category[]>([]);
+    const [pagination, setPagination] = useState({
+        current: 1,
+        pageSize: 10,
+        total: 0,
+    });
+
+    // Lấy danh sách danh mục
+    const fetchCategories = async (page = 1) => {
+        setLoading(true);
+        try {
+            const response = await api.get(
+                `admin/categories/list-category?page=${page}`
+            );
+            const { data, total, per_page, current_page } = response.data;
+            setCategories(data?.filter((item) => item?.category_id) || []);
+            setPagination({
+                current: current_page,
+                pageSize: per_page,
+                total: total,
+            });
+        } catch (error) {
+            console.error("Lỗi khi lấy danh sách danh mục:", error);
+            message.error("Không thể tải danh sách danh mục.");
+        } finally {
+            setLoading(false);
+        }
+    };
 
     useEffect(() => {
-        const fetchCategories = async () => {
-            setLoading(true); // Bắt đầu tải dữ liệu
-            try {
-                const response = await api.get(
-                    "admin/categories/list-category"
-                );
-                console.log("Dữ liệu danh mục nhận được:", response.data.data);
-                const categoriesData = Array.isArray(response.data.data)
-                    ? response.data.data
-                    : [];
-                setCategories(categoriesData); // Cập nhật state với dữ liệu nhận được
-            } catch (error) {
-                console.error("Lỗi khi lấy danh mục:", error);
-                message.error("Không thể tải danh mục.");
-            } finally {
-                setLoading(false); // Kết thúc tải dữ liệu
-            }
-        };
+        fetchCategories(pagination.current);
+    }, [pagination.current]);
 
-        fetchCategories();
-    }, []);
-
-    const mergedArrow = useMemo<TooltipProps["arrow"]>(() => {
-        if (arrow === "Hide") {
-            return false;
-        }
-
-        if (arrow === "Show") {
-            return true;
-        }
-
-        return {
-            pointAtCenter: true,
-        };
-    }, [arrow]);
-
+    // Mở modal thêm danh mục
     const handleAddCategory = () => {
         setCurrentCategory(null);
         setIsModalOpen(true);
     };
 
-    const handleEdit = (record: Category) => {
+    // Mở modal chỉnh sửa danh mục
+    const handleEdit = (record) => {
         setCurrentCategory(record);
         setIsModalOpen(true);
     };
 
-    const handleDelete = (category_id: number) => {
+    // Xóa danh mục
+    const handleDelete = (category_id) => {
         Modal.confirm({
             title: "Bạn có chắc chắn muốn xóa danh mục này?",
             onOk: async () => {
                 try {
                     await api.delete(
                         `admin/categories/delete-category/${category_id}`
-                    ); // Gửi yêu cầu xóa
-                    setCategories(
-                        categories.filter(
+                    );
+                    setCategories((prev) =>
+                        prev.filter(
                             (category) => category.category_id !== category_id
                         )
-                    ); // Cập nhật lại danh sách
+                    );
+                    setPagination((prev) => ({
+                        ...prev,
+                        total: prev.total - 1,
+                    }));
+                    await fetchCategories(pagination.current);
                     message.success("Xóa danh mục thành công");
                 } catch (error) {
                     console.error("Xóa danh mục thất bại:", error);
@@ -149,29 +86,32 @@ const QuanLyDanhMuc = () => {
         });
     };
 
-    const handleCancel = () => {
-        setIsModalOpen(false);
-    };
-
-    const handleOk = async (values: Category) => {
-        setFormLoading(true);
+    // Lưu thêm hoặc cập nhật danh mục
+    const handleOk = async (values) => {
+        setModalLoading(true);
         try {
             if (currentCategory) {
-                await api.post(`admin/categories/add-category`, values);
-                setCategories(
-                    categories.map((category) =>
-                        category.category_id === currentCategory.category_id
-                            ? { ...category, ...values }
+                const response = await api.put(
+                    `admin/categories/update-category/${currentCategory.category_id}`,
+                    values
+                );
+                const updatedCategory = response.data;
+
+                setCategories((prevCategories) =>
+                    prevCategories.map((category) =>
+                        category.category_id === updatedCategory.category_id
+                            ? { ...category, ...updatedCategory }
                             : category
                     )
                 );
+                await fetchCategories(pagination.current);
                 message.success("Cập nhật danh mục thành công");
             } else {
                 const response = await api.post(
                     "admin/categories/add-category",
                     values
                 );
-                setCategories([...categories, response.data]);
+                await fetchCategories(pagination.current);
                 message.success("Thêm danh mục thành công");
             }
             setIsModalOpen(false);
@@ -179,8 +119,13 @@ const QuanLyDanhMuc = () => {
             console.error("Lỗi khi thêm/sửa danh mục:", error);
             message.error("Không thể thêm hoặc sửa danh mục.");
         } finally {
-            setFormLoading(false);
+            setModalLoading(false);
         }
+    };
+
+    // Hủy modal
+    const handleCancel = () => {
+        setIsModalOpen(false);
     };
 
     return (
@@ -197,21 +142,117 @@ const QuanLyDanhMuc = () => {
                 >
                     Thêm mới
                 </Button>
-                <Table
-                    columns={columns(handleEdit, handleDelete)}
-                    dataSource={categories.length > 0 ? categories : []}
-                    loading={loading}
-                    pagination={{ pageSize: 5 }}
-                />
 
-                <FormDanhMuc
-                    open={isModalOpen}
-                    onOk={handleOk}
-                    onCancel={handleCancel}
-                    initialValues={currentCategory}
-                    loading={formLoading}
+                <Table
+                    rowKey={(record) =>
+                        record.category_id || `temp-${Date.now()}`
+                    }
+                    columns={[
+                        {
+                            title: "STT",
+                            key: "index",
+                            render: (text, record, index) => (
+                                <span
+                                    style={{
+                                        display: "flex",
+                                        justifyContent: "center",
+                                    }}
+                                >
+                                    {index + 1}
+                                </span>
+                            ),
+                            align: "center",
+                            width: "5%",
+                        },
+                        {
+                            title: "Tên danh mục",
+                            dataIndex: "name",
+                            key: "name",
+                            render: (text) => (
+                                <a style={{ color: "green" }}>{text}</a>
+                            ),
+                            align: "center",
+                        },
+                        {
+                            title: "Mô tả",
+                            dataIndex: "description",
+                            key: "description",
+                            render: (text) => (
+                                <span style={{ color: "gray" }}>{text}</span>
+                            ),
+                            align: "center",
+                        },
+                        // {
+                        //     title: "Tên đường dẫn sản phẩm",
+                        //     dataIndex: "slug",
+                        //     key: "slug",
+                        //     render: (text) => (
+                        //         <span style={{ color: "blue" }}>{text}</span>
+                        //     ),
+                        //     align: "center",
+                        // },
+                        // {
+                        //     title: "Danh mục thuộc",
+                        //     dataIndex: "parent_id",
+                        //     key: "parent_id",
+                        //     align: "center",
+                        // },
+                        {
+                            title: "Hoạt động",
+                            dataIndex: "is_active",
+                            key: "is_active",
+                            render: (text) => (
+                                <span style={{ color: text ? "green" : "red" }}>
+                                    {text ? "Hoạt động" : "Không hoạt động"}
+                                </span>
+                            ),
+                            align: "center",
+                        },
+                        {
+                            key: "action",
+                            render: (text, record) => (
+                                <Space size="middle">
+                                    <Tooltip placement="top" title="Chỉnh sửa">
+                                        <EditOutlined
+                                            style={{ color: "orange" }}
+                                            onClick={() => handleEdit(record)}
+                                        />
+                                    </Tooltip>
+                                    <Tooltip placement="top" title="Xóa">
+                                        <DeleteOutlined
+                                            style={{ color: "red" }}
+                                            onClick={() =>
+                                                handleDelete(record.category_id)
+                                            }
+                                        />
+                                    </Tooltip>
+                                </Space>
+                            ),
+                            align: "center",
+                        },
+                    ]}
+                    dataSource={categories}
+                    loading={loading}
+                    pagination={{
+                        current: pagination.current,
+                        pageSize: pagination.pageSize,
+                        total: pagination.total,
+                        onChange: (page) =>
+                            setPagination((prev) => ({
+                                ...prev,
+                                current: page,
+                            })),
+                    }}
                 />
             </div>
+
+            <FormDanhMuc
+                open={isModalOpen}
+                onCancel={handleCancel}
+                onOk={handleOk}
+                initialValues={currentCategory}
+                loading={modalLoading}
+            />
         </div>
     );
 };
