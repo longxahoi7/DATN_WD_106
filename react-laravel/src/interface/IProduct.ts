@@ -23,7 +23,7 @@ export interface IProduct {
 
 export interface IProductUser {
     product_id: number;
-    brandId: number;
+    brand_id: number;
     product_category_id: number;
     name: string;
     description: string;
@@ -31,13 +31,13 @@ export interface IProductUser {
     subtitle: string;
     slug: string;
     isActive: boolean;
-    deletedAt?: Date | null;
-    createdAt?: Date | null;
-    updatedAt?: Date | null;
+    deleted_At: Date;
+    created_At: Date;
+    updated_At: Date;
     main_image_url: string;
-    price: number | null;
-    category?: string;
-    mota?: string;
+    price: number;
+    in_stock: number;
+    discount: number;
 }
 
 export type FormData = Pick<
@@ -55,7 +55,7 @@ export interface Category {
     parent_id: number;
     created_at: string;
     updated_at: string;
-    delete_at: string;
+    deleted_at: string;
 }
 export interface Attributes {
     attribute_id: number;

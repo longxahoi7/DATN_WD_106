@@ -18,7 +18,6 @@ class ProductController extends Controller
     public function listProduct(Request $request)
     {
         $products = Product::with('category:category_id,name', 'brand:brand_id,name')
-            // ->where('category.name', 'like', '%' . $request->nhap.'%')
             ->where('name', 'like', '%' . $request->nhap . '%')
             ->orWhereHas('category', function ($query) use ($request) {
                 $query->where('name', 'like', '%' . $request->input('nhap', '') . '%');
@@ -47,21 +46,11 @@ class ProductController extends Controller
             'sizes' => $sizes,
             'colors' => $colors
         ]);
-    
-  
+
+
     }
     public function addProduct(Request $request)
     {
-        // if ($request->hasFile('main_image_url')) {
-        //     $anh = $request->file('main_image_url');
-        //     if ($anh->isValid()) {
-        //         $newAnh = time() . "." . $anh->getClientOriginalExtension();
-        //         $image = $anh->move(public_path('imagePro/'), $newAnh);
-        //     } else {
-        //         $image = null;
-        //     }
-        // }
-        // $image = $anh->storeAs('images', $newAnh, 'public');
         $product = Product::create([
             'brand_id' => $request->input('brand_id'),
             'name' => $request->input('name'),
@@ -69,8 +58,8 @@ class ProductController extends Controller
             'main_image_url' => $request->input('main_image_url'),
             'view_count' => 0,
             'discount' => $request->input('discount'),
-            'start_date' => $request->input('start_date'),
-            'end_date' => $request->input('end_date'),
+            // 'start_date' => $request->input('start_date'),
+            // 'end_date' => $request->input('end_date'),
             'sku' => $request->input('sku'),
             'description' => $request->input('description'),
             'subtitle' => $request->input('subtitle'),
@@ -90,8 +79,6 @@ class ProductController extends Controller
             }
         }
         $attPro = AttributeProduct::insert($productColorSizeData);
-
-
 
         return response()->json([
             'product' => $product,

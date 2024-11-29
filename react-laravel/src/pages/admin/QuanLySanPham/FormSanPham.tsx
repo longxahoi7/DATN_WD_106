@@ -1,65 +1,34 @@
 import React, { useState, useEffect } from "react";
-import {
-    Modal,
-    Form,
-    Input,
-    Upload,
-    Button,
-    DatePicker,
-    Select,
-    Row,
-    Col,
-    message,
-} from "antd";
-import { UploadOutlined, DeleteOutlined } from "@ant-design/icons";
-import { ColorPicker, Space } from "antd";
-import moment from "moment";
-import { Brands, Category } from "../../../interface/IProduct";
+import { Modal, Form, Input, Select, Row, Col, message } from "antd";
 import api from "../../../config/axios";
+import { Brands, Category } from "../../../interface/IProduct";
 
 const { Option } = Select;
 
 const FormSanPham = ({ open, onOk, onCancel, initialValues }) => {
     const [form] = Form.useForm();
     const [loading, setLoading] = useState(true);
-    const [previewImage, setPreviewImage] = useState<string | null>(null);
     const token = localStorage.getItem("token");
 
     const [brands, setBrands] = useState<Brands[]>([]);
     const [categories, setCategories] = useState<Category[]>([]);
+    const [attributeColors, setAttributeColors] = useState([]);
+    const [attributesSizes, setAttributeSizes] = useState([]);
 
-    const [attributeColors, setAttributeColors] = useState<[]>([]);
-    const [attributesSizes, setAttributeSizes] = useState<[]>([]);
-
+    // Fetch data từ API
     const fetchData = async () => {
         setLoading(true);
         try {
             const response = await api.get("admin/products/get-data");
-            console.log(response, "getData");
-
-            const parseBrands = Array.isArray(response.data.brands)
-                ? response.data.brands
-                : [];
-            setBrands(parseBrands);
-
-            const parseCategories = Array.isArray(response.data.categories)
-                ? response.data.categories
-                : [];
-            setCategories(parseCategories);
-
-            const parseAttributeColors = Array.isArray(response.data.colors)
-                ? response.data.colors
-                : [];
-            setAttributeColors(parseAttributeColors);
-            // console.log(attributeColors, "attributeColors");
-
-            const parseAttributeSizes = Array.isArray(response.data.sizes)
-                ? response.data.sizes
-                : [];
-            setAttributeSizes(parseAttributeSizes);
+            if (response.data) {
+                setBrands(response.data.brands || []);
+                setCategories(response.data.categories || []);
+                setAttributeColors(response.data.colors || []);
+                setAttributeSizes(response.data.sizes || []);
+            }
         } catch (error) {
-            console.error("Lỗi khi lấy sản phẩm:", error);
-            message.error("Không thể tải sản phẩm.");
+            console.error("Lỗi khi lấy dữ liệu sản phẩm:", error);
+            message.error("Không thể tải dữ liệu sản phẩm.");
         } finally {
             setLoading(false);
         }
@@ -69,31 +38,26 @@ const FormSanPham = ({ open, onOk, onCancel, initialValues }) => {
         fetchData();
     }, []);
 
-    // Set initial values when initialValues prop changes
+    // Gán giá trị ban đầu khi nhận `initialValues`
     useEffect(() => {
         if (initialValues) {
             form.setFieldsValue({
-                name: initialValues.name,
-                sku: initialValues.sku,
-                subtitle: initialValues.subtitle,
-                description: initialValues.description,
-                attribute_id: initialValues.attribute_id,
-                discount: initialValues.discount,
-                in_stock: initialValues.in_stock,
-                price: initialValues.price,
-                brand_id: initialValues.brand_id,
-                product_category_id: initialValues.product_category_id,
-                createdAt: initialValues.created_at
-                    ? moment(initialValues.created_at)
-                    : null,
-                updatedAt: initialValues.updated_at
-                    ? moment(initialValues.updated_at)
-                    : null,
-                main_image_url: initialValues.main_image_url,
+                name: initialValues.name || "",
+                sku: initialValues.sku || "",
+                subtitle: initialValues.subtitle || "",
+                description: initialValues.description || "",
+                product_category_id:
+                    initialValues.product_category_id || undefined,
+                brand_id: initialValues.brand_id || undefined,
+                in_stock: initialValues.in_stock || "",
+                price: initialValues.price || "",
+                color_id: initialValues.color_id || [],
+                size_id: initialValues.size_id || [],
+                discount: initialValues.discount || "",
+                main_image_url: initialValues.main_image_url || "",
             });
-            setPreviewImage(initialValues.main_image_url);
-
-            console.log("initialValues", initialValues);
+        } else {
+            form.resetFields();
         }
     }, [initialValues, form]);
 
@@ -102,113 +66,47 @@ const FormSanPham = ({ open, onOk, onCancel, initialValues }) => {
             const values = await form.validateFields();
             const formData = new FormData();
 
-            // Ensure form values are appended to FormData
-            formData.append("name", values.name);
-            formData.append("sku", values.sku);
-            formData.append("subtitle", values.subtitle);
-            formData.append("description", values.description);
-            formData.append(
-                "color_id",
-                Array.isArray(values.color_id)
-                    ? values.color_id
-                    : [values.color_id]
-            );
-
-            formData.append(
-                "size_id",
-                Array.isArray(values.size_id)
-                    ? values.size_id
-                    : [values.size_id]
-            );
-            formData.append("discount", values.discount);
-            // formData.append("in_stock", values.in_stock);
-            // formData.append("price", values.price);
-            // formData.append("brand_id", values.brand_id);
-            // formData.append("product_category_id", values.product_category_id);
-            // formData.append("main_image_url", previewImage as string);
-            // console.log(previewImage, "previewImage form data");
-
-            // Handle created_at and updated_at fields as dates
-            if (values.createdAt) {
-                formData.append(
-                    "created_at",
-                    values.createdAt.format("YYYY-MM-DD")
-                );
-            }
-            if (values.updatedAt) {
-                formData.append(
-                    "updated_at",
-                    values.updatedAt.format("YYYY-MM-DD")
-                );
-            }
-
-            // if (previewImage) {
-            //     const response = await fetch(previewImage);
-            //     const blob = await response.blob();
-            //     const file = new File([blob], "uploaded_image.jpg", {
-            //         type: "image/jpeg",
-            //     });
-
-            //     formData.append("main_image_url", file);
-            // }
-
-            formData.append("main_image_url", values.main_image_url);
-
-            // if (previewImage) {
-            //     const response = await fetch(previewImage);
-            //     console.log(response, "response_image");
-            //     let main_image_url = await response.blob();
-            //     formData.append("main_image_url", main_image_url);
-            //     // formData.append(
-            //     //     "main_image_url",
-            //     //     main_image_url,
-            //     //     "uploaded_image.jpg"
-            //     // );
-            // }
-
-            // Logging FormData to inspect its contents
-            for (let pair of formData.entries()) {
-                console.log(pair[0], pair[1]);
-            }
-
-            // Submit the form data to the server
-            const response = await fetch(
-                "http://localhost:8000/api/admin/products/add-product",
-                {
-                    method: "POST",
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                    body: formData,
+            Object.keys(values).forEach((key) => {
+                if (Array.isArray(values[key])) {
+                    values[key].forEach((item) =>
+                        formData.append(`${key}[]`, item)
+                    );
+                } else {
+                    formData.append(key, values[key]);
                 }
-            );
+            });
+
+            const url = initialValues
+                ? `http://localhost:8000/api/admin/products/update-product/${initialValues.product_id}`
+                : "http://localhost:8000/api/admin/products/add-product";
+
+            const method = initialValues ? "PUT" : "POST";
+
+            const response = await fetch(url, {
+                method: method,
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+                body: formData,
+            });
 
             if (response.ok) {
-                onOk(values);
+                const responseData = await response.json();
+                message.success(
+                    initialValues
+                        ? "Cập nhật sản phẩm thành công!"
+                        : "Thêm sản phẩm mới thành công!"
+                );
+                onOk(responseData);
                 form.resetFields();
-                setPreviewImage(null);
             } else {
-                console.error("Failed to save product:", await response.text());
+                const errorText = await response.text();
+                console.error("Failed to save product:", errorText);
+                message.error("Lỗi khi lưu sản phẩm.");
             }
         } catch (error) {
             console.error("Validation failed:", error);
         }
-    };
-
-    // Handle image upload
-    const handleImageUpload = ({ file }) => {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            if (e.target) {
-                setPreviewImage(e.target.result as string);
-            }
-        };
-        reader.readAsDataURL(file);
-    };
-
-    // Handle image removal
-    const handleRemoveImage = () => {
-        setPreviewImage(null);
     };
 
     return (
@@ -219,7 +117,6 @@ const FormSanPham = ({ open, onOk, onCancel, initialValues }) => {
             onCancel={() => {
                 onCancel();
                 form.resetFields();
-                setPreviewImage(null);
             }}
             okText="Lưu"
             cancelText="Hủy"
@@ -238,8 +135,7 @@ const FormSanPham = ({ open, onOk, onCancel, initialValues }) => {
                                 },
                                 {
                                     max: 50,
-                                    message:
-                                        "Tên sản phẩm không được vượt quá 50 ký tự",
+                                    message: "Không được vượt quá 50 ký tự",
                                 },
                             ]}
                         >
@@ -257,8 +153,7 @@ const FormSanPham = ({ open, onOk, onCancel, initialValues }) => {
                                 },
                                 {
                                     max: 50,
-                                    message:
-                                        "Mã sản phẩm không được vượt quá 50 ký tự",
+                                    message: "Không được vượt quá 50 ký tự",
                                 },
                             ]}
                         >
@@ -276,8 +171,7 @@ const FormSanPham = ({ open, onOk, onCancel, initialValues }) => {
                                 },
                                 {
                                     max: 50,
-                                    message:
-                                        "Subtitle sản phẩm không được vượt quá 50 ký tự",
+                                    message: "Không được vượt quá 50 ký tự",
                                 },
                             ]}
                         >
@@ -294,112 +188,43 @@ const FormSanPham = ({ open, onOk, onCancel, initialValues }) => {
                                     message: "Vui lòng nhập mô tả sản phẩm",
                                 },
                                 {
-                                    max: 50,
-                                    message:
-                                        "Mô tả sản phẩm không được vượt quá 50 ký tự",
+                                    max: 255,
+                                    message: "Không được vượt quá 255 ký tự",
                                 },
                             ]}
                         >
                             <Input placeholder="Mô tả sản phẩm" />
                         </Form.Item>
                     </Col>
-
-                    <Col span={6}>
+                    <Col span={12}>
                         <Form.Item
-                            name="color_id"
-                            label="Chọn màu"
-                            rules={[
-                                {
-                                    required: true,
-                                    message: "Vui lòng chọn mã màu",
-                                },
-                            ]}
+                            name="product_category_id"
+                            label="Danh mục sản phẩm"
                         >
-                            <Select
-                                placeholder="Chọn thuộc tính"
-                                mode="multiple"
-                            >
-                                {attributeColors?.map((color, index) => {
-                                    const {
-                                        color_id,
-                                        color_code,
-                                        created_at,
-                                        name,
-                                        updated_at,
-                                    } = color;
-                                    return (
-                                        <Option value={color_id} key={color_id}>
-                                            <i
-                                                className="fa-solid fa-ice-cream"
-                                                style={{
-                                                    color: color_code,
-                                                    marginRight: "8px",
-                                                }}
-                                            ></i>
-                                            {name}
-                                        </Option>
-                                    );
-                                })}
+                            <Select placeholder="Chọn danh mục sản phẩm">
+                                {categories.map((category) => (
+                                    <Option
+                                        key={category.category_id}
+                                        value={category.category_id}
+                                    >
+                                        {category.name}
+                                    </Option>
+                                ))}
                             </Select>
                         </Form.Item>
                     </Col>
-                    <Col span={6}>
-                        <Form.Item
-                            name="size_id"
-                            label="Chọn Size"
-                            rules={[
-                                {
-                                    required: true,
-                                    message: "Vui lòng chọn size",
-                                },
-                            ]}
-                        >
-                            <Select
-                                placeholder="Chọn thuộc tính"
-                                mode="multiple"
-                            >
-                                {attributesSizes.map((size, index) => {
-                                    const {
-                                        size_id,
-                                        name,
-                                        created_at,
-                                        updated_at,
-                                    } = size;
-                                    return (
-                                        <Option value={size_id} key={size_id}>
-                                            {name}
-                                        </Option>
-                                    );
-                                })}
+                    <Col span={12}>
+                        <Form.Item name="brand_id" label="Thương hiệu sản phẩm">
+                            <Select placeholder="Chọn thương hiệu sản phẩm">
+                                {brands.map((brand) => (
+                                    <Option
+                                        key={brand.brand_id}
+                                        value={brand.brand_id}
+                                    >
+                                        {brand.name}
+                                    </Option>
+                                ))}
                             </Select>
-                        </Form.Item>
-                    </Col>
-
-                    <Col span={12}>
-                        <Form.Item
-                            name="discount"
-                            label="Mã giảm giá"
-                            rules={[
-                                {
-                                    required: true,
-                                    message:
-                                        "Vui lòng nhập mã giảm giá sản phẩm",
-                                },
-                                {
-                                    max: 50,
-                                    message:
-                                        "Mã giảm giá sản phẩm không được vượt quá 50 ký tự",
-                                },
-                            ]}
-                        >
-                            <Input placeholder="Mã giảm giá sản phẩm" />
-                        </Form.Item>
-                    </Col>
-                    
-
-                    <Col span={12}>
-                        <Form.Item name="main_image_url" label="ảnh">
-                            <Input placeholder="ảnh" />
                         </Form.Item>
                     </Col>
                 </Row>
