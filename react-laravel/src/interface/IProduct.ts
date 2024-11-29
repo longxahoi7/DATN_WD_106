@@ -86,3 +86,20 @@ export interface Attribute_Products {
     created_at: string;
     updated_at: string;
 }
+
+export interface Coupon {
+    coupon_id: number;
+    code: string;
+    discount_amount: number | null;
+    discount_percentage: number | null;
+    quantity: number;
+    min_order_value: number | null;
+    max_order_value: number | null;
+    condition: string;
+    is_public: boolean;
+    start_date: Date;
+    end_date: Date;
+    is_active: boolean;
+    created_at: Date;
+    updated_at: Date;
+}

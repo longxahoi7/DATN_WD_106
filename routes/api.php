@@ -90,12 +90,12 @@ Route::group(
                 'as' => 'products.'
             ],
             function () {
-                
+
                 Route::get('/list-product', [ProductController::class, 'listProduct']);
                 Route::get('/get-data', [ProductController::class, 'getData']);
                 Route::post('/add-product', [ProductController::class, 'addProduct']);
                 Route::get('/get-data-atrpro', [ProductController::class, 'getDataAtrPro']);
-                Route::put('/update-atrPro', [ProductController::class, 'updateMultiplecolorProducts']);
+                Route::put('/update-atrPro', [ProductController::class, 'updateMultiplecolorProducts']); //chỉnh sửa sản phẩm thuộc tính theo id 
                 Route::get('/get-dataId/{id}', [ProductController::class, 'getDataId']);
                 Route::get('/detail-product/{id}', [ProductController::class, 'detailProduct']);
                 Route::delete('/destroy-product/{id}', [ProductController::class, 'destroyProduct']);

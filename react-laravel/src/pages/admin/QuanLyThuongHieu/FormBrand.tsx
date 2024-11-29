@@ -103,7 +103,7 @@ const FormBrand: React.FC<FormBrandProps> = ({
                     ]}
                 >
                     <Switch
-                        checked={initialValues?.is_active === 1} // Khi initialValues có active là 1, Switch sẽ bật
+                        checked={initialValues?.is_active === 1}
                         onChange={(checked) =>
                             form.setFieldsValue({ is_active: checked ? 1 : 0 })
                         }

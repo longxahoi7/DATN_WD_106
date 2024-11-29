@@ -1,47 +1,167 @@
-import React, { useState, useEffect } from "react";
-import { Space, Table, Button, Modal, message, Tooltip } from "antd";
-import { EditOutlined, DeleteOutlined, PlusOutlined } from "@ant-design/icons";
+import React, { useEffect, useState } from "react";
+import { Space, Table, Button, Modal, message, Image } from "antd";
+import {
+    EditOutlined,
+    DeleteOutlined,
+    PlusOutlined,
+    EyeOutlined,
+} from "@ant-design/icons";
 import "../../../style/quanLy.css";
-import api from "../../../config/axios";
 import FormSanPham from "./FormSanPham";
-import { IProduct } from "../../../interface/IProduct";
+import DetailSanPham from "./DetailSanPham";
+import { Brands, Category, IProduct } from "../../../interface/IProduct";
+import api from "../../../config/axios";
 
 const QuanLySanPham = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [modalLoading, setModalLoading] = useState(false); // Loading riêng cho modal
+    const [isDetailOpen, setIsDetailOpen] = useState(false);
     const [loading, setLoading] = useState(true);
-    const [products, setProducts] = useState<IProduct[]>([]);
-    const [currentProduct, setCurrentProduct] = useState<IProduct | null>(null);
-    const [pagination, setPagination] = useState({
-        current: 1,
-        pageSize: 10,
-        total: 0,
-    });
+    const [formLoading, setFormLoading] = useState(false);
 
-    const fetchProducts = async (page = 1) => {
+    const [currentProduct, setCurrentProduct] = useState<IProduct | null>(null);
+    const [products, setProducts] = useState<IProduct[]>([]);
+    // const [brands, setBrands] = useState<Brands[]>([]);
+    // const [categories, setCategories] = useState<Category[]>([]);
+
+    // const [attributeColors, setAttributeColors] = useState<[]>([]);
+    // const [attributesSizes, setAttributeSizes] = useState<[]>([]);
+
+    // const [attributeColors, setAttributeColors] = useState<Attributes[]>([]);
+    // const [attributesSizes, setAttributeSizes] = useState<Attributes[]>([]);
+
+    const fetchProducts = async () => {
         setLoading(true);
         try {
-            const response = await api.get(
-                `admin/products/list-product?page=${page}`
-            );
-            const { data, total, per_page, current_page } = response.data;
-            setProducts(data || []);
-            setPagination({
-                current: current_page,
-                pageSize: per_page,
-                total: total,
-            });
+            const response = await api.get("admin/products/list-product");
+            console.log(response, "response");
+
+            const parseProducts = Array.isArray(response.data.data)
+                ? response.data.data
+                : [];
+            setProducts(parseProducts);
         } catch (error) {
-            console.error("Lỗi khi lấy danh sách sản phẩm:", error);
-            message.error("Không thể tải danh sách sản phẩm.");
+            console.error("Lỗi khi lấy sản phẩm:", error);
+            message.error("Không thể tải sản phẩm.");
         } finally {
             setLoading(false);
         }
     };
 
     useEffect(() => {
-        fetchProducts(pagination.current);
-    }, [pagination.current]);
+        fetchProducts();
+    }, []);
+
+    const columns = (handleEdit, handleDelete, handleDetail) => [
+        // {
+        //     title: "STT",
+        //     key: "index",
+        //     render: (text, record, index) => (
+        //         <span style={{ display: "flex", justifyContent: "center" }}>
+        //             {index + 1}
+        //         </span>
+        //     ),
+        //     align: "center" as const,
+        // },
+        {
+            title: "Mã sản phẩm",
+            dataIndex: "product_id",
+            key: "product_id",
+            render: (product_id) => (
+                <span style={{ display: "flex", justifyContent: "center" }}>
+                    {product_id}
+                </span>
+            ),
+            align: "center" as const,
+        },
+        {
+            title: "Tên Sản Phẩm",
+            dataIndex: "name",
+            key: "name",
+            render: (name) => <a style={{ color: "green" }}>{name}</a>,
+            align: "center" as const,
+        },
+        {
+            title: "Hình ảnh",
+            dataIndex: "main_image_url",
+            key: "main_image_url",
+            render: (imageURL) => (
+                <div
+                    style={{
+                        display: "flex",
+                        justifyContent: "center",
+                    }}
+                >
+                    <Image
+                        src={imageURL}
+                        alt="Product"
+                        width={50}
+                        preview={false}
+                    />
+                </div>
+            ),
+            align: "center" as const,
+        },
+        {
+            title: "Mô tả",
+            dataIndex: "description",
+            key: "description",
+            render: (description) => <a>{description}</a>,
+            align: "center" as const,
+            width: "30%",
+        },
+        {
+            title: "Danh mục",
+            dataIndex: "category",
+            key: "category",
+            render: (category) => <span>{category.name}</span>,
+            align: "center" as const,
+        },
+        {
+            title: "Thương hiệu",
+            dataIndex: "brand",
+            key: "brand",
+            render: (brand) => <span>{brand.name}</span>,
+            align: "center" as const,
+        },
+        // {
+        //     title: "Giá",
+        //     dataIndex: "price",
+        //     key: "price",
+        //     render: (price) => (
+        //         <span>
+        //             {price ? `${price.toLocaleString()} VND` : "chưa có giá"}
+        //         </span>
+        //     ),
+        //     align: "center" as const,
+        // },
+        // {
+        //     title: "Danh mục",
+        //     dataIndex: "category",
+        //     key: "category",
+        //     render: (category) => <span>{category.name}</span>,
+        //     align: "center" as const,
+        // },
+        {
+            key: "action",
+            render: (text, record: IProduct) => (
+                <Space size="middle">
+                    <EyeOutlined
+                        style={{ color: "green" }}
+                        onClick={() => handleDetail(record)}
+                    />
+                    <EditOutlined
+                        style={{ color: "orange" }}
+                        onClick={() => handleEdit(record)}
+                    />
+                    <DeleteOutlined
+                        style={{ color: "red" }}
+                        onClick={() => handleDelete(record.product_id)}
+                    />
+                </Space>
+            ),
+            align: "center" as const,
+        },
+    ];
 
     const handleAddProduct = () => {
         setCurrentProduct(null);
@@ -61,16 +181,11 @@ const QuanLySanPham = () => {
                     await api.delete(
                         `admin/products/destroy-product/${product_id}`
                     );
-                    setProducts((prev) =>
-                        prev.filter(
+                    setProducts(
+                        products.filter(
                             (product) => product.product_id !== product_id
                         )
                     );
-                    setPagination((prev) => ({
-                        ...prev,
-                        total: prev.total - 1,
-                    }));
-                    await fetchProducts(pagination.current);
                     message.success("Xóa sản phẩm thành công");
                 } catch (error) {
                     console.error("Xóa sản phẩm thất bại:", error);
@@ -80,48 +195,50 @@ const QuanLySanPham = () => {
         });
     };
 
+    const handleDetail = (record: IProduct) => {
+        setCurrentProduct(record);
+        setIsDetailOpen(true);
+    };
+
+    const handleDetailClose = () => {
+        setIsDetailOpen(false);
+    };
+
     const handleOk = async (values: IProduct) => {
-        setModalLoading(true);
+        setFormLoading(true);
         try {
             if (currentProduct) {
-                const response = await api.put(
-                    `admin/products/update-product/${currentProduct.product_id}`,
+                await api.put(
+                    `admin/products/update-product/${currentProduct.product_id}`, // Sử dụng PUT cho update
                     values
                 );
-                const updatedProduct = response.data;
-
-                setProducts((prevProducts) =>
-                    prevProducts.map((product) =>
-                        product.product_id === updatedProduct.product_id
-                            ? { ...product, ...updatedProduct }
+                setProducts(
+                    products.map((product) =>
+                        product.product_id === currentProduct.product_id
+                            ? { ...product, ...values }
                             : product
                     )
                 );
-                await fetchProducts(pagination.current);
                 message.success("Cập nhật sản phẩm thành công");
             } else {
                 const response = await api.post(
                     "admin/products/add-product",
                     values
                 );
-                await fetchProducts(pagination.current);
+                setProducts([...products, response.data]);
                 message.success("Thêm sản phẩm thành công");
             }
             setIsModalOpen(false);
         } catch (error) {
-            // console.error("Lỗi khi thêm/sửa sản phẩm:", error);
-            // message.error("Không thể thêm hoặc sửa sản phẩm.");
+            console.error("Lỗi khi thêm/sửa sản phẩm:", error);
+            message.error("Không thể thêm hoặc sửa sản phẩm.");
         } finally {
-            setModalLoading(false);
+            setFormLoading(false);
         }
     };
 
-    const handleCancel = () => {
-        setIsModalOpen(false);
-    };
-
     return (
-        <div className="quan-ly-container">
+        <div className="quan-ly-san-pham-container">
             <div className="header">
                 <p className="title-css">Quản lý sản phẩm</p>
             </div>
@@ -134,107 +251,25 @@ const QuanLySanPham = () => {
                 >
                     Thêm mới
                 </Button>
-
                 <Table
-                    rowKey={(record) =>
-                        record.product_id || `temp-${Date.now()}`
-                    }
-                    columns={[
-                        {
-                            title: "STT",
-                            key: "index",
-                            render: (text, record, index) => (
-                                <span
-                                    style={{
-                                        display: "flex",
-                                        justifyContent: "center",
-                                    }}
-                                >
-                                    {index + 1}
-                                </span>
-                            ),
-                            align: "center" as "center",
-                            width: "5%",
-                        },
-                        {
-                            title: "Tên sản phẩm",
-                            dataIndex: "name",
-                            key: "name",
-                            render: (text) => (
-                                <a style={{ color: "green" }}>{text}</a>
-                            ),
-                            align: "center" as "center",
-                        },
-                        {
-                            title: "Mô tả",
-                            dataIndex: "description",
-                            key: "description",
-                            render: (text) => <span>{text}</span>,
-                            align: "center" as "center",
-                        },
-                        {
-                            title: "Mã sản phẩm",
-                            dataIndex: "sku",
-                            key: "sku",
-                            render: (text) => <span>{text}</span>,
-                            align: "center" as "center",
-                        },
-                        {
-                            title: "Trạng thái",
-                            dataIndex: "is_active",
-                            key: "is_active",
-                            render: (text) => (
-                                <span>
-                                    {text ? "Hoạt động" : "Không hoạt động"}
-                                </span>
-                            ),
-                            align: "center" as "center",
-                        },
-                        {
-                            key: "action",
-                            render: (text, record) => (
-                                <Space size="middle">
-                                    <Tooltip placement="top" title="Chỉnh sửa">
-                                        <EditOutlined
-                                            style={{ color: "orange" }}
-                                            onClick={() => handleEdit(record)}
-                                        />
-                                    </Tooltip>
-                                    <Tooltip placement="top" title="Xóa">
-                                        <DeleteOutlined
-                                            style={{ color: "red" }}
-                                            onClick={() =>
-                                                handleDelete(record.product_id)
-                                            }
-                                        />
-                                    </Tooltip>
-                                </Space>
-                            ),
-                            align: "center" as "center",
-                        },
-                    ]}
+                    columns={columns(handleEdit, handleDelete, handleDetail)}
                     dataSource={products}
+                    pagination={{ pageSize: 5 }}
                     loading={loading}
-                    pagination={{
-                        current: pagination.current,
-                        pageSize: pagination.pageSize,
-                        total: pagination.total,
-                        onChange: (page) =>
-                            setPagination((prev) => ({
-                                ...prev,
-                                current: page,
-                            })),
-                    }}
+                    rowKey={(record) => record.product_id}
+                />
+                <FormSanPham
+                    open={isModalOpen}
+                    onOk={handleOk}
+                    onCancel={() => setIsModalOpen(false)}
+                    initialValues={currentProduct}
+                />
+                <DetailSanPham
+                    open={isDetailOpen}
+                    onClose={handleDetailClose}
+                    product={currentProduct}
                 />
             </div>
-
-            <FormSanPham
-                open={isModalOpen}
-                onCancel={handleCancel}
-                onOk={handleOk}
-                initialValues={currentProduct}
-                loading={modalLoading}
-            />
         </div>
     );
 };

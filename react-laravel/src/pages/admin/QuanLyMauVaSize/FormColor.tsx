@@ -2,21 +2,7 @@ import React, { useEffect } from "react";
 import { Modal, Form, Input, Button } from "antd";
 import { Color } from "../../../interface/IProduct";
 
-interface FormColorProps {
-    open: boolean;
-    onCancel: () => void;
-    onOk: (values: Color) => void;
-    initialValues: Color | null;
-    loading: boolean;
-}
-
-const FormColor: React.FC<FormColorProps> = ({
-    open,
-    onCancel,
-    onOk,
-    initialValues,
-    loading,
-}) => {
+const FormColor = ({ open, onCancel, onOk, initialValues, loading }) => {
     const [form] = Form.useForm(); // Khởi tạo form
 
     useEffect(() => {
@@ -29,7 +15,10 @@ const FormColor: React.FC<FormColorProps> = ({
     }, [initialValues, form]);
 
     const handleFinish = (values: Color) => {
-        onOk(values); // Gửi dữ liệu khi form submit
+        form.validateFields().then((values) => {
+            onOk(values);
+            form.resetFields();
+        });
     };
 
     return (

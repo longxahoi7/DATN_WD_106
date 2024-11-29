@@ -34,6 +34,7 @@ import QuanLyMauVaSize from "./pages/admin/QuanLyMauVaSize/QuanLyColor";
 import QuanLyColor from "./pages/admin/QuanLyMauVaSize/QuanLyColor";
 import QuanLySize from "./pages/admin/QuanLyMauVaSize/QuanLySize";
 import QuanLyBrand from "./pages/admin/QuanLyThuongHieu/QuanLyBrand";
+import QuanLyCoupon from "./pages/admin/QuanLyMaGiamGia/QuanLyCoupon";
 // import ChiTietGioHang from "./pages/user/ChiTietGioHang/ChiTietGioHang";
 
 const App: React.FC = () => {
@@ -61,6 +62,7 @@ const App: React.FC = () => {
                     <Route path="colormanagement" element={<QuanLyColor />} />
                     <Route path="sizemanagement" element={<QuanLySize />} />
                     <Route path="brandmanagement" element={<QuanLyBrand />} />
+                    <Route path="couponmanagement" element={<QuanLyCoupon />} />
                 </Route>
 
                 {/* Routes cho trang người dùng */}

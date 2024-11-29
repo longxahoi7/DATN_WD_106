@@ -2,21 +2,7 @@ import React, { useEffect } from "react";
 import { Modal, Form, Input, Button } from "antd";
 import { Size } from "../../../interface/IProduct";
 
-interface FormSizeProps {
-    open: boolean;
-    onCancel: () => void;
-    onOk: (values: Size) => void;
-    initialValues: Size | null;
-    loading: boolean;
-}
-
-const FormSize: React.FC<FormSizeProps> = ({
-    open,
-    onCancel,
-    onOk,
-    initialValues,
-    loading,
-}) => {
+const FormSize = ({ open, onCancel, onOk, initialValues, loading }) => {
     const [form] = Form.useForm(); // Khởi tạo form
 
     useEffect(() => {
@@ -29,7 +15,10 @@ const FormSize: React.FC<FormSizeProps> = ({
     }, [initialValues, form]);
 
     const handleFinish = (values: Size) => {
-        onOk(values); // Gửi dữ liệu khi form submit
+        form.validateFields().then((values) => {
+            onOk(values);
+            form.resetFields();
+        });
     };
 
     return (

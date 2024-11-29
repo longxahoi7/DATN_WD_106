@@ -85,7 +85,7 @@ const QuanLyBrand = () => {
         try {
             const updatedValues = {
                 ...values,
-                is_active: values.is_active ? 1 : 0, // Chuyển true -> 1, false -> 0
+                is_active: values.is_active ? 1 : 0,
             };
 
             if (currentBrand) {
@@ -199,7 +199,11 @@ const QuanLyBrand = () => {
                                 dataIndex: "is_active",
                                 key: "is_active",
                                 render: (text) => (
-                                    <span>
+                                    <span
+                                        style={{
+                                            color: text ? "green" : "red",
+                                        }}
+                                    >
                                         {text === 1
                                             ? "Hoạt động"
                                             : "Không hoạt động"}

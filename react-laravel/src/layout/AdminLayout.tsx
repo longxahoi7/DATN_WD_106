@@ -65,7 +65,7 @@ const AdminLayout: React.FC = () => {
         {
             key: "8",
             icon: <TagsOutlined />,
-            label: "Mã giảm giá",
+            label: <Link to="couponmanagement">Mã giảm giá</Link>,
         },
         {
             key: "9",

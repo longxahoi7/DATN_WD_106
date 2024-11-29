@@ -97,10 +97,7 @@ const QuanLyColor = () => {
                 await fetchColors(pagination.current);
                 message.success("Cập nhật màu thành công");
             } else {
-                const response = await api.post(
-                    "admin/colors/add-color",
-                    values
-                );
+                await api.post("admin/colors/add-color", values);
                 await fetchColors(pagination.current);
                 message.success("Thêm màu thành công");
             }
@@ -172,7 +169,9 @@ const QuanLyColor = () => {
                                         height: "20px",
                                         backgroundColor: text,
                                     }}
-                                ></span>
+                                >
+                                    {text}
+                                </span>
                             ),
                             align: "center" as "center",
                         },
