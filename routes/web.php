@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\OrderController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('login', function () {
@@ -12,6 +13,13 @@ Route::get('register', function () {
 
 // Route cho người dùng
 // Route::prefix('/')->group(function () {
+
+    //Route Order Người dùng
+    Route::get('orders', [OrderController::class, 'index'])->name('user.orders.index');
+    Route::get('orders/{id}', [OrderController::class, 'show'])->name('user.orders.show');
+    //
+
+
     Route::get('/', function () {
     return redirect()->route('home');
     });
