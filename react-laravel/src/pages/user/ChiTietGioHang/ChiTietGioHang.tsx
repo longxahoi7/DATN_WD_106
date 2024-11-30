@@ -1,34 +1,55 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import '../../../style/chiTietGioHang.css';
 
-type Product = {
+interface CartItem {
   id: number;
   name: string;
   price: number;
   quantity: number;
-  img: string;
-};
+  image: string;
+}
 
 const ChiTietGioHang = () => {
-  const [products, setProducts] = useState<Product[]>([
-    { id: 1, name: 'Diamond Exclusive Ornament', price: 295.0, quantity: 1, img: 'assets/img/product/product-1.jpg' },
-    { id: 2, name: 'Perfect Diamond Jewelry', price: 275.0, quantity: 2, img: 'assets/img/product/product-2.jpg' },
-    { id: 3, name: 'Handmade Golden Necklace', price: 295.0, quantity: 1, img: 'assets/img/product/product-3.jpg' },
-    { id: 4, name: 'Diamond Exclusive Ornament', price: 110.0, quantity: 3, img: 'assets/img/product/product-4.jpg' },
-  ]);
+  const [items, setItems] = useState<CartItem[]>([]);
+  const token = localStorage.getItem('token'); // Lấy token từ localStorage
+
+  useEffect(() => {
+    const fetchCartItems = async () => {
+      try {
+        const response = await fetch("http://localhost:8000/api/users/cart/list-cart", {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error("Không thể lấy dữ liệu giỏ hàng");
+        }
+
+        const data = await response.json();
+        setItems(data.cart || []); // Gán dữ liệu vào state (giả định `data.cart` là danh sách sản phẩm)
+      } catch (error) {
+        console.error("Lỗi khi lấy dữ liệu giỏ hàng:", error);
+      }
+    };
+
+    fetchCartItems();
+  }, [token]);
 
   const updateQuantity = (id: number, increment: boolean) => {
-    setProducts((prevProducts) =>
-      prevProducts.map((product) =>
-        product.id === id
-          ? { ...product, quantity: increment ? product.quantity + 1 : Math.max(1, product.quantity - 1) }
-          : product
+    setItems((prevItems) =>
+      prevItems.map((item) =>
+        item.id === id
+          ? { ...item, quantity: increment ? item.quantity + 1 : Math.max(1, item.quantity - 1) }
+          : item
       )
     );
   };
 
-  const removeProduct = (id: number) => {
-    setProducts((prevProducts) => prevProducts.filter((product) => product.id !== id));
+  const removeItem = (id: number) => {
+    setItems((prevItems) => prevItems.filter((item) => item.id !== id));
   };
 
   return (
@@ -43,7 +64,9 @@ const ChiTietGioHang = () => {
                   <table className="table table-bordered">
                     <thead>
                       <tr>
-                        <th><input type="checkbox" /></th>
+                        <th>
+                          <input type="checkbox" />
+                        </th>
                         <th className="pro-thumbnail">Hình ảnh sản phẩm</th>
                         <th className="pro-title">Sản Phẩm</th>
                         <th className="pro-price">Giá</th>
@@ -53,24 +76,34 @@ const ChiTietGioHang = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      {products.map((product) => (
-                        <tr key={product.id}>
-                          <td><input type="checkbox" /></td>
-                          <td className="pro-thumbnail">
-                            <a href="#"><img className="img-fluid" src={product.img} alt="Product" /></a>
+                      {items.map((item) => (
+                        <tr key={item.id}>
+                          <td>
+                            <input type="checkbox" />
                           </td>
-                          <td className="pro-title"><a href="#">{product.name}</a></td>
-                          <td className="pro-price"><span>${product.price.toFixed(2)}</span></td>
+                          <td className="pro-thumbnail">
+                            <a href="#">
+                              <img className="img-fluid" src={item.image} alt="Product" />
+                            </a>
+                          </td>
+                          <td className="pro-title">
+                            <a href="#">{item.name}</a>
+                          </td>
+                          <td className="pro-price">
+                            <span>${item.price.toFixed(2)}</span>
+                          </td>
                           <td className="pro-quantity">
                             <div className="quantity-control">
-                              <button onClick={() => updateQuantity(product.id, false)}>-</button>
-                              <input type="text" value={product.quantity} readOnly />
-                              <button onClick={() => updateQuantity(product.id, true)}>+</button>
+                              <button onClick={() => updateQuantity(item.id, false)}>-</button>
+                              <input type="text" value={item.quantity} readOnly />
+                              <button onClick={() => updateQuantity(item.id, true)}>+</button>
                             </div>
                           </td>
-                          <td className="pro-subtotal"><span>${(product.price * product.quantity).toFixed(2)}</span></td>
+                          <td className="pro-subtotal">
+                            <span>${(item.price * item.quantity).toFixed(2)}</span>
+                          </td>
                           <td className="pro-remove">
-                            <button onClick={() => removeProduct(product.id)}>
+                            <button onClick={() => removeItem(item.id)}>
                               <i className="fa fa-trash-o"></i>
                             </button>
                           </td>
@@ -88,7 +121,9 @@ const ChiTietGioHang = () => {
                     </form>
                   </div>
                   <div className="cart-update">
-                    <a href="#" className="btn btn-sqr">Cập nhật giỏ hàng</a>
+                    <a href="#" className="btn btn-sqr">
+                      Cập nhật giỏ hàng
+                    </a>
                   </div>
                 </div>
               </div>
@@ -104,7 +139,12 @@ const ChiTietGioHang = () => {
                         <tbody>
                           <tr>
                             <td>Tổng giá sản phẩm</td>
-                            <td>$230</td>
+                            <td>
+                              $
+                              {items
+                                .reduce((total, item) => total + item.price * item.quantity, 0)
+                                .toFixed(2)}
+                            </td>
                           </tr>
                           <tr>
                             <td>Phí vận chuyển</td>
@@ -112,13 +152,23 @@ const ChiTietGioHang = () => {
                           </tr>
                           <tr className="total">
                             <td>Tổng chi phí</td>
-                            <td className="total-amount">$300</td>
+                            <td className="total-amount">
+                              $
+                              {(
+                                items.reduce(
+                                  (total, item) => total + item.price * item.quantity,
+                                  0
+                                ) + 70
+                              ).toFixed(2)}
+                            </td>
                           </tr>
                         </tbody>
                       </table>
                     </div>
                   </div>
-                  <a href="checkout.html" className="btn btn-sqr d-block">Thanh toán</a>
+                  <a href="checkout.html" className="btn btn-sqr d-block">
+                    Thanh toán
+                  </a>
                 </div>
               </div>
             </div>

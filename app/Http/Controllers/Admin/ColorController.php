@@ -8,6 +8,14 @@ use App\Models\Color;
 class ColorController extends Controller
 {
     //
+    public function home()
+    {
+        return view('admin.index');
+    }
+    public function index()
+    {
+        return view('admin.pages.color_management');
+    }
     public function listColor(Request $request)
     {
         $color = Color::where('name','like','%'. $request->nhap.'%')

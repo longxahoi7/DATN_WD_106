@@ -1,0 +1,30 @@
+body {
+    margin: 20px;
+}
+
+.table th,
+.table td {
+    text-align: center;
+}
+
+.add-button {
+    margin-bottom: 20px;
+    float: right;
+    background-color: #28a745;
+    color: white;
+}
+
+.action-icons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.modal-header .close {
+    margin: 0;
+}
+
+.modal-body input,
+.modal-body textarea {
+    margin-bottom: 10px;
+}

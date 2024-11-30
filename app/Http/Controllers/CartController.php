@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 class CartController extends Controller
 {
     // API để thêm sản phẩm vào giỏ hàng
+<<<<<<< HEAD
     public function addToCart(Request $request)
 {
     // Lấy thông tin sản phẩm
@@ -56,13 +57,36 @@ class CartController extends Controller
         'total' => $total
     ]);
 }
+=======
+    public function addToCart(Request $request, $productId)
+    {
+        $userId = auth()->id(); // Lấy ID của người dùng đang đăng nhập
+
+        if (!$userId) {
+            return response()->json(['message' => 'User not authenticated'], 401);
+        }
+
+        // Thêm sản phẩm vào giỏ hàng với user_id đã xác định
+        $cart = ShoppingCart::create([
+            'user_id' => $userId,
+            'product_id' => $productId,
+            'quantity' => $request->input('quantity', 1),
+        ]);
+
+        return response()->json([
+            'message' => 'Product added to cart successfully',
+            'cart' => $cart
+        ], 201);
+    }
+
+>>>>>>> 936956c57b86704585de9f0dd8c9e20c8eeda0e7
 
     // API để xem giỏ hàng
     public function viewCart()
     {
         // Lấy ID người dùng đã đăng nhập
-        $userId = Auth::id();
-    
+        //$userId = Auth::id();
+
         // Kiểm tra nếu người dùng chưa đăng nhập
         // if (!$userId) {
         //     return response()->json([
@@ -70,12 +94,12 @@ class CartController extends Controller
         //         'message' => 'User is not authenticated.'
         //     ], 401);
         // }
-    
+
         // Lấy giỏ hàng của người dùng đã đăng nhập
-        $shoppingCart = ShoppingCart::where('user_id', $userId)
+        $shoppingCart = ShoppingCart::where('user_id', 1)
             ->with('cartItems.product') // Eager load các sản phẩm trong giỏ hàng
             ->get(); // Lấy giỏ hàng đầu tiên (mỗi người dùng chỉ có một giỏ hàng)
-    
+
         // Nếu không tìm thấy giỏ hàng
         if (!$shoppingCart) {
             return response()->json([
@@ -83,7 +107,7 @@ class CartController extends Controller
                 'message' => 'No cart found for the logged-in user.'
             ], 404);
         }
-    
+
         // Trả về dữ liệu giỏ hàng cùng với các sản phẩm
         return response()->json([
             'success' => true,
