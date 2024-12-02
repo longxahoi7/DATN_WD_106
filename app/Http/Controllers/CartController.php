@@ -78,7 +78,7 @@ class CartController extends Controller
     if (!$shoppingCart) {
         return view('user.cart', [
             'cartItems' => [],
-            'totalAmount' => 0
+            'total' => 0
         ]);
     }
 
@@ -90,7 +90,7 @@ class CartController extends Controller
     // Trả dữ liệu về view
     return view('user.cart', [
         'cartItems' => $shoppingCart->cartItems,
-        'totalAmount' => $totalAmount
+        'total' => $totalAmount
     ]);
 }
 }
