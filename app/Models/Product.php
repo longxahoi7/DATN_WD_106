@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Models;
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -24,7 +25,7 @@ class Product extends Model
         'description',
         'subtitle',
         'slug',
-        'is_active'
+        'is_active',
     ];
     public function colors()
     {
@@ -52,8 +53,6 @@ class Product extends Model
     {
         return $this->belongsToMany(Coupon::class, 'coupon_product', 'product_id', 'coupon_id');
     }
-    public function comments()
-    {
-        return $this->morphMany(Comment::class, 'commentable');
-    }
+
 }
+

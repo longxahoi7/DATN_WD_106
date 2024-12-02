@@ -113,6 +113,7 @@ const Register: React.FC = () => {
                 } else if (message === "Account already exists") {
                     errorMessage = "Tài khoản này đã tồn tại.";
                 }
+                console.error("Error details:", error);
 
                 Swal.fire({
                     icon: "error",
@@ -292,7 +293,7 @@ const Register: React.FC = () => {
                                 }}
                                 disabled={!isFormValid()}
                             >
-                                {loading ? "Đang đăng ký..." : "Đăng ký"}
+                                {"Đăng ký"}
                             </button>
                         </form>
                     </div>

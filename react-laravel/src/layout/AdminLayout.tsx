@@ -5,6 +5,8 @@ import {
     DashboardOutlined,
     AppstoreAddOutlined,
     TagsOutlined,
+    ShoppingCartOutlined,
+    UserOutlined,
 } from "@ant-design/icons";
 import { Button, Layout, Menu, theme } from "antd";
 import { Outlet, Link, useLocation } from "react-router-dom";
@@ -35,30 +37,40 @@ const AdminLayout: React.FC = () => {
             children: [
                 {
                     key: "2",
-                    label: (
-                        <Link to="categorymanagement">Quản lý danh mục</Link>
-                    ),
+                    label: <Link to="categorymanagement">Danh mục</Link>,
                 },
                 {
                     key: "3",
-                    label: <Link to="productmanagement">Quản lý sản phẩm</Link>,
+                    label: <Link to="productmanagement">Sản phẩm</Link>,
                 },
                 {
                     key: "4",
-                    label: (
-                        <Link to="attributemanagement">Quản lý thuộc tính</Link>
-                    ),
+                    label: <Link to="colormanagement">Màu</Link>,
                 },
                 {
                     key: "5",
-                    label: <Link to="/">Quản lý đơn hàng</Link>,
+                    label: <Link to="sizemanagement">Size</Link>,
+                },
+                {
+                    key: "6",
+                    label: <Link to="brandmanagement">Thương hiệu</Link>,
                 },
             ],
         },
         {
-            key: "6",
+            key: "7",
+            icon: <ShoppingCartOutlined />,
+            label: "Quản lý đơn hàng",
+        },
+        {
+            key: "8",
             icon: <TagsOutlined />,
-            label: "Thương hiệu",
+            label: <Link to="couponmanagement">Mã giảm giá</Link>,
+        },
+        {
+            key: "9",
+            icon: <UserOutlined />,
+            label: "Tài khoản",
         },
     ];
 

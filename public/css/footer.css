@@ -1,0 +1,67 @@
+.custom-footer {
+    background-color: #f8f9fa; /* Màu nền nhạt */
+    color: #333; /* Màu chữ mặc định */
+    padding: 20px 0;
+    font-family: Arial, sans-serif;
+}
+
+.custom-footer .header-title {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.custom-footer .custom-logo img {
+    max-width: 50px;
+    margin: 0 auto;
+}
+
+.custom-footer .custom-description p {
+    font-size: 14px;
+    color: #666;
+}
+
+.custom-footer .row .col h5 {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.custom-footer .row .col ul {
+    list-style: none;
+    padding: 0;
+}
+
+.custom-footer .row .col ul li {
+    margin-bottom: 5px;
+}
+
+.custom-footer .row .col ul li a {
+    text-decoration: none;
+    color: #007bff;
+    font-size: 14px;
+}
+
+.custom-footer .row .col ul li a:hover {
+    text-decoration: underline;
+}
+
+.custom-footer .social-icons {
+    display: flex;
+    gap: 10px;
+}
+
+.custom-footer .social-icons li img {
+    width: 30px;
+    height: 30px;
+}
+
+.custom-footer .footer-header {
+    text-align: center;
+    font-size: 14px;
+    margin-top: 20px;
+}
+
+.custom-footer .footer-header h6 {
+    font-size: 18px;
+    font-weight: bold;
+}
