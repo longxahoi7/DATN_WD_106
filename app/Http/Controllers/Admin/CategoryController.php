@@ -25,17 +25,17 @@ class CategoryController extends Controller
 
     public function addCategory(Request $request)
     {
-        $anh = null;
-        if ($request->hasFile('image')) {
-            $image = $request->file('image');
-            $newImage = time() . "." . $image->getClientOriginalExtension();
-            $anh = $image->storeAs('images', $newImage, 'public');
-        }
+        // $anh = null;
+        // if ($request->hasFile('image')) {
+        //     $image = $request->file('image');
+        //     $newImage = time() . "." . $image->getClientOriginalExtension();
+        //     $anh = $image->storeAs('images', $newImage, 'public');
+        // }
 
         $category = Category::create([
             'name' => $request->input('name'),
             'description' => $request->input('description'),
-            'image' => $anh,
+            // 'image' => $anh,
             'parent_id' => $request->input('parent_id'),
             'slug' => str::slug($request->input('name')),
             'is_active' => $request->has('is_active') ? 1 : 0,

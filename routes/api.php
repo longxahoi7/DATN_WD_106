@@ -51,6 +51,7 @@ Route::middleware('auth:sanctum')->group(function () {
                     Route::post('/add-brand', [BrandController::class, 'addBrand']);
                     Route::get('/detail-brand/{id}', [BrandController::class, 'detailBrand']);
                     Route::delete('/destroy-brand/{id}', [BrandController::class, 'destroyBrand']);
+                    // update chuwa pass
                     Route::put('/update-brand/{id}', [BrandController::class, 'updateBrand']);
                 }
             );
