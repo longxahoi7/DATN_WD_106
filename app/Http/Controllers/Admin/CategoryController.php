@@ -10,7 +10,16 @@ use Illuminate\Http\Request;
 use App\Models\Category;
 class CategoryController extends Controller
 {
+
     //
+    public function home()
+    {
+        return view('admin.index');
+    }
+    public function index()
+    {
+        return view('admin.pages.category_management');
+    }
     public function listCategory(Request $request)
     {
         $categories = Category::where('name', 'like', '%' . $request->nhap . '%')
