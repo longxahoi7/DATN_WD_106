@@ -21,13 +21,15 @@
                 <div class="custom-form">
                     <h5>Chào mừng bạn đến với GENTLEMANOR</h5>
                     <p class="text-muted mb-4">Vui lòng nhập đầy đủ thông tin để sử dụng.</p>
-                    <form class="custom-form-auth" onsubmit="return handleRegister(event)">
-                        <div>
-                            <input type="text" class="formControl" id="name" placeholder="Họ và Tên"
+                    <form class="custom-form-auth" onsubmit="return handleRegister(event)"
+                    action="{{ route('register') }}" method="POST">
+                        @csrf    
+                         <div>
+                            <input type="text" class="formControl" name="name" id="name" placeholder="Họ và Tên"
                                 onchange="handleChange(event)" required>
                         </div>
                         <div>
-                            <input type="email" class="formControl" id="email" placeholder="Email"
+                            <input type="email" class="formControl" name="email" id="email" placeholder="Email"
                                 onchange="handleChange(event)" required>
                         </div>
                         <div class="password-input-wrapper">
@@ -41,11 +43,11 @@
                         </div>
                         <div class="row">
                             <div class="col">
-                                <input type="text" class="formControl" id="phone" placeholder="Số điện thoại"
+                                <input type="text" class="formControl" name="phone" id="phone" placeholder="Số điện thoại"
                                     onchange="handleChange(event)" required>
                             </div>
                             <div class="col">
-                                <input type="text" class="formControl" id="address" placeholder="Địa chỉ"
+                                <input type="text" class="formControl" name="address" id="address" placeholder="Địa chỉ"
                                     onchange="handleChange(event)" required>
                             </div>
                         </div>

@@ -3,7 +3,10 @@ use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ColorController;
 use App\Http\Controllers\Admin\SizeController;
+use App\Http\Controllers\User\AuthController;
 use Illuminate\Support\Facades\Route;
+
+
 Route::get('index', [BrandController::class, 'home']);
 Route::get('/brand', [BrandController::class, 'index'])->name('brand.index');
 Route::get('/category', [CategoryController::class, 'index'])->name('category.index');
@@ -12,13 +15,11 @@ Route::get('/size', [SizeController::class, 'index'])->name('size.index');
 Route::get('/1', function () {
     return view('user.chiTietGioHang');
 });
-Route::get('login', function () {
-    return view('auth.login');
-})->name('login');
+Route::get('login', [AuthController::class, 'viewLogin'])->name('viewLogin');
+Route::post('login', [AuthController::class, 'login'])->name('login');
 
-Route::get('register', function () {
-    return view('auth.register');
-})->name('register');
+Route::get('register', [AuthController::class, 'viewRegister'])->name('viewRegister');
+Route::post('register', [AuthController::class, 'register'])->name('register');
 
 // Route cho người dùng
 // Route::prefix('/')->group(function () {
@@ -26,9 +27,7 @@ Route::get('/', function () {
     return redirect()->route('home');
 });
 
-Route::get('home', function () {
-    return view('user.layouts.app');
-})->name('home');
+Route::get('home', [AuthController::class, 'home'])->name('home');
 
 Route::get('products', function () {
     return view('user.product');
@@ -52,7 +51,7 @@ Route::get('about', function () {
 // });
 
 // Route cho admin (cần middleware xác thực admin)
-Route::prefix('admin')->middleware(['auth', 'isAdmin'])->group(function () {
+Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => 'checkAdmin'], function () {
     Route::get('dashboard', function () {
         return view('admin.dashboard');
     })->name('admin.dashboard');
@@ -96,4 +95,5 @@ Route::prefix('admin')->middleware(['auth', 'isAdmin'])->group(function () {
     Route::get('accounts', function () {
         return view('admin.accounts.index');
     })->name('admin.accounts');
+
 });
