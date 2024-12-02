@@ -18,13 +18,13 @@
 </head>
 
 <body>
-    @include('components.header')
+    @include('user.components.header')
 
     <main class="container">
         @yield('content')
     </main>
 
-    @include('components.footer')
+    @include('user.components.footer')
 
     <script src="{{ asset('js/app.js') }}"></script>
 </body>

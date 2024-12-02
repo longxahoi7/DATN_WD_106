@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('user.layouts.app')
 
 @section('content')
 <h1>Your Cart</h1>
@@ -8,12 +8,6 @@
         <th>Quantity</th>
         <th>Price</th>
     </tr>
-    @foreach ($cartItems as $item)
-    <tr>
-        <td>{{ $item->name }}</td>
-        <td>{{ $item->quantity }}</td>
-        <td>{{ $item->price }}</td>
-    </tr>
-    @endforeach
+
 </table>
 @endsection
