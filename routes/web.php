@@ -1,7 +1,11 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+Route::get('index', [BrandController::class, 'home']);
+Route::get('/brand', [BrandController::class, 'index'])->name('brand.index');
+Route::get('/category', [CategoryController::class, 'index'])->name('category.index');
+Route::get('/color', [ColorController::class, 'index'])->name('color.index');
+Route::get('/size', [SizeController::class, 'index'])->name('size.index');
 Route::get('login', function () {
     return view('auth.login');
 })->name('login');
