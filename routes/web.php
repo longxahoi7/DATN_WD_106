@@ -9,6 +9,11 @@ Route::get('/brand', [BrandController::class, 'index'])->name('brand.index');
 Route::get('/category', [CategoryController::class, 'index'])->name('category.index');
 Route::get('/color', [ColorController::class, 'index'])->name('color.index');
 Route::get('/size', [SizeController::class, 'index'])->name('size.index');
+
+
+Route::get('/detail', function () {
+    return view('user.detailProduct');
+});
 Route::get('login', function () {
     return view('auth.login');
 })->name('login');
@@ -24,8 +29,9 @@ Route::get('/', function () {
 });
 
 Route::get('home', function () {
-    return view('layouts.app');
+    return view('user.layouts.app');
 })->name('home');
+
 
 Route::get('products', function () {
     return view('user.product');
