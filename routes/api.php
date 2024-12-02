@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\ColorController;
+use App\Http\Controllers\User\CommentController;
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\CouponController;
@@ -93,7 +94,7 @@ Route::group(
             Route::get('/list-product', [ProductController::class, 'listProduct']);
             Route::get('/get-data', [ProductController::class, 'getData']);
             Route::post('/add-product', [ProductController::class, 'addProduct']);
-            Route::get('/get-data-atrpro', [ProductController::class, 'getDataAtrPro']);
+            Route::get('/get-data-atrpro/{id}', [ProductController::class, 'getDataAtrPro']);
             Route::put('/update-atrPro', [ProductController::class, 'updateMultiplecolorProducts']);
             Route::get('/get-dataId/{id}', [ProductController::class, 'getDataId']);
             Route::get('/detail-product/{id}', [ProductController::class, 'detailProduct']);
@@ -157,6 +158,20 @@ Route::group(
                 Route::get('/invoices/{order_id}', [InvoiceController::class, 'generateInvoice']);
             }
         );
+        //Bỉnh luận
+        Route::group([
+            'prefix' => 'comments',
+            'as' => 'comments.'
+        ],function () {
+              // API thêm bình luận
+    Route::post('/comments', [CommentController::class, 'store']);
+    // API lấy bình luận theo đối tượng (ví dụ: sản phẩm)
+    Route::get('/comments/{commentable_id}', [CommentController::class, 'index']);
+    // API sửa bình luận
+    Route::put('/comments/{comment}', [CommentController::class, 'update']);
+    // API xóa bình luận
+    Route::delete('/comments/{comment}', [CommentController::class, 'destroy']);
+        });
     }
 );
 // });
