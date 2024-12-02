@@ -44,15 +44,6 @@ Route::group(
                 Route::put('/update-category/{id}', [CategoryController::class, 'updateCategory']);
             }
         );
-        // Route::group(
-        //     [
-        //         'prefix' => 'stats',
-        //         'as' => 'stats.'
-        //     ],
-        //     function () {
-        //         Route::get('stats', [StatsController::class, 'index']);
-        //     }
-        // );
         //CRUD BRAND
         Route::group(
             [
