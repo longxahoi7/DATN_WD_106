@@ -8,6 +8,7 @@ use App\Models\ShoppingCart;
 use App\Models\CartItem;
 use Illuminate\Support\Facades\Auth;
 
+
 class CartController extends Controller
 {
     // API để thêm sản phẩm vào giỏ hàng
@@ -59,35 +60,37 @@ class CartController extends Controller
 
     // API để xem giỏ hàng
     public function viewCart()
-    {
-        // Lấy ID người dùng đã đăng nhập
-        $userId = Auth::id();
-    
-        // Kiểm tra nếu người dùng chưa đăng nhập
-        // if (!$userId) {
-        //     return response()->json([
-        //         'success' => false,
-        //         'message' => 'User is not authenticated.'
-        //     ], 401);
-        // }
-    
-        // Lấy giỏ hàng của người dùng đã đăng nhập
-        $shoppingCart = ShoppingCart::where('user_id', $userId)
-            ->with('cartItems.product') // Eager load các sản phẩm trong giỏ hàng
-            ->get(); // Lấy giỏ hàng đầu tiên (mỗi người dùng chỉ có một giỏ hàng)
-    
-        // Nếu không tìm thấy giỏ hàng
-        if (!$shoppingCart) {
-            return response()->json([
-                'success' => false,
-                'message' => 'No cart found for the logged-in user.'
-            ], 404);
-        }
-    
-        // Trả về dữ liệu giỏ hàng cùng với các sản phẩm
-        return response()->json([
-            'success' => true,
-            'cart' => $shoppingCart
-        ], 200);
+{
+    // Lấy ID người dùng đã đăng nhập
+    $userId = Auth::id();
+
+    // Nếu người dùng chưa đăng nhập, chuyển hướng đến trang đăng nhập
+    if (!$userId) {
+        return redirect()->route('login')->with('error', 'Vui lòng đăng nhập để xem giỏ hàng.');
     }
+
+    // Lấy giỏ hàng của người dùng đã đăng nhập
+    $shoppingCart = ShoppingCart::where('user_id', $userId)
+        ->with('cartItems.product') // Eager load sản phẩm trong giỏ hàng
+        ->first(); // Mỗi người dùng chỉ có một giỏ hàng
+
+    // Nếu không tìm thấy giỏ hàng
+    if (!$shoppingCart) {
+        return view('user.cart', [
+            'cartItems' => [],
+            'totalAmount' => 0
+        ]);
+    }
+
+    // Tính tổng tiền
+    $totalAmount = $shoppingCart->cartItems->sum(function ($item) {
+        return $item->qty * $item->product->price;
+    });
+
+    // Trả dữ liệu về view
+    return view('user.cart', [
+        'cartItems' => $shoppingCart->cartItems,
+        'totalAmount' => $totalAmount
+    ]);
+}
 }
