@@ -56,8 +56,4 @@ class Product extends Model
     {
         return $this->belongsToMany(Coupon::class, 'coupon_product', 'product_id', 'coupon_id');
     }
-    public function comments()
-{
-    return $this->hasMany(Comment::class, 'product_id');
-}
 }
