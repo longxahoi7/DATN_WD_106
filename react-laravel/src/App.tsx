@@ -65,7 +65,7 @@ const App: React.FC = () => {
                     <Route path="couponmanagement" element={<QuanLyCoupon />} />
                 </Route>
 
-                {/* Routes cho trang người dùng */}
+                {/* Routes cho trang user */}
                 <Route path="" element={<UserLayout />}>
                     <Route path="" element={<ProductList />} />
                     <Route
