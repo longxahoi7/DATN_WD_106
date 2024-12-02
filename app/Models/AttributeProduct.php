@@ -25,4 +25,7 @@ class AttributeProduct extends Model
     {
         return $this->belongsTo(Size::class);
     }
+    public function images(){
+        return $this->hasMany(ProductImage::class,'attribute_product_id');
+    }
 }

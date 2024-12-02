@@ -14,4 +14,8 @@ protected $primaryKey='product_image_id';
         'color_id',
         'url',
     ];
+    public function attributeProduct()
+    {
+        return $this->belongsTo(AttributeProduct::class, 'attribute_product_id');
+    }
 }
