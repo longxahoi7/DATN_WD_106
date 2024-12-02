@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+        <title>Product Page</title>
+        <style>
+            body {
+                margin: 0;
+                padding: 0;
+                font-family: Arial, sans-serif;
+                background-color: #f8f9fa;
+                width: 100vw;
+                height: 100vh;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+            .container {
+                width: 80%;
+                margin: auto;
+                background: white;
+                padding: 20px;
+                border-radius: 8px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            }
+            .product-image {
+                width: 100%;
+                max-width: 500px;
+            }
+            h1 {
+                color: #333;
+            }
+            .price {
+                font-size: 1.5em;
+                color: #28a745;
+            }
+            .options {
+                margin: 10px 0;
+            }
+            .color-options,
+            .size-options {
+                display: flex;
+                gap: 10px;
+                margin-top: 10px;
+            }
+            .color-option,
+            .size-option {
+                padding: 10px;
+                border: 2px solid #ccc;
+                cursor: pointer;
+                text-align: center;
+            }
+            .color-option:hover,
+            .size-option:hover {
+                border-color: #28a745;
+            }
+            .selected {
+                border-color: #28a745;
+            }
+            .btn {
+                background-color: #28a745;
+                color: white;
+                padding: 10px 20px;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                margin-top: 10px;
+            }
+            .btn:hover {
+                background-color: #218838;
+            }
+            .similar-products {
+                display: flex;
+                gap: 20px;
+                justify-content: space-between;
+                margin-top: 20px;
+            }
+
+            .similar-product {
+                flex: 1 1 calc(33.33% - 20px);
+                text-align: center;
+                position: relative; /* Để định vị lớp phủ */
+                overflow: hidden; /* Đảm bảo lớp phủ không tràn ra ngoài */
+            }
+
+            .product-image {
+                position: relative;
+                width: 100%;
+            }
+
+            .product-image img {
+                width: 100%;
+                height: auto;
+                display: block;
+                transition: transform 0.3s ease; /* Tạo hiệu ứng zoom ảnh khi hover */
+            }
+
+            .product-image:hover img {
+                transform: scale(1.1); /* Zoom ảnh */
+            }
+
+            .product-overlay {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(11, 132, 108, 0.2); /* Nền xanh mờ */
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                opacity: 0; /* Ẩn lớp phủ ban đầu */
+                transition: opacity 0.3s ease;
+            }
+
+            .product-image:hover .product-overlay {
+                opacity: 1; /* Hiện lớp phủ khi hover */
+            }
+
+            .product-name {
+                font-size: 25px;
+                font-weight: bold;
+                margin: 10px 0;
+                color: #f8f9fa;
+            }
+
+            .product-price {
+                font-size: 20px;
+                color: #c31515;
+                margin-bottom: 10px;
+            }
+
+            .add-to-cart {
+                margin-top: 15px;
+                background-color: #13922f;
+                color: white;
+                border: none;
+                padding: 8px 16px;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                gap: 5px;
+                transition: background-color 0.3s ease;
+            }
+
+            .add-to-cart:hover {
+                background-color: #2cac1e;
+            }
+
+            .cart-icon {
+                font-size: 18px;
+            }
+            .review-images img {
+    width: 100px; /* Thay đổi kích thước hình ảnh */
+    height: auto; /* Giữ tỉ lệ hình ảnh */
+    margin: 5px; /* Khoảng cách giữa các ảnh */
+    object-fit: cover; /* Đảm bảo hình ảnh không bị méo */
+}
+            .reviews {
+                margin-top: 20px;
+            }
+            .review {
+                border-bottom: 1px solid #ccc;
+                padding: 10px 0;
+            }
+            .review:last-child {
+                border-bottom: none;
+            }
+            .rating {
+                color: #ffc107;
+            }
+            .review-form {
+                margin-top: 20px;
+            }
+            .review-form textarea {
+                width: 100%;
+                height: 60px;
+                margin-top: 10px;
+            }
+            .stars {
+                display: flex;
+                cursor: pointer;
+            }
+            .star {
+                font-size: 24px;
+                color: #ccc;
+            }
+            .star:hover,
+            .star.selected {
+                color: #ffc107;
+            }
+            .container1 {
+                display: flex;
+                justify-items: center;
+            }
+            .contai {
+                margin-right: 0;
+                margin-left: 50px;
+            }
+            h3 {
+                text-align: center;
+                position: relative;
+                margin-bottom: 10px; /* Khoảng cách dưới thẻ */
+            }
+            h3::after {
+                content: "";
+                display: block;
+
+                height: 3px; /* Độ dày đường gạch */
+                background-color: black; /* Màu đường gạch */
+                margin-top: 5px; /* Khoảng cách giữa chữ và gạch */
+                width: 20%; /* Độ dài đường gạch */
+                margin: 5px auto 0;
+            }
+            /* Tăng kích thước nút và biểu tượng */
+.like-button {
+    font-size: 30px; /* Thay đổi kích thước nút */
+    padding: 10px 20px; /* Thêm khoảng cách bên trong nút */
+    border: none; /* Bỏ đường viền */
+    background-color: transparent; /* Nền trong suốt */
+    cursor: pointer; /* Hiển thị con trỏ khi hover */
+    transition: transform 0.2s ease-in-out; /* Thêm hiệu ứng khi hover */
+}
+
+.like-button i {
+    font-size: 1em; /* Tăng kích thước của biểu tượng */
+}
+.report-button {
+    font-size: 30px; /* Thay đổi kích thước nút */
+    padding: 10px 20px; /* Thêm khoảng cách bên trong nút */
+    border: none; /* Bỏ đường viền */
+    background-color: transparent; /* Nền trong suốt */
+    cursor: pointer; /* Hiển thị con trỏ khi hover */
+    transition: transform 0.2s ease-in-out; /* Thêm hiệu ứng khi hover */
+}
+
+.report-button i {
+    font-size: 1em; /* Tăng kích thước của biểu tượng */
+}
+
+
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="container1">
+                <div>
+                    <img
+                        src="../../../public/imagePro/1732209277.jpg"
+                        alt="Modern Green Sweater"
+                        class="product-image"
+                    />
+                </div>
+                <div class="contai">
+                    <div class="options">
+                        <h1>Modern Green Sweater</h1>
+                        <p class="price">$49.99</p>
+                        <p>Color: <span id="color-name">Green</span></p>
+                        <div class="color-options">
+                            <div
+                                class="color-option selected"
+                                style="background-color: green"
+                                onclick="changeColor('Green', this)"
+                            ></div>
+                            <div
+                                class="color-option"
+                                style="background-color: gray"
+                                onclick="changeColor('Gray', this)"
+                            ></div>
+                            <div
+                                class="color-option"
+                                style="background-color: pink"
+                                onclick="changeColor('Pink', this)"
+                            ></div>
+                            <div
+                                class="color-option"
+                                style="background-color: white"
+                                onclick="changeColor('White', this)"
+                            ></div>
+                        </div>
+                    </div>
+
+                    <div class="options">
+                        <p>Size:</p>
+                        <div class="size-options">
+                            <div
+                                class="size-option"
+                                onclick="selectSize('S', this)"
+                            >
+                                S
+                            </div>
+                            <div
+                                class="size-option"
+                                onclick="selectSize('M', this)"
+                            >
+                                M
+                            </div>
+                            <div
+                                class="size-option"
+                                onclick="selectSize('L', this)"
+                            >
+                                L
+                            </div>
+                            <div
+                                class="size-option"
+                                onclick="selectSize('XL', this)"
+                            >
+                                XL
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="btn">Add to Cart</button>
+                    <button class="btn">Check Out</button>
+
+                    <h2>About this product</h2>
+                    <p>
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+                        sed do eiusmod tempor incididunt ut labore et dolore
+                        magna aliqua.
+                    </p>
+                </div>
+            </div>
+            <h3>Chi tiết sản phẩm</h3>
+            <div class="similar-products">
+                <div class="similar-product">
+                    <div class="product-image">
+                        <img
+                            src="../../../public/imagePro/1732209181.jpg"
+                            alt="Similar Product 1"
+                        />
+                        <div class="product-overlay">
+                            <p class="product-name">Red Sweater</p>
+                            <p class="product-price">$39.99</p>
+                            <button class="add-to-cart">
+                                <i class="cart-icon">🛒</i> Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="similar-product">
+                    <div class="product-image">
+                        <img
+                            src="../../../public/imagePro/1732209181.jpg"
+                            alt="Similar Product 2"
+                        />
+                        <div class="product-overlay">
+                            <p class="product-name">Blue Hoodie</p>
+                            <p class="product-price">$45.99</p>
+                            <button class="add-to-cart">
+                                <i class="cart-icon">🛒</i> Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="similar-product">
+                    <div class="product-image">
+                        <img
+                            src="../../../public/imagePro/1732209181.jpg"
+                            alt="Similar Product 3"
+                        />
+                        <div class="product-overlay">
+                            <p class="product-name">Black Jacket</p>
+                            <p class="product-price">$59.99</p>
+                            <button class="add-to-cart">
+                                <i class="cart-icon">🛒</i> Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="reviews">
+                <h2>Customer Reviews</h2>
+                <div class="review">
+                    <div class="review-header">
+                        <strong>anhan224</strong>
+                        <div class="rating">★★★★☆</div>
+                        <span class="review-date">2021-10-29 10:05</span>
+                    </div>
+                    <p class="review-text">
+                        Hàng đẹp, sản phẩm rất đáng mua nhé
+                        Mua hàng ở làn bên shop nên rất yên tâm về chất lượng ❤️❤️
+                        Sẽ còn mua hàng shop dài dài hihi! 😊
+                    </p>
+                    <div class="review-images">
+                        <img src="../../../public/imagePro/1732209277.jpg" alt="Review Image 1" />
+                        <img src="../../../public/imagePro/1732209500.jpg" alt="Review Image 2" />
+                        <img src="../../../public/imagePro/1732209441.jpg" alt="Review Image 3" />
+                    </div>
+                    <div class="review-buttons">
+                        <button class="like-button" onclick="toggleLike(this)">
+                            <i class="fa-regular fa-thumbs-up"></i>
+                        </button>
+                        <span class="like-count">0</span>
+                        <button class="report-button" onclick="toggleReport(this)">
+                            <i class="fa-solid fa-exclamation-triangle"></i>
+                        </button>
+                        <span class="report-count">0</span>
+                    </div>
+                </div>
+            </div>
+            <div class="review-form">
+                <h2>Leave a Review</h2>
+                <div class="stars">
+                    <span class="star" onclick="selectStar(1)">★</span>
+                    <span class="star" onclick="selectStar(2)">★</span>
+                    <span class="star" onclick="selectStar(3)">★</span>
+                    <span class="star" onclick="selectStar(4)">★</span>
+                    <span class="star" onclick="selectStar(5)">★</span>
+                </div>
+                <textarea placeholder="Write your review here..."></textarea>
+                <button class="btn">Submit Review</button>
+            </div>
+            </div>
+
+          
+        </div>
+        <script>
+            let selectedStars = 0;
+
+            function changeColor(color, element) {
+                document.getElementById("color-name").innerText = color;
+                const colorOptions = document.querySelectorAll(".color-option");
+                colorOptions.forEach((option) =>
+                    option.classList.remove("selected")
+                );
+                element.classList.add("selected");
+            }
+
+            function selectSize(size, element) {
+                const sizeOptions = document.querySelectorAll(".size-option");
+                sizeOptions.forEach((option) =>
+                    option.classList.remove("selected")
+                );
+                element.classList.add("selected");
+            }
+
+            function selectStar(rating) {
+                selectedStars = rating;
+                const stars = document.querySelectorAll(".star");
+                stars.forEach((star, index) => {
+                    star.classList.toggle("selected", index < rating);
+                });
+            }
+            function toggleLike(button) {
+    // Get the like count span (next sibling of the button)
+    const likeCount = button.nextElementSibling;
+    let count = parseInt(likeCount.innerText);
+
+    // Increment the count
+    count++;
+    likeCount.innerText = count; // Update the display
+
+    // Optional: Toggle the 'liked' class for styling
+    button.classList.toggle('liked');
+}
+
+function toggleReport(button) {
+    // Get the report count span (next sibling of the button)
+    const reportCount = button.nextElementSibling;
+    let count = parseInt(reportCount.innerText);
+
+    // Increment the count
+    count++;
+    reportCount.innerText = count; // Update the display
+
+    // Optional: Toggle the 'reported' class for styling
+    button.classList.toggle('reported');
+}
+        </script>
+    </body>
+</html>

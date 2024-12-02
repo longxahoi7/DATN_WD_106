@@ -11,75 +11,51 @@ use Illuminate\Support\Facades\Auth;
 class CartController extends Controller
 {
     // API để thêm sản phẩm vào giỏ hàng
-<<<<<<< HEAD
     public function addToCart(Request $request)
-{
-    // Lấy thông tin sản phẩm
-    $product = Product::findOrFail($request->product_id);
-
-    // Tìm hoặc tạo giỏ hàng cho người dùng
-    $cart = ShoppingCart::firstOrCreate([
-        'user_id' => auth()->id() // Nếu người dùng đã đăng nhập
-    ]);
-
-    // Kiểm tra nếu sản phẩm đã tồn tại trong giỏ hàng
-    $cartItem = CartItem::where('shopping_cart_id', $cart->id)
-        ->where('product_id', $product->product_id)
-        ->where('color_id', $request->color_id)
-        ->where('size_id', $request->size_id)
-        ->first();
-
-    if ($cartItem) {
-        // Nếu sản phẩm đã tồn tại, tăng số lượng
-        $cartItem->qty += $request->qty;
-        $cartItem->save();
-    } else {
-        // Thêm sản phẩm mới vào giỏ hàng
-        CartItem::create([
-            'shopping_cart_id' => $cart->id,
-            'product_id' => $product->product_id,
-            'color_id' => $request->color_id,
-            'size_id' => $request->size_id,
-            'qty' => $request->qty,
-            'price' => $product->price, // Giá hiện tại của sản phẩm
-        ]);
-    }
-
-    // Lấy tất cả sản phẩm trong giỏ hàng và tính tổng giá trị
-    $cartItems = CartItem::where('shopping_cart_id', $cart->id)->get();
-    $total = $cartItems->sum(function ($item) {
-        return $item->qty * $item->price;
-    });
-
-    // Trả về view giỏ hàng với thông tin cập nhật
-    return view('user.cart', [
-        'cartItems' => $cartItems,
-        'total' => $total
-    ]);
-}
-=======
-    public function addToCart(Request $request, $productId)
     {
-        $userId = auth()->id(); // Lấy ID của người dùng đang đăng nhập
+        // Lấy thông tin sản phẩm
+        $product = Product::findOrFail($request->product_id);
 
-        if (!$userId) {
-            return response()->json(['message' => 'User not authenticated'], 401);
+        // Tìm hoặc tạo giỏ hàng cho người dùng
+        $cart = ShoppingCart::firstOrCreate([
+            'user_id' => auth()->id() // Nếu người dùng đã đăng nhập
+        ]);
+
+        // Kiểm tra nếu sản phẩm đã tồn tại trong giỏ hàng
+        $cartItem = CartItem::where('shopping_cart_id', $cart->id)
+            ->where('product_id', $product->product_id)
+            ->where('color_id', $request->color_id)
+            ->where('size_id', $request->size_id)
+            ->first();
+
+        if ($cartItem) {
+            // Nếu sản phẩm đã tồn tại, tăng số lượng
+            $cartItem->qty += $request->qty;
+            $cartItem->save();
+        } else {
+            // Thêm sản phẩm mới vào giỏ hàng
+            CartItem::create([
+                'shopping_cart_id' => $cart->id,
+                'product_id' => $product->product_id,
+                'color_id' => $request->color_id,
+                'size_id' => $request->size_id,
+                'qty' => $request->qty,
+                'price' => $product->price, // Giá hiện tại của sản phẩm
+            ]);
         }
 
-        // Thêm sản phẩm vào giỏ hàng với user_id đã xác định
-        $cart = ShoppingCart::create([
-            'user_id' => $userId,
-            'product_id' => $productId,
-            'quantity' => $request->input('quantity', 1),
+        // Lấy tất cả sản phẩm trong giỏ hàng và tính tổng giá trị
+        $cartItems = CartItem::where('shopping_cart_id', $cart->id)->get();
+        $total = $cartItems->sum(function ($item) {
+            return $item->qty * $item->price;
+        });
+
+        // Trả về view giỏ hàng với thông tin cập nhật
+        return view('user.cart', [
+            'cartItems' => $cartItems,
+            'total' => $total
         ]);
-
-        return response()->json([
-            'message' => 'Product added to cart successfully',
-            'cart' => $cart
-        ], 201);
     }
-
->>>>>>> 936956c57b86704585de9f0dd8c9e20c8eeda0e7
 
     // API để xem giỏ hàng
     public function viewCart()
