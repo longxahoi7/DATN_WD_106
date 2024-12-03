@@ -3,7 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Product;
-use App\Models\Attribute;
+use App\Models\AttributeProduct;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -20,7 +20,7 @@ class AttributeProductFactory extends Factory
     {
         return [
             //
-            'attribute_id' => Attribute::all()->random()->attribute_id,
+            'attribute_id' => AttributeProduct::all()->random()->attribute_id,
             'product_id' => Product::all()->random()->product_id,
             'image' => $this->faker->imageUrl(640, 480),
             'price' => $this->faker->randomFloat(1, 50, 2),

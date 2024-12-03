@@ -51,9 +51,11 @@ class CartController extends Controller
     // API để xem giỏ hàng
     public function viewCart()
 {
+    if (!Auth::check()) {
+        return redirect()->route('login')->with('error', 'Vui lòng đăng nhập để xem giỏ hàng.');
+    }
     // Lấy ID người dùng đã đăng nhập
     $userId = Auth::id();
-
     // Nếu người dùng chưa đăng nhập, chuyển hướng đến trang đăng nhập
     if (!$userId) {
         return redirect()->route('login')->with('error', 'Vui lòng đăng nhập để xem giỏ hàng.');
@@ -62,25 +64,19 @@ class CartController extends Controller
     // Lấy giỏ hàng của người dùng đã đăng nhập
     $shoppingCart = ShoppingCart::where('user_id', $userId)
         ->with('cartItems.product') // Eager load sản phẩm trong giỏ hàng
-        ->first(); // Mỗi người dùng chỉ có một giỏ hàng
-
-    // Nếu không tìm thấy giỏ hàng
-    if (!$shoppingCart) {
-        return view('user.cart', [
-            'cartItems' => [],
-            'total' => 0
-        ]);
-    }
-
-    // Tính tổng tiền
-    $totalAmount = $shoppingCart->cartItems->sum(function ($item) {
+        ->first();
+        dd($shoppingCart);
+    // Nếu không tìm thấy giỏ hàng, trả về danh sách rỗng
+    $cartItems = $shoppingCart ? $shoppingCart->cartItems : [];
+    $totalAmount = $cartItems->sum(function ($item) {
         return $item->qty * $item->product->price;
     });
 
-    // Trả dữ liệu về view
-    return view('user.cart', [
-        'cartItems' => $shoppingCart->cartItems,
-        'total' => $totalAmount
+    return view('user.chiTietGioHang', [
+        'cartItems' => $cartItems,
+        'total' => $totalAmount,
+        'shippingFee' => 70000 // Phí vận chuyển mặc định
     ]);
 }
+
 }

@@ -3,9 +3,20 @@
 use App\Http\Controllers\OrderController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\BrandController;
+use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\ColorController;
+use App\Http\Controllers\Admin\SizeController;
 
 Auth::routes();
-
+Route::get('index', [BrandController::class, 'home']);
+Route::get('/brand', [BrandController::class, 'index'])->name('brand.index');
+Route::get('/category', [CategoryController::class, 'index'])->name('category.index');
+Route::get('/color', [ColorController::class, 'index'])->name('color.index');
+Route::get('/size', [SizeController::class, 'index'])->name('size.index');
+Route::get('/1', function () {
+    return view('user.chiTietGioHang');
+});
 Route::get('login', function () {
     return view('auth.login');
 })->name('login');

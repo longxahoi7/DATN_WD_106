@@ -1,7 +1,9 @@
 @extends("user.index")
+
 @push('styles')
-    <link rel="stylesheet" href="{{asset('css/chiTietGioHang.css')}}">
+<link rel="stylesheet" href="{{ asset('css/chiTietGioHang.css') }}">
 @endpush
+
 @section("content")
 <div class="cart-main-wrapper section-padding">
     <div class="container">
@@ -17,7 +19,7 @@
                                         <input type="checkbox" />
                                     </th>
                                     <th class="pro-thumbnail">Hình ảnh sản phẩm</th>
-                                    <th class="pro-title">Sản Phẩm</th>
+                                    <th class="pro-title">Sản phẩm</th>
                                     <th class="pro-price">Giá</th>
                                     <th class="pro-quantity">Số lượng</th>
                                     <th class="pro-subtotal">Tổng</th>
@@ -25,40 +27,53 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <!-- Thay thế phần này bằng các dòng sản phẩm -->
+                                @if(!empty($cartItems) && $cartItems->isNotEmpty())
+                                @foreach($cartItems as $item)
                                 <tr>
                                     <td>
                                         <input type="checkbox" />
                                     </td>
                                     <td class="pro-thumbnail">
                                         <a href="#">
-                                            <img class="img-fluid" src="image-path" alt="Product" />
+                                            <img class="img-fluid"
+                                                src="{{ asset('storage/' . $item->product->image) }}"
+                                                alt="{{ $item->product->name }}" />
                                         </a>
                                     </td>
                                     <td class="pro-title">
-                                        <a href="#">Tên sản phẩm</a>
+                                        <a href="#">{{ $item->product.name }}</a>
                                     </td>
                                     <td class="pro-price">
-                                        <span>$00.00</span>
+                                        <span>{{ number_format($item->product->price, 0, ',', '.') }} VND</span>
                                     </td>
                                     <td class="pro-quantity">
                                         <div class="quantity-control">
-                                            <button>-</button>
-                                            <input type="text" value="1" readonly />
-                                            <button>+</button>
+                                            <button class="btn-update-quantity" data-action="decrease" data-id="{{ $item->id }}">-</button>
+                                            <input type="text" value="{{ $item->qty }}" readonly />
+                                            <button class="btn-update-quantity" data-action="increase" data-id="{{ $item->id }}">+</button>
                                         </div>
                                     </td>
                                     <td class="pro-subtotal">
-                                        <span>$00.00</span>
+                                        <span>{{ number_format($item->qty * $item->product->price, 0, ',', '.') }} VND</span>
                                     </td>
                                     <td class="pro-remove">
-                                        <button>
-                                            <i class="fa fa-trash-o"></i>
-                                        </button>
+                                        <form action="{{ route('cart.remove', $item->id) }}" method="POST">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn">
+                                                <i class="fa fa-trash-o"></i>
+                                            </button>
+                                        </form>
                                     </td>
                                 </tr>
-                                <!-- Lặp lại các dòng sản phẩm -->
+                                @endforeach
+                                @else
+                                <tr>
+                                    <td colspan="7" class="text-center">Giỏ hàng của bạn đang trống.</td>
+                                </tr>
+                                @endif
                             </tbody>
+
                         </table>
                     </div>
                     <!-- Cart Update Option -->
@@ -86,21 +101,19 @@
                                     <tbody>
                                         <tr>
                                             <td>Tổng giá sản phẩm</td>
-                                            <td>$00.00</td>
                                         </tr>
                                         <tr>
                                             <td>Phí vận chuyển</td>
-                                            <td>$70</td>
                                         </tr>
                                         <tr class="total">
                                             <td>Tổng chi phí</td>
-                                            <td class="total-amount">$00.00</td>
                                         </tr>
                                     </tbody>
                                 </table>
                             </div>
                         </div>
-                        <a href="checkout.html" class="btn btn-sqr d-block">Thanh toán</a>
+                        <a href="" class="btn btn-sqr d-block">Thanh toán COD</a><br>
+                        <a href="" class="btn btn-sqr d-block">Thanh toán VNPAY</a>
                     </div>
                 </div>
             </div>
