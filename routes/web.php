@@ -1,7 +1,5 @@
 <?php
 
-
-<?php
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ColorController;
