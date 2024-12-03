@@ -1,3 +1,6 @@
+@push('styles')
+    <link rel="stylesheet" href="{{asset('css/navbarAdmin.css')}}">
+@endpush
 <aside class="custom-sider">
     <a href="" class="logo">
         <img src="{{ asset('image/logo/logo-remove.png') }}" alt="logo"
