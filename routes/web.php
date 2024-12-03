@@ -1,7 +1,10 @@
 <?php
 
 use App\Http\Controllers\OrderController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+
+Auth::routes();
 
 Route::get('login', function () {
     return view('auth.login');
@@ -20,13 +23,8 @@ Route::get('register', function () {
     //
 
 
-    Route::get('/', function () {
-    return redirect()->route('home');
-    });
-
-    Route::get('home', function () {
-        return view('layouts.app');
-    })->name('home');
+    Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+    Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
     Route::get('products', function () {
         return view('user.product');
@@ -95,3 +93,4 @@ Route::prefix('admin')->middleware(['auth', 'isAdmin'])->group(function () {
         return view('admin.accounts.index');
     })->name('admin.accounts');
 });
+
