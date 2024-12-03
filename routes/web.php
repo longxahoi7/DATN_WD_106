@@ -1,8 +1,8 @@
 <?php
-
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ColorController;
+use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\SizeController;
 use App\Http\Controllers\CartController;
 use Illuminate\Support\Facades\Auth;
@@ -26,9 +26,17 @@ Route::get('/brand', [BrandController::class, 'index'])->name('brand.index');
 Route::get('/category', [CategoryController::class, 'index'])->name('category.index');
 Route::get('/color', [ColorController::class, 'index'])->name('color.index');
 Route::get('/size', [SizeController::class, 'index'])->name('size.index');
+//oder tạm còn order chính tắt đi ở dòng 93 và trong navbaradmin có đường link nhưng chỉ ăn sang trang danh sách 
+Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
+Route::get('/ordersDetail', [OrderController::class, 'index'])->name('ordersDetail.index');
+Route::get('/shipper', [OrderController::class, 'index'])->name('orderShipper.index');
 Route::get('/1', function () {
     return view('user.chiTietGioHang');
 });
+Route::get('/detail', function () {
+    return view('user.detailProduct');
+});
+
 // Route cho người dùng
 // Route::prefix('/')->group(function () {
 Route::get('/', function () {
@@ -83,9 +91,9 @@ Route::prefix('admin')->middleware(['auth', 'isAdmin'])->group(function () {
     });
 
     // Quản lý đơn hàng
-    Route::get('orders', function () {
-        return view('admin.orders.index');
-    })->name('admin.orders');
+    // Route::get('orders', function () {
+    //     return view('admin.orders.index');
+    // })->name('admin.orders');
 
     // Quản lý mã giảm giá
     Route::prefix('discounts')->group(function () {
@@ -96,7 +104,7 @@ Route::prefix('admin')->middleware(['auth', 'isAdmin'])->group(function () {
         Route::get('create', function () {
             return view('admin.discounts.create');
         })->name('admin.discounts.create');
-});
+    });
 
     // Quản lý tài khoản
     Route::get('accounts', function () {
