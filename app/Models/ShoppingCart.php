@@ -17,6 +17,6 @@ class ShoppingCart extends Model
 
     public function cartItems()
     {
-        return $this->hasMany(CartItem::class, 'shopping_cart_id');
+        return $this->hasMany(CartItem::class, 'id');
     }
 }

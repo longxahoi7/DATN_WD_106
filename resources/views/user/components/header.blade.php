@@ -64,16 +64,17 @@
                         <a href="/" class="nav-link d-flex ">
                             <i class="fas fa-home"></i> Trang chủ
                         </a>
-                        <div class="dropdown mr-5">
+                       <div class="dropdown mr-5">
                             <a href="#" class="nav-link d-flex custom-Navlink">
-                                <i class="fas fa-user"></i>
-                                @auth
-                                {{ Auth::user()->name }} <!-- Hiển thị tên người dùng -->
+                                <i class="fas fa-user"></i> 
+                                @if(Auth::check())
+                                    {{ Auth::user()->name }}
                                 @else
-                                Tài Khoản
-                                @endauth
+                                    Tài Khoản
+                                @endif
                             </a>
                             <div class="dropdown-menu text-center">
+                                @if(Auth::check())
                                 <a href="/profile" class="dropdown-item">Thông tin chung</a>
                                 <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                                     @csrf
@@ -81,11 +82,13 @@
                                 <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                     Đăng xuất
                                 </a>
-
-                                <a href="/login" class="dropdown-item">Đăng nhập</a>
-                                <a href="/register" class="dropdown-item">Đăng ký</a>
+                                @else
+                                    <a href="/login" class="dropdown-item">Đăng nhập</a>
+                                    <a href="/register" class="dropdown-item">Đăng ký</a>
+                                @endif
                             </div>
                         </div>
+
                         <a href="#" class="nav-link  d-flex ">
                             <i class="fas fa-shopping-cart"></i>
                         </a>

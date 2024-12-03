@@ -59,9 +59,9 @@ class CartController extends Controller
         return redirect()->route('login')->with('error', 'Vui lòng đăng nhập để xem giỏ hàng.');
     }
 
-    // Lấy giỏ hàng của người dùng đã đăng nhập
+    // Lấy giỏ hàng của người dùng đã đăng nhập với eager load product và attributeProduct
     $shoppingCart = ShoppingCart::where('user_id', $userId)
-        ->with('cartItems.product') // Eager load sản phẩm trong giỏ hàng
+        ->with(['cartItems.product.attributeProducts']) // Eager load sản phẩm và attributeProducts
         ->first(); // Mỗi người dùng chỉ có một giỏ hàng
 
     // Nếu không tìm thấy giỏ hàng
@@ -74,7 +74,9 @@ class CartController extends Controller
 
     // Tính tổng tiền
     $totalAmount = $shoppingCart->cartItems->sum(function ($item) {
-        return $item->qty * $item->product->price;
+        // Lấy giá từ bảng attribute_products qua quan hệ product
+        $attributeProduct = $item->product->attributeProducts->first();
+        return $item->qty * ($attributeProduct ? $attributeProduct->price : 0);
     });
 
     // Trả dữ liệu về view
@@ -83,4 +85,7 @@ class CartController extends Controller
         'total' => $totalAmount
     ]);
 }
+
+
+
 }
