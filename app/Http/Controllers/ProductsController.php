@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\Models\Product;
 use App\Models\Attribute;
+use App\Models\AttributeProduct;
 use Illuminate\Http\Request;
 
 class ProductsController extends Controller
@@ -49,14 +50,12 @@ class ProductsController extends Controller
     }
     // API để lấy danh sách sản phẩm
     public function productList()
-    {
-        $listProduct = Product::all();
-
-        // Trả về danh sách sản phẩm dưới dạng JSON
-        return response()->json([
-            'products' => $listProduct
-        ], 200);
-    }
+{
+    // Eager load cả 'attributeProducts' từ bảng attribute_products
+    $listProduct = Product::with('attributeProducts')->get();
+    
+    return view('user.home', compact('listProduct'));
+}
 
     // API để lấy chi tiết một sản phẩm
     public function showProduct($productId)

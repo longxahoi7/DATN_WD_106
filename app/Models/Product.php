@@ -46,9 +46,10 @@ class Product extends Model
         return $this->belongsTo(Brand::class, 'brand_id');
     }
     public function attributeProducts()
-{
-    return $this->hasMany(AttributeProduct::class, 'product_id', 'product_id');
-}
+    {
+        return $this->hasMany(AttributeProduct::class, 'product_id', 'product_id');
+    }
+    
     public function coupons()
     {
         return $this->belongsToMany(Coupon::class, 'coupon_product', 'product_id', 'coupon_id');
@@ -59,4 +60,3 @@ class Product extends Model
 }
 
 }
-

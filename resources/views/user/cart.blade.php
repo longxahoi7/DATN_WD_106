@@ -28,56 +28,56 @@
                             </thead>
                             <tbody>
                                 @if(!empty($cartItems) && $cartItems->isNotEmpty())
-                                    @foreach($cartItems as $item)
-                                    <tr>
-                                        <td>
-                                            <input type="checkbox" />
-                                        </td>
-                                        <td class="pro-thumbnail">
-                                            <a href="#">
-                                            <img src="{{$item->product->main_image_url }}" 
-                                            alt="{{ $item->product->name }}" width="100">
+                                @foreach($cartItems as $item)
+                                <tr>
+                                    <td>
+                                        <input type="checkbox" />
+                                    </td>
+                                    <td class="pro-thumbnail">
+                                        <a href="#">
+                                            <img src="{{$item->product->main_image_url }}"
+                                                alt="{{ $item->product->name }}" width="100">
 
-                                            </a>
-                                        </td>
-                                        <td class="pro-title">
-                                            <a href="#">{{ $item->product->name }}</a>
-                                        </td>
-                                        <td class="pro-price">
-                                            @php
-                                                $attributeProduct = $item->product->attributeProducts->first();
-                                            @endphp
-                                            <span>
-                                                {{ number_format($attributeProduct ? $attributeProduct->price : 0, 0, ',', '.') }} VND
-                                            </span>
-                                        </td>
-                                        <td class="pro-quantity">
-                                            <div class="quantity-control">
-                                                <button class="btn-update-quantity" data-action="decrease" data-id="{{ $item->id }}">-</button>
-                                                <input type="text" value="{{ $item->qty }}" readonly />
-                                                <button class="btn-update-quantity" data-action="increase" data-id="{{ $item->id }}">+</button>
-                                            </div>
-                                        </td>
-                                        <td class="pro-subtotal">
-                                            <span>
-                                                {{ number_format($item->qty * ($attributeProduct ? $attributeProduct->price : 0), 0, ',', '.') }} VND
-                                            </span>
-                                        </td>
-                                        <td class="pro-remove">
-                                            <form action="#" method="POST">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn">
-                                                    <i class="fa fa-trash-o"></i>
-                                                </button>
-                                            </form>
-                                        </td>
-                                    </tr>
-                                    @endforeach
+                                        </a>
+                                    </td>
+                                    <td class="pro-title">
+                                        <a href="#">{{ $item->product->name }}</a>
+                                    </td>
+                                    <td class="pro-price">
+                                        @php
+                                        $attributeProduct = $item->product->attributeProducts->first();
+                                        @endphp
+                                        <span>
+                                            {{ number_format($attributeProduct ? $attributeProduct->price : 0, 0, ',', '.') }} VND
+                                        </span>
+                                    </td>
+                                    <td class="pro-quantity">
+                                        <div class="quantity-control">
+                                            <button class="btn-update-quantity" data-action="decrease" data-id="{{ $item->id }}">-</button>
+                                            <input type="text" value="{{ $item->qty }}" readonly />
+                                            <button class="btn-update-quantity" data-action="increase" data-id="{{ $item->id }}">+</button>
+                                        </div>
+                                    </td>
+                                    <td class="pro-subtotal">
+                                        <span>
+                                            {{ number_format($item->qty * ($attributeProduct ? $attributeProduct->price : 0), 0, ',', '.') }} VND
+                                        </span>
+                                    </td>
+                                    <td class="pro-remove">
+                                        <form action="#" method="POST">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn">
+                                                <i class="fa fa-trash-o"></i>
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                @endforeach
                                 @else
-                                    <tr>
-                                        <td colspan="7" class="text-center">Giỏ hàng của bạn đang trống.</td>
-                                    </tr>
+                                <tr>
+                                    <td colspan="7" class="text-center">Giỏ hàng của bạn đang trống.</td>
+                                </tr>
                                 @endif
                             </tbody>
                         </table>
