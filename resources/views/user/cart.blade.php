@@ -35,7 +35,7 @@
                                         </td>
                                         <td class="pro-thumbnail">
                                             <a href="#">
-                                            <img src="{{ $item->product->main_image_url }}" 
+                                            <img src="{{$item->product->main_image_url }}" 
                                             alt="{{ $item->product->name }}" width="100">
 
                                             </a>
