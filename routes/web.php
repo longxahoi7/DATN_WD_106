@@ -7,6 +7,8 @@ use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ColorController;
 use App\Http\Controllers\Admin\SizeController;
+use App\Http\Controllers\CartController;
+
 
 Auth::routes();
 Route::get('index', [BrandController::class, 'home']);
@@ -14,9 +16,7 @@ Route::get('/brand', [BrandController::class, 'index'])->name('brand.index');
 Route::get('/category', [CategoryController::class, 'index'])->name('category.index');
 Route::get('/color', [ColorController::class, 'index'])->name('color.index');
 Route::get('/size', [SizeController::class, 'index'])->name('size.index');
-Route::get('/1', function () {
-    return view('user.chiTietGioHang');
-});
+Route::get('/cart-list', [CartController::class, 'viewCart'])->name('users.cart');
 Route::get('login', function () {
     return view('auth.login');
 })->name('login');

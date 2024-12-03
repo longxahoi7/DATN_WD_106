@@ -51,32 +51,41 @@ class CartController extends Controller
     // API để xem giỏ hàng
     public function viewCart()
 {
-    if (!Auth::check()) {
-        return redirect()->route('login')->with('error', 'Vui lòng đăng nhập để xem giỏ hàng.');
-    }
     // Lấy ID người dùng đã đăng nhập
     $userId = Auth::id();
+
     // Nếu người dùng chưa đăng nhập, chuyển hướng đến trang đăng nhập
     if (!$userId) {
         return redirect()->route('login')->with('error', 'Vui lòng đăng nhập để xem giỏ hàng.');
     }
 
-    // Lấy giỏ hàng của người dùng đã đăng nhập
+    // Lấy giỏ hàng của người dùng đã đăng nhập với eager load product và attributeProduct
     $shoppingCart = ShoppingCart::where('user_id', $userId)
-        ->with('cartItems.product') // Eager load sản phẩm trong giỏ hàng
-        ->first();
-        dd($shoppingCart);
-    // Nếu không tìm thấy giỏ hàng, trả về danh sách rỗng
-    $cartItems = $shoppingCart ? $shoppingCart->cartItems : [];
-    $totalAmount = $cartItems->sum(function ($item) {
-        return $item->qty * $item->product->price;
+        ->with(['cartItems.product.attributeProducts']) // Eager load sản phẩm và attributeProducts
+        ->first(); // Mỗi người dùng chỉ có một giỏ hàng
+
+    // Nếu không tìm thấy giỏ hàng
+    if (!$shoppingCart) {
+        return view('user.cart', [
+            'cartItems' => [],
+            'total' => 0
+        ]);
+    }
+
+    // Tính tổng tiền
+    $totalAmount = $shoppingCart->cartItems->sum(function ($item) {
+        // Lấy giá từ bảng attribute_products qua quan hệ product
+        $attributeProduct = $item->product->attributeProducts->first();
+        return $item->qty * ($attributeProduct ? $attributeProduct->price : 0);
     });
 
-    return view('user.chiTietGioHang', [
-        'cartItems' => $cartItems,
-        'total' => $totalAmount,
-        'shippingFee' => 70000 // Phí vận chuyển mặc định
+    // Trả dữ liệu về view
+    return view('user.cart', [
+        'cartItems' => $shoppingCart->cartItems,
+        'total' => $totalAmount
     ]);
 }
+
+
 
 }
