@@ -1,8 +1,8 @@
 <?php
-
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ColorController;
+use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\SizeController;
 use App\Http\Controllers\CartController;
 use Illuminate\Support\Facades\Auth;
@@ -26,8 +26,8 @@ Route::get('/brand', [BrandController::class, 'index'])->name('brand.index');
 Route::get('/category', [CategoryController::class, 'index'])->name('category.index');
 Route::get('/color', [ColorController::class, 'index'])->name('color.index');
 Route::get('/size', [SizeController::class, 'index'])->name('size.index');
-Route::get('/cart-list', [CartController::class, 'viewCart'])->name('users.cart');
 
+Route::get('/cart-list', [CartController::class, 'viewCart'])->name('users.cart');
 
 
 // Route cho người dùng
@@ -86,9 +86,9 @@ Route::prefix('admin')->middleware(['auth', 'isAdmin'])->group(function () {
     });
 
     // Quản lý đơn hàng
-    Route::get('orders', function () {
-        return view('admin.orders.index');
-    })->name('admin.orders');
+    // Route::get('orders', function () {
+    //     return view('admin.orders.index');
+    // })->name('admin.orders');
 
     // Quản lý mã giảm giá
     Route::prefix('discounts')->group(function () {
@@ -99,7 +99,7 @@ Route::prefix('admin')->middleware(['auth', 'isAdmin'])->group(function () {
         Route::get('create', function () {
             return view('admin.discounts.create');
         })->name('admin.discounts.create');
-});
+    });
 
     // Quản lý tài khoản
     Route::get('accounts', function () {
