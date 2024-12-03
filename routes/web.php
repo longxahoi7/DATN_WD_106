@@ -1,8 +1,13 @@
 <?php
 
-use App\Http\Controllers\OrderController;
-use Illuminate\Support\Facades\Auth;
+
+<?php
+use App\Http\Controllers\Admin\BrandController;
+use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\ColorController;
+use App\Http\Controllers\Admin\SizeController;
 use Illuminate\Support\Facades\Route;
+
 
 Auth::routes();
 
@@ -14,37 +19,44 @@ Route::get('register', function () {
     return view('auth.register');
 })->name('register');
 
+
+Route::get('index', [BrandController::class, 'home']);
+Route::get('/brand', [BrandController::class, 'index'])->name('brand.index');
+Route::get('/category', [CategoryController::class, 'index'])->name('category.index');
+Route::get('/color', [ColorController::class, 'index'])->name('color.index');
+Route::get('/size', [SizeController::class, 'index'])->name('size.index');
+Route::get('/1', function () {
+    return view('user.chiTietGioHang');
+});
 // Route cho người dùng
 // Route::prefix('/')->group(function () {
+Route::get('/', function () {
+    return redirect()->route('home');
+});
 
-    //Route Order Người dùng
-    Route::get('orders', [OrderController::class, 'index'])->name('user.orders.index');
-    Route::get('orders/{id}', [OrderController::class, 'show'])->name('user.orders.show');
-    //
+Route::get('home', function () {
+    return view('user.layouts.app');
+})->name('home');
 
+Route::get('products', function () {
+    return view('user.product');
+})->name('products');
 
-    Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-    Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('product/{id}', function ($id) {
+    return view('user.product-detail', ['id' => $id]);
+})->name('product.detail');
 
-    Route::get('products', function () {
-        return view('user.product');
-    })->name('products');
+Route::get('cart', function () {
+    return view('user.cart');
+})->name('cart');
 
-    Route::get('product/{id}', function ($id) {
-        return view('user.product-detail', ['id' => $id]);
-    })->name('product.detail');
+Route::get('checkout', function () {
+    return view('user.checkout');
+})->name('checkout');
 
-    Route::get('cart', function () {
-        return view('user.cart');
-    })->name('cart');
-
-    Route::get('checkout', function () {
-        return view('user.checkout');
-    })->name('checkout');
-
-    Route::get('about', function () {
-        return view('user.about');
-    })->name('about');
+Route::get('about', function () {
+    return view('user.about');
+})->name('about');
 // });
 
 // Route cho admin (cần middleware xác thực admin)
@@ -86,11 +98,10 @@ Route::prefix('admin')->middleware(['auth', 'isAdmin'])->group(function () {
         Route::get('create', function () {
             return view('admin.discounts.create');
         })->name('admin.discounts.create');
-    });
+});
 
     // Quản lý tài khoản
     Route::get('accounts', function () {
         return view('admin.accounts.index');
     })->name('admin.accounts');
 });
-
