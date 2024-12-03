@@ -4,7 +4,10 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ColorController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\SizeController;
+use App\Http\Controllers\CartController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+
 
 
 Auth::routes();
@@ -52,10 +55,7 @@ Route::get('product/{id}', function ($id) {
     return view('user.product-detail', ['id' => $id]);
 })->name('product.detail');
 
-Route::get('cart', function () {
-    return view('user.cart');
-})->name('cart');
-
+Route::get('/cart', [CartController::class, 'viewCart'])->name('cart');
 Route::get('checkout', function () {
     return view('user.checkout');
 })->name('checkout');
