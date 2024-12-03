@@ -35,8 +35,8 @@
                                         </td>
                                         <td class="pro-thumbnail">
                                             <a href="#">
-                                            <img src="{{$item->product->main_image_url }}" 
-                                            alt="{{ $item->product->name }}" width="100">
+                                            <!-- <img src="{{$item->product->main_image_url }}" 
+                                            alt="{{ $item->product->name }}" width="100"> -->
 
                                             </a>
                                         </td>
@@ -121,8 +121,18 @@
                                 </table>
                             </div>
                         </div>
-                        <a href="" class="btn btn-sqr d-block">Thanh toán COD</a><br>
-                        <a href="" class="btn btn-sqr d-block">Thanh toán VNPAY</a>
+                        <form action="{{ route('checkout.cod') }}" method="POST">
+                            @csrf
+                            <input type="hidden" name="order_id" value="{{ $order->order_id }}">
+                            <input type="hidden" name="amount" value="{{ $total + 70000}}">
+                            <button type="submit" class="btn btn-primary">Thanh toán COD</button>
+                        </form>
+                        <form action="{{ route('checkout.vnpay') }}" method="POST">
+                        @csrf
+                            <button type="submit" name="redirect">
+                            Thanh toán VNPAY
+                            </button>
+                        </form>
                     </div>
                 </div>
             </div>

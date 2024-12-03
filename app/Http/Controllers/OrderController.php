@@ -21,7 +21,8 @@ class OrderController extends Controller
     public function show($id)
     {
         // Lấy thông tin đơn hàng của người dùng đang đăng nhập
-        $order = Order::where('order_id', $id)->where('user_id', auth()->id())->with('orderItems.product')->firstOrFail();
+        $order = Order::where('order_id', $id)
+        ->where('user_id', auth()->id())->with('orderItems.product')->firstOrFail();
 
         // Trả về view chi tiết đơn hàng
         return view('user.orders.details', compact('order'));
@@ -54,5 +55,16 @@ class OrderController extends Controller
         $cart->delete();
 
         return redirect()->route('user.orders.index')->with('success', 'Đơn hàng đã được tạo thành công!');
+    }
+
+    public function orderSuccess($orderId)
+    {
+        $order = Order::with('payment')->find($orderId);
+
+        if (!$order) {
+            return redirect()->route('home')->with('error', 'Order not found.');
+        }
+
+        return view('user.orders.order-cod', compact('order'));
     }
 }

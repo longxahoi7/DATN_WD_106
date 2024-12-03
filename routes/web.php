@@ -7,17 +7,11 @@ use App\Http\Controllers\Admin\SizeController;
 use App\Http\Controllers\CartController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\PaymentVnPayController;
+use App\Http\Controllers\OrderController;
 
 
-
-
-Auth::routes();
-Route::get('index', [BrandController::class, 'home']);
-Route::get('/brand', [BrandController::class, 'index'])->name('brand.index');
-Route::get('/category', [CategoryController::class, 'index'])->name('category.index');
-Route::get('/color', [ColorController::class, 'index'])->name('color.index');
-Route::get('/size', [SizeController::class, 'index'])->name('size.index');
-Route::get('/cart-list', [CartController::class, 'viewCart'])->name('users.cart');
 Route::get('login', function () {
     return view('auth.login');
 })->name('login');
@@ -26,15 +20,16 @@ Route::get('register', function () {
     return view('auth.register');
 })->name('register');
 
-
+Auth::routes();
 Route::get('index', [BrandController::class, 'home']);
 Route::get('/brand', [BrandController::class, 'index'])->name('brand.index');
 Route::get('/category', [CategoryController::class, 'index'])->name('category.index');
 Route::get('/color', [ColorController::class, 'index'])->name('color.index');
 Route::get('/size', [SizeController::class, 'index'])->name('size.index');
-Route::get('/1', function () {
-    return view('user.chiTietGioHang');
-});
+Route::get('/cart-list', [CartController::class, 'viewCart'])->name('users.cart');
+
+
+
 // Route cho người dùng
 // Route::prefix('/')->group(function () {
 Route::get('/', function () {
@@ -54,9 +49,11 @@ Route::get('product/{id}', function ($id) {
 })->name('product.detail');
 
 Route::get('/cart', [CartController::class, 'viewCart'])->name('cart');
-Route::get('checkout', function () {
-    return view('user.checkout');
-})->name('checkout');
+Route::post('/checkout/cod', [PaymentController::class, 'handleCodPayment'])->name('checkout.cod');
+Route::get('/order/success/{order_id}', [OrderController::class, 'orderSuccess'])
+            ->name('order.success');
+Route::post('/vnp_payment', [PaymentVnPayController::class, 'vnp_payment'])
+            ->name('checkout.vnpay');
 
 Route::get('about', function () {
     return view('user.about');

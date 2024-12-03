@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Product;
+use App\Models\Order;
 use App\Models\ShoppingCart;
 use App\Models\CartItem;
 use Illuminate\Support\Facades\Auth;
@@ -58,7 +59,7 @@ class CartController extends Controller
     if (!$userId) {
         return redirect()->route('login')->with('error', 'Vui lòng đăng nhập để xem giỏ hàng.');
     }
-
+    $order = Order::where('user_id', auth()->id())->latest()->first();
     // Lấy giỏ hàng của người dùng đã đăng nhập với eager load product và attributeProduct
     $shoppingCart = ShoppingCart::where('user_id', $userId)
         ->with(['cartItems.product.attributeProducts']) // Eager load sản phẩm và attributeProducts
@@ -82,7 +83,8 @@ class CartController extends Controller
     // Trả dữ liệu về view
     return view('user.cart', [
         'cartItems' => $shoppingCart->cartItems,
-        'total' => $totalAmount
+        'total' => $totalAmount,
+        'order' => $order
     ]);
 }
 
