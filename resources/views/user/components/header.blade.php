@@ -65,8 +65,13 @@
                             <i class="fas fa-home"></i> Trang chủ
                         </a>
                         <div class="dropdown mr-5">
-                            <a href="#" class="nav-link d-flex custom-Navlink ">
-                                <i class="fas fa-user"></i> Tài Khoản
+                            <a href="#" class="nav-link d-flex custom-Navlink">
+                                <i class="fas fa-user"></i>
+                                @auth
+                                {{ Auth::user()->name }} <!-- Hiển thị tên người dùng -->
+                                @else
+                                Tài Khoản
+                                @endauth
                             </a>
                             <div class="dropdown-menu text-center">
                                 <a href="/profile" class="dropdown-item">Thông tin chung</a>
