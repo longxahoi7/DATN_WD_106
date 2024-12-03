@@ -21,17 +21,19 @@
                 <div class="custom-form">
                     <h5>Chào mừng bạn trở lại với GENTLEMANOR</h5>
                     <p class="text-muted mb-4">Vui lòng đăng nhập để tiếp tục sử dụng dịch vụ.</p>
-                    <form class="custom-form-auth" onsubmit="return handleLogin(event)">
+                    <form class="custom-form-auth" onsubmit="return handleLogin(event)"
+                        method="post" action="{{ route('login') }}">
+                        @csrf
                         <div>
-                            <input type="email" class="formControl" id="email" placeholder="Email"
+                            <input type="email" class="formControl" name="email" id="email" placeholder="Email"
                                 onchange="handleChange(event)" required>
                         </div>
                         <div class="password-input-wrapper">
-                            <input id="password" class="formControl" type="password" placeholder="Mật khẩu"
+                            <input id="password" class="formControl" name="password" type="password" placeholder="Mật khẩu"
                                 onchange="handleChange(event)" required>
                             <div class="eye-icon" onclick="togglePasswordVisibility()"></div>
                         </div>
-                        <button type="submit" class="btn btn-success btn-block">Đăng nhập</button>
+                        <button class="btn btn-success btn-block">Đăng nhập</button>
                     </form>
                 </div>
 
@@ -68,7 +70,7 @@
         </div>
     </div>
 
-    <script>
+    <!-- <script>
     function togglePasswordVisibility() {
         const passwordInput = document.getElementById("password");
         if (passwordInput.type === "password") {
@@ -77,7 +79,7 @@
             passwordInput.type = "password";
         }
     }
-    </script>
+    </script> -->
 </body>
 
 </html>

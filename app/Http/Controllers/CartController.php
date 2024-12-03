@@ -55,6 +55,31 @@ class CartController extends Controller
             'cartItems' => $cartItems,
             'total' => $total
         ]);
+
+        // Kiểm tra nếu sản phẩm đã tồn tại trong giỏ hàng
+        // $cartItem = CartItem::where('shopping_cart_id', $cart->id)
+        //     ->where('product_id', $product->product_id)
+        //     ->where('color_id', $request->color_id)
+        //     ->where('size_id', $request->size_id)
+        //     ->first();
+
+        if ($cartItem) {
+            // Nếu sản phẩm đã tồn tại, tăng số lượng
+            $cartItem->qty += $request->qty;
+            $cartItem->save();
+        } else {
+            // Thêm sản phẩm mới
+            CartItem::create([
+                'shopping_cart_id' => $cart->id,
+                'product_id' => $product->product_id,
+                'color_id' => $request->color_id,
+                'size_id' => $request->size_id,
+                'qty' => $request->qty,
+                'price' => $product->price, // Giá hiện tại
+            ]);
+        }
+
+        return response()->json(['success' => 'Sản phẩm đã được thêm vào giỏ hàng.']);
     }
 
     // API để xem giỏ hàng

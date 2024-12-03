@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\ColorController;
+use App\Http\Controllers\User\CommentController;
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\CouponController;
@@ -8,14 +9,12 @@ use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\SizeController;
 use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\CartController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\ApiPaymentController;
 use App\Http\Controllers\Api\ApiUserController;
 use App\Http\Controllers\Api\InvoiceController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\StatsController;
-use Spatie\FlareClient\Api;
 
 // Route::post('register', [ApiUserController::class, 'register']);
 // //  http://127.0.0.1:8000/api/login
@@ -45,15 +44,6 @@ Route::group(
             Route::put('/update-category/{id}', [CategoryController::class, 'updateCategory']);
         }
         );
-        // Route::group(
-        //     [
-        //         'prefix' => 'stats',
-        //         'as' => 'stats.'
-        //     ],
-        //     function () {
-        //         Route::get('stats', [StatsController::class, 'index']);
-        //     }
-        // );
         //CRUD BRAND
         Route::group(
             [
@@ -103,7 +93,6 @@ Route::group(
                 'as' => 'products.'
             ],
             function () {
-
             Route::get('/list-product', [ProductController::class, 'listProduct']);
             Route::get('/get-data', [ProductController::class, 'getData']);
             Route::post('/add-product', [ProductController::class, 'addProduct']);
@@ -184,6 +173,20 @@ Route::group(
                 Route::get('/invoices/{order_id}', [InvoiceController::class, 'generateInvoice']);
             }
         );
+        //Bỉnh luận
+        Route::group([
+            'prefix' => 'comments',
+            'as' => 'comments.'
+        ],function () {
+              // API thêm bình luận
+    Route::post('/comments', [CommentController::class, 'store']);
+    // API lấy bình luận theo đối tượng (ví dụ: sản phẩm)
+    Route::get('/comments/{commentable_id}', [CommentController::class, 'index']);
+    // API sửa bình luận
+    Route::put('/comments/{comment}', [CommentController::class, 'update']);
+    // API xóa bình luận
+    Route::delete('/comments/{comment}', [CommentController::class, 'destroy']);
+        });
     }
 );
 // });

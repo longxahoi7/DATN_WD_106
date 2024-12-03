@@ -26,9 +26,6 @@ class Product extends Model
         'subtitle',
         'slug',
         'is_active',
-        'is_hot',        // Sản phẩm hot
-        'is_sale',       // Sản phẩm đang sale
-        'sold_count'   // Số lượng đã bán
     ];
     public function colors()
     {
@@ -56,8 +53,6 @@ class Product extends Model
     {
         return $this->belongsToMany(Coupon::class, 'coupon_product', 'product_id', 'coupon_id');
     }
-    public function comments()
-{
-    return $this->hasMany(Comment::class, 'product_id');
+
 }
-}
+
