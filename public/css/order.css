@@ -1,0 +1,45 @@
+/* chi tiết đơn hàng */
+.order-card {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.total-amount {
+    font-weight: bold;
+    font-size: 1.2em;
+}
+
+.btn-cancel {
+    background-color: gray;
+    color: white;
+}
+/* shipper */
+.card {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.container {
+    max-width: 600px;
+}
+
+.product-image {
+    width: 100px;
+    margin-right: 10px;
+    background: red;
+}
+
+.btn-cancelled {
+    background-color: brown;
+    color: white;
+}
+/* order */
+.container1 {
+    max-width: 800px;
+}
+.table th,
+.table td {
+    vertical-align: middle;
+}
