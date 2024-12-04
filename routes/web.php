@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\ColorController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\SizeController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductsController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -39,9 +40,9 @@ Route::get('/cart-list', [CartController::class, 'viewCart'])->name('users.cart'
 
 // Route cho người dùng
 // Route::prefix('/')->group(function () {
-Route::get('/', [                                   ProductsController::class, 'productList'])->name('product.list');
+Route::get('/', [                                   HomeController::class, 'index'])->name('product.list');
 
-Route::get('home', [                                ProductsController::class, 'productList'])->name('product.list');
+Route::get('home', [                                HomeController::class, 'index'])->name('product.list');
 
 Route::get('product', [                             ProductsController::class, 'productList'])->name('product.list');
 

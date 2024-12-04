@@ -62,11 +62,11 @@ class ProductsController extends Controller
             ->orderBy('sold_count', 'desc')
             ->take(10) // Lấy top 10 sản phẩm bán chạy
             ->get();
-        $productHot = Product::where('is_hot','=', 0)
+        $productHot = Product::where('is_hot',0)
             ->where('is_active', true)
             ->get();
 
-        return view('user.home', compact('listProduct','productHot','productSoldCount'));
+        return view('user.product', compact('listProduct','productHot','productSoldCount'));
     }
 
     // API để lấy chi tiết một sản phẩm
