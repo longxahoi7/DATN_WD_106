@@ -52,8 +52,11 @@ Route::get('/cart', [CartController::class, 'viewCart'])->name('cart');
 Route::post('/checkout/cod', [PaymentController::class, 'handleCodPayment'])->name('checkout.cod');
 Route::get('/order/success/{order_id}', [OrderController::class, 'orderSuccess'])
             ->name('order.success');
-Route::post('/vnp_payment', [PaymentVnPayController::class, 'vnp_payment'])
-            ->name('checkout.vnpay');
+Route::post('/vnp_payment', [PaymentVnPayController::class, 'vnp_payment'])->name('vnpay');
+
+Route::get('/vnpay_return', [PaymentVnPayController::class, 'handleVNPayCallback'])
+->name('vnpay.return');
+
 
 Route::get('about', function () {
     return view('user.about');
