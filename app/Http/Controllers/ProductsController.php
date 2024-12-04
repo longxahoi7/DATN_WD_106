@@ -71,10 +71,7 @@ class ProductsController extends Controller
         ->get();
  
         // Trả về thông tin sản phẩm dưới dạng JSON
-        return response()->json([
-            'product' => $product,
-            'relatedProducts' => $relatedProducts
-        ], 200);
+        return view('user.product-detail', compact('product','relatedProducts'));
     }
     
 }
