@@ -28,56 +28,56 @@
                             </thead>
                             <tbody>
                                 @if(!empty($cartItems) && $cartItems->isNotEmpty())
-                                @foreach($cartItems as $item)
-                                <tr>
-                                    <td>
-                                        <input type="checkbox" />
-                                    </td>
-                                    <td class="pro-thumbnail">
-                                        <a href="#">
-                                            <img src="{{$item->product->main_image_url }}"
-                                                alt="{{ $item->product->name }}" width="100">
+                                    @foreach($cartItems as $item)
+                                    <tr>
+                                        <td>
+                                            <input type="checkbox" />
+                                        </td>
+                                        <td class="pro-thumbnail">
+                                            <a href="#">
+                                            <!-- <img src="{{$item->product->main_image_url }}" 
+                                            alt="{{ $item->product->name }}" width="100"> -->
 
-                                        </a>
-                                    </td>
-                                    <td class="pro-title">
-                                        <a href="#">{{ $item->product->name }}</a>
-                                    </td>
-                                    <td class="pro-price">
-                                        @php
-                                        $attributeProduct = $item->product->attributeProducts->first();
-                                        @endphp
-                                        <span>
-                                            {{ number_format($attributeProduct ? $attributeProduct->price : 0, 0, ',', '.') }} VND
-                                        </span>
-                                    </td>
-                                    <td class="pro-quantity">
-                                        <div class="quantity-control">
-                                            <button class="btn-update-quantity" data-action="decrease" data-id="{{ $item->id }}">-</button>
-                                            <input type="text" value="{{ $item->qty }}" readonly />
-                                            <button class="btn-update-quantity" data-action="increase" data-id="{{ $item->id }}">+</button>
-                                        </div>
-                                    </td>
-                                    <td class="pro-subtotal">
-                                        <span>
-                                            {{ number_format($item->qty * ($attributeProduct ? $attributeProduct->price : 0), 0, ',', '.') }} VND
-                                        </span>
-                                    </td>
-                                    <td class="pro-remove">
-                                        <form action="#" method="POST">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn">
-                                                <i class="fa fa-trash-o"></i>
-                                            </button>
-                                        </form>
-                                    </td>
-                                </tr>
-                                @endforeach
+                                            </a>
+                                        </td>
+                                        <td class="pro-title">
+                                            <a href="#">{{ $item->product->name }}</a>
+                                        </td>
+                                        <td class="pro-price">
+                                            @php
+                                                $attributeProduct = $item->product->attributeProducts->first();
+                                            @endphp
+                                            <span>
+                                                {{ number_format($attributeProduct ? $attributeProduct->price : 0, 0, ',', '.') }} VND
+                                            </span>
+                                        </td>
+                                        <td class="pro-quantity">
+                                            <div class="quantity-control">
+                                                <button class="btn-update-quantity" data-action="decrease" data-id="{{ $item->id }}">-</button>
+                                                <input type="text" value="{{ $item->qty }}" readonly />
+                                                <button class="btn-update-quantity" data-action="increase" data-id="{{ $item->id }}">+</button>
+                                            </div>
+                                        </td>
+                                        <td class="pro-subtotal">
+                                            <span>
+                                                {{ number_format($item->qty * ($attributeProduct ? $attributeProduct->price : 0), 0, ',', '.') }} VND
+                                            </span>
+                                        </td>
+                                        <td class="pro-remove">
+                                            <form action="#" method="POST">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn">
+                                                    <i class="fa fa-trash-o"></i>
+                                                </button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                    @endforeach
                                 @else
-                                <tr>
-                                    <td colspan="7" class="text-center">Giỏ hàng của bạn đang trống.</td>
-                                </tr>
+                                    <tr>
+                                        <td colspan="7" class="text-center">Giỏ hàng của bạn đang trống.</td>
+                                    </tr>
                                 @endif
                             </tbody>
                         </table>
@@ -121,8 +121,18 @@
                                 </table>
                             </div>
                         </div>
-                        <a href="" class="btn btn-sqr d-block">Thanh toán COD</a><br>
-                        <a href="" class="btn btn-sqr d-block">Thanh toán VNPAY</a>
+                        <form action="{{ route('checkout.cod') }}" method="POST">
+                            @csrf
+                            <input type="hidden" name="order_id" value="{{ $order->order_id }}">
+                            <input type="hidden" name="amount" value="{{ $total + 70000}}">
+                            <button type="submit" class="btn btn-primary">Thanh toán COD</button>
+                        </form>
+                        <form action="{{ route('checkout.vnpay') }}" method="POST">
+                        @csrf
+                            <button type="submit" name="redirect">
+                            Thanh toán VNPAY
+                            </button>
+                        </form>
                     </div>
                 </div>
             </div>
