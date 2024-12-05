@@ -38,16 +38,20 @@ Route::get('/size', [SizeController::class, 'index'])->name('size.index');
 Route::get('/cart-list', [CartController::class, 'viewCart'])->name('users.cart');
 
 
-Route::get('/', [ProductsController::class, 'productList'])->name('home');
+Route::get('/', [ProductsController::class, 'productList'])->name('products.list');
 
 Route::get('product/{id}', [ProductsController::class, 'showProduct'])->name('product.detail');
 
-Route::get('/cart', [CartController::class, 'viewCart'])->name('cart');
+
 
 
 
 // Route::get('/cart-list',[CartController::class, 'viewCart'])->name('users.cart');
-Route::post('/cart/add/{id}',[CartController::class, 'addToCart'])->name('cart.add');
+Route::post('/cart/add',[CartController::class, 'addToCart'])->name('cart.add');
+
+Route::post('/cart/update/{id}', [CartController::class, 'update'])->name('cart.update');
+
+Route::delete('/cart/remove/{id}', [CartController::class, 'removeItem'])->name('cart.remove');
 
 
 Route::post('/checkout/cod', [PaymentController::class, 'handleCodPayment'])->name('checkout.cod');
