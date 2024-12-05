@@ -21,7 +21,7 @@
         </div>
     @endif
     <main>
-        @yield('content') ;
+        @yield('content') 
     </main>
     <section>
         @include('user.components.footer')

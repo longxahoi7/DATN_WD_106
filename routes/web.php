@@ -25,6 +25,8 @@ Route::get('register', function () {
 
 
 Auth::routes();
+Route::get('/', [HomeController::class, 'index'])->name('home');
+
 Route::get('index', [BrandController::class, 'home']);
 
 Route::get('/brand', [BrandController::class, 'index'])->name('brand.index');
@@ -35,17 +37,12 @@ Route::get('/color', [ColorController::class, 'index'])->name('color.index');
 
 Route::get('/size', [SizeController::class, 'index'])->name('size.index');
 
-Route::get('/cart-list', [CartController::class, 'viewCart'])->name('users.cart');
-
-
-Route::get('/', [HomeController::class, 'index'])->name('products.list');
-
 Route::get('product/{id}', [ProductsController::class, 'showProduct'])->name('product.detail');
 
 
 
 
-
+Route::get('/cart-list', [CartController::class, 'viewCart'])->name('users.cart');
 // Route::get('/cart-list',[CartController::class, 'viewCart'])->name('users.cart');
 Route::post('/cart/add',[CartController::class, 'addToCart'])->name('cart.add');
 
