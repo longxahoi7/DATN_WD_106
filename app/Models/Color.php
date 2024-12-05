@@ -13,7 +13,7 @@ protected $primaryKey ='color_id';
     protected $fillable=['name','color_code'];
     public function attributeProducts()
     {
-        return $this->hasMany(AttributeProduct::class);
+        return $this->hasMany(AttributeProduct::class , 'color_id');
     }
     public function sizes()
     {
