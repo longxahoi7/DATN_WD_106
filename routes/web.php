@@ -27,7 +27,7 @@ Route::get('/', function () {
 });
 
 Route::get('home', function () {
-    return view('layouts.app');
+    return view('user.layouts.app');
 })->name('home');
 
 Route::get('products', function () {
