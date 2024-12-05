@@ -40,9 +40,9 @@ Route::get('/cart-list', [CartController::class, 'viewCart'])->name('users.cart'
 
 // Route cho người dùng
 // Route::prefix('/')->group(function () {
-Route::get('/', [                                   HomeController::class, 'index'])->name('product.list');
+Route::get('/', [                                   HomeController::class, 'index'])->name('home');
 
-Route::get('home', [                                HomeController::class, 'index'])->name('product.list');
+Route::get('home', [                                HomeController::class, 'index'])->name('home');
 
 Route::get('product', [                             ProductsController::class, 'productList'])->name('product.list');
 

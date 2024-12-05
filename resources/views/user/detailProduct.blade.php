@@ -1,6 +1,6 @@
 @extends("user.index")
 @push('styles')
-    <link rel="stylesheet" href="{{asset('css/detailProduct.css')}}">
+<link rel="stylesheet" href="{{asset('css/detailProduct.css')}}">
 @endpush
 @section("content")
 
@@ -8,40 +8,32 @@
     <div class="container">
         <div class="container1">
             <div>
-                <img src="{{ asset('imagePro/1732209277.jpg') }}" alt="Modern Green Sweater" class="product-image" />
+                <img src="{{ $product->main_image_url }}" alt="{{ $product->name }}" class="product-image" />
             </div>
             <div class="contai">
                 <div class="options">
-                    <h1>Modern Green Sweater</h1>
-                    <p class="price">247.000Đ</p>
+                    <h1>{{ $product->name }}</h1>
+                    <p class="price">{{ number_format($product->price, 0, ',', '.') }} VND</p>
                     <p>Color: </p>
                     <div class="color-options">
-                        <div class="color-option selected" style="background-color: green"
-                            onclick="changeColor('Green', this)"></div>
-                        <div class="color-option" style="background-color: gray" onclick="changeColor('Gray', this)">
+                        @foreach ($product->colors as $color)
+
+                        <div class="color-option" style="background-color: {{ $color->name }}"
+                            onclick="changeColor('{{ $color->name }}', this)">
                         </div>
-                        <div class="color-option" style="background-color: pink" onclick="changeColor('Pink', this)">
-                        </div>
-                        <div class="color-option" style="background-color: white" onclick="changeColor('White', this)">
-                        </div>
+                        @endforeach
+
                     </div>
                 </div>
 
                 <div class="options">
                     <p>Size:</p>
                     <div class="size-options">
-                        <div class="size-option" onclick="selectSize('S', this)">
-                            S
+                        @foreach ($product->sizes as $size)
+                        <div class="size-option" onclick="selectSize('{{ $size->name }}', this)">
+                            {{ $size->name }}
                         </div>
-                        <div class="size-option" onclick="selectSize('M', this)">
-                            M
-                        </div>
-                        <div class="size-option" onclick="selectSize('L', this)">
-                            L
-                        </div>
-                        <div class="size-option" onclick="selectSize('XL', this)">
-                            XL
-                        </div>
+                        @endforeach
                     </div>
                 </div>
 
@@ -50,50 +42,24 @@
 
                 <h2>About this product</h2>
                 <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                    sed do eiusmod tempor incididunt ut labore et dolore
-                    magna aliqua.
+                    {{$product->subtitle}}
                 </p>
             </div>
         </div>
-        <h3>Chi tiết sản phẩm</h3>
+        <h3>Sản phẩm liên quan</h3>
         <div class="similar-products">
+            @foreach($relatedProducts as $relatedProduct)
             <div class="similar-product">
                 <div class="product-image">
-                    <img src="{{ asset('imagePro/1732209277.jpg') }}" alt="Similar Product 1" />
+                    <img src="{{ $relatedProduct->main_image_url }}" class="card-img-top" alt="{{ $relatedProduct->name }}">
                     <div class="product-overlay">
-                        <p class="product-name">Red Sweater</p>
-                        <p class="product-price">$39.99</p>
-                        <button class="add-to-cart">
-                            <i class="cart-icon">🛒</i> Add to Cart
-                        </button>
+                        <h5 class="product-name">{{ $relatedProduct->name }}</h5>
+                        <p class="product-price">{{ number_format($relatedProduct->price, 0, ',', '.') }} VND</p>
+                        <a href="{{ route('product.detail', $relatedProduct->product_id) }}" class="add-to-cart">Xem chi tiết</a>
                     </div>
                 </div>
             </div>
-            <div class="similar-product">
-                <div class="product-image">
-                    <img src="{{ asset('imagePro/1732209277.jpg') }}" alt="Similar Product 2" />
-                    <div class="product-overlay">
-                        <p class="product-name">Blue Hoodie</p>
-                        <p class="product-price">$45.99</p>
-                        <button class="add-to-cart">
-                            <i class="cart-icon">🛒</i> Add to Cart
-                        </button>
-                    </div>
-                </div>
-            </div>
-            <div class="similar-product">
-                <div class="product-image">
-                    <img src="{{ asset('imagePro/1732209500.jpg') }}" alt="Similar Product 3" />
-                    <div class="product-overlay">
-                        <p class="product-name">Black Jacket</p>
-                        <p class="product-price">$59.99</p>
-                        <button class="add-to-cart">
-                            <i class="cart-icon">🛒</i> Add to Cart
-                        </button>
-                    </div>
-                </div>
-            </div>
+            @endforeach
         </div>
 
         <div class="reviews">
@@ -169,6 +135,7 @@
             star.classList.toggle("selected", index < rating);
         });
     }
+
     function toggleLike(button) {
         // Get the like count span (next sibling of the button)
         const likeCount = button.nextElementSibling;
