@@ -4,22 +4,31 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Product;
+use App\Models\Order;
 use App\Models\ShoppingCart;
 use App\Models\CartItem;
 use Illuminate\Support\Facades\Auth;
 
+
 class CartController extends Controller
 {
     // API để thêm sản phẩm vào giỏ hàng
-<<<<<<< HEAD
     public function addToCart(Request $request)
 {
+    // Kiểm tra dữ liệu đầu vào
+    $request->validate([
+        'product_id' => 'required|exists:products,product_id',
+        'color_id' => 'nullable|exists:colors,color_id',
+        'size_id' => 'nullable|exists:sizes,size_id',
+        'qty' => 'required|integer|min:1'
+    ]);
+
     // Lấy thông tin sản phẩm
     $product = Product::findOrFail($request->product_id);
 
     // Tìm hoặc tạo giỏ hàng cho người dùng
     $cart = ShoppingCart::firstOrCreate([
-        'user_id' => auth()->id() // Nếu người dùng đã đăng nhập
+        'user_id' => auth()->id() // Người dùng phải đăng nhập
     ]);
 
     // Kiểm tra nếu sản phẩm đã tồn tại trong giỏ hàng
@@ -34,84 +43,62 @@ class CartController extends Controller
         $cartItem->qty += $request->qty;
         $cartItem->save();
     } else {
-        // Thêm sản phẩm mới vào giỏ hàng
+        // Thêm sản phẩm mới
         CartItem::create([
             'shopping_cart_id' => $cart->id,
             'product_id' => $product->product_id,
             'color_id' => $request->color_id,
             'size_id' => $request->size_id,
             'qty' => $request->qty,
-            'price' => $product->price, // Giá hiện tại của sản phẩm
+            'price' => $product->price,
         ]);
     }
 
-    // Lấy tất cả sản phẩm trong giỏ hàng và tính tổng giá trị
-    $cartItems = CartItem::where('shopping_cart_id', $cart->id)->get();
-    $total = $cartItems->sum(function ($item) {
-        return $item->qty * $item->price;
-    });
-
-    // Trả về view giỏ hàng với thông tin cập nhật
-    return view('user.cart', [
-        'cartItems' => $cartItems,
-        'total' => $total
-    ]);
+    // Điều hướng về trang giỏ hàng
+    return redirect()->route('users.cart')->with('success', 'Sản phẩm đã được thêm vào giỏ hàng.');
 }
-=======
-    public function addToCart(Request $request, $productId)
-    {
-        $userId = auth()->id(); // Lấy ID của người dùng đang đăng nhập
 
-        if (!$userId) {
-            return response()->json(['message' => 'User not authenticated'], 401);
-        }
-
-        // Thêm sản phẩm vào giỏ hàng với user_id đã xác định
-        $cart = ShoppingCart::create([
-            'user_id' => $userId,
-            'product_id' => $productId,
-            'quantity' => $request->input('quantity', 1),
-        ]);
-
-        return response()->json([
-            'message' => 'Product added to cart successfully',
-            'cart' => $cart
-        ], 201);
-    }
-
->>>>>>> 936956c57b86704585de9f0dd8c9e20c8eeda0e7
 
     // API để xem giỏ hàng
     public function viewCart()
-    {
-        // Lấy ID người dùng đã đăng nhập
-        //$userId = Auth::id();
+{
+    // Lấy ID người dùng đã đăng nhập
+    $userId = Auth::id();
 
-        // Kiểm tra nếu người dùng chưa đăng nhập
-        // if (!$userId) {
-        //     return response()->json([
-        //         'success' => false,
-        //         'message' => 'User is not authenticated.'
-        //     ], 401);
-        // }
-
-        // Lấy giỏ hàng của người dùng đã đăng nhập
-        $shoppingCart = ShoppingCart::where('user_id', 1)
-            ->with('cartItems.product') // Eager load các sản phẩm trong giỏ hàng
-            ->get(); // Lấy giỏ hàng đầu tiên (mỗi người dùng chỉ có một giỏ hàng)
-
-        // Nếu không tìm thấy giỏ hàng
-        if (!$shoppingCart) {
-            return response()->json([
-                'success' => false,
-                'message' => 'No cart found for the logged-in user.'
-            ], 404);
-        }
-
-        // Trả về dữ liệu giỏ hàng cùng với các sản phẩm
-        return response()->json([
-            'success' => true,
-            'cart' => $shoppingCart
-        ], 200);
+    // Nếu người dùng chưa đăng nhập, chuyển hướng đến trang đăng nhập
+    if (!$userId) {
+        return redirect()->route('login')->with('error', 'Vui lòng đăng nhập để xem giỏ hàng.');
     }
+    $order = Order::where('user_id', auth()->id())->latest()->first();
+    // Lấy giỏ hàng của người dùng đã đăng nhập với eager load product và attributeProduct
+    $shoppingCart = ShoppingCart::where('user_id', $userId)
+        ->with(['cartItems.product.attributeProducts']) // Eager load sản phẩm và attributeProducts
+        ->first(); // Mỗi người dùng chỉ có một giỏ hàng
+
+    // Nếu không tìm thấy giỏ hàng
+    if (!$shoppingCart) {
+        return view('user.cart', [
+            'cartItems' => [],
+            'total' => 0,
+
+        ]);
+    }
+
+    // Tính tổng tiền
+    $totalAmount = $shoppingCart->cartItems->sum(function ($item) {
+        // Lấy giá từ bảng attribute_products qua quan hệ product
+        $attributeProduct = $item->product->attributeProducts->first();
+        return $item->qty * ($attributeProduct ? $attributeProduct->price : 0);
+    });
+
+    // Trả dữ liệu về view
+    return view('user.cart', [
+        'cartItems' => $shoppingCart->cartItems,
+        'total' => $totalAmount,
+        'order' => $order
+    ]);
+}
+
+
+
 }

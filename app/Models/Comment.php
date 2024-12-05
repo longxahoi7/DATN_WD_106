@@ -8,25 +8,26 @@ use Illuminate\Database\Eloquent\Model;
 class Comment extends Model
 {
     use HasFactory;
-    protected $table = 'comments';
-
-    protected $primaryKey = 'comment_id';
-
+    protected $table='comments';
+    protected $primaryKey='comment_id';
     protected $fillable = [
-        'content',
-        'user_id',
-        'product_id',
+        'user_id', 'commentable_type', 'commentable_id', 'content',
     ];
-
-    // Quan hệ với User
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
     }
-
-    // Quan hệ với Product (nếu bình luận liên quan đến sản phẩm)
-    public function product()
+       // Quan hệ với các đối tượng mà người dùng có thể bình luận
+       public function commentable()
+       {
+           return $this->morphTo();
+       }
+       public function isBanned()
     {
-        return $this->belongsTo(Product::class, 'product_id');
+        return $this->is_banned;
+    }
+    public function replies()
+    {
+        return $this->hasMany(CommentReply::class, 'comment_id');
     }
 }

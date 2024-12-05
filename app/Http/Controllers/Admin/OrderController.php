@@ -8,8 +8,14 @@ use App\Models\Order;
 
 class OrderController extends Controller
 {
+    //
+    public function home()
+    {
+        return view('admin.index');
+    }
     public function index()
     {
+        return view('admin.pages.order_management');
         $orders = Order::with('orderItems')->get(); // Lấy tất cả đơn hàng cùng các item
         return response()->json($orders);
     }

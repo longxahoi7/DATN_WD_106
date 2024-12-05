@@ -13,9 +13,10 @@ class AttributeProduct extends Model
     protected $fillable = ['product_id', 'color_id', 'size_id', 'in_stock', 'price'];
 
     public function product()
-    {
-        return $this->belongsTo(Product::class);
-    }
+{
+    return $this->belongsTo(Product::class, 'product_id', 'product_id');
+}
+
     public function color()
     {
         return $this->belongsTo(Color::class);
@@ -24,5 +25,9 @@ class AttributeProduct extends Model
     public function size()
     {
         return $this->belongsTo(Size::class);
+    }
+    public function productImages()
+    {
+        return $this->hasMany(ProductImage::class);
     }
 }

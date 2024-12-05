@@ -1,0 +1,96 @@
+/* Toàn bộ sidebar */
+.custom-sider {
+    width: 250px;
+    height: 100vh; /* Chiều cao toàn màn hình */
+    background-color: #2c3e50; /* Màu nền sidebar */
+    color: #ecf0f1; /* Màu chữ */
+    position: fixed; /* Sidebar cố định */
+    padding: 20px;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2); /* Hiệu ứng đổ bóng */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+/* Logo */
+.custom-sider .logo {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.custom-sider .logo img {
+    border-radius: 8px; /* Bo góc logo */
+    transition: transform 0.3s ease-in-out; /* Hiệu ứng khi hover */
+}
+
+.custom-sider .logo img:hover {
+    transform: scale(1.1); /* Phóng to khi hover */
+}
+
+/* Menu chính */
+.menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.menu li {
+    margin: 15px 0;
+}
+
+.menu a {
+    text-decoration: none; /* Xóa gạch chân */
+    color: #ecf0f1;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    padding: 10px 15px;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+}
+
+.menu a:hover {
+    background-color: #34495e; /* Thay đổi màu nền khi hover */
+    color: #1abc9c; /* Thay đổi màu chữ khi hover */
+}
+
+.menu i {
+    margin-right: 10px; /* Khoảng cách giữa icon và text */
+}
+
+/* Submenu */
+.submenu {
+    list-style: none;
+    padding-left: 20px; /* Thụt lề submenu */
+    display: none; /* Mặc định ẩn */
+    margin-top: 10px;
+}
+
+.submenu li a {
+    font-size: 14px; /* Kích thước nhỏ hơn cho submenu */
+}
+
+.submenu.collapse {
+    display: block; /* Hiển thị submenu khi mở */
+}
+
+/* Hiệu ứng khi click */
+[data-toggle="collapse"]:hover + .submenu {
+    display: block;
+}
+
+/* Media query cho màn hình nhỏ */
+@media (max-width: 768px) {
+    .custom-sider {
+        width: 200px;
+        padding: 15px;
+    }
+
+    .menu a {
+        font-size: 14px;
+    }
+
+    .menu i {
+        margin-right: 5px;
+    }
+}

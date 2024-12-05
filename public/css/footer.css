@@ -3,6 +3,7 @@
     color: #333; /* Màu chữ mặc định */
     padding: 20px 0;
     font-family: Arial, sans-serif;
+    max-width: 100%;
 }
 
 .custom-footer .header-title {

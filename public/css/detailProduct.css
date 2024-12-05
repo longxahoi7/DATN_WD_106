@@ -1,0 +1,239 @@
+/* body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+} */
+.body {
+    margin: 0; /* Loại bỏ margin mặc định của body */
+    padding: 0; /* Loại bỏ padding mặc định của body */
+    width: 100%; /* Đảm bảo chiều rộng của body là 100% */
+}
+.container {
+    background: white;
+    padding: 16px 0;
+    border-radius: 8px;
+    /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); */
+    max-width: 1500px;
+}
+.product-image {
+    width: 100%;
+    max-width: 500px;
+}
+
+h1 {
+    color: #333;
+}
+.price {
+    font-size: 1.5em;
+    color: red;
+}
+.options {
+    margin: 10px 0;
+}
+.color-options,
+.size-options {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+.color-option,
+.size-option {
+    padding: 10px;
+    border: 2px solid #ccc;
+    cursor: pointer;
+    text-align: center;
+}
+.color-option:hover,
+.size-option:hover {
+    border-color: #28a745;
+}
+.selected {
+    border-color: #28a745;
+}
+.btn {
+    background-color: #28a745;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+.btn:hover {
+    background-color: #218838;
+}
+.similar-products {
+    display: flex;
+    gap: 20px;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.similar-product {
+    flex: 1 1 calc(33.33% - 20px);
+    text-align: center;
+    position: relative; /* Để định vị lớp phủ */
+    overflow: hidden; /* Đảm bảo lớp phủ không tràn ra ngoài */
+}
+
+.product-image {
+    position: relative;
+    width: 100%;
+}
+
+.product-image img {
+    width: 100%;
+    height: auto;
+    display: block;
+    transition: transform 0.3s ease; /* Tạo hiệu ứng zoom ảnh khi hover */
+}
+
+.product-image:hover img {
+    transform: scale(1.1); /* Zoom ảnh */
+}
+
+.product-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(11, 132, 108, 0.2); /* Nền xanh mờ */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    opacity: 0; /* Ẩn lớp phủ ban đầu */
+    transition: opacity 0.3s ease;
+}
+
+.product-image:hover .product-overlay {
+    opacity: 1; /* Hiện lớp phủ khi hover */
+}
+
+.product-name {
+    font-size: 25px;
+    font-weight: bold;
+    margin: 10px 0;
+    color: #f8f9fa;
+}
+
+.product-price {
+    font-size: 20px;
+    color: #c31515;
+    margin-bottom: 10px;
+}
+
+.add-to-cart {
+    margin-top: 15px;
+    background-color: #13922f;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.add-to-cart:hover {
+    background-color: #2cac1e;
+}
+
+.cart-icon {
+    font-size: 18px;
+}
+.review-images img {
+    width: 100px; /* Thay đổi kích thước hình ảnh */
+    height: auto; /* Giữ tỉ lệ hình ảnh */
+    margin: 5px; /* Khoảng cách giữa các ảnh */
+    object-fit: cover; /* Đảm bảo hình ảnh không bị méo */
+}
+.reviews {
+    margin-top: 20px;
+}
+.review {
+    border-bottom: 1px solid #ccc;
+    padding: 10px 0;
+}
+.review:last-child {
+    border-bottom: none;
+}
+.rating {
+    color: #ffc107;
+}
+.review-form {
+    margin-top: 20px;
+}
+.review-form textarea {
+    width: 100%;
+    height: 60px;
+    margin-top: 10px;
+}
+.stars {
+    display: flex;
+    cursor: pointer;
+}
+.star {
+    font-size: 24px;
+    color: #ccc;
+}
+.star:hover,
+.star.selected {
+    color: #ffc107;
+}
+.container1 {
+    display: flex;
+    justify-items: center;
+}
+.contai {
+    margin-right: 0;
+    margin-left: 50px;
+}
+h3 {
+    text-align: center;
+    position: relative;
+    margin-bottom: 10px; /* Khoảng cách dưới thẻ */
+}
+h3::after {
+    content: "";
+    display: block;
+
+    height: 3px; /* Độ dày đường gạch */
+    background-color: black; /* Màu đường gạch */
+    margin-top: 5px; /* Khoảng cách giữa chữ và gạch */
+    width: 20%; /* Độ dài đường gạch */
+    margin: 5px auto 0;
+}
+/* Tăng kích thước nút và biểu tượng */
+.like-button {
+    font-size: 30px; /* Thay đổi kích thước nút */
+    padding: 10px 20px; /* Thêm khoảng cách bên trong nút */
+    border: none; /* Bỏ đường viền */
+    background-color: transparent; /* Nền trong suốt */
+    cursor: pointer; /* Hiển thị con trỏ khi hover */
+    transition: transform 0.2s ease-in-out; /* Thêm hiệu ứng khi hover */
+}
+
+.like-button i {
+    font-size: 1em; /* Tăng kích thước của biểu tượng */
+}
+.report-button {
+    font-size: 30px; /* Thay đổi kích thước nút */
+    padding: 10px 20px; /* Thêm khoảng cách bên trong nút */
+    border: none; /* Bỏ đường viền */
+    background-color: transparent; /* Nền trong suốt */
+    cursor: pointer; /* Hiển thị con trỏ khi hover */
+    transition: transform 0.2s ease-in-out; /* Thêm hiệu ứng khi hover */
+}
+
+.report-button i {
+    font-size: 1em; /* Tăng kích thước của biểu tượng */
+}

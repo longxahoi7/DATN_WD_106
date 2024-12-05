@@ -1,7 +1,7 @@
 <link href="{{ asset('css/header.css') }}" rel="stylesheet">
 
 <div class="container-fluid border-bottom" style="padding-left: 25px; padding-right: 25px">
-    <div class="row g-0 d-flex justify-content-between align-items-center" >
+    <div class="row g-0 d-flex justify-content-between align-items-center">
         <!-- Cột bên trái - Logo -->
         <div class="col-2 d-flex align-items-center justify-content-center">
             <a href="/" class="navbar-brand">
@@ -12,7 +12,7 @@
 
         <!-- Cột giữa - Tìm kiếm và danh mục -->
         <div class="col-7" style="padding-left: 25px; padding-right: 25px">
-            <div class="row" >
+            <div class="row">
                 <!-- Hàng ngang 1 - Thanh tìm kiếm -->
                 <div class="col-12 mb-2 pt-5 form-search">
                     <form class="d-flex justify-content-center ">
@@ -64,17 +64,31 @@
                         <a href="/" class="nav-link d-flex ">
                             <i class="fas fa-home"></i> Trang chủ
                         </a>
-                        <div class="dropdown mr-5">
-                            <a href="#" class="nav-link d-flex custom-Navlink ">
-                                <i class="fas fa-user"></i> Tài Khoản
+                       <div class="dropdown mr-5">
+                            <a href="#" class="nav-link d-flex custom-Navlink">
+                                <i class="fas fa-user"></i> 
+                                @if(Auth::check())
+                                    {{ Auth::user()->name }}
+                                @else
+                                    Tài Khoản
+                                @endif
                             </a>
                             <div class="dropdown-menu text-center">
+                                @if(Auth::check())
                                 <a href="/profile" class="dropdown-item">Thông tin chung</a>
-                                <a href="/logout" class="dropdown-item">Đăng xuất</a>
-                                <a href="/login" class="dropdown-item">Đăng nhập</a>
-                                <a href="/register" class="dropdown-item">Đăng ký</a>
+                                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                    @csrf
+                                </form>
+                                <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                    Đăng xuất
+                                </a>
+                                @else
+                                    <a href="/login" class="dropdown-item">Đăng nhập</a>
+                                    <a href="/register" class="dropdown-item">Đăng ký</a>
+                                @endif
                             </div>
                         </div>
+
                         <a href="#" class="nav-link  d-flex ">
                             <i class="fas fa-shopping-cart"></i>
                         </a>
