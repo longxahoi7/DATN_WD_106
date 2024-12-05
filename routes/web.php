@@ -38,7 +38,7 @@ Route::get('/size', [SizeController::class, 'index'])->name('size.index');
 Route::get('/cart-list', [CartController::class, 'viewCart'])->name('users.cart');
 
 
-Route::get('/', [ProductsController::class, 'productList'])->name('products.list');
+Route::get('/', [HomeController::class, 'index'])->name('products.list');
 
 Route::get('product/{id}', [ProductsController::class, 'showProduct'])->name('product.detail');
 

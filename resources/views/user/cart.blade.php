@@ -1,3 +1,7 @@
+@extends('user.index')
+
+@section('content')
+
 @foreach($cartItems as $item)
 <tr>
     <td>
@@ -51,3 +55,4 @@
     </td>
 </tr>
 @endforeach
+@endsection
