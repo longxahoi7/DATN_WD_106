@@ -1,24 +1,25 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Models\Payment;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Carbon;
 class PaymentVnPayController extends Controller
 {
     //
-    public function vnp_payment()
+    public function vnp_payment(Request $request)
     {
+        $data = $request->all();
         $vnp_Url = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html"; // VNPAY Sandbox URL
-        $vnp_Returnurl = "https://localhost/vnpay_php/vnpay_return.php"; // Return URL của bạn (Sử dụng ngrok nếu đang chạy localhost)
-        $vnp_TmnCode = "V03IB2I2"; // Mã website tại VNPAY
-        $vnp_HashSecret = "0NK8MPYVQA00624WW4FQOC8XBAG41IC3"; // Chuỗi bí mật từ VNPAY
+        $vnp_Returnurl = "http://127.0.0.1:8000/vnp_return"; // Return URL của bạn (Sử dụng ngrok nếu đang chạy localhost)
+        $vnp_TmnCode = "L86V10FV"; // Mã website tại VNPAY
+        $vnp_HashSecret = "UG0UNZZI4B5W1R0UMAAA4QBVU77GQN46"; // Chuỗi bí mật từ VNPAY
         
         // Các thông tin thanh toán
-        $vnp_TxnRef = '214323'; // Mã giao dịch duy nhất
+        $vnp_TxnRef = date('YmdHis'); // Mã giao dịch duy nhất
         $vnp_OrderInfo = 'Thanh toán đơn hàng'; // Thông tin đơn hàng
         $vnp_OrderType = 'billpayment'; // Loại đơn hàng
-        $vnp_Amount = 200000 * 100; // Số tiền thanh toán (đơn vị là VND, nhân với 100 để chuyển đổi sang "cents")
+        $vnp_Amount = $data['amount'] * 100; // Số tiền thanh toán (đơn vị là VND, nhân với 100 để chuyển đổi sang "cents")
         $vnp_Locale = 'VN'; // Ngôn ngữ (VN cho tiếng Việt)
         $vnp_BankCode = 'NCB'; // Nếu không muốn chọn ngân hàng cụ thể, để trống để VNPAY tự chọn
         $vnp_IpAddr = $_SERVER['REMOTE_ADDR']; // Địa chỉ IP của người dùng
@@ -86,5 +87,51 @@ class PaymentVnPayController extends Controller
             echo json_encode($returnData);
         }
     }
+
+    public function handleVNPayCallback(Request $request)
+{
+    try {
+        // Lấy dữ liệu từ request
+        $data = $request->all();
+
+        // Tìm payment theo order_id
+        $payment = Payment::where('order_id', $data['order_id'])->first();
+        dd($payment);
+
+        // Nếu không tìm thấy payment, hiển thị thông báo lỗi trong view
+        if (!$payment) {
+            return view('user.orders.vnp_return')->with('error', 'Payment record not found for order_id: ' . $data['order_id']);
+        }
+
+        // Cập nhật dữ liệu từ VNPay trả về
+        $payment->update([
+            'vnp_txnref' => $data['vnp_TxnRef'] ?? null,
+            'vnp_bankcode' => $data['vnp_BankCode'] ?? null,
+            'vnp_responsecode' => $data['vnp_ResponseCode'] ?? null,
+            'vnp_transactionno' => $data['vnp_TransactionNo'] ?? null,
+            'vnp_securehash' => $data['vnp_SecureHash'] ?? null,
+            'vnp_transdate' => !empty($data['vnp_TransDate'])
+                ? \Carbon\Carbon::createFromFormat('YmdHis', $data['vnp_TransDate'])
+                : null,
+            'status' => $data['vnp_ResponseCode'] == '00' ? 'completed' : 'failed',
+        ]);
+
+        // Nếu thành công, lưu thông tin giao dịch vào DB
+        if ($data['vnp_ResponseCode'] == '00') {
+            // Dữ liệu đã được cập nhật ở trên, nếu muốn có thể lưu thêm các dữ liệu khác.
+            $payment->save();
+        }
+
+        // Trả về view Blade và truyền dữ liệu
+        return view('user.orders.vnp_return', [
+            'payment' => $payment,
+            'success' => $data['vnp_ResponseCode'] == '00', // Xác định giao dịch thành công hay thất bại
+        ]);
+
+    } catch (\Exception $e) {
+        // Nếu có lỗi, trả về view với thông báo lỗi
+        return view('user.orders.vnp_return')->with('error', $e->getMessage());
+    }
+}
     
 }

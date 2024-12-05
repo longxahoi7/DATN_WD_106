@@ -13,18 +13,19 @@ class AttributeProduct extends Model
     protected $fillable = ['product_id', 'color_id', 'size_id', 'in_stock', 'price'];
 
     public function product()
-{
-    return $this->belongsTo(Product::class, 'product_id', 'product_id');
-}
+    {
+        return $this->belongsTo(Product::class, 'product_id', 'product_id');
+    }
 
     public function color()
     {
-        return $this->belongsTo(Color::class);
+        return $this->belongsTo(Color::class, 'color_id', 'color_id');
     }
 
+    // Mối quan hệ với bảng Size
     public function size()
     {
-        return $this->belongsTo(Size::class);
+        return $this->belongsTo(Size::class, 'size_id', 'size_id');
     }
     public function productImages()
     {
