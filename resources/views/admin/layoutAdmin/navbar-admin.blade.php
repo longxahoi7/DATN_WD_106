@@ -17,20 +17,20 @@
                 <i class="icon-management"></i> Quản lý
             </a>
             <ul id="managementSubmenu" class="submenu collapse">
-                <li><a href="{{ route('category.index') }}">Quản lý danh mục</a></li>
+                <li><a href="">Quản lý danh mục</a></li>
                 <li><a href="#">Quản lý sản phẩm</a></li>
-                <li><a href="{{ route('size.index') }}">Quản lý Size</a></li>
-                <li><a href="{{ route('color.index') }}">Quản lý Màu</a></li>
-                <li><a href="{{ route('orders.index') }}">Quản lý đơn hàng</a></li>
+                <li><a href="">Quản lý Size</a></li>
+                <li><a href="">Quản lý Màu</a></li>
+                <li><a href="">Quản lý đơn hàng</a></li>
             </ul>
         </li>
         <li>
-            <a href="{{ route('brand.index') }}">
+            <a href="">
                 <i class="icon-tags"></i> Thương hiệu
             </a>
         </li>
         <li>
-            <a href="{{ route('orderShipper.index') }}">
+            <a href="">
                 <i class="icon-tags"></i> Shipper
             </a>
         </li>

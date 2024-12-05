@@ -61,44 +61,44 @@ class CartController extends Controller
 
     // API để xem giỏ hàng
     public function viewCart()
-{
-    // Lấy ID người dùng đã đăng nhập
-    $userId = Auth::id();
+    {
+        // Lấy ID người dùng đã đăng nhập
+        $userId = Auth::id();
 
-    // Nếu người dùng chưa đăng nhập, chuyển hướng đến trang đăng nhập
-    if (!$userId) {
-        return redirect()->route('login')->with('error', 'Vui lòng đăng nhập để xem giỏ hàng.');
-    }
-    $order = Order::where('user_id', auth()->id())->latest()->first();
-    // Lấy giỏ hàng của người dùng đã đăng nhập với eager load product và attributeProduct
-    $shoppingCart = ShoppingCart::where('user_id', $userId)
-        ->with(['cartItems.product.attributeProducts']) // Eager load sản phẩm và attributeProducts
-        ->first(); // Mỗi người dùng chỉ có một giỏ hàng
+        // Nếu người dùng chưa đăng nhập, chuyển hướng đến trang đăng nhập
+        if (!$userId) {
+            return redirect()->route('login')->with('error', 'Vui lòng đăng nhập để xem giỏ hàng.');
+        }
 
-    // Nếu không tìm thấy giỏ hàng
-    if (!$shoppingCart) {
+        // Lấy giỏ hàng của người dùng
+        $order = Order::where('user_id', auth()->id())->latest()->first();
+
+        $shoppingCart = ShoppingCart::where('user_id', $userId)
+            ->with(['cartItems.product.attributeProducts.color', 'cartItems.product.attributeProducts.size']) // Eager load sản phẩm và thuộc tính màu sắc, kích thước
+            ->first(); 
+
+        // Nếu không tìm thấy giỏ hàng, trả về view với giỏ hàng rỗng
+        if (!$shoppingCart) {
+            return view('user.cart', [
+                'cartItems' => [],
+                'total' => 0,
+            ]);
+        }
+
+        // Tính tổng tiền giỏ hàng
+        $totalAmount = $shoppingCart->cartItems->sum(function ($item) {
+            // Lấy giá từ bảng attribute_products qua quan hệ với product
+            $attributeProduct = $item->product->attributeProducts->first();
+            return $item->qty * ($attributeProduct ? $attributeProduct->price : 0);
+        });
+
+        // Trả về dữ liệu giỏ hàng
         return view('user.cart', [
-            'cartItems' => [],
-            'total' => 0,
-
+            'cartItems' => $shoppingCart->cartItems,
+            'total' => $totalAmount,
+            'order' => $order
         ]);
     }
 
-    // Tính tổng tiền
-    $totalAmount = $shoppingCart->cartItems->sum(function ($item) {
-        // Lấy giá từ bảng attribute_products qua quan hệ product
-        $attributeProduct = $item->product->attributeProducts->first();
-        return $item->qty * ($attributeProduct ? $attributeProduct->price : 0);
-    });
-
-    // Trả dữ liệu về view
-    return view('user.cart', [
-        'cartItems' => $shoppingCart->cartItems,
-        'total' => $totalAmount,
-        'order' => $order
-    ]);
 }
 
-
-
-}

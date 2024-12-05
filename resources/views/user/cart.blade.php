@@ -35,13 +35,21 @@
                                         </td>
                                         <td class="pro-thumbnail">
                                             <a href="#">
-                                            <!-- <img src="{{$item->product->main_image_url }}" 
-                                            alt="{{ $item->product->name }}" width="100"> -->
+                                            <img src="" 
+                                            alt="{{ $item->product->name }}" width="100">
 
                                             </a>
                                         </td>
                                         <td class="pro-title">
+                                        
                                             <a href="#">{{ $item->product->name }}</a>
+                                            @foreach($item->product->attributeProducts as $attribute)
+                                                <div class="attribute">
+                                                    <span>Color: {{ $attribute->color->name }}</span>
+                                                    <span>Size: {{ $attribute->size->name }}</span>
+                                                    <span>Price: {{ number_format($attribute->price, 2) }} VND</span>
+                                                </div>
+                                            @endforeach
                                         </td>
                                         <td class="pro-price">
                                             @php
@@ -121,7 +129,8 @@
                                 </table>
                             </div>
                         </div>
-                        <form action="{{ route('checkout.cod') }}" method="POST">
+                        <div class="row">
+                        <form action="{{ route('checkout.cod') }}" method="POST" >
                             @csrf
                             <input type="hidden" name="order_id" value="{{ $order->order_id }}">
                             <input type="hidden" name="amount" value="{{ $total + 70000}}">
@@ -129,10 +138,12 @@
                         </form>
                         <form action="{{ route('checkout.vnpay') }}" method="POST">
                         @csrf
-                            <button type="submit" name="redirect">
-                            Thanh toán VNPAY
+                            <button type="submit" name="redirect" class="btn btn-primary">
+                            <input type="hidden" name="amount" value="{{ $total + 70000}}">
+                                Thanh toán VNPAY
                             </button>
                         </form>
+                        </div>
                     </div>
                 </div>
             </div>

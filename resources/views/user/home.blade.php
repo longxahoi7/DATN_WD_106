@@ -8,7 +8,8 @@
         @foreach($productSoldCount as $soldProduct)
         <div class="col-md-3 mb-4">
             <div class="card">
-                <img src="{{ $soldProduct->main_image_url }}" class="card-img-top" alt="{{ $soldProduct->name }}">
+                <img src="{{ $soldProduct->main_image_url }}" class="card-img-top"
+                 alt="{{ $soldProduct->name }}">
                 <div class="card-body">
                     <h5 class="card-title">{{ $soldProduct->name }}</h5>
                     <p>Giá: {{ number_format($soldProduct->attributeProducts->first()->price ?? 0, 0, ',', '.') }} VND</p>
@@ -41,7 +42,11 @@
                 <img src="{{ $product->main_image_url }}" class="card-img-top" alt="{{ $product->name }}">
                 <div class="card-body">
                     <h5 class="card-title">{{ $product->name }}</h5>
-                    <p class="card-text"> Giá: {{ number_format($product->price, 0, ',', '.') }} VND</p>
+                    <p class="card-text">
+                    @foreach ($product->attributeProducts as $attribute)
+                        <li>{{ number_format($attribute->price, 0, ',', '.') }} VND</li>
+                    @endforeach
+                    </p>
                     <p class="card-text">{{ $product->description }}</p>
                     <a href="{{ route('product.detail', $product->product_id) }}" class="btn btn-primary">Xem chi tiết</a>
                 </div>

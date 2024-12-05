@@ -54,19 +54,25 @@ class ProductsController extends Controller
     // API để lấy danh sách sản phẩm
     public function productList()
     {
-        // Eager load cả 'attributeProducts' từ bảng attribute_products
+       // Lấy danh sách sản phẩm cùng với thông tin attributes
         $listProduct = Product::with('attributeProducts')->get();
-
-        $productSoldCount = Product::where('sold_count', '>', 100)
+        
+        // Lấy top 10 sản phẩm bán chạy (sold_count > 100) và đang hoạt động
+        $productSoldCount = Product::query()
+            ->where('sold_count', '>', 100)
             ->where('is_active', true)
             ->orderBy('sold_count', 'desc')
-            ->take(10) // Lấy top 10 sản phẩm bán chạy
+            ->take(10)
             ->get();
-        $productHot = Product::where('is_hot',0)
+
+        // Lấy danh sách sản phẩm "hot" đang hoạt động
+        $productHot = Product::query()
+            ->where('is_hot', 0)
             ->where('is_active', true)
             ->get();
 
-        return view('user.product', compact('listProduct','productHot','productSoldCount'));
+        // Trả về view với dữ liệu
+        return view('user.product', compact('listProduct', 'productHot', 'productSoldCount'));
     }
 
     // API để lấy chi tiết một sản phẩm
