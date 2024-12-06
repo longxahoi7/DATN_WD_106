@@ -63,5 +63,9 @@ class Product extends Model
     public function attributeProducts(){
         return  $this->hasMany(AttributeProduct::class, 'product_id');
     }
+    public function orderItems()
+    {
+        return $this->hasMany(OrderItem::class); 
+    }
 
 }

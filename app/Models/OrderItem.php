@@ -19,4 +19,19 @@ class OrderItem extends Model
     {
         return $this->belongsTo(Product::class, 'product_id');
     }
+    public function order()
+    {
+        return $this->belongsTo(Order::class, 'order_id');
+    }
+    public function attributeProduct()
+{
+    return $this->hasOneThrough(
+        AttributeProduct::class,
+        Product::class,
+        'product_id', // Foreign key trên bảng products
+        'product_id', // Foreign key trên bảng attribute_products
+        'product_id', // Local key trên bảng order_items
+        'product_id'  // Local key trên bảng products
+    );
+}
 }

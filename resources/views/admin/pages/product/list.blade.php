@@ -30,7 +30,7 @@
                 <tr>
                     <td>{{$product->sku}}</td>
                     <td>{{$product->name}}</td>
-                    <td><img src="{{ asset($product->main_image_url) }}" width="100px" height="100px" alt="Sản phẩm A"></td>
+                    <td><img src="{{ Storage::url($product->main_image_url) }}" width="100px" height="100px" alt="Sản phẩm A"></td>
                     <td>{{$product->description}}</td>
                     <td>
                             <form action="{{ route('admin.products.toggle', $product->product_id) }}" method="POST"

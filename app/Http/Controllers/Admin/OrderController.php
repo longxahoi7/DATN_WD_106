@@ -31,31 +31,32 @@ class OrderController extends Controller
     }
 
     public function showDetailOrder($orderId)
-    {
-        // Lấy thông tin order theo ID
-        $order = Order::with(['user'])->findOrFail($orderId);
+{
+    $order = Order::with(['orderItems.attributeProduct.product'])->findOrFail($orderId);
 
-        // Trả về view cùng dữ liệu
-        return view('admin.pages.orderDetail', compact('order'));
-    }
+    return view('admin.pages.orderDetail', compact('order'));
+}
     //Cập nhật
-    public function updateStatus(Request $request, $id)
+    // AdminController.php
+
+    public function updateOrderStatus(Request $request)
     {
-        $validated = $request->validate([
-            'status' => 'required|in:pending,processing,shipped,delivered,cancelled,completed',
-        ]);
+        // Kiểm tra nếu đơn hàng tồn tại
+        $order = Order::find($request->order_id);
+        
+        if ($order) {
+            // Cập nhật trạng thái đơn hàng
+            $order->status = $request->status;
+            $order->save();
 
-        $order = Order::findOrFail($id);
-        $order->update(['status' => $validated['status']]);
+            // Trả về phản hồi JSON
+            return response()->json(['success' => true, 'message' => 'Cập nhật trạng thái thành công!']);
+        }
 
-        return response()->json($order);
+        // Nếu không tìm thấy đơn hàng
+        return response()->json(['success' => false, 'message' => 'Không tìm thấy đơn hàng!']);
     }
-    // Xóa đơn hàng
-    public function destroy($id)
-    {
-        $order = Order::findOrFail($id);
-        $order->delete();
 
-        return response()->json(['message' => 'Đơn hàng đã được xóa.']);
-    }
+
+
 }
