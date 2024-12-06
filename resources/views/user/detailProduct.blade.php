@@ -73,9 +73,52 @@
             </div>
 
             <div class="reviews">
+            <h2>Customer Reviews</h2>
+            <div class="review">
+                <div class="review-header">
+                    <strong>anhan224</strong>
+                    <div class="rating">★★★★☆</div>
+                    <span class="review-date">2021-10-29 10:05</span>
+                </div>
+                <p class="review-text">
+                    Hàng đẹp, sản phẩm rất đáng mua nhé
+                    Mua hàng ở làn bên shop nên rất yên tâm về chất lượng ❤️❤️
+                    Sẽ còn mua hàng shop dài dài hihi! 😊
+                </p>
+                <div class="review-images">
+                    <img src="{{ asset('imagePro/1732209277.jpg') }}" alt="Review Image 1" />
+                    <img src="{{ asset('imagePro/1732209500.jpg') }}" alt="Review Image 2" />
+                    <img src="{{ asset('imagePro/1732209441.jpg') }}" alt="Review Image 3" />
+                </div>
+                <div class="review-buttons">
+                    <button class="like-button" onclick="toggleLike(this)">
+                        <i class="fa-regular fa-thumbs-up"></i>
+                    </button>
+                    <span class="like-count">0</span>
+                    <button class="report-button" onclick="toggleReport(this)">
+                        <i class="fa-solid fa-exclamation-triangle"></i>
+                    </button>
+                    <span class="report-count">0</span>
+                </div>
+
+        </div>
+        <div class="review-form">
+            <h2>Leave a Review</h2>
+            <div class="stars">
+                <span class="star" onclick="selectStar(1)">★</span>
+                <span class="star" onclick="selectStar(2)">★</span>
+                <span class="star" onclick="selectStar(3)">★</span>
+                <span class="star" onclick="selectStar(4)">★</span>
+                <span class="star" onclick="selectStar(5)">★</span>
+
+            <div class="reviews">
                 <h2>Đánh giá sản phẩm</h2>
                 <!-- Review Section -->
             </div>
+            <textarea placeholder="Write your review here..."></textarea>
+            <button class="btn">Submit Review</button>
+        </div>
+
         </div>
     </div>
 

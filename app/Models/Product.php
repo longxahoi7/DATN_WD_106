@@ -60,8 +60,8 @@ class Product extends Model
     {
         return $this->belongsToMany(Order::class, 'product_id', 'order_id');
     }
-    public function attributeProducts(){
-        return  $this->hasMany(AttributeProduct::class, 'product_id');
+    public function attributeProducts()
+    {
+        return $this->hasMany(AttributeProduct::class, 'product_id', 'product_id');
     }
-
 }

@@ -21,4 +21,8 @@ class ProductImage extends Model
     {
         return $this->belongsTo(Color::class);
     }
+    public function attributeProduct()
+    {
+        return $this->belongsTo(AttributeProduct::class, 'attribute_product_id');
+    }
 }
