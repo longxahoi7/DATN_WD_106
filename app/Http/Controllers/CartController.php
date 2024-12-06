@@ -63,7 +63,7 @@ class CartController extends Controller
     {
         // Lấy ID người dùng đã đăng nhập
         $userId = Auth::id();
-
+        
         // Nếu người dùng chưa đăng nhập, chuyển hướng đến trang đăng nhập
         if (!$userId) {
             return redirect()->route('login')->with('error', 'Vui lòng đăng nhập để xem giỏ hàng.');
@@ -75,7 +75,7 @@ class CartController extends Controller
         $shoppingCart = ShoppingCart::where('user_id', $userId)
             ->with(['cartItems.product.attributeProducts.color', 'cartItems.product.attributeProducts.size']) // Eager load sản phẩm và thuộc tính màu sắc, kích thước
             ->first();
-
+        
         // Nếu không tìm thấy giỏ hàng, trả về view với giỏ hàng rỗng
         if (!$shoppingCart) {
             return view('user.cart', [
