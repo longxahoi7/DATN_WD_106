@@ -80,7 +80,7 @@ class ProductsController extends Controller
     {
         // Tìm sản phẩm theo ID và kèm theo các thuộc tính của sản phẩm
         $product = Product::where('product_id', $productId)
-            ->with(['attributeProducts.color', 'attributeProducts.size']) // Eager load color and size attributes
+            ->with(['attributeProducts.color', 'attributeProducts.size','attributeProducts']) // Eager load color and size attributes
             ->firstOrFail();
         //Hiển thj sản phẩm liên quan
         $relatedProducts = Product::where('product_category_id', $product->product_category_id)
