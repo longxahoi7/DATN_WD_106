@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="cart-table-container">
-    <table class="cart-table" border="1" cellpadding="10" cellspacing="0" style="width: 100%; border-collapse: collapse; table-layout: fixed;">
+    <table class="cart-table" border="1" cellpadding="10" cellspacing="0" style="width: 100%; border-collapse: collapse;">
         <thead>
             <tr>
                 <th>Chọn</th>
@@ -26,7 +26,7 @@
                     </a>
                 </td>
                 <td class="pro-title">
-                    <a href="{{ route('product.detail', $item->product_id) }}">{{ $item->product->name }}</a>
+                    <a href="#">{{ $item->product->name }}</a>
                     @foreach($item->product->attributeProducts as $attribute)
                     <div class="attribute">
                         <span>Color: {{ $attribute->color->name }}</span>
@@ -62,7 +62,7 @@
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="btn">
-                            <i class="fa fa-trash-o"></i>
+                            <i class="fa fa-trash-o">Xóa</i>
                         </button>
                     </form>
                 </td>
@@ -70,5 +70,26 @@
             @endforeach
         </tbody>
     </table>
+
+    <div class="cart-summary">
+        <table>
+            <tr>
+                <th>Tổng tiền:</th>
+                <td>{{ number_format($total, 0, ',', '.') }} VND</td>
+            </tr>
+            <tr>
+                <th>Giảm giá:</th>
+                <td>{{ number_format($discount, 0, ',', '.') }} VND</td>
+            </tr>
+            <tr>
+                <th>Phí vận chuyển:</th>
+                <td>{{ number_format($shippingFee, 0, ',', '.') }} VND</td>
+            </tr>
+            <tr>
+                <th>Tổng cộng:</th>
+                <td>{{ number_format($finalTotal, 0, ',', '.') }} VND</td>
+            </tr>
+        </table>
+    </div>
 </div>
 @endsection

@@ -7,6 +7,7 @@ use App\Models\Product;
 use App\Models\Order;
 use App\Models\ShoppingCart;
 use App\Models\CartItem;
+use App\Models\Coupon;
 use Illuminate\Support\Facades\Auth;
 
 
@@ -68,10 +69,8 @@ class CartController extends Controller
         if (!$userId) {
             return redirect()->route('login')->with('error', 'Vui lòng đăng nhập để xem giỏ hàng.');
         }
-
+    
         // Lấy giỏ hàng của người dùng
-        $order = Order::where('user_id', auth()->id())->latest()->first();
-
         $shoppingCart = ShoppingCart::where('user_id', $userId)
             ->with(['cartItems.product.attributeProducts.color', 'cartItems.product.attributeProducts.size']) // Eager load sản phẩm và thuộc tính màu sắc, kích thước
             ->first();
@@ -81,23 +80,57 @@ class CartController extends Controller
             return view('user.cart', [
                 'cartItems' => [],
                 'total' => 0,
+                'discount' => 0,
+                'shippingFee' => 40000, // Phí ship mặc định
+                'finalTotal' => 40000, // Tổng cộng bao gồm phí ship
             ]);
         }
-
+    
         // Tính tổng tiền giỏ hàng
         $totalAmount = $shoppingCart->cartItems->sum(function ($item) {
             // Lấy giá từ bảng attribute_products qua quan hệ với product
             $attributeProduct = $item->product->attributeProducts->first();
             return $item->qty * ($attributeProduct ? $attributeProduct->price : 0);
         });
-
+    
+        // Kiểm tra mã giảm giá nếu có
+        $discount = 0;
+        $couponCode = session('coupon_code'); // Lấy mã giảm giá từ session (nếu có)
+    
+        if ($couponCode) {
+            // Áp dụng mã giảm giá nếu có
+            $coupon = Coupon::where('code', $couponCode)->first();
+            if ($coupon) {
+                // Giảm giá theo tỷ lệ phần trăm hoặc giá trị cố định
+                if ($coupon->type == 'percentage') {
+                    $discount = ($coupon->discount / 100) * $totalAmount; // Giảm giá theo phần trăm
+                } else {
+                    $discount = $coupon->discount; // Giảm giá theo số tiền cố định
+                }
+            }
+        }
+    
+        // Tổng tiền sau khi áp dụng giảm giá
+        $totalAfterDiscount = $totalAmount - $discount;
+    
+        // Phí ship
+        $shippingFee = 40000;
+    
+        // Tổng cộng sau khi cộng phí ship
+        $finalTotal = $totalAfterDiscount + $shippingFee;
+    
         // Trả về dữ liệu giỏ hàng
         return view('user.cart', [
             'cartItems' => $shoppingCart->cartItems,
             'total' => $totalAmount,
-            'order' => $order
+            'discount' => $discount,
+            'shippingFee' => $shippingFee,
+            'finalTotal' => $finalTotal,
+            'couponCode' => $couponCode,
         ]);
     }
+    
+
 
     public function update(Request $request, $id)
     {
@@ -121,6 +154,6 @@ class CartController extends Controller
         $cartItem = CartItem::findOrFail($id);
         $cartItem->delete();
 
-        return redirect()->route('user.cart')->with('success', 'Sản phẩm đã được xóa khỏi giỏ hàng.');
+        return redirect()->route('users.cart')->with('success', 'Sản phẩm đã được xóa khỏi giỏ hàng.');
     }
 }
