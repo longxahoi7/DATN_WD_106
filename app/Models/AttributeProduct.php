@@ -21,12 +21,14 @@ class AttributeProduct extends Model
     {
         return $this->belongsTo(Color::class, 'color_id');
     }
-
+    // Mối quan hệ với bảng Size
     public function size()
     {
         return $this->belongsTo(Size::class, 'size_id');
+
     }
-    public function images(){
-        return $this->hasMany(ProductImage::class,'attribute_product_id');
+    public function productImages()
+    {
+        return $this->hasMany(ProductImage::class);
     }
 }

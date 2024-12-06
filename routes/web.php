@@ -1,6 +1,6 @@
 <?php
-
 use App\Http\Controllers\Admin\ColorController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\User\CommentController;
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\CategoryController;
@@ -16,15 +16,18 @@ use App\Http\Controllers\Api\InvoiceController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\StatsController;
 use App\Http\Controllers\Admin\Dasboard;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\PaymentVnPayController;
+use App\Http\Controllers\OrderController as OrderUserController;
 
 Route::group(
     [
         'prefix' => 'admin',
         'as' => 'admin.'
     ],
-
     function () {
-        Route::get('/dashBoard',[Dasboard::class,'dashBoard']);
+        Route::get('/dashBoard', [Dasboard::class, 'dashBoard']);
         // Thống kê
         Route::get('stats', [StatsController::class, 'index']);
         // CRUD CATẺGORY
@@ -52,7 +55,7 @@ Route::group(
                 'as' => 'brands.'
             ],
             function () {
-                
+
             Route::get('/list-brand', [BrandController::class, 'listBrand'])->name('index');
             Route::post('/brands/{id}/toggle', [BrandController::class, 'toggle'])->name('toggle');
             Route::get('/create-brand', [BrandController::class, 'createBrand'])->name('create');
@@ -73,7 +76,7 @@ Route::group(
             Route::get('/list-color', [ColorController::class, 'listColor'])->name('index');
             Route::get('/create-color', [ColorController::class, 'createColor'])->name('create');
             Route::post('/add-color', [ColorController::class, 'addColor'])->name('store');
-            
+
             Route::get('/detail-color/{id}', [ColorController::class, 'detailColor'])->name(name: 'detail');
             Route::get('/edit-color/{id}', [ColorController::class, 'editColor'])->name(name: 'edit');
             Route::delete('/destroy-color/{id}', [ColorController::class, 'destroyColor'])->name(name: 'delete');
@@ -88,7 +91,7 @@ Route::group(
             ],
             function () {
             Route::get('/list-size', [SizeController::class, 'listSize'])->name('index');
-           
+
             Route::get('/create-size', [SizeController::class, 'createSize'])->name('create');
             Route::post('/add-size', [SizeController::class, 'addSize'])->name('store');
             Route::get('/detail-size/{id}', [SizeController::class, 'detailSize'])->name(name: 'detail');
@@ -114,7 +117,8 @@ Route::group(
             Route::get('/detail-product/{id}', [ProductController::class, 'detailProduct'])->name('detail');
             Route::delete('/destroy-product/{id}', [ProductController::class, 'destroyProduct'])->name('delete');
             Route::post('/products/{id}/restore', [ProductController::class, 'restoreProduct']);
-            Route::put('/update-product/{id}', [ProductController::class, 'updateProduct'])->name('update');;
+            Route::put('/update-product/{id}', [ProductController::class, 'updateProduct'])->name('update');
+            ;
         }
         );
         // CRUD COUPON
@@ -144,7 +148,79 @@ Route::group(
             Route::delete('/orders/{id}', [OrderController::class, 'destroy']);  // Xóa đơn hàng
         }
         );
-    });
+    }
+);
+
+
+
+
+
+
+Route::get('register', function () {
+    return view('auth.register');
+})->name('register');
+
+
+
+Auth::routes();
+Route::get('/', [HomeController::class, 'index'])->name('home');
+
+Route::get('index', [BrandController::class, 'home']);
+
+Route::get('/brand', [BrandController::class, 'index'])->name('brand.index');
+
+Route::get('/category', [CategoryController::class, 'index'])->name('category.index');
+
+Route::get('/color', [ColorController::class, 'index'])->name('color.index');
+
+Route::get('/size', [SizeController::class, 'index'])->name('size.index');
+
+Route::get('/cart-list', [CartController::class, 'viewCart'])->name('users.cart');
+
+
+// Route cho người dùng
+// Route::prefix('/')->group(function () {
+Route::get('/', [HomeController::class, 'index'])->name('home');
+
+// Route::get('home', [HomeController::class, 'index'])->name('product.list');
+
+// Route::get('product', [ProductsController::class, 'productList'])->name('product.list');
+
+Route::get('product/{id}', [ProductsController::class, 'showProduct'])->name('product.detail');
+
+
+
+
+Route::post('/cart/add', [CartController::class, 'addToCart'])->name('cart.add');
+
+Route::post('/cart/update/{id}', [CartController::class, 'update'])->name('cart.update');
+
+Route::delete('/cart/remove/{id}', [CartController::class, 'removeItem'])->name('cart.remove');
+
+
+Route::post('/checkout/cod', [PaymentController::class, 'handleCodPayment'])->name('checkout.cod');
+
+Route::get('/order/success/{order_id}', [OrderUserController::class, 'orderSuccess'])->name('order.success');
+
+Route::post('/vnp_payment', [PaymentVnPayController::class, 'vnp_payment'])->name('checkout.vnpay');
+Route::get('/vnp_return', [PaymentVnPayController::class, 'handleVNPayCallback'])
+    ->name('vnp_return');
+
+Route::get('about', function () {
+    return view('user.about');
+})->name('about');
+// });
+
+// Route cho admin (cần middleware xác thực admin)
+// Route::prefix('admin')->middleware(['auth', 'isAdmin'])->group(function () {
+Route::get('/dashboard', function () {
+    return view('admin.pages.orderDetail');
+})->name('admin.dashboard');
+Route::get('/orders', [OrderController::class, 'showAllOrders'])
+    ->name('admin.orders');
+
+Route::get('/orders-detail/{id}', [OrderController::class, 'showDetailOrder'])
+    ->name('admin.orderDetail');
 
 
 
@@ -152,22 +228,10 @@ Route::group(
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+// Quản lý đơn hàng
+// Route::get('orders', function () {
+//     return view('admin.orders.index');
+// })->name('admin.orders');
 
 
 
@@ -259,3 +323,9 @@ Route::group(
 //         return view('admin.accounts.index');
 //     })->name('admin.accounts');
 // }); 
+
+// Quản lý tài khoản
+Route::get('accounts', function () {
+    return view('admin.accounts.index');
+})->name('admin.accounts');
+// });

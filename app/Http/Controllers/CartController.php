@@ -4,64 +4,39 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Product;
+use App\Models\Order;
 use App\Models\ShoppingCart;
 use App\Models\CartItem;
+use App\Models\Coupon;
 use Illuminate\Support\Facades\Auth;
+
 
 class CartController extends Controller
 {
     // API để thêm sản phẩm vào giỏ hàng
     public function addToCart(Request $request)
     {
+        // Kiểm tra dữ liệu đầu vào
+        $request->validate([
+            'product_id' => 'required|exists:products,product_id',
+            'color_id' => 'nullable|exists:colors,color_id',
+            'size_id' => 'nullable|exists:sizes,size_id',
+            'qty' => 'required|integer|min:1'
+        ]);
+
         // Lấy thông tin sản phẩm
         $product = Product::findOrFail($request->product_id);
 
         // Tìm hoặc tạo giỏ hàng cho người dùng
         $cart = ShoppingCart::firstOrCreate([
-            'user_id' => auth()->id() // Nếu người dùng đã đăng nhập
+            'user_id' => auth()->id() // Người dùng phải đăng nhập
         ]);
 
         // Kiểm tra nếu sản phẩm đã tồn tại trong giỏ hàng
         $cartItem = CartItem::where('shopping_cart_id', $cart->id)
             ->where('product_id', $product->product_id)
-            ->where('color_id', $request->color_id)
-            ->where('size_id', $request->size_id)
+
             ->first();
-
-        if ($cartItem) {
-            // Nếu sản phẩm đã tồn tại, tăng số lượng
-            $cartItem->qty += $request->qty;
-            $cartItem->save();
-        } else {
-            // Thêm sản phẩm mới vào giỏ hàng
-            CartItem::create([
-                'shopping_cart_id' => $cart->id,
-                'product_id' => $product->product_id,
-                'color_id' => $request->color_id,
-                'size_id' => $request->size_id,
-                'qty' => $request->qty,
-                'price' => $product->price, // Giá hiện tại của sản phẩm
-            ]);
-        }
-
-        // Lấy tất cả sản phẩm trong giỏ hàng và tính tổng giá trị
-        $cartItems = CartItem::where('shopping_cart_id', $cart->id)->get();
-        $total = $cartItems->sum(function ($item) {
-            return $item->qty * $item->price;
-        });
-
-        // Trả về view giỏ hàng với thông tin cập nhật
-        return view('user.cart', [
-            'cartItems' => $cartItems,
-            'total' => $total
-        ]);
-
-        // Kiểm tra nếu sản phẩm đã tồn tại trong giỏ hàng
-        // $cartItem = CartItem::where('shopping_cart_id', $cart->id)
-        //     ->where('product_id', $product->product_id)
-        //     ->where('color_id', $request->color_id)
-        //     ->where('size_id', $request->size_id)
-        //     ->first();
 
         if ($cartItem) {
             // Nếu sản phẩm đã tồn tại, tăng số lượng
@@ -75,44 +50,112 @@ class CartController extends Controller
                 'color_id' => $request->color_id,
                 'size_id' => $request->size_id,
                 'qty' => $request->qty,
-                'price' => $product->price, // Giá hiện tại
+                'price' => $product->price,
             ]);
         }
 
-        return response()->json(['success' => 'Sản phẩm đã được thêm vào giỏ hàng.']);
+        // Điều hướng về trang giỏ hàng
+        return redirect()->route('users.cart')->with('success', 'Sản phẩm đã được thêm vào giỏ hàng.');
     }
+
 
     // API để xem giỏ hàng
     public function viewCart()
     {
         // Lấy ID người dùng đã đăng nhập
-        //$userId = Auth::id();
+        $userId = Auth::id();
 
-        // Kiểm tra nếu người dùng chưa đăng nhập
-        // if (!$userId) {
-        //     return response()->json([
-        //         'success' => false,
-        //         'message' => 'User is not authenticated.'
-        //     ], 401);
-        // }
-
-        // Lấy giỏ hàng của người dùng đã đăng nhập
-        $shoppingCart = ShoppingCart::where('user_id', 1)
-            ->with('cartItems.product') // Eager load các sản phẩm trong giỏ hàng
-            ->get(); // Lấy giỏ hàng đầu tiên (mỗi người dùng chỉ có một giỏ hàng)
-
-        // Nếu không tìm thấy giỏ hàng
-        if (!$shoppingCart) {
-            return response()->json([
-                'success' => false,
-                'message' => 'No cart found for the logged-in user.'
-            ], 404);
+        // Nếu người dùng chưa đăng nhập, chuyển hướng đến trang đăng nhập
+        if (!$userId) {
+            return redirect()->route('login')->with('error', 'Vui lòng đăng nhập để xem giỏ hàng.');
         }
 
-        // Trả về dữ liệu giỏ hàng cùng với các sản phẩm
-        return response()->json([
-            'success' => true,
-            'cart' => $shoppingCart
-        ], 200);
+        // Lấy giỏ hàng của người dùng
+        $shoppingCart = ShoppingCart::where('user_id', $userId)
+            ->with(['cartItems.product.attributeProducts.color', 'cartItems.product.attributeProducts.size']) // Eager load sản phẩm và thuộc tính màu sắc, kích thước
+            ->first();
+
+        // Nếu không tìm thấy giỏ hàng, trả về view với giỏ hàng rỗng
+        if (!$shoppingCart) {
+            return view('user.cart', [
+                'cartItems' => [],
+                'total' => 0,
+                'discount' => 0,
+                'shippingFee' => 40000, // Phí ship mặc định
+                'finalTotal' => 40000, // Tổng cộng bao gồm phí ship
+            ]);
+        }
+
+        // Tính tổng tiền giỏ hàng
+        $totalAmount = $shoppingCart->cartItems->sum(function ($item) {
+            // Lấy giá từ bảng attribute_products qua quan hệ với product
+            $attributeProduct = $item->product->attributeProducts->first();
+            return $item->qty * ($attributeProduct ? $attributeProduct->price : 0);
+        });
+
+        // Kiểm tra mã giảm giá nếu có
+        $discount = 0;
+        $couponCode = session('coupon_code'); // Lấy mã giảm giá từ session (nếu có)
+        // Lấy giỏ hàng của người dùng
+        $order = Order::where('user_id', auth()->id())->latest()->first();
+        if ($couponCode) {
+            // Áp dụng mã giảm giá nếu có
+            $coupon = Coupon::where('code', $couponCode)->first();
+            if ($coupon) {
+                // Giảm giá theo tỷ lệ phần trăm hoặc giá trị cố định
+                if ($coupon->type == 'percentage') {
+                    $discount = ($coupon->discount / 100) * $totalAmount; // Giảm giá theo phần trăm
+                } else {
+                    $discount = $coupon->discount; // Giảm giá theo số tiền cố định
+                }
+            }
+        }
+
+        // Tổng tiền sau khi áp dụng giảm giá
+        $totalAfterDiscount = $totalAmount - $discount;
+
+        // Phí ship
+        $shippingFee = 40000;
+
+        // Tổng cộng sau khi cộng phí ship
+        $finalTotal = $totalAfterDiscount + $shippingFee;
+
+        // Trả về dữ liệu giỏ hàng
+        return view('user.cart', [
+            'cartItems' => $shoppingCart->cartItems,
+            'total' => $totalAmount,
+            'discount' => $discount,
+            'shippingFee' => $shippingFee,
+            'finalTotal' => $finalTotal,
+            'couponCode' => $couponCode,
+            'order' => $order
+        ]);
+    }
+
+
+
+    public function update(Request $request, $id)
+    {
+        // Lấy thông tin giỏ hàng
+        $cartItem = CartItem::findOrFail($id);
+
+        // Kiểm tra xem số lượng có hợp lệ không
+        $request->validate([
+            'qty' => 'required|integer|min:1',
+        ]);
+
+        // Cập nhật số lượng
+        $cartItem->qty = $request->qty;
+        $cartItem->save();
+
+        // Trở lại trang giỏ hàng với thông báo thành công
+        return redirect()->route('users.cart')->with('success', 'Cập nhật giỏ hàng thành công');
+    }
+    public function removeItem($id)
+    {
+        $cartItem = CartItem::findOrFail($id);
+        $cartItem->delete();
+
+        return redirect()->route('users.cart')->with('success', 'Sản phẩm đã được xóa khỏi giỏ hàng.');
     }
 }

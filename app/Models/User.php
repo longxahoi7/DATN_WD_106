@@ -45,6 +45,7 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'password' => 'hashed',
     ];
     public function coupons()
     {
@@ -53,5 +54,9 @@ class User extends Authenticatable
     public function shoppingCart()
     {
         return $this->hasOne(ShoppingCart::class, 'user_id');
+    }
+    public function orders()
+    {
+        return $this->hasMany(Order::class, 'user_id');
     }
 }

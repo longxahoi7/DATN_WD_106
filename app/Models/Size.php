@@ -14,7 +14,7 @@ protected $primaryKey ='size_id';
     protected $fillable=['name'];
     public function attributeProducts()
     {
-        return $this->hasMany(AttributeProduct::class);
+        return $this->hasMany(AttributeProduct::class,'size_id');
     }
     public function colors()
     {

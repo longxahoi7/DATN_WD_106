@@ -15,6 +15,21 @@ class CartItem extends Model
     // }
     public function product()
     {
-        return $this->belongsTo(Product::class, 'product_id');
+        return $this->belongsTo(Product::class, 'product_id', 'product_id');
+    }
+    public function shoppingCart()
+    {
+        return $this->belongsTo(ShoppingCart::class, 'shopping_cart_id');
+    }
+    public function attributeProducts()
+    {
+        return $this->hasManyThrough(
+            AttributeProduct::class,
+            Product::class,
+            'product_id', // Foreign key on Product table
+            'product_id', // Foreign key on AttributeProduct table
+            'product_id', // Local key on CartItem table
+            'product_id'  // Local key on Product table
+        );
     }
 }

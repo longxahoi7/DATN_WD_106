@@ -1,3 +1,6 @@
+@push('styles')
+    <link rel="stylesheet" href="{{asset('css/navbarAdmin.css')}}">
+@endpush
 <aside class="custom-sider">
     <a href="" class="logo">
         <img src="{{ asset('image/logo/logo-remove.png') }}" alt="logo"
@@ -24,6 +27,11 @@
         <li>
             <a href="{{ route('admin.brands.index') }}">
                 <i class="icon-tags"></i> Thương hiệu
+            </a>
+        </li>
+        <li>
+            <a href="">
+                <i class="icon-tags"></i> Shipper
             </a>
         </li>
     </ul>
