@@ -4,7 +4,7 @@
     <div class="container" style="max-width: 1200px; margin: 0 auto;">
         <div class="header-title" style="text-align: center; margin-bottom: 20px;">
             <div class="custom-logo" style="margin-bottom: 10px;">
-                <img src="{{ asset('imagePro/image/logo/logo-remove.png') }}" alt="logo" style="max-width: 150px;">
+                <img src="{{ asset('/storage/imagePro/image/logo/logo-remove.png') }}" alt="logo" style="max-width: 150px;">
             </div>
             <div class="custom-description">
                 <p style="font-size: 14px; color: #666;">
@@ -72,15 +72,15 @@
                 <h5 style="font-size: 16px; font-weight: bold;">Kết nối với chúng tôi</h5>
                 <ul style="list-style: none; display: flex; gap: 10px; padding: 0;">
                     <li>
-                        <a href="#"><img src="{{ asset('imagePro/icon/iconfacebook.png') }}" alt="facebook"
+                        <a href="#"><img src="{{ asset('/storage/imagePro/icon/iconfacebook.png') }}" alt="facebook"
                                 style="width: 30px; height: 30px;"></a>
                     </li>
                     <li>
-                        <a href="#"><img src="{{ asset('imagePro/icon/icon instagram.png') }}" alt="instagram"
+                        <a href="#"><img src="{{ asset('/storage/imagePro/icon/icon instagram.png') }}" alt="instagram"
                                 style="width: 30px; height: 30px;"></a>
                     </li>
                     <li>
-                        <a href="#"><img src="{{ asset('imagePro/icon/iconzalo.png') }}" alt="zalo"
+                        <a href="#"><img src="{{ asset('/storage/imagePro/icon/iconzalo.png') }}" alt="zalo"
                                 style="width: 30px; height: 30px;"></a>
                     </li>
                 </ul>

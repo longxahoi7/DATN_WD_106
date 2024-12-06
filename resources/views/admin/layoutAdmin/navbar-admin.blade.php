@@ -3,7 +3,7 @@
 @endpush
 <aside class="custom-sider">
     <a href="" class="logo">
-        <img src="{{ asset('image/logo/logo-remove.png') }}" alt="logo"
+        <img src="{{ asset('/image/logo/logo-remove.png') }}" alt="logo"
             style="width: 100px; height: 55px; box-shadow: -moz-initial;" />
     </a>
     <ul class="menu">
