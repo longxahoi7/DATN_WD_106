@@ -18,13 +18,14 @@ class Order extends Model
         'payment_status',
         // Thêm các thuộc tính khác nếu cần
     ];
-    public function orderItems()
-    {
-        return $this->hasMany(OrderItem::class, 'order_id');
-    }
+   
     public function payment()
     {
         return $this->hasOne(Payment::class, 'order_id', 'order_id');
+    }
+    public function orderItems()
+    {
+        return $this->hasMany(OrderItem::class, 'order_id');
     }
     public function user()
     {
