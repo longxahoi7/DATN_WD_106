@@ -5,7 +5,7 @@
         <!-- Cột bên trái - Logo -->
         <div class="col-2 d-flex align-items-center justify-content-center">
             <a href="/" class="navbar-brand">
-                <img src="{{ asset('imagePro/image/logo/logo-remove.png') }}" alt="Gentle Manor" style="width: 120px;">
+                <img src="{{ asset('/storage/imagePro/image/logo/logo-remove.png') }}" alt="Gentle Manor" style="width: 120px;">
             </a>
         </div>
 
