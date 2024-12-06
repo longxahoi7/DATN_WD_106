@@ -11,11 +11,9 @@ class ProductImage extends Model
     protected $table='product_images';
 protected $primaryKey='product_image_id';
     protected $fillable = [
+        'product_id',
         'color_id',
         'url',
     ];
-    public function attributeProduct()
-    {
-        return $this->belongsTo(AttributeProduct::class, 'attribute_product_id');
-    }
+  
 }

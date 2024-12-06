@@ -1,0 +1,48 @@
+body {
+    background-color: #f8f9fa;
+    font-family: Arial, sans-serif;
+}
+.container {
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+}
+h1 {
+    color: #343a40;
+    margin-bottom: 30px;
+}
+.form-group label {
+    color: #495057;
+    font-weight: bold;
+}
+.form-group label .required {
+    color: red; /* Màu đỏ cho dấu * */
+}
+.form-control {
+    font-size: 1.1rem;
+    height: calc(2.25rem + 2px);
+}
+.btn-primary {
+    background-color: #28a745;
+    border: none;
+    font-size: 1.1rem;
+    padding: 10px 20px;
+}
+.btn-primary:hover {
+    background-color: #218838;
+}
+.btn-secondary {
+    background-color: #dc3545;
+    border: none;
+    font-size: 1.1rem;
+    padding: 10px 20px;
+    margin-left: 10px;
+}
+.btn-secondary:hover {
+    background-color: #c82333;
+}
+.button-container {
+    text-align: right;
+    margin-top: 20px;
+}

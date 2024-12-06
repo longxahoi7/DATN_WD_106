@@ -9,75 +9,77 @@ use Illuminate\Support\Str;
 
 class BrandController extends Controller
 {
-    //
-    public function home()
-    {
-        return view('admin.index');
-    }
-    public function index()
-    {
-        return view('admin.pages.brand_management');
-    }
+  
     public function listBrand(Request $request)
     {
-        $products = Brand::where('name', 'like', '%' . $request->nhap . '%')
+        $brands = Brand::where('name', 'like', '%' . $request->nhap . '%')
             ->orWhere('is_active', 'like', '%' . $request->nhap . '%')
             ->orWhere('slug', 'like', '%' . $request->nhap . '%')
             ->orWhere('description', 'like', '%' . $request->nhap . '%')
             ->latest()->paginate(5);
-        return response()->json($products);
+           
+        return view ('admin.pages.brand.list')
+        ->with(['brands'=>$brands]);
     }
+    public function toggle($id)
+{
+    $brand = Brand::findOrFail($id);
+
+    // Thay đổi trạng thái is_active
+    $brand->is_active = !$brand->is_active;
+    $brand->save();
+
+    return redirect()->back()->with('success', 'Trạng thái thương hiệu đã được thay đổi!');
+}
+public function createBrand()
+{
+    return view('admin.pages.brand.create');
+}
     public function addBrand(BrandsRequest $request)
     {
 
-        $product = Brand::create([
+        Brand::create([
             'name' => $request->input('name'),
             'description' => $request->input('description'),
             'slug' => str::slug($request->input('name')),
-            'is_active' => $request->has('is_active') ? 1 : 0,
         ]);
-        return response()->json([
-            'product' => $product,
-            'message' => 'Brand add successfully!',
-        ], 201);
+        return redirect()->route('admin.brands.index')->with('success', 'Brand added successfully!');
 
     }
     public function detailBrand($id)
     {
-        $product = Brand::findOrFail($id);
-        return response()->json($product);
+        $detailBrand = Brand::findOrFail($id);
+        return view('admin.pages.brand.detail', compact('detailBrand'));
+
     }
+    public function   editBrand($id)
+    {
+        $detailBrand = Brand::findOrFail($id);
+        return view('admin.pages.brand.edit', compact('detailBrand'));
+
+    }
+
     public function updateBrand(Request $request, $id)
     {
+        // Find the brand by ID
         $brand = Brand::findOrFail($id);
-
-        // Không cần kiểm tra trùng 'slug' khi cập nhật
-        $validated = $request->validate([
+    
+        // Validate the incoming request data if needed
+        $request->validate([
             'name' => 'required|string|max:255',
-            'description' => 'required|string|max:255',
-            'slug' => 'nullable|string|max:255', // Đảm bảo slug không bị kiểm tra trùng
-            'is_active' => 'required|boolean', // Kiểm tra trạng thái hoạt động
+            'slug' => 'nullable|string|max:255',
+            'description' => 'nullable|string',
         ]);
-
-        // Nếu có slug mới, cập nhật lại slug
-        if ($request->input('slug')) {
-            $brand->slug = Str::slug($request->input('slug'));
-        } else {
-            // Nếu không có slug, dùng slug từ 'name'
-            $brand->slug = Str::slug($request->input('name'));
-        }
-
-        // Cập nhật các thông tin khác
-        $brand->name = $request->input('name');
-        $brand->description = $request->input('description');
-        $brand->is_active = $request->input('is_active');
-
-        $brand->save();
-
-        return response()->json([
-            'message' => 'Brand updated successfully!',
-            'product' => $brand
-        ], 200);
+    
+        // Update the brand with the new data
+        $brand->update([
+            'name' => $request->input('name'),
+            'slug' => $request->input('slug'),
+            'description' => $request->input('description'),
+            'is_active' => $request->input('is_active', 1),  // Set to 1 by default if not provided
+        ]);
+    
+        return redirect()->route('admin.brands.index')->with('success', 'Brand updated successfully!');
     }
 
 
@@ -85,9 +87,7 @@ class BrandController extends Controller
     {
         $product = Brand::findOrFail($id);
         $product->delete();
-        return response()->json([
-            'message' => 'Brand soft deleted successfully'
-        ], 200);
+        return redirect()->back()->with('message' ,'Brand deleted successfully!',);
     }
 
 

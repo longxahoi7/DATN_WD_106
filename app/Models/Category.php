@@ -16,5 +16,25 @@ class Category extends Model
     {
         return $this->hasMany(Product::class);
     }
-    
+    public static function callTreeCategory($parent_id = 0, $levels = "")
+    {
+        // Lấy các danh mục con dựa trên parent_id
+        $categories = Category::where('parent_id', '=', $parent_id)->get();
+
+        // Mảng kết quả
+        $result = [];
+
+        foreach ($categories as $category) {
+            // Thêm vào danh mục vào mảng kết quả với id, name và levels
+            $result[] = [
+                'category_id' => $category->category_id,
+                'name' => $levels . $category->name
+            ];
+
+            // Đệ quy để lấy các danh mục con của danh mục này
+            $result = array_merge($result, self::callTreeCategory($category->category_id, $levels . "-"));
+        }
+
+        return $result;
+    }
 }

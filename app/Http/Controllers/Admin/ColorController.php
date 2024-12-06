@@ -8,21 +8,21 @@ use App\Models\Color;
 class ColorController extends Controller
 {
     //
-    public function home()
-    {
-        return view('admin.index');
-    }
-    public function index()
-    {
-        return view('admin.pages.color_management');
-    }
+   
+  
     public function listColor(Request $request)
     {
-        $color = Color::where('name','like','%'. $request->nhap.'%')
+        $colors = Color::where('name','like','%'. $request->nhap.'%')
         ->orWhere('color_code','like','%'. $request->nhap.'%')
         ->latest()->paginate(5);
-        return response()->json($color);
+        return view('admin.pages.color.list',compact('colors'));
     }
+    public function createColor(Request $request)
+    {
+        
+        return view('admin.pages.color.create');
+    }
+    
     public function addColor(Request $request)
     {
 
@@ -32,13 +32,18 @@ class ColorController extends Controller
         ]);
 
         $color = Color::create($validated);
-        return response()->json(['color'=>$color,'message' => 'Color add successfully!',],201);
+        return redirect()->route('admin.colors.index')->with(['color'=>$color,'message' => 'Color add successfully!',],201);
 
 }
 public function detailColor($id)
 {
     $color = Color::findOrFail($id);
-    return response()->json($color);
+    return view('admin.pages.color.detail',compact('color'));
+}
+public function editColor($id)
+{
+    $color = Color::findOrFail($id);
+    return view('admin.pages.color.edit',compact('color'));
 }
 public function updateColor(Request $request,$id)
 {
@@ -49,17 +54,12 @@ public function updateColor(Request $request,$id)
     ]);
 
     $color->update($validated);
-    return response()->json([
-        'message' => 'Color updated successfully!',
-        'color' => $color
-    ], 200);
+    return redirect()->route('admin.colors.index')->with(['color'=>$color,'message' => 'Color add successfully!',],200);
 
 }
 public function destroyColor($id){
     $color=Color::findOrFail($id);
     $color->delete();
-    return response()->json([
-        'message' => 'Color soft deleted successfully'
-    ],200);
+    return redirect()->route('admin.colors.index')->with(['message' => 'color deleted successfully!',],200);
 }
 }

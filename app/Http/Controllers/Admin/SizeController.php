@@ -8,19 +8,17 @@ use App\Models\Size;
 class SizeController extends Controller
 {
     //
-    public function home()
-    {
-        return view('admin.index');
-    }
-    public function index()
-    {
-        return view('admin.pages.size_management');
-    }
+   
     public function listSize(Request $request)
     {
         $sizes = Size::where('name', 'like', '%' . $request->nhap . '%')
             ->latest()->paginate(5);
-        return response()->json($sizes);
+            return view('admin.pages.size.list',compact('sizes'));
+    }
+    public function createSize(Request $request)
+    {
+        
+        return view('admin.pages.size.create');
     }
     public function addSize(Request $request)
     {
@@ -30,14 +28,19 @@ class SizeController extends Controller
         ]);
 
         $size = Size::create($validated);
-        return response()->json(['size' => $size, 'message' => 'Brand add successfully!',], 201);
+        return redirect()->route('admin.sizes.index')->with(['size'=>$size,'message' => 'Color add successfully!',],201);
 
     }
     public function detailSize($id)
     {
         $size = Size::findOrFail($id);
-        return response()->json($size);
+        return view('admin.pages.size.detail',compact('size'));
     }
+    public function editColor($id)
+{
+    $size = Size::findOrFail($id);
+    return view('admin.pages.size.edit',compact('size'));
+}
     public function updateSize(Request $request, $id)
     {
         $validated = $request->validate([
@@ -47,18 +50,13 @@ class SizeController extends Controller
         $size = Size::findOrFail($id);
         $size->name = $validated['name'];
         $size->save();
-        return response()->json([
-            'message' => 'Size updated successfully!',
-            'size' => $size
-        ], 200);
+        return redirect()->route('admin.sizes.index')->with(['size'=>$size,'message' => 'Size add successfully!',],200);
 
     }
     public function destroySize($id)
     {
         $size = Size::findOrFail($id);
         $size->delete();
-        return response()->json([
-            'message' => 'Size soft deleted successfully'
-        ], 200);
+        return redirect()->route('admin.sizes.index')->with(['message' => 'Size deleted successfully!',],200);
     }
 }
