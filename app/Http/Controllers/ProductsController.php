@@ -79,9 +79,8 @@ class ProductsController extends Controller
     public function showProduct($productId)
     {
         // Tìm sản phẩm theo ID và kèm theo các thuộc tính của sản phẩm
-        $product = Product::where('product_id', $productId)
-            ->with(['attributeProducts.color', 'attributeProducts.size','attributeProducts']) // Eager load color and size attributes
-            ->firstOrFail();
+        $product = Product::with(['colors', 'sizes', 'category', 'brand'])
+                          ->findOrFail($productId);
         //Hiển thj sản phẩm liên quan
         $relatedProducts = Product::where('product_category_id', $product->product_category_id)
             ->where('product_id', '!=', $product->product_id) // Loại trừ sản phẩm hiện tại

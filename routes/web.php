@@ -10,6 +10,9 @@ use App\Http\Controllers\Admin\SizeController;
 use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\CartController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\ApiPaymentController;
+use App\Http\Controllers\Api\ApiUserController;
+use App\Http\Controllers\Api\InvoiceController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\StatsController;
 use App\Http\Controllers\Admin\Dasboard;
@@ -147,6 +150,10 @@ Route::group(
         );
     }
 );
+
+
+
+
 
 
 Route::get('register', function () {

@@ -15,32 +15,37 @@
             <div class="contai">
                 <div class="options">
                     <h1>{{ $product->name }}</h1>
-                    @foreach($product->attributeProducts as $attributeProduct)
-                    <p class="price">{{ number_format($attributeProduct->price, 0, ',', '.') }} VND</p>
-                    @endforeach
+                    <p class="price" id="product-price">
+                        {{ number_format($product->attributeProducts->first()->price ?? 0, 0, ',', '.') }} VND
+                    </p>
                     <p>Color: </p>
                     <div class="color-options">
-                        @foreach ($product->colors as $color)
+                        @foreach($product->attributeProducts as $attributeProduct)
                         <div class="color-option"
-                            style="background-color: {{ $color->name }}"
-                            onclick="changeColor('{{ $color->name }}', this)">
+                            style="background-color: {{ $attributeProduct->color->name }}"
+                            onclick="changeColor('{{ $attributeProduct->color->name }}', this)">
                         </div>
                         @endforeach
                     </div>
+
                 </div>
 
                 <div class="options">
                     <p>Size:</p>
                     <div class="size-options">
-                        @foreach ($product->sizes as $size)
-                        <div class="size-option" onclick="selectSize('{{ $size->name }}', this)">
-                            {{ $size->name }}
+                        @foreach($product->attributeProducts->unique('size_id') as $attributeProduct)
+                        <div class="size-option"
+                            data-size="{{ $attributeProduct->size->name }}"
+                            data-price="{{ $attributeProduct->price }}"
+                            onclick="updatePrice('{{ $attributeProduct->price }}', 'size', this)">
+                            {{ $attributeProduct->size->name }}
                         </div>
                         @endforeach
                     </div>
+
                 </div>
 
-                <form action="{{ route('cart.add') }}" method="POST">
+                <form id="add-to-cart-form" action="{{ route('cart.add') }}" method="POST">
                     @csrf
                     <input type="hidden" name="product_id" value="{{ $product->product_id }}">
                     <input type="hidden" name="color_id" id="selected-color" value="">
@@ -52,6 +57,8 @@
                     </div>
 
                     <button type="submit" class="btn btn-success">Thêm vào giỏ hàng</button>
+              
+
                 </form>
 
                 <h2>Thông tin sản phẩm</h2>
@@ -137,14 +144,36 @@
                 colorOptions.forEach(option => option.classList.remove("selected"));
                 element.classList.add("selected");
             }
-
             // Function to handle size selection
             function selectSize(size, element) {
                 selectedSize = size;
-                document.getElementById("selected-size").value = size;
+                document.getElementById("selected-size").value = size; // Gán giá trị vào input hidden
+                console.log("Size ID đã chọn:", size); // Hiển thị giá trị trong console
                 const sizeOptions = document.querySelectorAll(".size-option");
                 sizeOptions.forEach(option => option.classList.remove("selected"));
                 element.classList.add("selected");
             }
+            // Hàm cập nhật giá sản phẩm
+            function updatePrice(price, type, element) {
+                // Loại bỏ trạng thái "selected" của các lựa chọn hiện tại
+                if (type === 'color') {
+                    document.querySelectorAll('.color-option').forEach(option => {
+                        option.classList.remove('selected');
+                    });
+                } else if (type === 'size') {
+                    document.querySelectorAll('.size-option').forEach(option => {
+                        option.classList.remove('selected');
+                    });
+                }
+
+                // Đánh dấu lựa chọn hiện tại là "selected"
+                element.classList.add('selected');
+
+                // Cập nhật giá hiển thị
+                const priceElement = document.getElementById('product-price');
+                priceElement.textContent = `${Number(price).toLocaleString()} VND`;
+            }
+
+            
         </script>
         @endsection

@@ -32,4 +32,5 @@ class CartItem extends Model
             'product_id'  // Local key on Product table
         );
     }
+    
 }
