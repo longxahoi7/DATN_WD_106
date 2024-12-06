@@ -9,10 +9,23 @@
         <div class="col-md-3 mb-4">
             <div class="card">
                 <img src="{{ $soldProduct->main_image_url }}" class="card-img-top"
-                 alt="{{ $soldProduct->name }}">
+                    alt="{{ $soldProduct->name }}">
                 <div class="card-body">
                     <h5 class="card-title">{{ $soldProduct->name }}</h5>
-                    <p>Giá: {{ number_format($soldProduct->attributeProducts->first()->price ?? 0, 0, ',', '.') }} VND</p>
+                    @php
+                    // Lấy danh sách giá của sản phẩm
+                    $prices = $soldProduct->attributeProducts->pluck('price');
+                    $minPrice = $prices->min();
+                    $maxPrice = $prices->max();
+                    @endphp
+                    <p>
+                        Giá:
+                        @if ($minPrice == $maxPrice)
+                        {{ number_format($minPrice, 0, ',', '.') }} VND
+                        @else
+                        {{ number_format($minPrice, 0, ',', '.') }} - {{ number_format($maxPrice, 0, ',', '.') }} VND
+                        @endif
+                    </p>
                     <a href="{{ route('product.detail', $soldProduct->product_id) }}" class="btn btn-primary">Xem chi tiết</a>
                 </div>
             </div>
@@ -27,7 +40,20 @@
                 <img src="{{ $hotProduct->main_image_url }}" class="card-img-top" alt="{{ $hotProduct->name }}">
                 <div class="card-body">
                     <h5 class="card-title">{{ $hotProduct->name }}</h5>
-                    <p>Giá: {{ number_format($hotProduct->attributeProducts->first()->price ?? 0, 0, ',', '.') }} VND</p>
+                    @php
+                    // Lấy danh sách giá của sản phẩm
+                    $prices = $hotProduct->attributeProducts->pluck('price');
+                    $minPrice = $prices->min();
+                    $maxPrice = $prices->max();
+                    @endphp
+                    <p>
+                        Giá:
+                        @if ($minPrice == $maxPrice)
+                        {{ number_format($minPrice, 0, ',', '.') }} VND
+                        @else
+                        {{ number_format($minPrice, 0, ',', '.') }} - {{ number_format($maxPrice, 0, ',', '.') }} VND
+                        @endif
+                    </p>
                     <a href="{{ route('product.detail', $hotProduct->product_id) }}" class="btn btn-primary">Xem chi tiết</a>
                 </div>
             </div>
@@ -43,9 +69,20 @@
                 <div class="card-body">
                     <h5 class="card-title">{{ $product->name }}</h5>
                     <p class="card-text">
-                    @foreach ($product->attributeProducts as $attribute)
-                        <li>{{ number_format($attribute->price, 0, ',', '.') }} VND</li>
-                    @endforeach
+                        @php
+                        // Lấy danh sách giá của sản phẩm
+                        $prices = $product->attributeProducts->pluck('price');
+                        $minPrice = $prices->min();
+                        $maxPrice = $prices->max();
+                        @endphp
+                    <p>
+                        Giá:
+                        @if ($minPrice == $maxPrice)
+                        {{ number_format($minPrice, 0, ',', '.') }} VND
+                        @else
+                        {{ number_format($minPrice, 0, ',', '.') }} - {{ number_format($maxPrice, 0, ',', '.') }} VND
+                        @endif
+                    </p>
                     </p>
                     <p class="card-text">{{ $product->description }}</p>
                     <a href="{{ route('product.detail', $product->product_id) }}" class="btn btn-primary">Xem chi tiết</a>
