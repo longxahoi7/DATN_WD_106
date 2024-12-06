@@ -40,7 +40,7 @@ Route::get('/cart-list', [CartController::class, 'viewCart'])->name('users.cart'
 
 // Route cho người dùng
 // Route::prefix('/')->group(function () {
-Route::get('/', [HomeController::class, 'index'])->name('product.list');
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
 // Route::get('home', [HomeController::class, 'index'])->name('product.list');
 
@@ -71,12 +71,15 @@ Route::get('about', function () {
 
 // Route cho admin (cần middleware xác thực admin)
 // Route::prefix('admin')->middleware(['auth', 'isAdmin'])->group(function () {
-    Route::get('dashboard', function () {
-        return view('admin.dashboard');
+    Route::get('/dashboard', function () {
+        return view('admin.pages.orderDetail');
     })->name('admin.dashboard');
-    Route::get('orders', function () {
-        return view('admin.pages.order_management');
-    })->name('admin.dashboard');
+    Route::get('/orders', [OrderController::class, 'showAllOrders'])
+    ->name('admin.orders');
+
+    Route::get('/orders-detail/{id}', [OrderController::class, 'showDetailOrder'])
+    ->name('admin.orderDetail');
+
     // Quản lý sản phẩm
     Route::prefix('products')->group(function () {
         Route::get('/', function () {

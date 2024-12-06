@@ -29,85 +29,20 @@
                     <th>Hành động</th>
                 </tr>
             </thead>
+            
             <tbody>
+            @foreach ($orders as $order)
                 <tr>
-                    <td>36</td>
+                    <td>{{ $order->order_id }}</td>
+                    <td>{{ $order->status }}</td>
+                    <td>{{ $order->user->name ?? 'N/A' }}</td>
+                    <td>{{ number_format($order->total, 2) }} VND</td>
+                    <td>{{ $order->created_at->format('Y-m-d') }}</td>
                     <td>
-                        <i class="fas fa-check-circle text-success"></i> Đã
-                        giao hàng
+                        <a href="{{ route('admin.orderDetail', $order->order_id) }}" class="fas fa-eye text-success"></a>
                     </td>
-                    <td>chiuroi</td>
-                    <td>977.000 đ</td>
-                    <td>2024-11-24 13:55:58</td>
-                    <td>
-                        <a href="/admin/detailorder" class="fas fa-eye text-success"></a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>35</td>
-                    <td>
-                        <i class="fas fa-hourglass-half text-warning"></i>
-                        Chờ xác nhận
-                    </td>
-                    <td>chiuroi</td>
-                    <td>977.000 đ</td>
-                    <td>2024-11-24 13:53:13</td>
-                    <td>
-                        <a href="/admin/detailorder" class="fas fa-eye text-success"></a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>34</td>
-                    <td>
-                        <i class="fas fa-hourglass-half text-warning"></i>
-                        Chờ xác nhận
-                    </td>
-                    <td>chiuroi</td>
-                    <td>977.000 đ</td>
-                    <td>2024-11-24 13:52:22</td>
-                    <td>
-                        <a href="/admin/detailorder" class="fas fa-eye text-success"></a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>33</td>
-                    <td>
-                        <i class="fas fa-check-circle text-success"></i> Đã
-                        giao hàng
-                    </td>
-                    <td>chiuroi</td>
-                    <td>190.000 đ</td>
-                    <td>2024-11-24 08:30:29</td>
-                    <td>
-                        <a href="/admin/detailorder" class="fas fa-eye text-success"></a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>32</td>
-                    <td>
-                        <i class="fas fa-check-circle text-success"></i> Đã
-                        hoàn thành
-                    </td>
-                    <td>chiuroi</td>
-                    <td>389.000 đ</td>
-                    <td>2024-11-23 18:01:10</td>
-                    <td>
-                        <a href="/admin/detailorder" class="fas fa-eye text-success"></a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>31</td>
-                    <td>
-                        <i class="fas fa-hourglass-half text-warning"></i>
-                        Chờ xác nhận
-                    </td>
-                    <td>N/A</td>
-                    <td>75 đ</td>
-                    <td>2024-11-22 08:16:21</td>
-                    <td>
-                        <a href="/admin/detailorder" class="fas fa-eye text-success"></a>
-                    </td>
-                </tr>
+                    </tr>
+                @endforeach
             </tbody>
         </table>
     </div>

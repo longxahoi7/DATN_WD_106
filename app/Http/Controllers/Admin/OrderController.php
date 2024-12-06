@@ -21,10 +21,22 @@ class OrderController extends Controller
     }
 
     // Lấy chi tiết một đơn hàng
-    public function show($id)
+    public function showAllOrders()
     {
-        $order = Order::with('orderItems')->findOrFail($id); // Lấy đơn hàng theo ID
-        return response()->json($order);
+        // Lấy toàn bộ orders, eager load quan hệ với bảng users
+        $orders = Order::with('user')->get();
+
+        // Trả dữ liệu về view
+        return view('admin.pages.order_management', compact('orders'));
+    }
+
+    public function showDetailOrder($orderId)
+    {
+        // Lấy thông tin order theo ID
+        $order = Order::with(['user'])->findOrFail($orderId);
+
+        // Trả về view cùng dữ liệu
+        return view('admin.pages.orderDetail', compact('order'));
     }
     //Cập nhật
     public function updateStatus(Request $request, $id)

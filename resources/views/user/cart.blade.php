@@ -142,7 +142,7 @@
                             <input type="hidden" name="amount" value="{{ $total + 70000}}">
                                 Thanh toán VNPAY
                             </button>
-                        </form>
+                        </form> 
                         </div>
                     </div>
                 </div>

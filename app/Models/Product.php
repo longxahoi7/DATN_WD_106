@@ -57,8 +57,13 @@ class Product extends Model
         return $this->belongsToMany(Coupon::class, 'coupon_product', 'product_id', 'coupon_id');
     }
     public function productImages()
-{
-    return $this->hasManyThrough(ProductImage::class, AttributeProduct::class, 'product_id', 'attribute_product_id');
-}
+    {
+        return $this->hasManyThrough(ProductImage::class, AttributeProduct::class, 'product_id', 'attribute_product_id');
+    }
+
+    public function orders()
+    {
+        return $this->belongsToMany(Order::class, 'product_id', 'order_id');
+    }
 
 }
