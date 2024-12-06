@@ -54,9 +54,9 @@ class ProductsController extends Controller
     // API để lấy danh sách sản phẩm
     public function productList()
     {
-       // Lấy danh sách sản phẩm cùng với thông tin attributes
+        // Lấy danh sách sản phẩm cùng với thông tin attributes
         $listProduct = Product::with('attributeProducts')->get();
-        
+
         // Lấy top 10 sản phẩm bán chạy (sold_count > 100) và đang hoạt động
         $productSoldCount = Product::query()
             ->where('sold_count', '>', 100)
@@ -79,8 +79,9 @@ class ProductsController extends Controller
     public function showProduct($productId)
     {
         // Tìm sản phẩm theo ID và kèm theo các thuộc tính của sản phẩm
-        $product = Product::with('brand', 'category', 'colors', 'sizes', 'attributeProducts')->findOrFail($productId);
-
+        $product = Product::where('product_id', $productId)
+            ->with(['attributeProducts.color', 'attributeProducts.size']) // Eager load color and size attributes
+            ->firstOrFail();
         //Hiển thj sản phẩm liên quan
         $relatedProducts = Product::where('product_category_id', $product->product_category_id)
             ->where('product_id', '!=', $product->product_id) // Loại trừ sản phẩm hiện tại

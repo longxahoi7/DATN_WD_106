@@ -17,7 +17,10 @@ class CartItem extends Model
     {
         return $this->belongsTo(Product::class, 'product_id', 'product_id');
     }
-
+    public function shoppingCart()
+    {
+        return $this->belongsTo(ShoppingCart::class, 'shopping_cart_id');
+    }
     public function attributeProducts()
     {
         return $this->hasManyThrough(

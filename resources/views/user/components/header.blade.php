@@ -89,7 +89,7 @@
                             </div>
                         </div>
 
-                        <a href="#" class="nav-link  d-flex ">
+                        <a href="{{ route('users.cart') }}" class="nav-link  d-flex ">
                             <i class="fas fa-shopping-cart"></i>
                         </a>
                     </nav>
