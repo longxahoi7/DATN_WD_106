@@ -10,23 +10,23 @@
             <div class="col-md-6">
                 <div class="order-card">
                     <h2>1. Thông tin khách hàng</h2>
-                    <p><strong>Tên người mua:</strong> chuirori</p>
-                    <p><strong>Email:</strong> chuirori@gmail.com</p>
-                    <p><strong>Điện thoại:</strong> 123456789</p>
-                    <p><strong>Địa chỉ:</strong> 123 Xuân Phương, Xã Chiềng Châu, Huyện Mai Châu, Tỉnh Hòa Bình</p>
+                    <p><strong>Tên người mua:</strong>{{ $order->user->name }}</p>
+                    <p><strong>Email:</strong>{{ $order->user->email }}</p>
+                    <p><strong>Điện thoại:</strong>{{ $order->user->phone }}</p>
+                    <p><strong>Địa chỉ:</strong>{{ $order->user->address }}</p>
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="order-card">
                     <h2>2. Thông tin đơn hàng</h2>
-                    <p><strong>Mã đơn hàng:</strong> 35</p>
-                    <p><strong>Trạng thái thanh toán:</strong> Chưa thanh toán</p>
-                    <p><strong>Ngày mua hàng:</strong> 2021-11-24 13:53:13</p>
+                    <p><strong>Mã đơn hàng:</strong>  {{ $order->order_id }}</p>
+                    <p><strong>Trạng thái thanh toán:</strong> {{ $order->status }}</p>
+                    <p><strong>Ngày mua hàng:</strong>{{ $order->created_at->format('Y-m-d') }}</p>
                     <p><strong>Trạng thái:</strong> Chờ xác nhận</p>
-                    <div class="mt-4">
+                    <!-- <div class="mt-4">
                         <button class="btn btn-success" id="confirmOrderBtn">Xác nhận đơn hàng</button>
                         <button class="btn btn-danger" id="cancelOrderBtn">Hủy đơn hàng</button>
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </div>
