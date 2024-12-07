@@ -30,7 +30,7 @@ Route::group(
         // CRUD CATẺGORY
         Route::group(
             [
-                'prefix' => 'categories',
+                'prefix' => '   ',
                 'as' => 'categories.'
             ],
             function () {
@@ -316,7 +316,7 @@ Route::post('/admin/update-order-status', [OrderController::class, 'updateOrderS
 //     Route::get('accounts', function () {
 //         return view('admin.accounts.index');
 //     })->name('admin.accounts');
-// }); 
+// });
 
 // Quản lý tài khoản
 Route::get('accounts', function () {
