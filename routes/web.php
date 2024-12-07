@@ -33,7 +33,7 @@ Route::group(
         // CRUD CATẺGORY
         Route::group(
             [
-                'prefix' => 'categories',
+                'prefix' => '   ',
                 'as' => 'categories.'
             ],
             function () {
@@ -222,6 +222,7 @@ Route::get('/orders', [OrderController::class, 'showAllOrders'])
 Route::get('/orders-detail/{id}', [OrderController::class, 'showDetailOrder'])
     ->name('admin.orderDetail');
 
+Route::post('/admin/update-order-status', [OrderController::class, 'updateOrderStatus'])->name('admin.updateOrderStatus');
 
 
 
@@ -322,7 +323,7 @@ Route::get('/orders-detail/{id}', [OrderController::class, 'showDetailOrder'])
 //     Route::get('accounts', function () {
 //         return view('admin.accounts.index');
 //     })->name('admin.accounts');
-// }); 
+// });
 
 // Quản lý tài khoản
 Route::get('accounts', function () {

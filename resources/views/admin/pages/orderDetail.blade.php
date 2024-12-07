@@ -20,13 +20,13 @@
                 <div class="order-card">
                     <h2>2. Thông tin đơn hàng</h2>
                     <p><strong>Mã đơn hàng:</strong>  {{ $order->order_id }}</p>
-                    <p><strong>Trạng thái thanh toán:</strong> {{ $order->status }}</p>
+                    <p><strong>Trạng thái đơn hàng:</strong> {{ $order->status }}</p>
                     <p><strong>Ngày mua hàng:</strong>{{ $order->created_at->format('Y-m-d') }}</p>
-                    <p><strong>Trạng thái:</strong> Chờ xác nhận</p>
-                    <!-- <div class="mt-4">
-                        <button class="btn btn-success" id="confirmOrderBtn">Xác nhận đơn hàng</button>
-                        <button class="btn btn-danger" id="cancelOrderBtn">Hủy đơn hàng</button>
-                    </div> -->
+                    <!-- <p><strong>Trạng thái:</strong> Chờ xác nhận</p> -->
+                    <div class="mt-4">
+                        <!-- <button class="btn btn-success" id="confirmOrderBtn">Xác nhận đơn hàng</button>
+                        <button class="btn btn-danger" id="cancelOrderBtn">Hủy đơn hàng</button> -->
+                    </div>
                 </div>
             </div>
         </div>
@@ -36,7 +36,6 @@
             <table class="table table-bordered order-table mt-4">
                 <thead class="thead-light">
                     <tr>
-                        <th>#</th>
                         <th>Ảnh</th>
                         <th>Tên sản phẩm</th>
                         <th>Giá</th>
@@ -45,37 +44,23 @@
                     </tr>
                 </thead>
                 <tbody>
+                @foreach ($order->orderItems as $index => $orderItem)
                     <tr>
-                        <td class="text-center">1.</td>
                         <td class="text-center">
-                            <img alt="Áo Sơ Mi Tay Ngắn Nữ Cotton Sựờng TA324C8220" height="50"
-                                src="https://storage.googleapis.com/a1aa/image/Wge7wZXnR80xOypFuAPPInrIYcULlfGtJg9beNun1lyHjzonA.jpg"
-                                width="50" />
+                            <img src="/storage/{{ $orderItem->product->main_image_url }}" alt="{{ $orderItem->product->name }}" width="50" height="50">
                         </td>
-                        <td>Áo Sơ Mi Tay Ngắn Nữ Cotton Sựờng TA324C8220 - Chính Hãng GenViet - GENVJET JEANS</td>
-                        <td class="text-right">199.000 đ</td>
-                        <td class="text-center">3</td>
-                        <td class="text-right">597.000 đ</td>
+                        <td>{{ $orderItem->product->name }}</td>
+                        <td>{{ number_format($orderItem->attributeProduct->price ?? 0) }} VND</td>
+                        <td class="text-center">{{ $orderItem->quantity }}</td>
+                        <td class="text-right">{{ number_format($orderItem->attributeProduct->price * $orderItem->quantity, 0, 2) }} đ</td>
                     </tr>
-                    <tr>
-                        <td class="text-center">2.</td>
-                        <td class="text-center">
-                            <img alt="Quần Âu Baggy Nam Caro TUT05 Menswear ODT03" height="50"
-                                src="https://storage.googleapis.com/a1aa/image/jxg4bQLEJHInKhX5eNVCLeIsobFkevdTt763rdAUm4CFjzonA.jpg"
-                                width="50" />
-                        </td>
-                        <td>Quần Âu Baggy Nam Caro TUT05 Menswear ODT03 - Quần Tây Đen Ống Côn Trẻ Trung Cotton Hàn Quốc
-                            Ít Nhăn, Tôn Dáng, Lịch Sự</td>
-                        <td class="text-right">190.000 đ</td>
-                        <td class="text-center">2</td>
-                        <td class="text-right">380.000 đ</td>
-                    </tr>
+                @endforeach
                 </tbody>
             </table>
-            <div class="text-right mt-4">
+            <!-- <div class="text-right mt-4">
                 <strong>Tổng tiền:</strong>
                 <span class="total-amount">482.470 đ</span>
-            </div>
+            </div> -->
         </div>
     </div>
 
