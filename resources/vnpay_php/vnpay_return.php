@@ -1,5 +1,6 @@
-@extends('user.layouts.app')
-<head>
+<!DOCTYPE html>
+<html lang="en">
+    <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -13,10 +14,9 @@
         <link href="/vnpay_php/assets/jumbotron-narrow.css" rel="stylesheet">         
         <script src="/vnpay_php/assets/jquery-1.11.3.min.js"></script>
     </head>
-@section('content')
-    
+    <body>
         <?php
-        require_once("./resources/vnpay_php/config.php");
+        require_once("./config.php");
         $vnp_SecureHash = $_GET['vnp_SecureHash'];
         $inputData = array();
         foreach ($_GET as $key => $value) {
@@ -87,7 +87,7 @@
                                 echo "<span style='color:red'>GD Khong thanh cong</span>";
                             }
                         } else {
-                            echo "<span style='color:blue'>hascreat khong hop le</span>";
+                            echo "<span style='color:red'>Chu ky khong hop le</span>";
                         }
                         ?>
 
@@ -98,10 +98,11 @@
                 &nbsp;
             </p>
             <button>
-                <a href="{{route('home')}}">Back home</a>
+                <a href="route('home')">Back home</a>
             </button>
             <footer class="footer">
                    <p>&copy; VNPAY <?php echo date('Y')?></p>
             </footer>
         </div>  
-@endsection
+    </body>
+</html>

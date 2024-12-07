@@ -177,7 +177,7 @@
                 <!-- Thêm class 'product-item' -->
                 <a href="{{ route('product.detail', $soldProduct->product_id) }}" class="product-card-link">
                     <div class="card">
-                        <img src="{{ $soldProduct->main_image_url }}" class="card-img-top"
+                        <img src="/storage/{{ $soldProduct->main_image_url }}" class="card-img-top"
                             alt="{{ $soldProduct->name }}">
                         <div class="card-body">
                             <h5 class="card-title">{{ $soldProduct->name }}</h5>
@@ -224,7 +224,7 @@
                 <!-- Thêm class 'product-item' -->
                 <a href="{{ route('product.detail', $hotProduct->product_id) }}" class="product-card-link">
                     <div class="card">
-                        <img src="{{ $hotProduct->main_image_url }}" class="card-img-top" alt="{{ $hotProduct->name }}">
+                        <img src="/storage/{{ $hotProduct->main_image_url }}" class="card-img-top" alt="{{ $hotProduct->name }}">
                         <div class="card-body">
                             <h5 class="card-title">{{ $hotProduct->name }}</h5>
                             @php

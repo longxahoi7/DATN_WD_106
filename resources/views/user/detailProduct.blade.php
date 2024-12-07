@@ -5,132 +5,85 @@
 @endpush
 
 @section("content")
-<style>
-</style>
 <div class="body">
     <div class="container">
         <div class="container1">
-            <!-- Hiển thị hình ảnh hoặc thông báo nếu không có -->
-            <div class="custom-image">
-                @if($product->main_image_url)
-                <img src="{{ $product->main_image_url }}" alt="{{ $product->name }}" class="product-image" />
-                @else
-                <div class="no-image">Sản phẩm chưa có hình ảnh</div>
-                @endif
+            <div>
+                <img src="/storage/{{ $product->main_image_url }}" alt="{{ $product->name }}" class="product-image" />
             </div>
 
             <div class="contai">
-                <!-- Thông tin sản phẩm -->
                 <div class="options">
-                    <h1 class="product-title">{{ $product->name }}</h1>
-                    <div class="rating-section">
-                        <span class="icon-star">⭐</span>
-                        <span class="rating-number">({{ $product->rating_count }} đánh giá)</span>
-                    </div>
-                    <div class="price-display">₫{{ number_format($product->price, 0, ',', '.') }}</div>
-                </div>
-
-                <!-- Thêm thông tin về màu sắc và kích thước -->
-                <div class="options">
-                    <p class="custom-title-small">Màu sắc: </p>
+                    <h1>{{ $product->name }}</h1>
+                    <p class="price" id="product-price">
+                        {{ number_format($product->attributeProducts->first()->price ?? 0, 0, ',', '.') }} VND
+                    </p>
+                    <p>Color: </p>
                     <div class="color-options">
-                        @foreach ($product->colors as $color)
-                        <div class="color-option" style="background-color: {{ $color->name }}"
-                            onclick="changeColor('{{ $color->name }}', this)"></div>
+                        @foreach($product->attributeProducts as $attributeProduct)
+                        <div class="color-option"
+                            style="background-color: {{ $attributeProduct->color->name }};"
+                            onclick="changeColor('{{ $attributeProduct->color->color_id }}', this)"> <!-- Gửi ID thay vì tên -->
+                        </div>
                         @endforeach
                     </div>
+
                 </div>
 
                 <div class="options">
-                    <p class="custom-title-small">Size:</p>
+                    <p>Size:</p>
                     <div class="size-options">
-                        @foreach ($product->sizes as $size)
-                        <div class="size-option" onclick="selectSize('{{ $size->name }}', this)">
-                            {{ $size->name }}
+                        @foreach($product->attributeProducts->unique('size_id') as $attributeProduct)
+                        <div class="size-option"
+                            data-id="{{ $attributeProduct->size->size_id }}"
+                            data-price="{{ $attributeProduct->price }}"
+                            onclick="selectSize('{{ $attributeProduct->size->size_id }}', this)">
+                            {{ $attributeProduct->size->name }}
                         </div>
                         @endforeach
+
+                    </div>
+
+                </div>
+
+                <form id="add-to-cart-form" action="{{ route('cart.add') }}" method="POST">
+                    @csrf
+                    <input type="hidden" name="product_id" value="{{ $product->product_id }}">
+                    <input type="hidden" name="color_id" id="selected-color" value="">
+                    <input type="hidden" name="size_id" id="selected-size" value="">
+
+                    <div class="mb-3">
+                        <label for="quantity" class="form-label">Số lượng</label>
+                        <input type="number" name="qty" id="quantity" class="form-control" min="1" value="1">
+                    </div>
+
+                    <button type="submit" class="btn btn-success">Thêm vào giỏ hàng</button>
+                </form>
+
+
+                <h2>Thông tin sản phẩm</h2>
+                <p>{{ $product->subtitle }}</p>
+            </div>
+        </div>
+
+        <h3>Sản phẩm liên quan</h3>
+        <div class="similar-products">
+            @foreach($relatedProducts as $relatedProduct)
+            <div class="similar-product">
+                <div class="product-image">
+                    <img src="/storage/{{ $relatedProduct->main_image_url }}" class="card-img-top" alt="{{ $relatedProduct->name }}">
+                    <div class="product-overlay">
+                        <h5 class="product-name">{{ $relatedProduct->name }}</h5>
+                        <p class="product-price">{{ number_format($relatedProduct->price, 0, ',', '.') }} VND</p>
+                        <a href="{{ route('product.detail', $relatedProduct->product_id) }}" class="add-to-cart">Xem chi tiết</a>
                     </div>
                 </div>
-
-                <!-- Thêm thông tin số lượng -->
-                <div class="quantity-container">
-                    <p class="custom-title-small">Số lượng:</p>
-                    <button class="quantity-btn" id="decrease">-</button>
-                    <input type="text" class="quantity-input" id="quantity" value="1" readonly>
-                    <button class="quantity-btn" id="increase">+</button>
-                </div>
-
-
-
-                <!-- Thêm nút chức năng -->
-                <div class="action-buttons">
-                    <button type="button" class="btn btn-cart"><i class="fa fa-shopping-cart"></i> Thêm vào giỏ
-                        hàng</button>
-                    <button type="button" class="btn btn-buy-now">Mua ngay</button>
-                </div>
             </div>
+            @endforeach
         </div>
 
-        <div class="container2">
-            <div class="button-header">
-                <button>
-                    Chi tiết sản phẩm <i class="fa fa-star"></i>
-                </button>
-            </div>
-            <div class="product-details">
-                <p><span class="label">Danh Mục:</span> ...</p>
-                <p><span class="label">Kho:</span> ...</p>
-                <p><span class="label">Thương Hiệu:</span> ...</p>
-                <p><span class="label">Màu:</span> ...</p>
-                <p><span class="label">Size:</span></p>
-                <ul>
-                    <li>Size M: Nặng 45-55kg</li>
-                    <li>Size L: Nặng 55-65kg</li>
-                    <li>Size XL: Nặng 65-75kg</li>
-                </ul>
-                <p><span class="label">Mô tả:</span> {{ $product->subtitle }}</p>
-            </div>
-        </div>
-
-
-
-
-        <div class="container3">
-            <div class="button-header">
-                <button>
-                    Sản phẩm liên quan <i class="fa fa-star"></i>
-                </button>
-            </div>
-            <div class="similar-products">
-                @if($relatedProducts->isEmpty())
-                <p class="no-related-products">Không có sản phẩm liên quan</p>
-                @else
-                @foreach($relatedProducts as $relatedProduct)
-                <div class="similar-product">
-                    <div class="product-image">
-                        <img src="{{ $relatedProduct->main_image_url }}" class="card-img-top"
-                            alt="{{ $relatedProduct->name }}">
-                        <div class="product-overlay">
-                            <h5 class="product-name">{{ $relatedProduct->name }}</h5>
-                            <p class="product-price">{{ number_format($relatedProduct->price, 0, ',', '.') }} VND</p>
-                            <a href="{{ route('product.detail', $relatedProduct->product_id) }}" class="add-to-cart">Xem
-                                chi
-                                tiết</a>
-                        </div>
-                    </div>
-                </div>
-                @endforeach
-                @endif
-            </div>
-        </div>
-
-
-        <div class="container3 reviews">
-            <div class="button-header">
-                <button>
-                    Bình luận và đánh giá <i class="fa fa-star"></i>
-                </button>
-            </div>
+        <div class="reviews">
+            <h2>Customer Reviews</h2>
             <div class="review">
                 <div class="review-header">
                     <strong>anhan224</strong>
@@ -143,7 +96,7 @@
                     Sẽ còn mua hàng shop dài dài hihi! 😊
                 </p>
                 <div class="review-images">
-                    <img src="{{ asset('imagePro/1732209277.jpg') }}" alt="Review Image 1" />
+                    <img src="" alt="Review Image 1" />
                     <img src="{{ asset('imagePro/1732209500.jpg') }}" alt="Review Image 2" />
                     <img src="{{ asset('imagePro/1732209441.jpg') }}" alt="Review Image 3" />
                 </div>
@@ -157,6 +110,7 @@
                     </button>
                     <span class="report-count">0</span>
                 </div>
+
             </div>
             <div class="review-form">
                 <h2>Leave a Review</h2>
@@ -166,37 +120,80 @@
                     <span class="star" onclick="selectStar(3)">★</span>
                     <span class="star" onclick="selectStar(4)">★</span>
                     <span class="star" onclick="selectStar(5)">★</span>
+
+                    <div class="reviews">
+                        <h2>Đánh giá sản phẩm</h2>
+                        <!-- Review Section -->
+                    </div>
+                    <textarea placeholder="Write your review here..."></textarea>
+                    <button class="btn">Submit Review</button>
                 </div>
-                <textarea placeholder="Write your review here..."></textarea>
-                <button class="btn">Bình luận</button>
+
             </div>
         </div>
 
-
         <script>
-        let selectedColor = '';
-        let selectedSize = '';
+            let selectedColor = '';
+            let selectedSize = '';
+            document.getElementById('add-to-cart-form').addEventListener('submit', function(e) {
+                const color = document.getElementById('selected-color').value;
+                const size = document.getElementById('selected-size').value;
 
-        // Function to handle color selection
-        function changeColor(color, element) {
-            selectedColor = color;
-            document.getElementById("selected-color").value = color;
-            const colorOptions = document.querySelectorAll(".color-option");
-            colorOptions.forEach(option => option.classList.remove("selected"));
-            element.classList.add("selected");
-        }
+                if (!color || !size) {
+                    e.preventDefault(); // Ngăn form gửi đi
+                    alert('Vui lòng chọn màu sắc và kích thước.');
+                }
+            });
+            // Function to handle color selection
 
-        // Function to handle size selection
-        function selectSize(size, element) {
-            selectedSize = size;
-            document.getElementById("selected-size").value = size;
-            const sizeOptions = document.querySelectorAll(".size-option");
-            sizeOptions.forEach(option => option.classList.remove("selected"));
-            element
-                .classList.add("selected");
-        }
+            function changeColor(colorId, element) {
+                // Cập nhật giá trị vào input ẩn
+                document.getElementById('selected-color').value = colorId;
+
+                // Thêm hiệu ứng hiển thị màu được chọn
+                const colorOptions = document.querySelectorAll('.color-option');
+                colorOptions.forEach(option => option.classList.remove('selected'));
+                element.classList.add('selected');
+            }
+
+
+            // Function to handle size selection
+            function selectSize(sizeId, element) {
+                // Cập nhật giá trị vào input ẩn
+                document.getElementById('selected-size').value = sizeId;
+
+                // Cập nhật giá hiển thị
+                const newPrice = element.getAttribute('data-price');
+                document.getElementById('product-price').innerText = new Intl.NumberFormat('vi-VN', {
+                    style: 'currency',
+                    currency: 'VND'
+                }).format(newPrice);
+
+                // Thêm hiệu ứng hiển thị kích thước được chọn
+                const sizeOptions = document.querySelectorAll('.size-option');
+                sizeOptions.forEach(option => option.classList.remove('selected'));
+                element.classList.add('selected');
+            }
+
+            // Hàm cập nhật giá sản phẩm
+            function updatePrice(price, type, element) {
+                // Loại bỏ trạng thái "selected" của các lựa chọn hiện tại
+                if (type === 'color') {
+                    document.querySelectorAll('.color-option').forEach(option => {
+                        option.classList.remove('selected');
+                    });
+                } else if (type === 'size') {
+                    document.querySelectorAll('.size-option').forEach(option => {
+                        option.classList.remove('selected');
+                    });
+                }
+
+                // Đánh dấu lựa chọn hiện tại là "selected"
+                element.classList.add('selected');
+
+                // Cập nhật giá hiển thị
+                const priceElement = document.getElementById('product-price');
+                priceElement.textContent = `${Number(price).toLocaleString()} VND`;
+            }
         </script>
-
-
-
         @endsection
