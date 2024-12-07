@@ -1,35 +1,64 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Models\Order;
 use Illuminate\Http\Request;
 use App\Models\Payment;
+use App\Models\ShoppingCart;
+use App\Models\Order;
+use Illuminate\Support\Facades\Auth;
 class PaymentController extends Controller
 {
     //
-    public function handleCodPayment(Request $request)
+    public function processCOD(Request $request)
     {
-        // Lấy thông tin đơn hàng (giả sử `order_id` được gửi từ request)
-        $orderId = $request->input('order_id');
-        $total = $request->input('amount'); // Số tiền thanh toán
-
-        // Kiểm tra đơn hàng tồn tại
-        $order = Order::find($orderId);
-
-        if (!$order) {
-            return redirect()->back()->with('error', 'Order not found.');
+        if (!auth()->check()) {
+            return redirect()->route('login')->with('error', 'Bạn cần đăng nhập để thực hiện thanh toán.');
         }
 
-        // Tạo một bản ghi trong bảng `payments`
-        $payment = Payment::create([
-            'order_id' => $order->order_id,
-            'amount' => $total,
-            'payment_method' => 'COD',
-            'status' => 'completed', // Gán trạng thái "completed"
-        ]);
+        // Lấy user hiện tại
+        $user = auth()->user();
 
-        // Chuyển hướng về trang thành công
-        return redirect()->route('order.success', ['order_id' => $order->order_id])
-                         ->with('success', 'Payment completed successfully.');
+        // Kiểm tra giỏ hàng
+        $cartItems = $user->cartItems;
+        if ($cartItems->isEmpty()) {
+            return redirect()->route('cart.index')->with('error', 'Giỏ hàng của bạn đang trống.');
+        }
+
+        // Lưu thông tin đơn hàng
+        $order = new Order();
+        $order->user_id = $user->id;
+        $order->total = $request->input('amount'); // Tổng tiền từ input
+        $order->payment_status = 'COD';
+        $order->status = 'processing'; // Trạng thái mặc định
+        $order->save();
+
+        // Lưu các sản phẩm trong giỏ hàng vào `order_items`
+        foreach ($cartItems as $item) {
+            $order->items()->create([
+                'product_id' => $item->product_id,
+                'quantity' => $item->qty,
+                'price' => $item->product->price,
+            ]);
+        }
+
+        // Xóa giỏ hàng sau khi đặt hàng
+        // $user->cartItems()->delete();
+
+        // Lưu ID đơn hàng vào session
+        $request->session()->put('order_id', $order->id);
+
+        // Chuyển hướng tới trang thành công
+        return redirect()->route('checkout.success');
+    }
+
+    public function success(Request $request)
+    {
+        // Lấy ID đơn hàng từ session
+        $orderId = $request->session()->get('order_id');
+
+        // Tải thông tin đơn hàng và các mục trong đơn hàng
+        $order = Order::with('items.product')->findOrFail($orderId);
+
+        return view('checkout.success', compact('order'));
     }
 }

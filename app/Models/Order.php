@@ -35,4 +35,8 @@ class Order extends Model
 {
     return $this->belongsToMany(Product::class, 'order_product', 'order_id', 'product_id');
 }
+public function items()
+    {
+        return $this->hasMany(OrderItem::class, 'order_id', 'id');  // Đảm bảo mối quan hệ sử dụng đúng trường order_id
+    }
 }

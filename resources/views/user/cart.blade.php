@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="cart-table-container">
-    <table class="cart-table" border="1" cellpadding="10" cellspacing="0" style="width: 100%; border-collapse: collapse;">
+    <table class="table table-border" border="1" cellpadding="10" cellspacing="0" style="width: 100%; border-collapse: collapse;">
         <thead>
             <tr>
                 <th>Chọn</th>
@@ -15,29 +15,26 @@
             </tr>
         </thead>
         <tbody>
-            @foreach($cartItems as $item)
+        @foreach($cartItems as $item)
             <tr>
                 <td>
                     <input type="checkbox" />
                 </td>
                 <td class="pro-thumbnail">
                     <a href="#">
-                        <img src="{{ $item->product->main_image_url }}" alt="{{ $item->product->name }}" width="100">
+                        <img src="/storage/{{ $item->product->main_image_url }}" alt="{{ $item->product->name }}" width="100">
                     </a>
                 </td>
                 <td class="pro-title">
                     <a href="#">{{ $item->product->name }}</a>
-                    @foreach($item->product->attributeProducts as $attribute)
                     <div class="attribute">
-                        <span>Color: {{ $attribute->color->name }}</span>
-                        <span>Size: {{ $attribute->size->name }}</span>
-                        <span>Price: {{ number_format($attribute->price, 2) }} VND</span>
+                        <span>Color: {{ $item->color->name }}</span><br>
+                        <span>Size: {{ $item->size->name }}</span>
                     </div>
-                    @endforeach
                 </td>
                 <td class="pro-price">
                     @php
-                    $attributeProduct = $item->product->attributeProducts->first();
+                    $attributeProduct = $item->product->attributeProducts->firstWhere('size_id', $item->size_id);
                     @endphp
                     <span>
                         {{ number_format($attributeProduct ? $attributeProduct->price : 0, 0, ',', '.') }} VND
@@ -87,9 +84,21 @@
             </tr>
             <tr>
                 <th>Tổng cộng:</th>
+                <input type="hidden" name="amount" value="{{ number_format($finalTotal, 0, ',', '.') }} VND">
                 <td>{{ number_format($finalTotal, 0, ',', '.') }} VND</td>
             </tr>
+           
         </table>
+        <form action="{{ route('checkout.cod') }}" method="post">
+            @csrf
+            <input type="hidden" name="amount">
+            <button type="submit" class="btn btn-success">Thanh toán COD</button>
+        </form>
+        <form action="{{ route('checkout.vnpay') }}" method="post" >
+            @csrf
+            <input type="hidden" name="amount" value="{{ $finalTotal }}">
+            <button type="submit" name="redirect" class="btn btn-primary">Thanh toán VNPay</button>
+        </form>
     </div>
 </div>
 @endsection

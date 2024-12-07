@@ -191,11 +191,12 @@ Route::post('/cart/update/{id}', [CartController::class, 'update'])->name('cart.
 Route::delete('/cart/remove/{id}', [CartController::class, 'removeItem'])->name('cart.remove');
 
 
-Route::post('/checkout/cod', [PaymentController::class, 'handleCodPayment'])->name('checkout.cod');
+Route::post('/checkout/cod', [PaymentController::class, 'processCOD'])->name('checkout.cod');
+Route::get('/checkout/success', [PaymentController::class, 'success'])->name('checkout.success');
 
-Route::get('/order/success/{order_id}', [OrderUserController::class, 'orderSuccess'])->name('order.success');
+Route::post('/vnp_payment', [PaymentVnPayController::class, 'vnp_payment'])
+->name('checkout.vnpay');   
 
-Route::post('/vnp_payment', [PaymentVnPayController::class, 'vnp_payment'])->name('checkout.vnpay');
 Route::get('/vnp_return', [PaymentVnPayController::class, 'handleVNPayCallback'])
     ->name('vnp_return');
 

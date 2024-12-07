@@ -8,7 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 class CartItem extends Model
 {
     use HasFactory;
-    protected $fillable =['shopping_cart_id','product_id','qty'];
+    protected $fillable = [
+        'shopping_cart_id',
+        'product_id',
+        'color_id',
+        'size_id',
+        'qty',
+    ];
 
     // public function productItem(){
     //     return $this->belongsTo(Product::class,'product_id');
@@ -21,6 +27,14 @@ class CartItem extends Model
     {
         return $this->belongsTo(ShoppingCart::class, 'shopping_cart_id');
     }
+    public function color()
+    {
+        return $this->belongsTo(Color::class, 'color_id');
+    }
+    public function size()
+    {
+        return $this->belongsTo(Size::class, 'size_id');
+    }
     public function attributeProducts()
     {
         return $this->hasManyThrough(
@@ -31,5 +45,16 @@ class CartItem extends Model
             'product_id', // Local key on CartItem table
             'product_id'  // Local key on Product table
         );
+    }
+    public function attributeProduct()
+{
+    return $this->hasOne(AttributeProduct::class, 'product_id', 'product_id')
+        ->where('color_id', $this->color_id)
+        ->where('size_id', $this->size_id);
+}
+
+public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }

@@ -8,6 +8,8 @@ use App\Models\Order;
 use App\Models\ShoppingCart;
 use App\Models\CartItem;
 use App\Models\Coupon;
+use App\Models\Color;
+use App\Models\Size;
 use Illuminate\Support\Facades\Auth;
 
 
@@ -16,48 +18,47 @@ class CartController extends Controller
     // API để thêm sản phẩm vào giỏ hàng
     public function addToCart(Request $request)
     {
-        // Kiểm tra dữ liệu đầu vào
-        $request->validate([
-            'product_id' => 'required|exists:products,product_id',
-            'color_id' => 'nullable|exists:colors,color_id',
-            'size_id' => 'nullable|exists:sizes,size_id',
-            'qty' => 'required|integer|min:1'
-        ]);
-
-        // Lấy thông tin sản phẩm
+        if (!auth()->check()) {
+            // Nếu chưa đăng nhập, chuyển hướng đến trang đăng nhập với thông báo
+            return redirect()->route('login')->with('error', 'Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng.');
+        }
         $product = Product::findOrFail($request->product_id);
 
-        // Tìm hoặc tạo giỏ hàng cho người dùng
-        $cart = ShoppingCart::firstOrCreate([
-            'user_id' => auth()->id() // Người dùng phải đăng nhập
+    // Kiểm tra nếu có lựa chọn màu sắc và kích thước
+    $color = $request->color_id ? Color::find($request->color_id) : null;
+    $size = $request->size_id ? Size::find($request->size_id) : null;
+
+
+    // Tìm hoặc tạo giỏ hàng cho người dùng
+    $cart = ShoppingCart::firstOrCreate([
+        'user_id' => auth()->id() // Người dùng phải đăng nhập
+    ]);
+
+    // Kiểm tra nếu sản phẩm đã tồn tại trong giỏ hàng với màu sắc và kích thước đã chọn
+    $cartItem = CartItem::where('shopping_cart_id', $cart->id)
+        ->where('product_id', $product->product_id)
+        ->where('color_id', $color ? $color->color_id : null) // Nếu có màu sắc
+        ->where('size_id', $size ? $size->size_id : null)   // Nếu có kích thước
+        ->first();
+
+    if ($cartItem) {
+        // Nếu sản phẩm đã tồn tại, tăng số lượng
+        $cartItem->qty += $request->qty;
+        $cartItem->save();
+    } else {
+        // Thêm sản phẩm mới vào giỏ hàng
+        CartItem::create([
+            'shopping_cart_id' => $cart->id,
+            'product_id' => $product->product_id,
+            'color_id' => $request->color_id,   // Nếu có màu sắc
+            'size_id' => $request->size_id,       // Nếu có kích thước
+            'qty' => $request->qty,
+            'price' => $product->price,
         ]);
-
-        // Kiểm tra nếu sản phẩm đã tồn tại trong giỏ hàng
-        $cartItem = CartItem::where('shopping_cart_id', $cart->id)
-            ->where('product_id', $product->product_id)
-
-            ->first();
-
-        if ($cartItem) {
-            // Nếu sản phẩm đã tồn tại, tăng số lượng
-            $cartItem->qty += $request->qty;
-            $cartItem->save();
-        } else {
-            // Thêm sản phẩm mới
-            CartItem::create([
-                'shopping_cart_id' => $cart->id,
-                'product_id' => $product->product_id,
-                'color_id' => $request->color_id,
-                'size_id' => $request->size_id,
-                'qty' => $request->qty,
-                'price' => $product->price,
-            ]);
-        }
-
-        // Điều hướng về trang giỏ hàng
-        return redirect()->route('users.cart')->with('success', 'Sản phẩm đã được thêm vào giỏ hàng.');
     }
-
+    // Trả về thông báo và điều hướng về trang giỏ hàng
+    return redirect()->route('users.cart')->with('success', 'Sản phẩm đã được thêm vào giỏ hàng.');
+}
 
     // API để xem giỏ hàng
     public function viewCart()
