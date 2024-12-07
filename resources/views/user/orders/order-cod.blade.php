@@ -1,48 +1,42 @@
 @extends('user.layouts.app')
 
 @section('content')
-<div class="container">
-    <h2>Thank you for your order!</h2>
-    <p>Your order #{{ $order->order_id }} has been successfully processed.</p>
-    <p>Payment Amount: {{ number_format($order->payment->amount, 2) }} VND</p>
-    <p>Payment Method: {{ $order->payment->payment_method }}</p>
-    <a href="{{ route('home') }}" class="btn btn-primary">Go back to Home</a>
-</div>
-@endsection
-@extends('layouts.app')
-
-@section('content')
-<div class="container">
-    <h2>Đặt hàng thành công!</h2>
-    <p>Cảm ơn bạn đã đặt hàng. Dưới đây là thông tin chi tiết đơn hàng của bạn:</p>
-
-    <h4>Mã đơn hàng: {{ $order->id }}</h4>
-    <h4>Tổng tiền: {{ number_format($order->total, 0, ',', '.') }} VND</h4>
-    <h4>Phương thức thanh toán: {{ $order->payment_status }}</h4>
+<div class="order-success">
+    <h1>Đặt hàng thành công!</h1>
+    <p>Xin chào, <strong>{{ $userName }}</strong>.</p>
+    <p>Cảm ơn bạn đã đặt hàng. Dưới đây là thông tin đơn hàng của bạn:</p>
 
     <table class="table table-bordered">
         <thead>
             <tr>
-                <th>#</th>
-                <th>Sản phẩm</th>
+                <th>Tên sản phẩm</th>
+                <th>Màu</th>
+                <th>Size</th>
                 <th>Số lượng</th>
-                <th>Giá</th>
+                <th>Đơn giá</th>
+                <th>Phí vận chuyển</th>
                 <th>Thành tiền</th>
             </tr>
         </thead>
         <tbody>
-            @foreach ($order->items as $item)
+            @foreach ($productDetails as $product)
             <tr>
-                <td>{{ $loop->iteration }}</td>
-                <td>{{ $item->product->name }}</td>
-                <td>{{ $item->quantity }}</td>
-                <td>{{ number_format($item->price, 0, ',', '.') }} VND</td>
-                <td>{{ number_format($item->quantity * $item->price, 0, ',', '.') }} VND</td>
+                <td>{{ $product['name'] }}</td>
+                <td>{{ $product['color'] }}</td>
+                <td>{{ $product['size'] }}</td>
+                <td>{{ $product['quantity'] }}</td>
+                <td>{{ number_format($product['price'], 0, ',', '.') }} VND</td>
+                <td>{{ number_format($shippingFee, 0, ',', '.') }} VND</td>
+                <td>{{ number_format($total, 0, ',', '.') }} VND</td>
             </tr>
             @endforeach
         </tbody>
     </table>
 
-    <a href="{{ route('home') }}" class="btn btn-primary">Về trang chủ</a>
+    <!-- <p><strong>Phí vận chuyển:</strong> {{ number_format($shippingFee, 0, ',', '.') }} VND</p>
+    <p><strong>Tổng tiền:</strong> {{ number_format($total, 0, ',', '.') }} VND</p> -->
+
+    <p>Chúng tôi sẽ liên hệ với bạn sớm nhất để xác nhận đơn hàng.</p>
+    <a href="{{ route('home') }}" class="btn btn-primary">Quay lại trang chủ</a>
 </div>
 @endsection

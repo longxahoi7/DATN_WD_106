@@ -191,8 +191,9 @@ Route::post('/cart/update/{id}', [CartController::class, 'update'])->name('cart.
 Route::delete('/cart/remove/{id}', [CartController::class, 'removeItem'])->name('cart.remove');
 
 
-Route::post('/checkout/cod', [PaymentController::class, 'processCOD'])->name('checkout.cod');
-Route::get('/checkout/success', [PaymentController::class, 'success'])->name('checkout.success');
+Route::post('/checkout/cod', [PaymentController::class, 'checkoutCOD'])->name('checkout.cod');
+// Route trang thông báo thanh toán thành công
+Route::get('order/success', [PaymentController::class, 'orderSuccess'])->name('user.orders.order-cod');
 
 Route::post('/vnp_payment', [PaymentVnPayController::class, 'vnp_payment'])
 ->name('checkout.vnpay');   
