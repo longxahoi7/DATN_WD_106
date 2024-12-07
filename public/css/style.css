@@ -16,7 +16,8 @@ body {
 
 .action-icons {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
+    align-items: center;
     gap: 10px;
 }
 
@@ -27,4 +28,11 @@ body {
 .modal-body input,
 .modal-body textarea {
     margin-bottom: 10px;
+}
+
+.icon-action-category {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 100%;
 }
