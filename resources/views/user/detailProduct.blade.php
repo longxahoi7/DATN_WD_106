@@ -22,8 +22,8 @@
                     <div class="color-options">
                         @foreach($product->attributeProducts as $attributeProduct)
                         <div class="color-option"
-                            style="background-color: {{ $attributeProduct->color->name }}"
-                            onclick="changeColor('{{ $attributeProduct->color->name }}', this)">
+                            style="background-color: {{ $attributeProduct->color->name }};"
+                            onclick="changeColor('{{ $attributeProduct->color->color_id }}', this)"> <!-- Gửi ID thay vì tên -->
                         </div>
                         @endforeach
                     </div>
@@ -35,12 +35,13 @@
                     <div class="size-options">
                         @foreach($product->attributeProducts->unique('size_id') as $attributeProduct)
                         <div class="size-option"
-                            data-size="{{ $attributeProduct->size->name }}"
+                            data-id="{{ $attributeProduct->size->size_id }}"
                             data-price="{{ $attributeProduct->price }}"
-                            onclick="updatePrice('{{ $attributeProduct->price }}', 'size', this)">
+                            onclick="selectSize('{{ $attributeProduct->size->size_id }}', this)">
                             {{ $attributeProduct->size->name }}
                         </div>
                         @endforeach
+
                     </div>
 
                 </div>
@@ -57,9 +58,8 @@
                     </div>
 
                     <button type="submit" class="btn btn-success">Thêm vào giỏ hàng</button>
-              
-
                 </form>
+
 
                 <h2>Thông tin sản phẩm</h2>
                 <p>{{ $product->subtitle }}</p>
@@ -135,24 +135,46 @@
         <script>
             let selectedColor = '';
             let selectedSize = '';
+            document.getElementById('add-to-cart-form').addEventListener('submit', function(e) {
+                const color = document.getElementById('selected-color').value;
+                const size = document.getElementById('selected-size').value;
 
+                if (!color || !size) {
+                    e.preventDefault(); // Ngăn form gửi đi
+                    alert('Vui lòng chọn màu sắc và kích thước.');
+                }
+            });
             // Function to handle color selection
-            function changeColor(color, element) {
-                selectedColor = color;
-                document.getElementById("selected-color").value = color;
-                const colorOptions = document.querySelectorAll(".color-option");
-                colorOptions.forEach(option => option.classList.remove("selected"));
-                element.classList.add("selected");
+
+            function changeColor(colorId, element) {
+                // Cập nhật giá trị vào input ẩn
+                document.getElementById('selected-color').value = colorId;
+
+                // Thêm hiệu ứng hiển thị màu được chọn
+                const colorOptions = document.querySelectorAll('.color-option');
+                colorOptions.forEach(option => option.classList.remove('selected'));
+                element.classList.add('selected');
             }
+
+
             // Function to handle size selection
-            function selectSize(size, element) {
-                selectedSize = size;
-                document.getElementById("selected-size").value = size; // Gán giá trị vào input hidden
-                console.log("Size ID đã chọn:", size); // Hiển thị giá trị trong console
-                const sizeOptions = document.querySelectorAll(".size-option");
-                sizeOptions.forEach(option => option.classList.remove("selected"));
-                element.classList.add("selected");
+            function selectSize(sizeId, element) {
+                // Cập nhật giá trị vào input ẩn
+                document.getElementById('selected-size').value = sizeId;
+
+                // Cập nhật giá hiển thị
+                const newPrice = element.getAttribute('data-price');
+                document.getElementById('product-price').innerText = new Intl.NumberFormat('vi-VN', {
+                    style: 'currency',
+                    currency: 'VND'
+                }).format(newPrice);
+
+                // Thêm hiệu ứng hiển thị kích thước được chọn
+                const sizeOptions = document.querySelectorAll('.size-option');
+                sizeOptions.forEach(option => option.classList.remove('selected'));
+                element.classList.add('selected');
             }
+
             // Hàm cập nhật giá sản phẩm
             function updatePrice(price, type, element) {
                 // Loại bỏ trạng thái "selected" của các lựa chọn hiện tại
@@ -173,7 +195,5 @@
                 const priceElement = document.getElementById('product-price');
                 priceElement.textContent = `${Number(price).toLocaleString()} VND`;
             }
-
-            
         </script>
         @endsection

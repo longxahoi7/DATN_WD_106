@@ -25,15 +25,6 @@ class CartController extends Controller
     $color = $request->color_id ? Color::find($request->color_id) : null;
     $size = $request->size_id ? Size::find($request->size_id) : null;
 
-    // Nếu có màu sắc, kiểm tra xem sản phẩm có màu đó không
-    if ($color && !$product->colors->contains($color)) {
-        return redirect()->back()->withErrors('Màu sắc không hợp lệ cho sản phẩm này.');
-    }
-
-    // Nếu có kích thước, kiểm tra xem sản phẩm có kích thước đó không
-    if ($size && !$product->sizes->contains($size)) {
-        return redirect()->back()->withErrors('Kích thước không hợp lệ cho sản phẩm này.');
-    }
 
     // Tìm hoặc tạo giỏ hàng cho người dùng
     $cart = ShoppingCart::firstOrCreate([
@@ -56,13 +47,12 @@ class CartController extends Controller
         CartItem::create([
             'shopping_cart_id' => $cart->id,
             'product_id' => $product->product_id,
-            'color_id' => $color ? $color->color_id : null,   // Nếu có màu sắc
-            'size_id' => $size ? $size->size_id : null,       // Nếu có kích thước
+            'color_id' => $request->color_id,   // Nếu có màu sắc
+            'size_id' => $request->size_id,       // Nếu có kích thước
             'qty' => $request->qty,
             'price' => $product->price,
         ]);
     }
-
     // Trả về thông báo và điều hướng về trang giỏ hàng
     return redirect()->route('users.cart')->with('success', 'Sản phẩm đã được thêm vào giỏ hàng.');
 }
@@ -80,14 +70,7 @@ class CartController extends Controller
     }
 
     // Lấy giỏ hàng của người dùng và eager load tất cả thông tin cần thiết
-    $shoppingCart = ShoppingCart::where('user_id', $userId)
-        ->with([
-            'cartItems.product', // Lấy thông tin sản phẩm
-            'cartItems.product.attributeProducts.color', // Lấy thông tin màu sắc
-            'cartItems.product.attributeProducts.size',  // Lấy thông tin kích thước
-            'cartItems.product.attributeProducts' // Lấy tất cả các attribute products
-        ])
-        ->first();
+    $shoppingCart = ShoppingCart::with('cartItems.product.attributeProducts')->where('user_id', $userId)->first();
 
     // Nếu không tìm thấy giỏ hàng, trả về view với giỏ hàng rỗng
     if (!$shoppingCart) {

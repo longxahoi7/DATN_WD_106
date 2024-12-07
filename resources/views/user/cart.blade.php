@@ -27,17 +27,14 @@
                 </td>
                 <td class="pro-title">
                     <a href="#">{{ $item->product->name }}</a>
-                    @foreach($item->product->attributeProducts as $attribute)
                     <div class="attribute">
-                        <span>Color: {{ $attribute->color->name }}</span>
-                        <span>Size: {{ $attribute->size->name }}</span>
-                        <span>Price: {{ number_format($attribute->price, 2) }} VND</span>
+                        <span>Color: {{ $item->color->name }}</span>
+                        <span>Size: {{ $item->size->name }}</span>
                     </div>
-                    @endforeach
                 </td>
                 <td class="pro-price">
                     @php
-                    $attributeProduct = $item->product->attributeProducts->first();
+                    $attributeProduct = $item->product->attributeProducts->firstWhere('size_id', $item->size_id);
                     @endphp
                     <span>
                         {{ number_format($attributeProduct ? $attributeProduct->price : 0, 0, ',', '.') }} VND
