@@ -194,12 +194,20 @@ Route::delete('/cart/remove/{id}', [CartController::class, 'removeItem'])->name(
 Route::post('/checkout/cod', [PaymentController::class, 'checkoutCOD'])->name('checkout.cod');
 // Route trang thông báo thanh toán thành công
 Route::get('order/success', [PaymentController::class, 'orderSuccess'])->name('user.orders.order-cod');
-
+Route::get('/order-history', [OrderUserController::class, 'orderHistory'])->name('user.order_history');
+Route::post('/cancel-order/{orderId}', [OrderUserController::class, 'cancelOrder'])->name('user.cancel_order');
 Route::post('/vnp_payment', [PaymentVnPayController::class, 'vnp_payment'])
 ->name('checkout.vnpay');   
 
 Route::get('/vnp_return', [PaymentVnPayController::class, 'handleVNPayCallback'])
-    ->name('vnp_return');
+->name('vnpay.callback');
+
+Route::get('/payment_vnpay', function () {
+    return view('user.orders.orderVNPAY');
+})->name('vnp.success');
+Route::get('/payment_vnpay', function () {
+    return view('user.orders.orderVNPAYFailed');
+})->name('vnp.failed');
 
 Route::get('about', function () {
     return view('user.about');

@@ -18,7 +18,9 @@ class Order extends Model
         'payment_status',
         // Thêm các thuộc tính khác nếu cần
     ];
-   
+    protected $casts = [
+        'order_date' => 'datetime', // Chuyển đổi cột order_date thành Carbon
+    ];
     public function payment()
     {
         return $this->hasOne(Payment::class, 'order_id', 'order_id');
