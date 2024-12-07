@@ -171,6 +171,9 @@ Route::get('/size', [SizeController::class, 'index'])->name('size.index');
 Route::get('/cart-list', [CartController::class, 'viewCart'])->name('users.cart');
 
 
+Route::get('/order-history', [OrderUserController::class, 'orderHistory'])->name('user.order_history');
+Route::post('/cancel-order/{orderId}', [OrderUserController::class, 'cancelOrder'])->name('user.cancel_order');
+
 // Route cho người dùng
 // Route::prefix('/')->group(function () {
 Route::get('/', [HomeController::class, 'index'])->name('home');

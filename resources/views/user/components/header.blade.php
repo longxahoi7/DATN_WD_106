@@ -71,6 +71,7 @@
                             <div class="dropdown-menu text-center">
                                 @if(Auth::check())
                                 <a href="/profile" class="dropdown-item">Thông tin chung</a>
+                                <a href="/order-history" class="dropdown-item">Lịch sử mua hàng</a>
                                 <form id="logout-form" action="{{ route('logout') }}" method="POST"
                                     style="display: none;">
                                     @csrf
@@ -81,6 +82,7 @@
                                 @else
                                 <a href="/login" class="dropdown-item">Đăng nhập</a>
                                 <a href="/register" class="dropdown-item">Đăng ký</a>
+                                
                                 @endif
                             </div>
                         </div>

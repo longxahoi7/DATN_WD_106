@@ -8,13 +8,21 @@ use Illuminate\Http\Request;
 
 class OrderController extends Controller
 {
-    public function index()
+    public function orderHistory()
     {
-        // Lấy danh sách đơn hàng của người dùng đang đăng nhập
-        $orders = Order::where('user_id', auth()->id())->orderBy('created_at', 'desc')->get();
+        // Kiểm tra xem người dùng đã đăng nhập chưa
+        if (!auth()->check()) {
+            return redirect()->route('login')->with('error', 'Vui lòng đăng nhập để xem lịch sử mua hàng.');
+        }
+
+        // Lấy danh sách đơn hàng của người dùng
+        $orders = Order::where('user_id', auth()->id())
+            ->with('orderItems.product') // Eager load thông tin sản phẩm
+            ->orderBy('order_date', 'desc') // Sắp xếp theo ngày đặt hàng mới nhất
+            ->get();
 
         // Trả về view danh sách đơn hàng
-        return view('user.orders.index', compact('orders'));
+        return view('user.orderHistory', compact('orders'));
     }
 
 
@@ -22,7 +30,7 @@ class OrderController extends Controller
     {
         // Lấy thông tin đơn hàng của người dùng đang đăng nhập
         $order = Order::where('order_id', $id)
-        ->where('user_id', auth()->id())->with('orderItems.product')->firstOrFail();
+            ->where('user_id', auth()->id())->with('orderItems.product')->firstOrFail();
 
         // Trả về view chi tiết đơn hàng
         return view('user.orders.details', compact('order'));
@@ -67,4 +75,21 @@ class OrderController extends Controller
 
         return view('user.orders.order-cod', compact('order'));
     }
+    public function cancelOrder($id)
+    {
+        // Tìm đơn hàng
+        $order = Order::findOrFail($id);
+
+        // Kiểm tra trạng thái đơn hàng
+        if ($order->status !== 'pending') {
+            return redirect()->back()->with('error', 'Chỉ có thể hủy đơn hàng trong trạng thái chờ xác nhận.');
+        }
+
+        // Cập nhật trạng thái thành 'cancelled'
+        $order->status = 'cancelled';
+        $order->save();
+
+        return redirect()->back()->with('success', 'Đơn hàng đã được hủy thành công.');
+    }
+
 }
