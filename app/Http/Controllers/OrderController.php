@@ -22,7 +22,7 @@ class OrderController extends Controller
             ->get();
 
         // Trả về view danh sách đơn hàng
-        return view('user.orderHistory', compact('orders'));
+        return view('user.orders.orderHistory', compact('orders'));
     }
 
 
@@ -85,8 +85,7 @@ class OrderController extends Controller
             return redirect()->back()->with('error', 'Chỉ có thể hủy đơn hàng trong trạng thái chờ xác nhận.');
         }
 
-        // Cập nhật trạng thái thành 'cancelled'
-        $order->status = 'cancelled';
+        // Cập nhật trạng thái thành 'cancelled'/-strong/-heart:>:o:-((:-h $order->status = 'cancelled';
         $order->save();
 
         return redirect()->back()->with('success', 'Đơn hàng đã được hủy thành công.');
