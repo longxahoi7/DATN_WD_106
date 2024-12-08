@@ -89,7 +89,7 @@
             </tr>
            
         </table>
-        <form action="{{ route('checkout.cod') }}" method="POST">
+        <form action="{{ route('user.order_confirm') }}" method="POST">
             @csrf
             <input type="hidden" name="amount" value="{{ $finalTotal }}">
             <button type="submit" class="btn btn-success">Thanh toán COD</button>

@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Order;
+use App\Models\OrderItem;
 use App\Models\ShoppingCart;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class OrderController extends Controller
 {
@@ -90,5 +92,49 @@ class OrderController extends Controller
 
         return redirect()->back()->with('success', 'Đơn hàng đã được hủy thành công.');
     }
-
+    public function confirmOrder(Request $request)
+    {
+        // Lấy thông tin người dùng đang đăng nhập
+        $user = Auth::user();
+    
+        if (!$user) {
+            return redirect()->route('login')->with('error', 'Vui lòng đăng nhập để thanh toán!');
+        }
+    
+        // Lấy giỏ hàng của người dùng
+        $shoppingCart = ShoppingCart::where('user_id', $user->user_id)->first();
+        $cartItems = $shoppingCart->cartItems;
+    
+        // Tính tổng tiền đơn hàng (không bao gồm phí vận chuyển)
+        $totalWithoutShipping = 0;
+        $productDetails = []; // Lưu thông tin chi tiết sản phẩm
+        foreach ($cartItems as $item) {
+            $attributeProduct = $item->product->attributeProducts->firstWhere('size_id', $item->size_id);
+            if ($attributeProduct) {
+                $totalWithoutShipping += $attributeProduct->price * $item->qty;
+    
+                $productDetails[] = [
+                    'name' => $item->product->name,
+                    'color' => $item->color->name,
+                    'size' => $item->size->name,
+                    'quantity' => $item->qty,
+                    'price' => $attributeProduct->price,
+                    'subtotal' => $attributeProduct->price * $item->qty
+                ];
+            }
+        }
+    
+        // Thêm phí vận chuyển
+        $shippingFee = 40000;
+        $total = $totalWithoutShipping + $shippingFee;
+    
+        // Chuyển hướng đến trang thông báo thanh toán thành công và truyền thông tin
+        return view('user.orders.orderConfirm', [
+            'user' => $user,
+            'productDetails' => $productDetails,
+            'total' => $total,
+            'shippingFee' => $shippingFee
+        ]);
+    }
+    
 }
