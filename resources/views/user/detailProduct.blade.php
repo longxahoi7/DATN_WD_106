@@ -23,7 +23,7 @@
                         @foreach($product->attributeProducts as $attributeProduct)
                         <div class="color-option"
                             style="background-color: {{ $attributeProduct->color->name }};"
-                            onclick="changeColor('{{ $attributeProduct->color->color_id }}', this)"> <!-- Gửi ID thay vì tên -->
+                            onclick="changeColor('{{ $attributeProduct->color->color_id }}', this)"> 
                         </div>
                         @endforeach
                     </div>

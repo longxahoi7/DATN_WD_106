@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Order;
+use App\Models\OrderItem;
 use App\Models\ShoppingCart;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class OrderController extends Controller
 {
@@ -75,20 +77,78 @@ class OrderController extends Controller
 
         return view('user.orders.order-cod', compact('order'));
     }
-    public function cancelOrder($id)
+    public function cancelOrder($orderId)
     {
-        // Tìm đơn hàng
-        $order = Order::findOrFail($id);
-
-        // Kiểm tra trạng thái đơn hàng
-        if ($order->status !== 'pending') {
-            return redirect()->back()->with('error', 'Chỉ có thể hủy đơn hàng trong trạng thái chờ xác nhận.');
+        // Kiểm tra nếu người dùng đã đăng nhập
+        if (!auth()->check()) {
+            return redirect()->route('login')->with('error', 'Vui lòng đăng nhập để hủy đơn hàng.');
         }
 
-        // Cập nhật trạng thái thành 'cancelled'/-strong/-heart:>:o:-((:-h $order->status = 'cancelled';
-        $order->save();
+        // Lấy đơn hàng
+        $order = Order::where('order_id', $orderId)
+            ->where('user_id', auth()->id()) // Đảm bảo là người dùng của đơn hàng này
+            ->first();
 
-        return redirect()->back()->with('success', 'Đơn hàng đã được hủy thành công.');
+        // Kiểm tra xem đơn hàng có tồn tại và trạng thái là "pending" không
+        if (!$order) {
+            return redirect()->route('user.order_history')->with('error', 'Đơn hàng không tồn tại.');
+        }
+
+        if ($order->status !== 'pending') {
+            return redirect()->route('user.order_history')->with('error', 'Đơn hàng không thể hủy ở trạng thái này.');
+        }
+
+        // Cập nhật trạng thái đơn hàng thành "canceled"
+        $order->update([
+            'status' => 'cancelled',
+        ]);
+
+        // Thực hiện các thao tác khác nếu cần, như gửi email hoặc xử lý tiền hoàn lại...
+
+        return redirect()->route('user.order_history')->with('success', 'Đơn hàng đã được hủy.');
     }
+    public function confirmOrder(Request $request)
+    {
+        // Lấy thông tin người dùng đang đăng nhập
+        $user = Auth::user();
 
+        if (!$user) {
+            return redirect()->route('login')->with('error', 'Vui lòng đăng nhập để thanh toán!');
+        }
+
+        // Lấy giỏ hàng của người dùng
+        $shoppingCart = ShoppingCart::where('user_id', $user->user_id)->first();
+        $cartItems = $shoppingCart->cartItems;
+
+        // Tính tổng tiền đơn hàng (không bao gồm phí vận chuyển)
+        $totalWithoutShipping = 0;
+        $productDetails = []; // Lưu thông tin chi tiết sản phẩm
+        foreach ($cartItems as $item) {
+            $attributeProduct = $item->product->attributeProducts->firstWhere('size_id', $item->size_id);
+            if ($attributeProduct) {
+                $totalWithoutShipping += $attributeProduct->price * $item->qty;
+
+                $productDetails[] = [
+                    'name' => $item->product->name,
+                    'color' => $item->color->name,
+                    'size' => $item->size->name,
+                    'quantity' => $item->qty,
+                    'price' => $attributeProduct->price,
+                    'subtotal' => $attributeProduct->price * $item->qty
+                ];
+            }
+        }
+
+        // Thêm phí vận chuyển
+        $shippingFee = 40000;
+        $total = $totalWithoutShipping + $shippingFee;
+
+        // Chuyển hướng đến trang thông báo thanh toán thành công và truyền thông tin
+        return view('user.orders.orderConfirm', [
+            'user' => $user,
+            'productDetails' => $productDetails,
+            'total' => $total,
+            'shippingFee' => $shippingFee
+        ]);
+    }
 }
