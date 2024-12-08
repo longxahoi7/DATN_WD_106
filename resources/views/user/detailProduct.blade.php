@@ -29,7 +29,6 @@
                         $maxPrice = $prices->max();
                         $defaultPrice = $product->attributeProducts->first()->price ?? 0;
                         @endphp
-
                         @if ($minPrice == $maxPrice)
                         <span data-min-price="{{ $minPrice }}" data-max-price="{{ $maxPrice }}">
                             {{ number_format($minPrice, 0, ',', '.') }} VND
@@ -63,21 +62,21 @@
 
                 <div class="quantity-container d-flex">
                     <label for="quantity" class="form-label">Số lượng: </label>
-                    <div class="btn btn-info" onclick="changeQuantity(-1)">-</div>
+                    <div class="btn" onclick="changeQuantity(-1)">-</div>
                     <input type="number" name="display-qty" id="quantity" class="form-control" min="1" value="1"
                         onchange="updateQuantity(this.value)">
-                    <div class="btn btn-info" onclick="changeQuantity(1)">+</div>
+                    <div class="btn" onclick="changeQuantity(1)">+</div>
                 </div>
 
                 <div class="d-flex">
-                    <button type="button" class="btn custom-cart mr-2" onclick="addToCart()">Thêm vào giỏ hàng</button>
+                    <button type="button" class="custom-cart" onclick="addToCart()">Thêm vào giỏ hàng</button>
                     <form id="add-to-cart-form" action="{{ route('cart.add') }}" method="POST">
                         @csrf
                         <input type="hidden" name="product_id" value="{{ $product->product_id }}">
                         <input type="hidden" name="color_id" id="selected-color" value="">
                         <input type="hidden" name="size_id" id="selected-size" value="">
                         <input type="hidden" name="qty" id="qty-hidden" value="1">
-                        <button type="submit" class="btn custom-buy">Mua ngay</button>
+                        <button type="submit" class="custom-buy">Mua ngay</button>
                     </form>
                 </div>
             </div>
@@ -95,6 +94,7 @@
             </div>
         </div>
 
+        <!-- Chi tiết sản phẩm -->
         <div class="container-details">
             <div class="button-header mb-3">
                 <button>
@@ -339,52 +339,36 @@
             let currentQuantity = parseInt(quantityInput.value) || 1;
             currentQuantity += change;
 
-            if (currentQuantity < 1) currentQuantity = 1; // Không cho phép giá trị nhỏ hơn 1
+            if (currentQuantity < 1) currentQuantity = 1;
             quantityInput.value = currentQuantity;
-            updateQuantity(currentQuantity); // Cập nhật giá trị vào input ẩn
+            updateQuantity(currentQuantity);
         }
 
         function updateQuantity(value) {
-            const qtyInput = document.getElementById('qty-hidden');
-            qtyInput.value = value;
-        }
+            let qty = parseInt(value);
 
-        function showToast(message, isError = true) {
-            const toast = document.getElementById('toast-notification');
-            const toastMessage = document.getElementById('toast-message');
-
-            // Cập nhật thông điệp
-            toastMessage.innerText = message;
-
-            // Hiện toast
-            toast.style.display = 'block';
-
-            // Thêm màu tùy theo trạng thái lỗi/success
-            if (isError) {
-                toast.classList.remove('bg-success');
-                toast.classList.add('bg-danger');
-            } else {
-                toast.classList.remove('bg-danger');
-                toast.classList.add('bg-success');
+            if (isNaN(qty) || qty < 1) {
+                qty = 1;
             }
 
-            // Ẩn toast sau 3 giây
+            document.getElementById('quantity').value = qty;
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast-notification');
+            const toastMessage = document.getElementById('toast-message');
+            toastMessage.innerText = message;
+            toast.style.display = 'flex';
             setTimeout(() => {
                 toast.style.display = 'none';
             }, 3000);
         }
 
         function closeToast() {
-            const toast = document.getElementById('toast-notification');
-            toast.style.display = 'none';
-        }
-
-
-        function closeToast() {
-            const toast = document.getElementById('toast-notification');
-            toast.style.display = 'none';
+            document.getElementById('toast-notification').style.display = 'none';
         }
         </script>
+
 
 
         @endsection
