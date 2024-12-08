@@ -2,13 +2,21 @@ body {
     margin: 20px;
 }
 .brand-info {
-    margin-bottom: 20px;
+    margin-bottom: 50px;
+    border: 1px solid #a7a6a658;
+    padding: 50px;
+    border-radius: 10px;
+    font-size: 20px;
 }
 .two {
     display: flex;
     justify-content: center;
-    margin-top: 30px;
+    margin-top: 50px;
 }
 .container {
     margin-top: 200px;
+}
+
+.baby-huong {
+    padding: 12px;
 }

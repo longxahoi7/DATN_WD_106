@@ -30,7 +30,7 @@
         </div>
     </div>
     <div class="text-center">
-        <a href="{{ route('admin.colors.index') }}" class="btn btn-success">Quay lại danh sách màu sắc</a>
+        <a href="{{ route('admin.colors.index') }}" class="btn btn-success ">Quay lại danh sách màu sắc</a>
     </div>
 </div>
 

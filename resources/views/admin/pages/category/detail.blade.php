@@ -10,9 +10,9 @@
     <h1 class="text-center">Chi Tiết Danh mục</h1>
     <div class="two">
         <div class="brand-info">
-        <p>
+            <p>
                 <strong>Ảnh:</strong>
-               <img src="{{$category->image}}"  width = "100px" height = "100px" alt="">
+                <img src="{{$category->image}}" width="100px" height="100px" alt="">
             </p>
             <h3>
                 Tên Danh mục:
@@ -37,7 +37,8 @@
         </div>
     </div>
     <div class="text-center">
-        <a href="{{ route('admin.categories.index') }}" class="btn btn-success">Quay lại danh sách thương hiệu</a>
+        <a href="{{ route('admin.categories.index') }}" class="btn btn-success baby-huong">Quay lại danh sách thương
+            hiệu</a>
     </div>
 </div>
 
