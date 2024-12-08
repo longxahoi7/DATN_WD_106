@@ -187,6 +187,8 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::get('product/{id}', [ProductsController::class, 'showProduct'])->name('product.detail');
 Route::get('/product-list', [ProductsController::class, 'productList'])->name('product.list');
+Route::get('/products/{categoryId?}', [ProductController::class, 'productList'])->name('user.proincate');
+
 
 
 

@@ -26,13 +26,19 @@
                 <div class="col">
                     <div class="header-nav align-items-center" style="display: flex; margin-top: 10px">
                         <ul class='d-flex'>
+                            
                             @foreach ($categories as $category)
                             <li class="dropdown-item">
-                                <a href="/products?category={{ $category->id }}">{{ $category->name }}</a> 
+                                <a href="{{ route('product.list', $category->category_id) }}">{{ $category->name }}</a> 
                                 <ul class="sub-dropdown-menu">
                                 </ul>
                             </li>
                             @endforeach
+                            <li class="dropdown-item">
+                                <a href="{{ asset('/product-list') }}">Danh sách sản phẩm</a> 
+                                <ul class="sub-dropdown-menu">
+                                </ul>
+                            </li>
                         </ul>
                     </div>
                 </div>
