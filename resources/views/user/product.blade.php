@@ -1,155 +1,45 @@
-@extends('layouts.app')
+@extends('user.layouts.app')
 
-@section('content')
 <link href="{{ asset('css/productList.css') }}" rel="stylesheet" type="text/css">
-<div class="container">
-    <x-slide-show /> <!-- Assuming you have a Blade component for SlideShow -->
-
-    <div class="button-header">
-        <button>
-            Gentle Manor - Sản Phẩm Nổi Bật <i class="fa fa-star"></i>
-        </button>
-    </div>
-
-    <div class="product-list">
-        <figure class="snip1585">
-            <img src="{{ 'https://placehold.co/276x350?text=%22Kh%C3%B4ng%20c%C3%B3%20%E1%BA%A3nh%22' }}" alt="tên ảnh"
-                class="w-full h-full object-cover" />
-            <figcaption>
-                <h6>
-                    tên sản phẩm <br />
-                    <span class="pt-3">
-                        giá <sup>đ</sup>
-                    </span>
-                    <br />
-                </h6>
-                <button class="add-to-cart-button">
-                    <i class="fa fa-shopping-cart"></i> Mua Ngay
-                </button>
-            </figcaption>
-            <a href="product-detail" class="product-detail-link"></a>
-        </figure>
-        <figure class="snip1585">
-            <img src="{{ 'https://placehold.co/276x350?text=%22Kh%C3%B4ng%20c%C3%B3%20%E1%BA%A3nh%22' }}" alt="tên ảnh"
-                class="w-full h-full object-cover" />
-            <figcaption>
-                <h6>
-                    tên sản phẩm <br />
-                    <span class="pt-3">
-                        giá <sup>đ</sup>
-                    </span>
-                    <br />
-                </h6>
-                <button class="add-to-cart-button">
-                    <i class="fa fa-shopping-cart"></i> Mua Ngay
-                </button>
-            </figcaption>
-            <a href="product-detail" class="product-detail-link"></a>
-        </figure>
-        <figure class="snip1585">
-            <img src="{{ 'https://placehold.co/276x350?text=%22Kh%C3%B4ng%20c%C3%B3%20%E1%BA%A3nh%22' }}" alt="tên ảnh"
-                class="w-full h-full object-cover" />
-            <figcaption>
-                <h6>
-                    tên sản phẩm <br />
-                    <span class="pt-3">
-                        giá <sup>đ</sup>
-                    </span>
-                    <br />
-                </h6>
-                <button class="add-to-cart-button">
-                    <i class="fa fa-shopping-cart"></i> Mua Ngay
-                </button>
-            </figcaption>
-            <a href="product-detail" class="product-detail-link"></a>
-        </figure>
-        <figure class="snip1585">
-            <img src="{{ 'https://placehold.co/276x350?text=%22Kh%C3%B4ng%20c%C3%B3%20%E1%BA%A3nh%22' }}" alt="tên ảnh"
-                class="w-full h-full object-cover" />
-            <figcaption>
-                <h6>
-                    tên sản phẩm <br />
-                    <span class="pt-3">
-                        giá <sup>đ</sup>
-                    </span>
-                    <br />
-                </h6>
-                <button class="add-to-cart-button">
-                    <i class="fa fa-shopping-cart"></i> Mua Ngay
-                </button>
-            </figcaption>
-            <a href="product-detail" class="product-detail-link"></a>
-        </figure>
-        <figure class="snip1585">
-            <img src="{{ 'https://placehold.co/276x350?text=%22Kh%C3%B4ng%20c%C3%B3%20%E1%BA%A3nh%22' }}" alt="tên ảnh"
-                class="w-full h-full object-cover" />
-            <figcaption>
-                <h6>
-                    tên sản phẩm <br />
-                    <span class="pt-3">
-                        giá <sup>đ</sup>
-                    </span>
-                    <br />
-                </h6>
-                <button class="add-to-cart-button">
-                    <i class="fa fa-shopping-cart"></i> Mua Ngay
-                </button>
-            </figcaption>
-            <a href="product-detail" class="product-detail-link"></a>
-        </figure>
-        <figure class="snip1585">
-            <img src="{{ 'https://placehold.co/276x350?text=%22Kh%C3%B4ng%20c%C3%B3%20%E1%BA%A3nh%22' }}" alt="tên ảnh"
-                class="w-full h-full object-cover" />
-            <figcaption>
-                <h6>
-                    tên sản phẩm <br />
-                    <span class="pt-3">
-                        giá <sup>đ</sup>
-                    </span>
-                    <br />
-                </h6>
-                <button class="add-to-cart-button">
-                    <i class="fa fa-shopping-cart"></i> Mua Ngay
-                </button>
-            </figcaption>
-            <a href="product-detail" class="product-detail-link"></a>
-        </figure>
-        <figure class="snip1585">
-            <img src="{{ 'https://placehold.co/276x350?text=%22Kh%C3%B4ng%20c%C3%B3%20%E1%BA%A3nh%22' }}" alt="tên ảnh"
-                class="w-full h-full object-cover" />
-            <figcaption>
-                <h6>
-                    tên sản phẩm <br />
-                    <span class="pt-3">
-                        giá <sup>đ</sup>
-                    </span>
-                    <br />
-                </h6>
-                <button class="add-to-cart-button">
-                    <i class="fa fa-shopping-cart"></i> Mua Ngay
-                </button>
-            </figcaption>
-            <a href="product-detail" class="product-detail-link"></a>
-        </figure>
-        <figure class="snip1585">
-            <img src="{{ 'https://placehold.co/276x350?text=%22Kh%C3%B4ng%20c%C3%B3%20%E1%BA%A3nh%22' }}" alt="tên ảnh"
-                class="w-full h-full object-cover" />
-            <figcaption>
-                <h6>
-                    tên sản phẩm <br />
-                    <span class="pt-3">
-                        giá <sup>đ</sup>
-                    </span>
-                    <br />
-                </h6>
-                <button class="add-to-cart-button">
-                    <i class="fa fa-shopping-cart"></i> Mua Ngay
-                </button>
-            </figcaption>
-            <a href="product-detail" class="product-detail-link"></a>
-        </figure>
-
-        <!-- <p>Không có sản phẩm nào trong danh mục này.</p> -->
+@section('content')
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Danh Sách Sản Phẩm</h1>
+    
+    <div class="row">
+        @foreach ($listProduct as $product)
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <img src="{{ asset('storage/' . $product->image) }}" class="card-img-top" alt="{{ $product->name }}">
+                <div class="card-body">
+                    <h5 class="card-title">{{ $product->name }}</h5>
+                    <p class="card-text">
+                        {{ Str::limit($product->description, 100) }}
+                    </p>
+                    <h6 class="text-danger">
+                    @php
+                        // Lấy danh sách giá của sản phẩm
+                        $prices = $product->attributeProducts->pluck('price');
+                        $minPrice = $prices->min();
+                        $maxPrice = $prices->max();
+                        @endphp
+                        @if ($minPrice == $maxPrice)
+                        {{ number_format($minPrice, 0, ',', '.') }} VND
+                        @else
+                        {{ number_format($minPrice, 0, ',', '.') }} -
+                        {{ number_format($maxPrice, 0, ',', '.') }} VND
+                        @endif
+                    </h6>
+                </div>
+                <div class="card-footer text-center">
+                    <a href="{{ route('product.detail', $product->product_id) }}" class="btn btn-primary">Xem Chi Tiết</a>
+                    <form action="{{ route('cart.add', $product->id) }}" method="POST" class="d-inline">
+                        @csrf
+                        <button type="submit" class="btn btn-success">Thêm Vào Giỏ</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        @endforeach
     </div>
 </div>
 @endsection

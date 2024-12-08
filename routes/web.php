@@ -156,7 +156,9 @@ Route::get('register', function () {
 
 
 Auth::routes();
+
 Route::get('/', [HomeController::class, 'index'])->name('home');
+
 
 Route::get('index', [BrandController::class, 'home']);
 
@@ -171,6 +173,10 @@ Route::get('/size', [SizeController::class, 'index'])->name('size.index');
 Route::get('/cart-list', [CartController::class, 'viewCart'])->name('users.cart');
 
 
+Route::get('/order-history', [OrderUserController::class, 'orderHistory'])->name('user.order_history');
+Route::post('/order-confirm', [OrderUserController::class, 'confirmOrder'])->name('user.order_confirm');
+Route::post('/cancel-order/{orderId}', [OrderUserController::class, 'cancelOrder'])->name('user.cancel_order');
+
 // Route cho người dùng
 // Route::prefix('/')->group(function () {
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -180,6 +186,8 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 // Route::get('product', [ProductsController::class, 'productList'])->name('product.list');
 
 Route::get('product/{id}', [ProductsController::class, 'showProduct'])->name('product.detail');
+Route::get('/product-list', [ProductsController::class, 'productList'])->name('product.list');
+Route::get('/products/{categoryId?}', [ProductController::class, 'productList'])->name('user.proincate');
 
 
 

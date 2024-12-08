@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
 
@@ -21,7 +22,7 @@ class HomeController extends Controller
     {
         // Eager load cả 'attributeProducts' từ bảng attribute_products
         $listProduct = Product::with('attributeProducts')->get();
-
+        
         $productSoldCount = Product::where('sold_count', '>', 100)
             ->where('is_active', true)
             ->orderBy('sold_count', 'desc')

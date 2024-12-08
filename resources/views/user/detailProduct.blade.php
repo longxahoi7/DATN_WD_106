@@ -44,9 +44,9 @@
                     <p>Color: </p>
                     <div class="color-options">
                         @foreach($product->attributeProducts as $attributeProduct)
-                        <button class="color-option" style="background-color: {{ $attributeProduct->color->name }};"
+                        <div class="color-option" style="background-color: {{ $attributeProduct->color->name }};"
                             onclick="changeColor('{{ $attributeProduct->color->color_id }}', this)">
-                        </button>
+                        </div>
                         @endforeach
                     </div>
                     <p class="section-title">Size:</p>

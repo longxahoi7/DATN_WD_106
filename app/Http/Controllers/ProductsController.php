@@ -52,10 +52,16 @@ class ProductsController extends Controller
 
 
     // API để lấy danh sách sản phẩm
-    public function productList()
+    public function productList($categoryId = null)
     {
-        // Lấy danh sách sản phẩm cùng với thông tin attributes
-        $listProduct = Product::with('attributeProducts')->get();
+        // Nếu có categoryId thì lọc theo danh mục, nếu không thì lấy tất cả sản phẩm
+        if ($categoryId) {
+            $listProduct = Product::with('attributeProducts')
+                ->where('category_id', $categoryId)
+                ->get();
+        } else {
+            $listProduct = Product::with('attributeProducts')->get();
+        }
 
         // Lấy top 10 sản phẩm bán chạy (sold_count > 100) và đang hoạt động
         $productSoldCount = Product::query()
@@ -67,7 +73,7 @@ class ProductsController extends Controller
 
         // Lấy danh sách sản phẩm "hot" đang hoạt động
         $productHot = Product::query()
-            ->where('is_hot', 0)
+            ->where('is_hot', 1)
             ->where('is_active', true)
             ->get();
 
@@ -75,12 +81,13 @@ class ProductsController extends Controller
         return view('user.product', compact('listProduct', 'productHot', 'productSoldCount'));
     }
 
+
     // API để lấy chi tiết một sản phẩm
     public function showProduct($productId)
     {
         // Tìm sản phẩm theo ID và kèm theo các thuộc tính của sản phẩm
         $product = Product::where('product_id', $productId)
-            ->with(['attributeProducts.color', 'attributeProducts.size','attributeProducts']) // Eager load color and size attributes
+            ->with(['attributeProducts.color', 'attributeProducts.size', 'attributeProducts']) // Eager load color and size attributes
             ->firstOrFail();
         //Hiển thj sản phẩm liên quan
         $relatedProducts = Product::where('product_category_id', $product->product_category_id)
