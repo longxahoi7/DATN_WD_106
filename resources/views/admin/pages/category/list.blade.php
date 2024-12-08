@@ -42,7 +42,8 @@
                        
     
                         <td class="action-icons">
-                           <a href="{{route('admin.categories.detail',$category->category_id)}}"> <i class="fas fa-eye text-info" title="Chi tiết"></i></a>
+                           <a href="{{route('admin.categories.detail',$category->category_id)}}"> 
+                            <i class=" fas fa-eye text-info" title="Chi tiết"></i></a>
                             <a href="{{route('admin.categories.edit',$category->category_id)}}"><i class="fas fa-edit text-warning" title="Sửa"></i></a>
                           <!-- Form xóa -->
                           <form action="{{ route('admin.categories.delete', $category->category_id) }}" method="POST"

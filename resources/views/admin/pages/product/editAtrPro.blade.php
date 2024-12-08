@@ -88,7 +88,7 @@
 
             $colorString = (string) $color;
             $parts = explode('-', $colorString);
-                            ?>
+                                                    ?>
                 <h3>Màu: {{ $parts[0] }}</h3>
                 <table class="product-table">
                     <thead>
@@ -213,11 +213,17 @@
                             "X-CSRF-TOKEN": csrfToken
                         },
                         body: formData
-                    }).then(response => response.json())  // Xử lý phản hồi từ server
-                        .then(data => {
-                        })
+                    }).then(response => {
+
+                        if (!response.ok) {
+                            throw new Error('Lỗi khi gửi yêu cầu');
+                        }
+                        window.location.href="/admin/products/list-product"
+
+
+                    })
                         .catch(error => {
-                            window.location.href = "/admin/products/list-product"; 
+                            alert('Sai')
                         });
 
                     // Dữ liệu có thể gửi qua AJAX hoặc xử lý theo yêu cầu

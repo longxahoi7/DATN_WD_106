@@ -26,11 +26,11 @@ class CategoryController extends Controller
     }
     public function toggle($id)
     {
-        $brand = Category::findOrFail($id);
+        $category = Category::findOrFail($id);
     
         // Thay đổi trạng thái is_active
-        $brand->is_active = !$brand->is_active;
-        $brand->save();
+        $category->is_active = !$category->is_active;
+        $category->save();
     
         return redirect()->back()->with('success', 'Trạng thái thương hiệu đã được thay đổi!');
     }
@@ -39,7 +39,6 @@ class CategoryController extends Controller
     {
         // Gọi phương thức getCategory với tham số parentId
         $categories = Category::callTreeCategory();
-        
         // Trả về view với biến htmlOption
         return view('admin.pages.category.create', data: compact('categories'));
     }
@@ -83,7 +82,10 @@ class CategoryController extends Controller
     public function editCategory($id)
     {
         $category = Category::findOrFail($id);
-        $categories = Category::callTreeCategory();  // Lấy danh mục con dưới dạng mảng
+        $categories = Category::callTreeCategory(0,'',$id);  // Lấy danh mục con dưới dạng mảng
+        // dd($category);
+        // dd($categories);
+
         return view('admin.pages.category.edit', compact('category', 'categories'));
     }
     public function updateCategory(Request $request, $id)

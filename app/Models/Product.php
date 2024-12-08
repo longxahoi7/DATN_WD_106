@@ -55,7 +55,11 @@ class Product extends Model
     {
         return $this->hasManyThrough(ProductImage::class, AttributeProduct::class, 'product_id', 'attribute_product_id');
     }
-
+    public function attributes()
+    {
+        return $this->belongsToMany(AttributeProduct::class, 'attribute_products', 'product_id', 'attribute_id');
+    }
+    
     public function orders()
     {
         return $this->belongsToMany(Order::class, 'product_id', 'order_id');

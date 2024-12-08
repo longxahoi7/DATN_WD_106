@@ -36,7 +36,7 @@ class SizeController extends Controller
         $size = Size::findOrFail($id);
         return view('admin.pages.size.detail',compact('size'));
     }
-    public function editColor($id)
+    public function editSize($id)
 {
     $size = Size::findOrFail($id);
     return view('admin.pages.size.edit',compact('size'));

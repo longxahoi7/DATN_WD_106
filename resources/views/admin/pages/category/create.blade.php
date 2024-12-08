@@ -25,9 +25,9 @@
                 <input type="text" class="form-control" id="slug" name="slug" placeholder="Nhập tên đường dẫn" />
             </div>
             <div class="form-group">
-                <label for="productCategory">Chọn danh mục</label>
+                <label for="productCategory">Chọn danh mục cha</label>
                 <select class="form-control" id="productCategory" name="parent_id" required> 
-                <option value="0">Chọn danh mục </option>
+                <option value="0">Chọn danh mục cha </option>
                     @foreach($categories as $category)
                     <option value="{{ $category['category_id'] }}">{{ $category['name'] }}</option>
                     @endforeach
