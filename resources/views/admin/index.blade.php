@@ -12,10 +12,11 @@
     <!-- Favicon -->
     <link rel="icon" href="{{ asset('imagePro/image/logo/logoremove-white.png') }}" type="image/png">
 
-
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <!-- <link rel="stylesheet" href="{{asset('css/navbarAmin.css')}}"> -->
+    <link rel="stylesheet" href="{{asset('css/admin/headerAdmin.css')}}">
+    <link rel="stylesheet" href="{{asset('css/admin/admin.css')}}">
+    <link rel="stylesheet" href="{{asset('css/admin/table.css')}}">
     @stack('styles')
 </head>
 
@@ -24,10 +25,6 @@
         @include('admin.layoutAdmin.header-admin')
         <!-- Include file header -->
     </header>
-    <section>
-        <!-- @include('admin.layoutAdmin.navbar-admin') -->
-        <!-- Include file header -->
-    </section>
     <main>
         @yield('content')
     </main>
@@ -35,7 +32,5 @@
 </body>
 
 <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script> -->
-
-
 
 </html>

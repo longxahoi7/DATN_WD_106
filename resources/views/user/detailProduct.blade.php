@@ -52,8 +52,7 @@
                     <div class="size-options">
                         @foreach($product->attributeProducts->unique('size_id') as $attributeProduct)
                         <button class="size-option" data-id="{{ $attributeProduct->size->size_id }}"
-                            data-price="{{ $attributeProduct->price }}"
-                            data-stock="{{ $attributeProduct->in_stock }}"
+                            data-price="{{ $attributeProduct->price }}" data-stock="{{ $attributeProduct->in_stock }}"
                             onclick="selectSize('{{ $attributeProduct->size->size_id }}', this)">
                             {{ $attributeProduct->size->name }}
                         </button>
@@ -262,7 +261,7 @@
             </div>
         </div>
 
-    <script>
+        <script>
         let selectedColor = '';
         let selectedSize = '';
         document.getElementById('add-to-cart-form').addEventListener('submit', function(e) {
@@ -384,5 +383,5 @@
         function closeToast() {
             document.getElementById('toast-notification').style.display = 'none';
         }
-    </script>
-@endsection
+        </script>
+        @endsection

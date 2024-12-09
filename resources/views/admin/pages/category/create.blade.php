@@ -1,8 +1,4 @@
 @extends('admin.index')
-@push('styles')
-    <link rel="stylesheet" href="{{asset('css/style.css')}}">
-    <link rel="stylesheet" href="{{asset('css/huongEdit.css')}}">
-@endpush
 @section('content')
 
 <body>
@@ -26,8 +22,8 @@
             </div>
             <div class="form-group">
                 <label for="productCategory">Chọn danh mục</label>
-                <select class="form-control" id="productCategory" name="parent_id" required> 
-                <option value="0">Chọn danh mục </option>
+                <select class="form-control" id="productCategory" name="parent_id" required>
+                    <option value="0">Chọn danh mục </option>
                     @foreach($categories as $category)
                     <option value="{{ $category['category_id'] }}">{{ $category['name'] }}</option>
                     @endforeach
@@ -50,13 +46,13 @@
         </form>
     </div>
     @push('scripts')
-        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
-        <script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
+    <script>
 
-        </script>
+    </script>
     @endpush
 </body>
 @endsection

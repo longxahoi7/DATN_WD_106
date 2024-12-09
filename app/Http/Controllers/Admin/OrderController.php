@@ -27,14 +27,14 @@ class OrderController extends Controller
         $orders = Order::with('user')->get();
 
         // Trả dữ liệu về view
-        return view('admin.pages.order_management', compact('orders'));
+        return view('admin.pages.order.order_management', compact('orders'));
     }
 
     public function showDetailOrder($orderId)
 {
     $order = Order::with(['orderItems.attributeProduct.product'])->findOrFail($orderId);
 
-    return view('admin.pages.orderDetail', compact('order'));
+    return view('admin.pages.order.orderDetail', compact('order'));
 }
     //Cập nhật
     // AdminController.php
@@ -43,7 +43,7 @@ class OrderController extends Controller
     {
         // Kiểm tra nếu đơn hàng tồn tại
         $order = Order::find($request->order_id);
-        
+
         if ($order) {
             // Cập nhật trạng thái đơn hàng
             $order->status = $request->status;

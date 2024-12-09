@@ -1,7 +1,4 @@
 @extends('admin.index')
-@push('styles')
-    <link rel="stylesheet" href="{{asset('css/style.css')}}">
-@endpush
 @section('content')
 
 <body>
@@ -20,22 +17,24 @@
                     </tr>
                 </thead>
                 <tbody>
-                @foreach ($colors as $color)
+                    @foreach ($colors as $color)
                     <tr>
                         <td>{{$color->color_id}}</td>
                         <td>{{$color->name}}</td>
                         <td class="action-icons">
-                           <a href="{{route('admin.colors.detail',$color->color_id)}}"> <i class="fas fa-eye text-info" title="Chi tiết"></i></a>
-                            <a href="{{route('admin.colors.edit',$color->color_id)}}"><i class="fas fa-edit text-warning" title="Sửa"></i></a>
-                           <!-- Form xóa -->
-                           <form action="{{ route('admin.colors.delete', $color->color_id) }}" method="POST"
-                                    onsubmit="return confirm('Bạn có chắc chắn muốn xóa màu sắc này?');">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-link text-danger" title="Xóa">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </form>
+                            <a href="{{route('admin.colors.detail',$color->color_id)}}"> <i class="fas fa-eye text-info"
+                                    title="Chi tiết"></i></a>
+                            <a href="{{route('admin.colors.edit',$color->color_id)}}"><i
+                                    class="fas fa-edit text-warning" title="Sửa"></i></a>
+                            <!-- Form xóa -->
+                            <form action="{{ route('admin.colors.delete', $color->color_id) }}" method="POST"
+                                onsubmit="return confirm('Bạn có chắc chắn muốn xóa màu sắc này?');">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-link text-danger" title="Xóa">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </form>
                         </td>
                     </tr>
                     @endforeach
@@ -75,10 +74,10 @@
             </div>
 
             <nav>
-    <ul class="pagination justify-content-center">
-        {{ $colors->links() }}
-    </ul>
-</nav>
+                <ul class="pagination justify-content-center">
+                    {{ $colors->links() }}
+                </ul>
+            </nav>
         </div>
 
         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
@@ -87,21 +86,22 @@
 
     </body>
     @push('scripts')
-        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
-        <script>
-            function setDeleteData(brandName) {
-                document.getElementById("deleteBrandName").textContent =
-                    brandName;
-            }
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
+    <script>
+    function setDeleteData(brandName) {
+        document.getElementById("deleteBrandName").textContent =
+            brandName;
+    }
 
-            function confirmDelete() {
-                alert("Thương hiệu đã được xóa!");
-                $("#deleteBrandModal").modal("hide");
-            }
-        </script>
-    @endpush
+    function confirmDelete() {
+        alert("Thương hiệu đã được xóa!");
+        $("#deleteBrandModal").modal("hide");
+    }
+    </script>
+    @endpus
+h
 </body>
 @endsection
