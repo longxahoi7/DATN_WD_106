@@ -42,17 +42,18 @@
                     </p>
                     <p>Màu sắc: </p>
                     <div class="color-options">
-                    @foreach($product->attributeProducts->unique('color_id') as $attributeProduct)
+                        @foreach($product->attributeProducts->unique('color_id') as $attributeProduct)
                         <div class="color-option" style="background-color: {{ $attributeProduct->color->name }};"
                             onclick="changeColor('{{ $attributeProduct->color->color_id }}', this)">
                         </div>
-                    @endforeach
+                        @endforeach
                     </div>
                     <p class="section-title">Size:</p>
                     <div class="size-options">
                         @foreach($product->attributeProducts->unique('size_id') as $attributeProduct)
                         <button class="size-option" data-id="{{ $attributeProduct->size->size_id }}"
                             data-price="{{ $attributeProduct->price }}"
+                            data-stock="{{ $attributeProduct->in_stock }}"
                             onclick="selectSize('{{ $attributeProduct->size->size_id }}', this)">
                             {{ $attributeProduct->size->name }}
                         </button>
@@ -66,7 +67,10 @@
                     <input type="number" name="display-qty" id="quantity" class="custom-quantity-input" min="1"
                         value="1" onchange="updateQuantity(this.value)">
                     <div class="custom-quantity" onclick="changeQuantity(1)">+</div>
-                    <span class="product-stock ml-3">Còn lại: 20 sản phẩm </span>
+                    <!-- <span class="product-stock ml-3">Còn lại: 20 sản phẩm </span> -->
+                    <p class="product-stock">
+                        Còn lại: <span id="product-stock">-</span> sản phẩm
+                    </p>
                 </div>
 
                 <div class="d-flex">
@@ -109,17 +113,17 @@
                     <p>{{ $product->category->name ?? 'Chưa cập nhật' }}</p>
                 </div>
 
-                <div class="detail-section">
-                    <h3>Kho:</h3>
-                    @foreach($product->attributeProducts as $attributeProduct)
-                    <p>{{ $attributeProduct->in_stock ?? 'Không xác định' }}</p>
-                    @endforeach
-                </div>
+                <!-- <div class="detail-section">
+                        <h3>Kho:</h3>
+                        @foreach($product->attributeProducts as $attributeProduct)
+                        <p>{{ $attributeProduct->in_stock ?? 'Không xác định' }}</p>
+                        @endforeach
+                    </div> -->
 
-                <div class="detail-section">
+                <!-- <div class="detail-section">
                     <h3>Thương hiệu:</h3>
                     <p>{{ $product->brands->name ?? 'Chưa cập nhật' }}</p>
-                </div>
+                </div> -->
 
                 <div class="detail-section">
                     <h3>Màu sắc:</h3>
@@ -154,7 +158,6 @@
                 </div>
             </div>
         </div>
-
 
         <div class="container-related">
             <div class="button-header">
@@ -204,7 +207,6 @@
                 @endif
             </div>
         </div>
-
 
         <div class="container-review">
             <!-- Phần danh sách đánh giá -->
@@ -260,7 +262,7 @@
             </div>
         </div>
 
-        <script>
+    <script>
         let selectedColor = '';
         let selectedSize = '';
         document.getElementById('add-to-cart-form').addEventListener('submit', function(e) {
@@ -308,10 +310,12 @@
 
             // Cập nhật giá hiển thị
             const newPrice = element.getAttribute('data-price');
+            const newStock = element.getAttribute('data-stock');
             document.getElementById('product-price').innerText = new Intl.NumberFormat('vi-VN', {
                 style: 'currency',
                 currency: 'VND'
             }).format(newPrice);
+            document.getElementById('product-stock').innerText = `Còn lại: ${newStock} sản phẩm`;
 
             // Xóa lớp active khỏi tất cả các nút kích thước
             const sizeOptions = document.querySelectorAll('.size-option');
@@ -380,8 +384,5 @@
         function closeToast() {
             document.getElementById('toast-notification').style.display = 'none';
         }
-        </script>
-
-
-
-        @endsection
+    </script>
+@endsection
