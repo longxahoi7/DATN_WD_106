@@ -26,6 +26,9 @@ class Product extends Model
         'subtitle',
         'slug',
         'is_active',
+        'is_best_seller',
+        'is_hot',
+        'view_count',
     ];
     public function colors()
     {
@@ -70,5 +73,15 @@ class Product extends Model
     }
     public function cartItems() {
         return $this->hasMany(CartItem::class, 'product_id');
+    }
+
+    
+    public static function getBestSellers()
+    {
+        return self::where('is_best_seller', 1)->limit(10)->get(); // Giới hạn số lượng sản phẩm bán chạy
+    }
+    public static function getHotProducts()
+    {
+        return self::where('is_hot', 1)->limit(10)->get(); // Giới hạn số lượng sản phẩm hot
     }
 }

@@ -68,7 +68,7 @@
         <p class="no-product-message">Không tìm thấy sản phẩm bán chạy.</p>
         @else
         <div class="product-slide">
-            @foreach($productSoldCount as $soldProduct)
+            @foreach($bestSellers as $soldProduct)
             <div class="product-item">
                 <a href="{{ route('product.detail', $soldProduct->product_id) }}" class="product-card-link">
                     <div class="card">
@@ -112,11 +112,11 @@
         </button>
     </div>
     <div class="row product-carousel">
-        @if($productHot->isEmpty())
+        @if($hotProducts->isEmpty())
         <p class="no-product-message">Không tìm thấy sản phẩm hot.</p>
         @else
         <div class="product-slide">
-            @foreach($productHot as $hotProduct)
+            @foreach($hotProducts as $hotProduct)
             <div class="product-item">
                 <a href="{{ route('product.detail', $hotProduct->product_id) }}" class="product-card-link">
                     <div class="card">
