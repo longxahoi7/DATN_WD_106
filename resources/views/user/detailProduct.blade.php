@@ -42,11 +42,11 @@
                     </p>
                     <p>Màu sắc: </p>
                     <div class="color-options">
-                        @foreach($product->attributeProducts as $attributeProduct)
+                    @foreach($product->attributeProducts->unique('color_id') as $attributeProduct)
                         <div class="color-option" style="background-color: {{ $attributeProduct->color->name }};"
                             onclick="changeColor('{{ $attributeProduct->color->color_id }}', this)">
                         </div>
-                        @endforeach
+                    @endforeach
                     </div>
                     <p class="section-title">Size:</p>
                     <div class="size-options">
@@ -110,20 +110,20 @@
 
                 <div class="detail-section">
                     <h3>Kho:</h3>
-                    <p>{{ $product->stock ?? 'Không xác định' }}</p>
+                    @foreach($product->attributeProducts as $attributeProduct)
+                    <p>{{ $attributeProduct->in_stock ?? 'Không xác định' }}</p>
+                    @endforeach
                 </div>
 
                 <div class="detail-section">
                     <h3>Thương hiệu:</h3>
-                    @foreach($product->attributeProducts as $attributeProduct)
-                    <p>{{ $attributeProduct->brand->name ?? 'Chưa cập nhật' }}</p>
-                    @endforeach
+                    <p>{{ $product->brands->name ?? 'Chưa cập nhật' }}</p>
                 </div>
 
                 <div class="detail-section">
                     <h3>Màu sắc:</h3>
                     <p>
-                        @foreach($product->attributeProducts as $attributeProduct)
+                        @foreach($product->attributeProducts->unique('color_id') as $attributeProduct)
                         <span
                             style="color: {{ $attributeProduct->color->name }}; padding: 2px 6px; margin-right: 5px; border-radius: 4px;">
                             {{ $attributeProduct->color->name }}

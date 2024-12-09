@@ -248,7 +248,9 @@
                     <div class="custom-cart-footer">
                         <p class="custom-total-amount">Tổng tiền: 200.000đ</p>
                         <div class="custom-cart-actions">
-                            <button class="custom-add-cart-popup">Xem giỏ hàng</button>
+                            <button class="custom-add-cart-popup">
+                                <a href="{{ route('users.cart') }}">Xem giỏ hàng</a>
+                            </button>
                             <form action="{{ route('checkout.vnpay') }}" method="post">
                                 @csrf
                                 <input type="hidden" name="amount" value="">
