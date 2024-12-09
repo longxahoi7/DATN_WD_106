@@ -46,7 +46,7 @@ function fetchCartItems() {
                     cartItemsHtml += `
                         <div class="custom-product-card">
                             <div class="custom-product-image">
-                                <a href="product.detail/${item.product.product_id}" class="custom-product-card-link">
+                                <a href="/product/${item.product.product_id}" class="custom-product-card-link">
                                     <img src="${item.product.main_image_url}" alt="${item.product.name}">
                                 </a>
                             </div>
