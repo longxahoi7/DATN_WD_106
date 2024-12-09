@@ -58,27 +58,20 @@ class ProductsController extends Controller
         if ($categoryId) {
             $listProduct = Product::with('attributeProducts')
                 ->where('category_id', $categoryId)
+                ->active() // Sử dụng scope 'active' để lọc sản phẩm đang hoạt động
                 ->get();
         } else {
-            $listProduct = Product::with('attributeProducts')->get();
+            $listProduct = Product::with('attributeProducts')
+                ->active() // Sử dụng scope 'active' để lọc sản phẩm đang hoạt động
+                ->get();
         }
+        
 
         // Lấy top 10 sản phẩm bán chạy (sold_count > 100) và đang hoạt động
-        $productSoldCount = Product::query()
-            ->where('sold_count', '>', 100)
-            ->where('is_active', true)
-            ->orderBy('sold_count', 'desc')
-            ->take(10)
-            ->get();
-
-        // Lấy danh sách sản phẩm "hot" đang hoạt động
-        $productHot = Product::query()
-            ->where('is_hot', 1)
-            ->where('is_active', true)
-            ->get();
-
+        $bestSellers = Product::getBestSellers();
+        $hotProducts = Product::getHotProducts();
         // Trả về view với dữ liệu
-        return view('user.product', compact('listProduct', 'productHot', 'productSoldCount'));
+        return view('user.product', compact('listProduct', 'hotProducts', 'bestSellers'));
     }
 
 

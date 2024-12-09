@@ -205,7 +205,7 @@ class ProductController extends Controller
     }
     public function detailProduct($id){
         $attPros = AttributeProduct::with([
-            'product:product_id,name,sku',
+            'product:product_id,name,sku,is_best_seller,is_hot,is_active',
             'color:color_id,name',
             'size:size_id,name'])
          ->where('product_id',  $id)
@@ -259,7 +259,9 @@ class ProductController extends Controller
         'description' => $request->input('description',''),
         'subtitle' => $request->input('subtitle'),
         'slug' => Str::slug($request->input('name')),
-        'is_active' => $request->has('is_active') ? 1 : 0,  // Kiểm tra nếu 'is_active' có trong request
+        'is_active' => $request->has('is_active') ? 1 : 0,
+        'is_hot' => $request->has('is_hot') ? 1 : 0,
+        'is_best_seller' => $request->has('is_best_seller') ? 1 : 0, 
     ]);
 
     // Xử lý color và size IDs (có thể là mảng hoặc chuỗi phân cách bởi dấu phẩy)

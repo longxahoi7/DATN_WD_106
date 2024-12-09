@@ -93,55 +93,7 @@
                 </div>
             </div>
 
-            <!-- Popup giỏ hàng -->
-            <div id="customCartPopup" class="custom-cart-popup d-none">
-                <div class="custom-cart-popup-overlay" onclick="toggleCartPopup()"></div>
-                <div class="custom-cart-popup-content">
-                    <button class="custom-close-popup" onclick="toggleCartPopup()">&times;</button>
-                    <h4 class="custom-cart-title">Giỏ hàng của bạn</h4>
-                    <div class="custom-cart-items-container">
-                        <div class="custom-product-card">
-                            <div class="custom-product-image">
-                                <a href="product.detail/2" class="custom-product-card-link">
-                                    <img src="{{ asset('imagePro/image/no-image.png') }}" alt="name"
-                                        onerror="this.onerror=null; this.src='{{ asset('imagePro/image/no-image.png') }}';">
-                                </a>
-                            </div>
-                            <div class="custom-product-details">
-                                <h5 class="custom-product-name">Name of the Product That Can Be Really Long</h5>
-                                <p class="custom-product-price">200.000đ</p>
-                                <div class="custom-details-row">
-                                    <p class="custom-product-attribute">Màu sắc: Đỏ</p>
-                                    <p class="custom-product-attribute">Size: XL</p>
-                                </div>
-                                <p class="custom-product-quantity">Số lượng: 2</p>
-                            </div>
-                            <div class="custom-remove-btn">
-                                <form action="remove/2" method="POST">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="custom-btn-remove">&times;</button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="custom-cart-footer">
-                        <p class="custom-total-amount">Tổng tiền: 200.000đ</p>
-                        <div class="custom-cart-actions">
-                            <button class="custom-add-cart-popup">
-                                <a href="{{ route('users.cart') }}">Xem giỏ hàng</a>
-                            </button>
-                            <form action="{{ route('checkout.vnpay') }}" method="post">
-                                @csrf
-                                <input type="hidden" name="amount" value="">
-                                <button type="submit" name="redirect" class="custom-btn-checkout-popup">Thanh toán
-                                    VNPay</button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
+            @include('user.components.cart-popup', ['cartItems' => $cartItems ?? [], 'total' => $total ?? 0])
             <div class="row mt-3 mb-3">
                 <!-- Hàng ngang 2 - Địa chỉ và số điện thoại -->
                 <div class="col text-start custom-text d-flex">
@@ -157,8 +109,13 @@
 </div>
 
 <script>
-function toggleCartPopup() {
-    const cartPopup = document.getElementById('customCartPopup');
+    function toggleCartPopup() {
+    const cartPopup = document.getElementById('cart-popup');
     cartPopup.classList.toggle('d-none');
+    
+    if (!cartPopup.classList.contains('d-none')) {
+        fetchCartItems();
+    }
 }
+
 </script>

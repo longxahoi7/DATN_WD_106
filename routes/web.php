@@ -174,7 +174,7 @@ Route::get('/brand', [BrandController::class, 'index'])->name('brand.index');
 Route::get('/category', [CategoryController::class, 'index'])->name('category.index');
 Route::get('/color', [ColorController::class, 'index'])->name('color.index');
 Route::get('/size', [SizeController::class, 'index'])->name('size.index');
-Route::get('/cart-list', [CartController::class, 'viewCart'])->name('users.cart');
+
 
 
 Route::get('/order-history', [OrderUserController::class, 'orderHistory'])->name('user.order_history');
@@ -186,11 +186,17 @@ Route::get('product/{id}', [ProductsController::class, 'showProduct'])->name('pr
 Route::get('/product-list', [ProductsController::class, 'productList'])->name('product.list');
 Route::get('/products/{categoryId?}', [ProductController::class, 'productList'])->name('user.proincate');
 
+
+
+Route::get('/cart-list', [CartController::class, 'viewCart'])->name('users.cart');
+
 Route::post('/cart/add', [CartController::class, 'addToCart'])->name('cart.add');
 
 Route::post('/cart/update/{id}', [CartController::class, 'update'])->name('cart.update');
 
 Route::delete('/cart/remove/{id}', [CartController::class, 'removeItem'])->name('cart.remove');
+Route::get('/cart-popup', [CartController::class, 'viewCartPopup'])->name('cart.popup');
+
 Route::post('/checkout/cod', [PaymentController::class, 'checkoutCOD'])->name('checkout.cod');
 Route::get('order/success', [PaymentController::class, 'orderSuccess'])->name('user.orders.order-cod');
 Route::get('/order-history', [OrderUserController::class, 'orderHistory'])->name('user.order_history');

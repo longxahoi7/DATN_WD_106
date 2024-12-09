@@ -24,7 +24,7 @@
                         <th>Tên Sản Phẩm</th>
                         <th>Hình ảnh</th>
                         <th>Mô tả</th>
-                        <th>Trạng thái</th>
+                        <th>Chỉnh sửa trạng thái</th>
                         <th>Danh mục</th>
                         <th>Thương hiệu</th>
                         <th>Thao tác</th>

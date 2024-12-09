@@ -111,7 +111,6 @@
                     <h3>Danh Mục:</h3>
                     <p>{{ $product->category->name ?? 'Chưa cập nhật' }}</p>
                 </div>
-
                 <!-- <div class="detail-section">
                         <h3>Kho:</h3>
                         @foreach($product->attributeProducts as $attributeProduct)
