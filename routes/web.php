@@ -158,18 +158,11 @@ Route::get('register', function () {
 Auth::routes();
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
-
-
 Route::get('index', [BrandController::class, 'home']);
-
 Route::get('/brand', [BrandController::class, 'index'])->name('brand.index');
-
 Route::get('/category', [CategoryController::class, 'index'])->name('category.index');
-
 Route::get('/color', [ColorController::class, 'index'])->name('color.index');
-
 Route::get('/size', [SizeController::class, 'index'])->name('size.index');
-
 Route::get('/cart-list', [CartController::class, 'viewCart'])->name('users.cart');
 
 
@@ -179,7 +172,7 @@ Route::post('/cancel-order/{orderId}', [OrderUserController::class, 'cancelOrder
 
 // Route cho người dùng
 // Route::prefix('/')->group(function () {
-Route::get('/', [HomeController::class, 'index'])->name('home');
+// Route::get('/', [HomeController::class, 'index'])->name('home');
 
 // Route::get('home', [HomeController::class, 'index'])->name('product.list');
 
@@ -205,7 +198,7 @@ Route::get('order/success', [PaymentController::class, 'orderSuccess'])->name('u
 Route::get('/order-history', [OrderUserController::class, 'orderHistory'])->name('user.order_history');
 Route::post('/cancel-order/{orderId}', [OrderUserController::class, 'cancelOrder'])->name('user.cancel_order');
 Route::post('/vnp_payment', [PaymentVnPayController::class, 'vnp_payment'])
-->name('checkout.vnpay');   
+->name('checkout.vnpay');
 
 Route::get('/vnp_return', [PaymentVnPayController::class, 'handleVNPayCallback'])
 ->name('vnpay.callback');

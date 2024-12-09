@@ -21,14 +21,26 @@
             @foreach($cartItems as $item)
             <div class="product-card">
                 <div class="product-image">
-                    <img src="/storage/{{ $item->product->main_image_url }}" alt="{{ $item->product->name }}"
-                        class="product-image-detail"
-                        onerror="this.onerror=null; this.src='{{ asset('imagePro/image/no-image.png') }}';">
+                    <a href="{{ route('product.detail', $item->product_id) }}" class="product-card-link">
+                        <img src="/storage/{{ $item->product->main_image_url }}" alt="{{ $item->product->name }}"
+                            class="product-image-detail"
+                            onerror="this.onerror=null; this.src='{{ asset('imagePro/image/no-image.png') }}';">
+                    </a>
                 </div>
+
                 <div class="product-details">
-                    <div class="card-details" onclick="openPopup('{{ $item->id }}')">
-                        <h5 class="product-name">{{ $item->product->name }}</h5>
-                        <div class="attribute hover-info">
+                    <div class="card-details">
+                        <a href="{{ route('product.detail', $item->product_id) }}" class="product-card-link">
+                            <h5 class="product-name">{{ $item->product->name }}</h5>
+                            @php
+                            $attributeProduct = $item->product->attributeProducts->firstWhere('size_id',
+                            $item->size_id);
+                            @endphp
+                            <span class="product-price">
+                                {{ number_format($attributeProduct ? $attributeProduct->price : 0, 0, ',', '.') }} đ
+                            </span>
+                        </a>
+                        <div class="attribute hover-info" onclick="openPopup('{{ $item->id }}')">
                             <span>Màu: {{ $item->color->name }}</span>
                             <span>Kích thước: {{ $item->size->name }} ▼</span>
                         </div>
@@ -61,7 +73,8 @@
                                     value="{{ $item->qty }}" onchange="updateQuantity(this.value, '{{ $item->id }}')">
                                 <div class="custom-quantity" onclick="changeQuantity(1, '{{ $item->id }}')">+</div>
                             </div>
-                            <div class="popup-buttons">
+                            <hr class="divider-line mt-3">
+                            <div class="popup-buttons text-end ">
                                 <button onclick="confirmSelection()">Xác nhận</button>
                                 <button onclick="closePopup()">Hủy</button>
                             </div>
@@ -157,6 +170,7 @@ function confirmSelection() {
     closePopup();
 }
 </script>
+
 
 
 

@@ -26,16 +26,16 @@
                 <div class="col">
                     <div class="header-nav align-items-center" style="display: flex; margin-top: 10px">
                         <ul class='d-flex'>
-                            
+
                             @foreach ($categories as $category)
                             <li class="dropdown-item">
-                                <a href="{{ route('product.list', $category->category_id) }}">{{ $category->name }}</a> 
+                                <a href="{{ route('product.list', $category->category_id) }}">{{ $category->name }}</a>
                                 <ul class="sub-dropdown-menu">
                                 </ul>
                             </li>
                             @endforeach
                             <li class="dropdown-item">
-                                <a href="{{ asset('/product-list') }}">Danh sách sản phẩm</a> 
+                                <a href="{{ asset('/product-list') }}">Danh sách sản phẩm</a>
                                 <ul class="sub-dropdown-menu">
                                 </ul>
                             </li>
@@ -82,10 +82,181 @@
                             </div>
                         </div>
 
-                        <a href="{{ route('users.cart') }}" class="nav-link ml-3">
+                        <!-- <a href="{{ route('users.cart') }}" class="nav-link ml-3">
                             <i class="fas fa-shopping-cart"></i>
+                        </a> -->
+                        <a href="javascript:void(0);" class="nav-link ml-3" onclick="toggleCartPopup()">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span class="custom-cart-count">2</span>
                         </a>
                     </nav>
+                </div>
+            </div>
+
+            <!-- Popup giỏ hàng -->
+            <div id="customCartPopup" class="custom-cart-popup d-none">
+                <div class="custom-cart-popup-overlay" onclick="toggleCartPopup()"></div>
+                <div class="custom-cart-popup-content">
+                    <button class="custom-close-popup" onclick="toggleCartPopup()">&times;</button>
+                    <h4 class="custom-cart-title">Giỏ hàng của bạn</h4>
+                    <div class="custom-cart-items-container">
+                        <div class="custom-product-card">
+                            <div class="custom-product-image">
+                                <a href="product.detail/2" class="custom-product-card-link">
+                                    <img src="{{ asset('imagePro/image/no-image.png') }}" alt="name"
+                                        onerror="this.onerror=null; this.src='{{ asset('imagePro/image/no-image.png') }}';">
+                                </a>
+                            </div>
+                            <div class="custom-product-details">
+                                <h5 class="custom-product-name">Name of the Product That Can Be Really Long</h5>
+                                <p class="custom-product-price">200.000đ</p>
+                                <div class="custom-details-row">
+                                    <p class="custom-product-attribute">Màu sắc: Đỏ</p>
+                                    <p class="custom-product-attribute">Size: XL</p>
+                                </div>
+                                <p class="custom-product-quantity">Số lượng: 2</p>
+                            </div>
+                            <div class="custom-remove-btn">
+                                <form action="remove/2" method="POST">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="custom-btn-remove">&times;</button>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="custom-product-card">
+                            <div class="custom-product-image">
+                                <a href="product.detail/2" class="custom-product-card-link">
+                                    <img src="{{ asset('imagePro/image/no-image.png') }}" alt="name"
+                                        onerror="this.onerror=null; this.src='{{ asset('imagePro/image/no-image.png') }}';">
+                                </a>
+                            </div>
+                            <div class="custom-product-details">
+                                <h5 class="custom-product-name">Name of the Product That Can Be Really Long</h5>
+                                <p class="custom-product-price">200.000đ</p>
+                                <div class="custom-details-row">
+                                    <p class="custom-product-attribute">Màu sắc: Đỏ</p>
+                                    <p class="custom-product-attribute">Size: XL</p>
+                                </div>
+                                <p class="custom-product-quantity">Số lượng: 2</p>
+                            </div>
+                            <div class="custom-remove-btn">
+                                <form action="remove/2" method="POST">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="custom-btn-remove">&times;</button>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="custom-product-card">
+                            <div class="custom-product-image">
+                                <a href="product.detail/2" class="custom-product-card-link">
+                                    <img src="{{ asset('imagePro/image/no-image.png') }}" alt="name"
+                                        onerror="this.onerror=null; this.src='{{ asset('imagePro/image/no-image.png') }}';">
+                                </a>
+                            </div>
+                            <div class="custom-product-details">
+                                <h5 class="custom-product-name">Name of the Product That Can Be Really Long</h5>
+                                <p class="custom-product-price">200.000đ</p>
+                                <div class="custom-details-row">
+                                    <p class="custom-product-attribute">Màu sắc: Đỏ</p>
+                                    <p class="custom-product-attribute">Size: XL</p>
+                                </div>
+                                <p class="custom-product-quantity">Số lượng: 2</p>
+                            </div>
+                            <div class="custom-remove-btn">
+                                <form action="remove/2" method="POST">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="custom-btn-remove">&times;</button>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="custom-product-card">
+                            <div class="custom-product-image">
+                                <a href="product.detail/2" class="custom-product-card-link">
+                                    <img src="{{ asset('imagePro/image/no-image.png') }}" alt="name"
+                                        onerror="this.onerror=null; this.src='{{ asset('imagePro/image/no-image.png') }}';">
+                                </a>
+                            </div>
+                            <div class="custom-product-details">
+                                <h5 class="custom-product-name">Name of the Product That Can Be Really Long</h5>
+                                <p class="custom-product-price">200.000đ</p>
+                                <div class="custom-details-row">
+                                    <p class="custom-product-attribute">Màu sắc: Đỏ</p>
+                                    <p class="custom-product-attribute">Size: XL</p>
+                                </div>
+                                <p class="custom-product-quantity">Số lượng: 2</p>
+                            </div>
+                            <div class="custom-remove-btn">
+                                <form action="remove/2" method="POST">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="custom-btn-remove">&times;</button>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="custom-product-card">
+                            <div class="custom-product-image">
+                                <a href="product.detail/2" class="custom-product-card-link">
+                                    <img src="{{ asset('imagePro/image/no-image.png') }}" alt="name"
+                                        onerror="this.onerror=null; this.src='{{ asset('imagePro/image/no-image.png') }}';">
+                                </a>
+                            </div>
+                            <div class="custom-product-details">
+                                <h5 class="custom-product-name">Name of the Product That Can Be Really Long</h5>
+                                <p class="custom-product-price">200.000đ</p>
+                                <div class="custom-details-row">
+                                    <p class="custom-product-attribute">Màu sắc: Đỏ</p>
+                                    <p class="custom-product-attribute">Size: XL</p>
+                                </div>
+                                <p class="custom-product-quantity">Số lượng: 2</p>
+                            </div>
+                            <div class="custom-remove-btn">
+                                <form action="remove/2" method="POST">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="custom-btn-remove">&times;</button>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="custom-product-card">
+                            <div class="custom-product-image">
+                                <a href="product.detail/2" class="custom-product-card-link">
+                                    <img src="{{ asset('imagePro/image/no-image.png') }}" alt="name"
+                                        onerror="this.onerror=null; this.src='{{ asset('imagePro/image/no-image.png') }}';">
+                                </a>
+                            </div>
+                            <div class="custom-product-details">
+                                <h5 class="custom-product-name">Name of the Product That Can Be Really Long</h5>
+                                <p class="custom-product-price">200.000đ</p>
+                                <div class="custom-details-row">
+                                    <p class="custom-product-attribute">Màu sắc: Đỏ</p>
+                                    <p class="custom-product-attribute">Size: XL</p>
+                                </div>
+                                <p class="custom-product-quantity">Số lượng: 2</p>
+                            </div>
+                            <div class="custom-remove-btn">
+                                <form action="remove/2" method="POST">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="custom-btn-remove">&times;</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="custom-cart-footer">
+                        <p class="custom-total-amount">Tổng tiền: 200.000đ</p>
+                        <div class="custom-cart-actions">
+                            <button class="custom-add-cart-popup">Xem giỏ hàng</button>
+                            <form action="{{ route('checkout.vnpay') }}" method="post">
+                                @csrf
+                                <input type="hidden" name="amount" value="">
+                                <button type="submit" name="redirect" class="custom-btn-checkout-popup">Thanh toán
+                                    VNPay</button>
+                            </form>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -102,3 +273,10 @@
         </div>
     </div>
 </div>
+
+<script>
+function toggleCartPopup() {
+    const cartPopup = document.getElementById('customCartPopup');
+    cartPopup.classList.toggle('d-none');
+}
+</script>
