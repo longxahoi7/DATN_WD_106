@@ -4,16 +4,18 @@
     <div class="header-content">
         <!-- Logo nằm cuối bên trái -->
         <div class="logo">
-            <img src="{{ asset('imagePro/image/logo/logo-admin.png') }}" alt="Gentle Manor" style="width: 170px;">
+            <a href="http://localhost:8000/admin/dashBoard">
+                <img src="{{ asset('imagePro/image/logo/logo-admin.png') }}" alt="Gentle Manor" style="width: 170px;">
+            </a>
         </div>
 
         <!-- Thông tin nằm bên phải trong header -->
         <div class="header-right">
-            <a href="/" class="menu-header-item">
+            <a href="/" class="">
                 <span class="icon-home">🏠</span> Quay về trang chủ
             </a>
             <div class="dropdown">
-                <a href="#" class="nav-link">
+                <a href="#" class="nav-link dropdown-toggle">
                     <span class="icon-user">👤</span>
                     @if(Auth::check())
                     {{ Auth::user()->name }}
@@ -21,7 +23,7 @@
                     Tài Khoản
                     @endif
                 </a>
-                <div class="dropdown-menu text-center">
+                <div class="dropdown-menu">
                     @if(Auth::check())
                     <a href="/profile" class="dropdown-item">Thông tin chung</a>
                     <a href="/order-history" class="dropdown-item">Cài đặt</a>
@@ -29,12 +31,10 @@
                         @csrf
                     </form>
                     <a href="#" class="dropdown-item"
-                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Đăng
-                        xuất</a>
+                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Đăng xuất</a>
                     @else
                     <a href="/login" class="dropdown-item">Đăng nhập</a>
                     <a href="/register" class="dropdown-item">Đăng ký</a>
-
                     @endif
                 </div>
             </div>
@@ -46,53 +46,41 @@
         <ul class="d-flex justify-content-around menu-list">
             <!-- Thống kê -->
             <li>
-                <a href="{{ route('admin.dashboard') }}">
+                <a href="http://localhost:8000/admin/dashBoard">
                     <i class="icon-dashboard">📊</i> Thống kê
                 </a>
             </li>
 
             <!-- Quản lý với Dropdown -->
             <li class="dropdown">
-                <a href="#" class="toggle-link">
+                <a href="#" class="toggle-link dropdown-toggle">
                     <i class="icon-management">🛠️</i> Quản lý
-                    <span class="arrow">▼</span>
                 </a>
                 <ul id="managementSubmenu" class="submenu">
-                    <li>
-                        <a href="{{ route('admin.categories.index') }}">
-                            <i class="icon-category">📂</i> Quản lý danh mục
-                        </a>
+                    <li><a href="{{ route('admin.products.index') }}"><i class="icon-product">🛒</i> Quản lý sản
+                            phẩm</a></li>
+                    <li><a href="{{ route('admin.categories.index') }}"><i class="icon-category">📂</i> Quản lý
+                            danh mục</a></li>
+                    <li><a href="{{ route('admin.sizes.index') }}"><i class="icon-size">📏</i> Quản lý Size</a>
                     </li>
-                    <li>
-                        <a href="{{ route('admin.products.index') }}">
-                            <i class="icon-product">🛒</i> Quản lý sản phẩm
-                        </a>
+                    <li><a href="{{ route('admin.colors.index') }}"><i class="icon-color">🎨</i> Quản lý Màu</a>
                     </li>
-                    <li>
-                        <a href="{{ route('admin.sizes.index') }}">
-                            <i class="icon-size">📏</i> Quản lý Size
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{{ route('admin.colors.index') }}">
-                            <i class="icon-color">🎨</i> Quản lý Màu
-                        </a>
-                    </li>
+                    <li><a href="{{ route('admin.brands.index') }}"><i class="icon-tags">🏷️</i> Quản lý thương
+                            hiệu</a></li>
                 </ul>
-            </li>
-
-
-            <!-- Thương hiệu -->
-            <li>
-                <a href="{{ route('admin.brands.index') }}">
-                    <i class="icon-tags">🏷️</i> Thương hiệu
-                </a>
             </li>
 
             <!-- Shipper -->
             <li>
-                <a href="">
+                <a href="/shipper">
                     <i class="icon-shipping">🚚</i> Shipper
+                </a>
+            </li>
+
+            <!-- Mã giảm giá -->
+            <li>
+                <a href="/coupon">
+                    <i class="icon-discount">🏷️</i> Mã giảm giá
                 </a>
             </li>
 
@@ -105,7 +93,7 @@
 
             <!-- Quản lý tài khoản -->
             <li>
-                <a href="">
+                <a href="user">
                     <i class="icon-account">👥</i> Tài khoản
                 </a>
             </li>
@@ -115,30 +103,64 @@
 
 <script>
 document.addEventListener("DOMContentLoaded", function() {
-    const toggleLink = document.querySelector('.toggle-link');
-    const submenu = document.getElementById('managementSubmenu');
+    const accountToggle = document.querySelector('.nav-link.dropdown-toggle');
+    const accountDropdown = document.querySelector('.dropdown-menu');
+    const accountArrow = accountToggle.querySelector('.arrow');
 
-    toggleLink.addEventListener('click', function() {
-        submenu.classList.toggle('show');
-        toggleLink.classList.toggle('active');
+    accountToggle.addEventListener('click', function(e) {
+        e.preventDefault();
+        accountDropdown.classList.toggle('show');
+        accountArrow.classList.toggle('up');
+    });
+
+    document.addEventListener('click', function(e) {
+        if (!accountDropdown.contains(e.target) && !accountToggle.contains(e.target)) {
+            accountDropdown.classList.remove('show');
+            accountArrow.classList.remove('up');
+        }
+    });
+
+    const managementToggle = document.querySelector('.toggle-link.dropdown-toggle');
+    const managementDropdown = document.querySelector('.submenu');
+    const managementArrow = managementToggle.querySelector('.arrow');
+
+    managementToggle.addEventListener('click', function(e) {
+        e.preventDefault();
+        managementDropdown.classList.toggle('show');
+        managementArrow.classList.toggle('up');
+    });
+
+    document.addEventListener('click', function(e) {
+        if (!managementDropdown.contains(e.target) && !managementToggle.contains(e.target)) {
+            managementDropdown.classList.remove('show');
+            managementArrow.classList.remove('up');
+        }
     });
 });
 document.addEventListener("DOMContentLoaded", function() {
-    const navLink = document.querySelector('.nav-link.custom-Navlink'); // Link dropdown
-    const dropdownMenu = document.querySelector('.dropdown-menu'); // Menu con
+    const currentURL = window.location.href;
 
-    // Toggle menu con khi click
-    navLink.addEventListener('click', function(e) {
-        e.preventDefault();
+    const menuLinks = document.querySelectorAll(".menu a");
 
-        // Toggle class 'show' cho menu con
-        dropdownMenu.classList.toggle('show');
+    menuLinks.forEach(link => {
+        if (link.href === currentURL) {
+            link.classList.add("active");
+            link.parentElement.classList.add("hover");
+        }
     });
 
-    // Ẩn menu con khi click ngoài
-    document.addEventListener('click', function(e) {
-        if (!dropdownMenu.contains(e.target) && !navLink.contains(e.target)) {
-            dropdownMenu.classList.remove('show');
+});
+document.addEventListener("DOMContentLoaded", function() {
+    const currentURL = window.location.href;
+
+    const menuItems = document.querySelectorAll(".submenu li a");
+
+    menuItems.forEach(item => {
+        if (item.href === currentURL) {
+            const parentDropdown = item.closest('.dropdown');
+            if (parentDropdown) {
+                parentDropdown.classList.add('active');
+            }
         }
     });
 });
