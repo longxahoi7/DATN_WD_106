@@ -487,34 +487,38 @@ textarea {
 }
 
 /* Số lượng */
-.quantity-container {
+
+.quantity-container.d-flex {
     display: flex;
     align-items: center;
-    gap: 10px;
+    align-items: center;
     margin-bottom: 20px;
 }
 
-.quantity-container .form-label {
-    margin-bottom: 0;
-}
-
-.quantity-container .btn {
+.custom-quantity {
+    background-color: black;
+    color: white;
     font-size: 18px;
-    width: 35px;
     padding: 5px 10px;
-    cursor: pointer;
-    background-color: #000000;
-    border: 1px solid #ccc;
-    transition: all 0.3s ease;
-}
-
-.quantity-container .btn:hover {
-    background-color: #f8f9fa;
-}
-
-.quantity-container input {
-    width: 60px;
+    border: none;
     text-align: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.custom-quantity-input {
+    width: 40px;
+    height: 37px;
+    text-align: center;
+    font-size: 16px;
+    border: 1px solid #333;
+    padding: 0 5px;
+    transition: border-color 0.3s ease;
+}
+
+.custom-quantity-input:focus {
+    border-color: #2a9d8f;
+    outline: none;
 }
 
 /* Nút thêm vào giỏ hàng */
