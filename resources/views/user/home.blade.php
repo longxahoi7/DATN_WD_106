@@ -64,7 +64,7 @@
         </button>
     </div>
     <div class="row product-carousel">
-        @if($productSoldCount->isEmpty())
+        @if($bestSellers->isEmpty())
         <p class="no-product-message">Không tìm thấy sản phẩm bán chạy.</p>
         @else
         <div class="product-slide">

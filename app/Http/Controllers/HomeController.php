@@ -21,15 +21,11 @@ class HomeController extends Controller
     public function index()
     {
         // Eager load cả 'attributeProducts' từ bảng attribute_products
-        $listProduct = Product::with('attributeProducts')->get();
-        $bestSellers = Product::getBestSellers();
-        $productSoldCount = Product::where('sold_count', '>', 100)
-            ->where('is_active', true)
-            ->orderBy('sold_count', 'desc')
-            ->take(10) // Lấy top 10 sản phẩm bán chạy
+        $listProduct = Product::with('attributeProducts')
+            ->where('is_active', 1)  // Lọc sản phẩm có trạng thái is_active = 1 (sản phẩm đang hoạt động)
             ->get();
-            $hotProducts = Product::getHotProducts();
-        return view('user.home', compact('listProduct','hotProducts','productSoldCount','bestSellers'));
-
+        $bestSellers = Product::getBestSellers();
+        $hotProducts = Product::getHotProducts();
+        return view('user.home', compact('listProduct', 'hotProducts', 'bestSellers'));
     }
 }
