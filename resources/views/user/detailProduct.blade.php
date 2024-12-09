@@ -42,7 +42,7 @@
                     </p>
                     <p>Màu sắc: </p>
                     <div class="color-options">
-                        @foreach($product->attributeProducts as $attributeProduct)
+                        @foreach($product->attributeProducts->unique('color_id') as $attributeProduct)
                         <div class="color-option" style="background-color: {{ $attributeProduct->color->name }};"
                             onclick="changeColor('{{ $attributeProduct->color->color_id }}', this)">
                         </div>
@@ -52,8 +52,8 @@
                     <div class="size-options">
                         @foreach($product->attributeProducts->unique('size_id') as $attributeProduct)
                         <button class="size-option" data-id="{{ $attributeProduct->size->size_id }}"
-                            data-price="{{ $attributeProduct->price }}"
-                            onclick="selectSize('{{ $attributeProduct->size->size_id }}', this)">
+                            data-price="{{ $attributeProduct->price }}" data-stock="{{ $attributeProduct->in_stock }}"
+onclick="selectSize('{{ $attributeProduct->size->size_id }}', this)">
                             {{ $attributeProduct->size->name }}
                         </button>
                         @endforeach
@@ -66,6 +66,10 @@
                     <input type="number" name="display-qty" id="quantity" class="custom-quantity-input" min="1"
                         value="1" onchange="updateQuantity(this.value)">
                     <div class="custom-quantity" onclick="changeQuantity(1)">+</div>
+                    <!-- <span class="product-stock ml-3">Còn lại: 20 sản phẩm </span> -->
+                    <p class="product-stock">
+                        Còn lại: <span id="product-stock">-</span> sản phẩm
+                    </p>
                 </div>
 
                 <div class="d-flex">
@@ -75,7 +79,7 @@
                         <input type="hidden" name="product_id" value="{{ $product->product_id }}">
                         <input type="hidden" name="color_id" id="selected-color" value="">
                         <input type="hidden" name="size_id" id="selected-size" value="">
-                        <input type="hidden" name="qty" id="qty-hidden" value="1">
+                        <input type="hidden" name="qty" id="qty-hidden" min="1" value="">
                         <button type="submit" class="custom-buy">Mua ngay</button>
                     </form>
                 </div>
@@ -107,23 +111,22 @@
                     <h3>Danh Mục:</h3>
                     <p>{{ $product->category->name ?? 'Chưa cập nhật' }}</p>
                 </div>
+<!-- <div class="detail-section">
+                        <h3>Kho:</h3>
+                        @foreach($product->attributeProducts as $attributeProduct)
+                        <p>{{ $attributeProduct->in_stock ?? 'Không xác định' }}</p>
+                        @endforeach
+                    </div> -->
 
-                <div class="detail-section">
-                    <h3>Kho:</h3>
-                    <p>{{ $product->stock ?? 'Không xác định' }}</p>
-                </div>
-
-                <div class="detail-section">
+                <!-- <div class="detail-section">
                     <h3>Thương hiệu:</h3>
-                    @foreach($product->attributeProducts as $attributeProduct)
-                    <p>{{ $attributeProduct->brand->name ?? 'Chưa cập nhật' }}</p>
-                    @endforeach
-                </div>
+                    <p>{{ $product->brands->name ?? 'Chưa cập nhật' }}</p>
+                </div> -->
 
                 <div class="detail-section">
                     <h3>Màu sắc:</h3>
                     <p>
-                        @foreach($product->attributeProducts as $attributeProduct)
+                        @foreach($product->attributeProducts->unique('color_id') as $attributeProduct)
                         <span
                             style="color: {{ $attributeProduct->color->name }}; padding: 2px 6px; margin-right: 5px; border-radius: 4px;">
                             {{ $attributeProduct->color->name }}
@@ -143,9 +146,16 @@
                         @endforeach
                     </p>
                 </div>
+                <div class="product-description">
+                    <div class="description-header">
+                        <h3>Mô tả sản phẩm:</h3>
+                    </div>
+                    <p>
+                        {{ $product->description ?? 'Mô tả sản phẩm đang được cập nhật...' }}
+                    </p>
+                </div>
             </div>
         </div>
-
 
         <div class="container-related">
             <div class="button-header">
@@ -164,7 +174,7 @@
                             <div class="card">
                                 <img src="{{ asset('storage/' . $relatedProduct->main_image_url) }}"
                                     alt="{{ $relatedProduct->name }}" class="product-image"
-                                    onerror="this.onerror=null; this.src='{{ asset('imagePro/image/no-image.png') }}';">
+onerror="this.onerror=null; this.src='{{ asset('imagePro/image/no-image.png') }}';">
                                 <div class="card-body">
                                     <h5 class="card-title">{{ $relatedProduct->name }}</h5>
                                     @php
@@ -196,7 +206,6 @@
             </div>
         </div>
 
-
         <div class="container-review">
             <!-- Phần danh sách đánh giá -->
             <div class="button-header">
@@ -219,7 +228,7 @@
                     <div class="review-images">
                         <img src="https://picsum.photos" alt="Review Image 1"
                             onerror="this.onerror=null; this.src='{{ asset('imagePro/image/no-image.png') }}';" />
-                        <img src="https://picsum.photos" alt="Review Image 2"
+<img src="https://picsum.photos" alt="Review Image 2"
                             onerror="this.onerror=null; this.src='{{ asset('imagePro/image/no-image.png') }}';" />
                         <img src="https://picsum.photos" alt="Review Image 3"
                             onerror="this.onerror=null; this.src='{{ asset('imagePro/image/no-image.png') }}';" />
@@ -252,127 +261,126 @@
         </div>
 
         <script>
-            let selectedColor = '';
-            let selectedSize = '';
-            document.getElementById('add-to-cart-form').addEventListener('submit', function(e) {
-                const color = document.getElementById('selected-color').value;
-                const size = document.getElementById('selected-size').value;
+        let selectedColor = '';
+        let selectedSize = '';
+        document.getElementById('add-to-cart-form').addEventListener('submit', function(e) {
+            const color = document.getElementById('selected-color').value;
+            const size = document.getElementById('selected-size').value;
 
-                if (!color || !size) {
-                    e.preventDefault(); // Ngăn form gửi đi
-                    showToast('Vui lòng chọn màu sắc và kích thước.', true);
-                }
+            if (!color || !size) {
+                e.preventDefault(); // Ngăn form gửi đi
+                showToast('Vui lòng chọn màu sắc và kích thước.', true);
+            }
+        });
+
+        document.querySelector('.custom-cart').addEventListener('click', function(e) {
+            const color = document.getElementById('selected-color').value;
+            const size = document.getElementById('selected-size').value;
+
+            if (!color || !size) {
+                e.preventDefault(); // Ngăn gửi form nếu chưa chọn thuộc tính
+                showToast('Vui lòng chọn màu sắc và kích thước.', true);
+            } else {
+                showToast('Thêm vào giỏ hàng thành công!', false);
+            }
+        });
+
+
+        function changeColor(colorId, element) {
+// Cập nhật giá trị vào input ẩn
+            document.getElementById('selected-color').value = colorId;
+
+            // Xóa lớp active khỏi tất cả các nút màu
+            const colorOptions = document.querySelectorAll('.color-option');
+            colorOptions.forEach(option => {
+                option.classList.remove('active');
             });
 
-            document.querySelector('.custom-cart').addEventListener('click', function(e) {
-                const color = document.getElementById('selected-color').value;
-                const size = document.getElementById('selected-size').value;
+            // Thêm lớp active cho nút màu được chọn
+            element.classList.add('active');
+        }
 
-                if (!color || !size) {
-                    e.preventDefault(); // Ngăn gửi form nếu chưa chọn thuộc tính
-                    showToast('Vui lòng chọn màu sắc và kích thước.', true);
-                } else {
-                    showToast('Thêm vào giỏ hàng thành công!', false);
-                }
+
+        // Hàm size
+        function selectSize(sizeId, element) {
+            // Cập nhật giá trị vào input ẩn
+            document.getElementById('selected-size').value = sizeId;
+
+            // Cập nhật giá hiển thị
+            const newPrice = element.getAttribute('data-price');
+            const newStock = element.getAttribute('data-stock');
+            document.getElementById('product-price').innerText = new Intl.NumberFormat('vi-VN', {
+                style: 'currency',
+                currency: 'VND'
+            }).format(newPrice);
+            document.getElementById('product-stock').innerText = `Còn lại: ${newStock} sản phẩm`;
+
+            // Xóa lớp active khỏi tất cả các nút kích thước
+            const sizeOptions = document.querySelectorAll('.size-option');
+            sizeOptions.forEach(option => {
+                option.classList.remove('active');
             });
+            // Thêm lớp active cho kích thước được chọn
+            element.classList.add('active');
+        }
 
-
-            function changeColor(colorId, element) {
-                // Cập nhật giá trị vào input ẩn
-                document.getElementById('selected-color').value = colorId;
-
-                // Xóa lớp active khỏi tất cả các nút màu
-                const colorOptions = document.querySelectorAll('.color-option');
-                colorOptions.forEach(option => {
-                    option.classList.remove('active');
+        // Hàm cập nhật giá sản phẩm
+        function updatePrice(price, type, element) {
+            // Loại bỏ trạng thái "selected" của các lựa chọn hiện tại
+            if (type === 'color') {
+                document.querySelectorAll('.color-option').forEach(option => {
+                    option.classList.remove('selected');
                 });
-
-                // Thêm lớp active cho nút màu được chọn
-                element.classList.add('active');
-            }
-
-
-            // Hàm size
-            function selectSize(sizeId, element) {
-                // Cập nhật giá trị vào input ẩn
-                document.getElementById('selected-size').value = sizeId;
-
-                // Cập nhật giá hiển thị
-                const newPrice = element.getAttribute('data-price');
-                document.getElementById('product-price').innerText = new Intl.NumberFormat('vi-VN', {
-                    style: 'currency',
-                    currency: 'VND'
-                }).format(newPrice);
-
-                // Xóa lớp active khỏi tất cả các nút kích thước
-                const sizeOptions = document.querySelectorAll('.size-option');
-                sizeOptions.forEach(option => {
-                    option.classList.remove('active');
+            } else if (type === 'size') {
+                document.querySelectorAll('.size-option').forEach(option => {
+                    option.classList.remove('selected');
                 });
-                // Thêm lớp active cho kích thước được chọn
-                element.classList.add('active');
             }
 
-            // Hàm cập nhật giá sản phẩm
-            function updatePrice(price, type, element) {
-                // Loại bỏ trạng thái "selected" của các lựa chọn hiện tại
-                if (type === 'color') {
-                    document.querySelectorAll('.color-option').forEach(option => {
-                        option.classList.remove('selected');
-                    });
-                } else if (type === 'size') {
-                    document.querySelectorAll('.size-option').forEach(option => {
-                        option.classList.remove('selected');
-                    });
-                }
+            // Đánh dấu lựa chọn hiện tại là "selected"
+            element.classList.add('selected');
 
-                // Đánh dấu lựa chọn hiện tại là "selected"
-                element.classList.add('selected');
+            // Cập nhật giá hiển thị
+            const priceElement = document.getElementById('product-price');
+            priceElement.textContent = `${Number(price).toLocaleString()} VND`;
+        }
 
-                // Cập nhật giá hiển thị
-                const priceElement = document.getElementById('product-price');
-                priceElement.textContent = `${Number(price).toLocaleString()} VND`;
-            }
+        function changeQuantity(change) {
+            const quantityInput = document.getElementById('quantity');
+            let currentQuantity = parseInt(quantityInput.value) || 1;
+            currentQuantity += change;
 
-            function changeQuantity(change) {
-                const quantityInput = document.getElementById('quantity');
-                let currentQuantity = parseInt(quantityInput.value) || 1;
-                currentQuantity += change;
+            if (currentQuantity < 1) currentQuantity = 1;
+            quantityInput.value = currentQuantity;
+            updateQuantity(currentQuantity);
+        }
 
-                if (currentQuantity < 1) currentQuantity = 1;
-                quantityInput.value = currentQuantity;
-                updateQuantity(currentQuantity);
-            }
+        function updateQuantity(value) {
+            let qty = parseInt(value);
 
-            function updateQuantity(value) {
-                let qty = parseInt(value);
+            if (isNaN(qty) || qty < 1) {
+                qty = 1;
+}
 
-                if (isNaN(qty) || qty < 1) {
-                    qty = 1;
-                }
+            // Cập nhật giá trị của input hiển thị
+            document.getElementById('quantity').value = qty;
 
-                // Cập nhật giá trị của input hiển thị
-                document.getElementById('quantity').value = qty;
+            // Cập nhật giá trị của hidden input
+            document.getElementById('qty-hidden').value = qty;
+        }
 
-                // Cập nhật giá trị của hidden input
-                document.getElementById('qty-hidden').value = qty;
-            }
+        function showToast(message) {
+            const toast = document.getElementById('toast-notification');
+            const toastMessage = document.getElementById('toast-message');
+            toastMessage.innerText = message;
+            toast.style.display = 'flex';
+            setTimeout(() => {
+                toast.style.display = 'none';
+            }, 3000);
+        }
 
-            function showToast(message) {
-                const toast = document.getElementById('toast-notification');
-                const toastMessage = document.getElementById('toast-message');
-                toastMessage.innerText = message;
-                toast.style.display = 'flex';
-                setTimeout(() => {
-                    toast.style.display = 'none';
-                }, 3000);
-            }
-
-            function closeToast() {
-                document.getElementById('toast-notification').style.display = 'none';
-            }
+        function closeToast() {
+            document.getElementById('toast-notification').style.display = 'none';
+        }
         </script>
-
-
-
         @endsection
