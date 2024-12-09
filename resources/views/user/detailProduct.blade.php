@@ -40,7 +40,7 @@
                         </span>
                         @endif
                     </p>
-                    <p>Color: </p>
+                    <p>Màu sắc: </p>
                     <div class="color-options">
                         @foreach($product->attributeProducts as $attributeProduct)
                         <div class="color-option" style="background-color: {{ $attributeProduct->color->name }};"
@@ -61,11 +61,11 @@
                 </div>
 
                 <div class="quantity-container d-flex">
-                    <label for="quantity" class="form-label">Số lượng: </label>
-                    <div class="btn" onclick="changeQuantity(-1)">-</div>
-                    <input type="number" name="display-qty" id="quantity" class="form-control" min="1" value="1"
-                        onchange="updateQuantity(this.value)">
-                    <div class="btn" onclick="changeQuantity(1)">+</div>
+                    <label for="quantity" class="form-label mr-2">Số lượng: </label>
+                    <div class="custom-quantity" onclick="changeQuantity(-1)">-</div>
+                    <input type="number" name="display-qty" id="quantity" class="custom-quantity-input" min="1"
+                        value="1" onchange="updateQuantity(this.value)">
+                    <div class="custom-quantity" onclick="changeQuantity(1)">+</div>
                 </div>
 
                 <div class="d-flex">
