@@ -66,6 +66,7 @@
                     <input type="number" name="display-qty" id="quantity" class="custom-quantity-input" min="1"
                         value="1" onchange="updateQuantity(this.value)">
                     <div class="custom-quantity" onclick="changeQuantity(1)">+</div>
+                    <span class="product-stock ml-3">Còn lại: 20 sản phẩm </span>
                 </div>
 
                 <div class="d-flex">
@@ -75,7 +76,7 @@
                         <input type="hidden" name="product_id" value="{{ $product->product_id }}">
                         <input type="hidden" name="color_id" id="selected-color" value="">
                         <input type="hidden" name="size_id" id="selected-size" value="">
-                        <input type="hidden" name="qty" id="qty-hidden" value="1">
+                        <input type="hidden" name="qty" id="qty-hidden" min="1" value="">
                         <button type="submit" class="custom-buy">Mua ngay</button>
                     </form>
                 </div>
@@ -141,6 +142,14 @@
                             {{ $attributeProduct->size->name }}
                         </span>
                         @endforeach
+                    </p>
+                </div>
+                <div class="product-description">
+                    <div class="description-header">
+                        <h3>Mô tả sản phẩm:</h3>
+                    </div>
+                    <p>
+                        {{ $product->description ?? 'Mô tả sản phẩm đang được cập nhật...' }}
                     </p>
                 </div>
             </div>
@@ -351,7 +360,11 @@
                 qty = 1;
             }
 
+            // Cập nhật giá trị của input hiển thị
             document.getElementById('quantity').value = qty;
+
+            // Cập nhật giá trị của hidden input
+            document.getElementById('qty-hidden').value = qty;
         }
 
         function showToast(message) {
