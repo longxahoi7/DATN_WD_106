@@ -315,8 +315,28 @@ textarea {
   margin-bottom: 15px;
 }
 
-.product-description{
-    color: #777;
+.description-content p {
+  font-size: 14px;
+  color: #555;
+  margin-bottom: 15px;
+  font-style: italic;
+}
+
+.description-content h4 {
+  font-size: 16px;
+  color: #555;
+  margin: 10px 0;
+}
+
+.description-content ul {
+  padding-left: 20px;
+  font-size: 14px;
+  color: #555;
+}
+
+.description-content li {
+  margin-bottom: 8px;
+  line-height: 1.6;
 }
 
 /* Container chính */
@@ -589,10 +609,4 @@ input[type="number"] {
 .custom-buy :hover{
     background-color: white;
     color: white;
-}
-
-.product-stock {
-    font-size: 12px;
-    color: #666;
-    padding: 3px 8px;
 }
