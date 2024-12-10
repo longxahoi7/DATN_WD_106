@@ -53,7 +53,7 @@
                         @foreach($product->attributeProducts->unique('size_id') as $attributeProduct)
                         <button class="size-option" data-id="{{ $attributeProduct->size->size_id }}"
                             data-price="{{ $attributeProduct->price }}" data-stock="{{ $attributeProduct->in_stock }}"
-onclick="selectSize('{{ $attributeProduct->size->size_id }}', this)">
+                            onclick="selectSize('{{ $attributeProduct->size->size_id }}', this)">
                             {{ $attributeProduct->size->name }}
                         </button>
                         @endforeach
@@ -111,7 +111,7 @@ onclick="selectSize('{{ $attributeProduct->size->size_id }}', this)">
                     <h3>Danh Mục:</h3>
                     <p>{{ $product->category->name ?? 'Chưa cập nhật' }}</p>
                 </div>
-<!-- <div class="detail-section">
+                <!-- <div class="detail-section">
                         <h3>Kho:</h3>
                         @foreach($product->attributeProducts as $attributeProduct)
                         <p>{{ $attributeProduct->in_stock ?? 'Không xác định' }}</p>
@@ -174,7 +174,7 @@ onclick="selectSize('{{ $attributeProduct->size->size_id }}', this)">
                             <div class="card">
                                 <img src="{{ asset('storage/' . $relatedProduct->main_image_url) }}"
                                     alt="{{ $relatedProduct->name }}" class="product-image"
-onerror="this.onerror=null; this.src='{{ asset('imagePro/image/no-image.png') }}';">
+                                    onerror="this.onerror=null; this.src='{{ asset('imagePro/image/no-image.png') }}';">
                                 <div class="card-body">
                                     <h5 class="card-title">{{ $relatedProduct->name }}</h5>
                                     @php
@@ -228,7 +228,7 @@ onerror="this.onerror=null; this.src='{{ asset('imagePro/image/no-image.png') }}
                     <div class="review-images">
                         <img src="https://picsum.photos" alt="Review Image 1"
                             onerror="this.onerror=null; this.src='{{ asset('imagePro/image/no-image.png') }}';" />
-<img src="https://picsum.photos" alt="Review Image 2"
+                        <img src="https://picsum.photos" alt="Review Image 2"
                             onerror="this.onerror=null; this.src='{{ asset('imagePro/image/no-image.png') }}';" />
                         <img src="https://picsum.photos" alt="Review Image 3"
                             onerror="this.onerror=null; this.src='{{ asset('imagePro/image/no-image.png') }}';" />
@@ -287,7 +287,7 @@ onerror="this.onerror=null; this.src='{{ asset('imagePro/image/no-image.png') }}
 
 
         function changeColor(colorId, element) {
-// Cập nhật giá trị vào input ẩn
+            // Cập nhật giá trị vào input ẩn
             document.getElementById('selected-color').value = colorId;
 
             // Xóa lớp active khỏi tất cả các nút màu
@@ -360,7 +360,7 @@ onerror="this.onerror=null; this.src='{{ asset('imagePro/image/no-image.png') }}
 
             if (isNaN(qty) || qty < 1) {
                 qty = 1;
-}
+            }
 
             // Cập nhật giá trị của input hiển thị
             document.getElementById('quantity').value = qty;

@@ -1,4 +1,3 @@
-<link rel="stylesheet" href="{{asset('css/headerAdmin.css')}}">
 <div class="header">
     <!-- Phần thông tin bên trái và bên phải -->
     <div class="header-content">
