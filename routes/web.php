@@ -1,7 +1,5 @@
 <?php
 use App\Http\Controllers\Admin\ColorController;
-use App\Http\Controllers\Admin\CustomerController;
-use App\Http\Controllers\Admin\EmployeeController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\User\CommentController;
 use App\Http\Controllers\Admin\BrandController;
@@ -26,10 +24,9 @@ Route::group(
         'as' => 'admin.'
     ],
     function () {
-        Route::get('/dashBoard', [Dasboard::class, 'dashBoard']);
-        // Thống kê
-        Route::get('stats', [StatsController::class, 'index']);
-        // CRUD CATEGORY
+        Route::get('/dashBoard', [StatsController::class, 'Stats'])->name('stats');
+
+        // CRUD CATẺGORY
         Route::group(
             [
                 'prefix' => '   ',
@@ -127,14 +124,11 @@ Route::group(
                 'as' => 'coupons.'
             ],
             function () {
-            Route::get('/list-coupon', [CouponController::class,'listCoupon'])->name('index');
-            Route::get('/create-coupon', [CouponController::class,'createCoupon'])->name('create');
-            Route::post('/coupon/{id}/toggle', [CouponController::class, 'toggle'])->name('toggle');
-            Route::post('/add-coupon', [CouponController::class, 'addCoupon'])->name('store');
-            Route::get('/detail-coupon/{id}', [CouponController::class, 'detailCoupon'])->name('detail');
-            Route::get('/edit-coupon/{id}', [CouponController::class, 'editCoupon'])->name('edit');
-            Route::delete('/destroy-coupon/{id}', [CouponController::class, 'destroyCoupon'])->name('delete');
-            Route::put('/update-coupon/{id}', [CouponController::class, 'updateCoupon'])->name('update');
+            Route::get('/list-coupon', [CouponController::class, 'listCoupon']);
+            Route::post('/add-coupon', [CouponController::class, 'addCoupon']);
+            Route::get('/detail-coupon/{id}', [CouponController::class, 'detailCoupon']);
+            Route::delete('/destroy-coupon/{id}', [CouponController::class, 'destroyCoupon']);
+            Route::put('/update-coupon/{id}', [CouponController::class, 'updateCoupon']);
         }
         );
         //Quản lý đơn hàng
@@ -150,62 +144,18 @@ Route::group(
             Route::delete('/orders/{id}', [OrderController::class, 'destroy']);  // Xóa đơn hàng
         }
         );
-        Route::group(
-            [
-                'prefix' => 'employees',
-                'as' => 'employees.'
-            ],
-            function () {
-            Route::get('/list-employee', [EmployeeController::class,'listEmployee'])->name('index');
-            Route::get('/create-employee', [EmployeeController::class,'createEmployee'])->name('create');
-            Route::post('/employee/{id}/toggle', [EmployeeController::class, 'toggle'])->name('toggle');
-            Route::post('/add-employee', [EmployeeController::class, 'addEmployee'])->name('store');
-            Route::get('/detail-employee/{id}', [EmployeeController::class, 'detailEmployee'])->name('detail');
-            Route::get('/edit-employee/{id}', [EmployeeController::class, 'editEmployee'])->name('edit');
-            Route::delete('/destroy-employee/{id}', [EmployeeController::class, 'destroyEmployee'])->name('delete');
-            Route::put('/update-employee/{id}', [EmployeeController::class, 'updateEmployee'])->name('update');
-        }
-        );
-        Route::group(
-            [
-                'prefix' => 'customers',
-                'as' => 'customers.'
-            ],
-            function () {
-            Route::get('/list-customer', [CustomerController::class,'listCustomer'])->name('index');
-            Route::post('/customer/{id}/toggle', [CustomerController::class, 'toggle'])->name('toggle');
-            Route::get('/create-customer', [CustomerController::class,'createCustomer'])->name('create');
-            Route::post('/customer/{id}/toggle', [CustomerController::class, 'toggle'])->name('toggle');
-            Route::post('/add-customer', [CustomerController::class, 'addCustomer'])->name('store');
-            Route::get('/detail-customer/{id}', [CustomerController::class, 'detailCustomer'])->name('detail');
-            Route::get('/edit-customer/{id}', [CustomerController::class, 'editCustomer'])->name('edit');
-            Route::delete('/destroy-customer/{id}', [CustomerController::class, 'destroyCustomer'])->name('delete');
-            Route::put('/update-customer/{id}', [CustomerController::class, 'updateCustomer'])->name('update');
-        }
-        );
     }
 );
 
-Route::get('/orders', [OrderController::class, 'showAllOrders'])
-    ->name('admin.orders');
-Route::get('/orders-detail/{id}', [OrderController::class, 'showDetailOrder'])
-    ->name('admin.orderDetail');
-Route::post('/admin/update-order-status', [OrderController::class, 'updateOrderStatus'])->name('admin.updateOrderStatus');
 
-    // Quản lý tài khoản
-Route::get('accounts', function () {
-    return view('admin.accounts.index');
-})->name('admin.accounts');
-
-
-// route auth
 Route::get('register', function () {
     return view('auth.register');
 })->name('register');
 
+
+
 Auth::routes();
 
-// route user
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('index', [BrandController::class, 'home']);
 Route::get('/brand', [BrandController::class, 'index'])->name('brand.index');
@@ -219,6 +169,13 @@ Route::get('/order-history', [OrderUserController::class, 'orderHistory'])->name
 Route::post('/order-confirm', [OrderUserController::class, 'confirmOrder'])->name('user.order_confirm');
 Route::post('/cancel-order/{orderId}', [OrderUserController::class, 'cancelOrder'])->name('user.cancel_order');
 
+// Route cho người dùng
+// Route::prefix('/')->group(function () {
+// Route::get('/', [HomeController::class, 'index'])->name('home');
+
+// Route::get('home', [HomeController::class, 'index'])->name('product.list');
+
+// Route::get('product', [ProductsController::class, 'productList'])->name('product.list');
 
 Route::get('product/{id}', [ProductsController::class, 'showProduct'])->name('product.detail');
 Route::get('/product-list', [ProductsController::class, 'productList'])->name('product.list');
@@ -227,15 +184,16 @@ Route::get('/products/{categoryId?}', [ProductController::class, 'productList'])
 
 
 Route::get('/cart-list', [CartController::class, 'viewCart'])->name('users.cart');
-
 Route::post('/cart/add', [CartController::class, 'addToCart'])->name('cart.add');
 
 Route::post('/cart/update/{id}', [CartController::class, 'update'])->name('cart.update');
 
 Route::delete('/cart/remove/{id}', [CartController::class, 'removeItem'])->name('cart.remove');
+
 Route::get('/cart-popup', [CartController::class, 'viewCartPopup'])->name('cart.popup');
 
 Route::post('/checkout/cod', [PaymentController::class, 'checkoutCOD'])->name('checkout.cod');
+// Route trang thông báo thanh toán thành công
 Route::get('order/success', [PaymentController::class, 'orderSuccess'])->name('user.orders.order-cod');
 Route::get('/order-history', [OrderUserController::class, 'orderHistory'])->name('user.order_history');
 Route::post('/cancel-order/{orderId}', [OrderUserController::class, 'cancelOrder'])->name('user.cancel_order');
@@ -270,3 +228,109 @@ Route::get('/orders-detail/{id}', [OrderController::class, 'showDetailOrder'])
 
 Route::post('/admin/update-order-status', [OrderController::class, 'updateOrderStatus'])->name('admin.updateOrderStatus');
 
+
+
+
+
+
+// Quản lý đơn hàng
+// Route::get('orders', function () {
+//     return view('admin.orders.index');
+// })->name('admin.orders');
+
+
+
+
+
+
+// Route::get('login', function () {
+//     return view('auth.login');
+// })->name('login');
+
+// Route::get('register', function () {
+//     return view('auth.register');
+// })->name('register');
+
+// // Route cho người dùng
+// // Route::prefix('/')->group(function () {
+//     Route::get('/', function () {
+//     return redirect()->route('home');
+//     });
+
+//     Route::get('home', function () {
+//         return view('layouts.app');
+//     })->name('home');
+
+//     Route::get('products', function () {
+//         return view('user.product');
+//     })->name('products');
+
+//     Route::get('product/{id}', function ($id) {
+//         return view('user.product-detail', ['id' => $id]);
+//     })->name('product.detail');
+
+//     Route::get('cart', function () {
+//         return view('user.cart');
+//     })->name('cart');
+
+//     Route::get('checkout', function () {
+//         return view('user.checkout');
+//     })->name('checkout');
+
+//     Route::get('about', function () {
+//         return view('user.about');
+//     })->name('about');
+// // });
+
+// // Route cho admin (cần middleware xác thực admin)
+// Route::prefix('admin')->middleware(['auth', 'isAdmin'])->group(function () {
+//     Route::get('dashboard', function () {
+//         return view('admin.dashboard');
+//     })->name('admin.dashboard');
+
+//     // Quản lý sản phẩm
+//     Route::prefix('products')->group(function () {
+//         Route::get('/', function () {
+//             return view('admin.products.index');
+//         })->name('admin.products.index');
+
+//         Route::get('create', function () {
+//             return view('admin.products.create');
+//         })->name('admin.products.create');
+
+//         Route::get('edit/{id}', function ($id) {
+//             return view('admin.products.edit', ['id' => $id]);
+//         })->name('admin.products.edit');
+
+//         Route::get('categories', function () {
+//             return view('admin.products.categories');
+//         })->name('admin.products.categories');
+//     });
+
+//     // Quản lý đơn hàng
+//     Route::get('orders', function () {
+//         return view('admin.orders.index');
+//     })->name('admin.orders');
+
+//     // Quản lý mã giảm giá
+//     Route::prefix('discounts')->group(function () {
+//         Route::get('/', function () {
+//             return view('admin.discounts.index');
+//         })->name('admin.discounts.index');
+
+//         Route::get('create', function () {
+//             return view('admin.discounts.create');
+//         })->name('admin.discounts.create');
+//     });
+
+//     // Quản lý tài khoản
+//     Route::get('accounts', function () {
+//         return view('admin.accounts.index');
+//     })->name('admin.accounts');
+// });
+
+// Quản lý tài khoản
+Route::get('accounts', function () {
+    return view('admin.accounts.index');
+})->name('admin.accounts');
+// });
