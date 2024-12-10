@@ -22,6 +22,10 @@ return new class extends Migration
             $table->string('remember_token',100);
             $table->string('address',100)->nullable();
             $table->string('phone',20)->nullable();
+            $table->date('birth_date')->nullable(); // Ngày sinh
+            $table->enum('gender', ['male', 'female', 'other'])->nullable(); // Giới tính
+            $table->string('profile_image')->nullable(); // Ảnh người dùng\
+            $table->tinyInteger('is_active')->default(1);
         });
     }
 

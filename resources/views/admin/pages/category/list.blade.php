@@ -27,7 +27,7 @@
                         <tr>
                             <td>{{$category->category_id}}</td>
                             <td>{{$category->name}}</td>
-                            <td><img src="{{$category->image}}" width="100px" height="100px" alt=""></td>
+                            <td><img src=" {{ asset('storage/' . $user->image) }}" width="100px" height="100px" alt=""></td>
                             <td>{{$category->description}}</td>
                             <td>
                                 <form action="{{ route('admin.categories.toggle', $category->category_id) }}" method="POST"

@@ -21,7 +21,11 @@ class User extends Authenticatable
         'name',
         'email',
         'address',
+        'birth_date',
+        'gender',
+        'profile_image',
         'phone',
+        'is_active',
         'password',
         'remember_token',
     ];
@@ -62,5 +66,14 @@ class User extends Authenticatable
     public function cartItems()
     {
         return $this->hasMany(CartItem::class);
+    }
+    public function employee()
+    {
+        return $this->hasOne(Employee::class, 'user_id', 'user_id');
+    }
+
+    public function customer()
+    {
+        return $this->hasOne(Customer::class, 'user_id', 'user_id');
     }
 }

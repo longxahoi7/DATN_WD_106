@@ -18,8 +18,24 @@
                 <li><a href="{{route('admin.products.index')}}">Quản lý sản phẩm</a></li>
                 <li><a href="{{route('admin.sizes.index')}}">Quản lý Size</a></li>
                 <li><a href="{{route('admin.colors.index')}}">Quản lý Màu</a></li>
+                <li><a href="{{route('admin.coupons.index')}}">Quản lý phiếu giảm giá</a></li>
                 <li><a href="{{route('admin.orders')}}">Quản lý đơn hàng</a></li>
+
+
+
+
+                <li>
+           
+        </li>
             </ul>
+            <a href="#managementSubmenu" data-toggle="collapse">
+                <i class="icon-management"></i> Quản lý tài khoản
+            </a>
+            <ul id="managementSubmenu" class="submenu collapse">
+            <li><a href="{{route('admin.customers.index')}}">Quản lý khách hàng</a></li>
+                <li><a href="{{route('admin.employees.index')}}">Quản lý nhân viên</a></li>
+            </ul>
+
         </li>
         <li>
             <a href="{{ route('admin.brands.index') }}">

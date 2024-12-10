@@ -12,12 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('customers', function (Blueprint $table) {
-            $table->id();
+            $table->increments('customer_id');
             $table->unsignedInteger('user_id'); 
             $table->foreign('user_id')->references('user_id')->on('users')->onDelete('cascade');
-            $table->string('name');
-            $table->string('phone');
-            $table->text('address')->nullable();
             $table->integer('loyalty_points')->default(0);  // Điểm tích lũy của khách hàng
             $table->timestamps();
         });

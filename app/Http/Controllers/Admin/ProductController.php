@@ -259,7 +259,6 @@ class ProductController extends Controller
         'description' => $request->input('description',''),
         'subtitle' => $request->input('subtitle'),
         'slug' => Str::slug($request->input('name')),
-        'is_active' => $request->has('is_active') ? 1 : 0,  // Kiểm tra nếu 'is_active' có trong request
     ]);
 
     // Xử lý color và size IDs (có thể là mảng hoặc chuỗi phân cách bởi dấu phẩy)

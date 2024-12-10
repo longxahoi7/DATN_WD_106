@@ -11,16 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('staff', function (Blueprint $table) {
-            $table->increments('staff_id');
+        Schema::create('employees', function (Blueprint $table) {
+            $table->increments('employee_id');
             $table->unsignedInteger('user_id'); 
             $table->foreign('user_id')->references('user_id')->on('users')->onDelete('cascade');
-            $table->string('name');
-            $table->string('phone');
-            $table->text('address')->nullable();
-            $table->string('position');
-            $table->enum('role', ['admin', 'manager', 'sales', 'warehouse']);
+            $table->enum('role', ['admin', 'managerCate', 'managerpro', 'managerCoupon','managerOder']);
             $table->decimal('salary', 10, 2)->nullable();  // Mức lương (nullable nếu không phải tất cả nhân viên có lương cố định)
+            $table->boolean('is_active')->default(true);
             $table->timestamps();
         });
     }
@@ -30,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('staff');
+        Schema::dropIfExists('employees');
     }
 };

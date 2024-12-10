@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Coupon;
+use App\Models\User;
 use App\Models\CouponProduct;
 use App\Models\CouponUser;
 class CouponController extends Controller
@@ -12,7 +13,7 @@ class CouponController extends Controller
     //
     public function listCoupon(Request $request)
     {
-        $products = Coupon::with('users', 'products')->where('code', 'like', '%' . $request->nhap . '%')
+        $coupons = Coupon::with('users', 'products')->where('code', 'like', '%' . $request->nhap . '%')
             ->orWhere('is_active', 'like', '%' . $request->nhap . '%')
             ->orWhere('discount_percentage', 'like', '%' . $request->nhap . '%')
             ->orWhere('quantity', 'like', '%' . $request->nhap . '%')
@@ -22,15 +23,23 @@ class CouponController extends Controller
             ->orWhere('is_public', 'like', '%' . $request->nhap . '%')
             ->orWhere('start_date', 'like', '%' . $request->nhap . '%')
             ->orWhere('end_date', 'like', '%' . $request->nhap . '%')
-            ->orWherehas('users', function ($nameUser) use ($request) {
-                $nameUser->where('name', 'like', '%' . $request->nhap . '%');
-            })
-            ->orWherehas('products', function ($namepro) use ($request) {
-                $namepro->where('name', 'like', '%' . $request->nhap . '%');
-            })
-
             ->latest()->paginate(5);
-        return response()->json($products);
+            return view('admin.pages.coupon.list',compact('coupons'));
+    }
+    public function toggle($id)
+    {
+        $coupon = Coupon::findOrFail($id);
+    
+        // Thay đổi trạng thái is_active
+        $coupon->is_active = !$coupon->is_active;
+        $coupon->save();
+    
+        return redirect()->back()->with('success', 'Trạng thái phiếu giảm giá đã được thay đổi!');
+    }
+
+    public function createCoupon(Request $request){
+        $users=User::where('name', 'like', '%' . $request->nhap . '%')->get();
+        return view('admin.pages.coupon.create',compact('users'));
     }
     public function addCoupon(Request $request)
     {
@@ -45,10 +54,9 @@ class CouponController extends Controller
             'is_public' => $request->input('is_public', true),
             'start_date' => $request->input('start_date'),
             'end_date' => $request->input('end_date'),
-            'is_active' => $request->input('is_active', true),
         ]);
         $couponUsers = [];
-        $couponProducts = [];
+        // $couponProducts = [];
         if ($request->has('user_id')) {
             foreach ($request->input('user_id') as $userId) {
                 $couponUser = CouponUser::create([
@@ -58,43 +66,53 @@ class CouponController extends Controller
                 $couponUsers[] = $couponUser;
             }
         }
-        if ($request->has('product_id')) {
-            foreach ($request->input('product_id') as $productId) {
-                $couponPro = CouponProduct::create([
-                    'coupon_id' => $coupon->coupon_id,
-                    'product_id' => $productId
-                ]);
-                $couponProducts[] = $couponPro;
-            }
-        }
-        return response()->json([
+        // if ($request->has('product_id')) {
+        //     foreach ($request->input('product_id') as $productId) {
+        //         $couponPro = CouponProduct::create([
+        //             'coupon_id' => $coupon->coupon_id,
+        //             'product_id' => $productId
+        //         ]);
+        //         $couponProducts[] = $couponPro;
+        //     }
+        // }
+        return redirect()->route('admin.coupons.index')->with([
             'coupon' => $coupon,
             'couponUsers' => $couponUsers,
-            'couponProducts' => $couponProducts,
             'message' => 'Coupon added successfully!',
         ], 201);
 
+    }
+    public function detailCoupon($id){
+        $coupon = Coupon::findOrFail($id);
+        return view('admin.pages.coupon.detail',compact('coupon'));
+    }
+    public function editCoupon(Request $request,$id){
+        $coupon = Coupon::findOrFail($id);
+        $users=User::where('name', 'like', '%' . $request->nhap . '%')->get();
+     
+        $userCoupon = CouponUser::where('coupon_id', $id)->get();;
+        return view('admin.pages.coupon.edit',
+        compact('coupon','userCoupon','users'));
     }
     public function updateCoupon(Request $request, $id)
     {
         $coupon = Coupon::findOrFail($id);
         // Update coupon details
         $coupon->update([
-            'code' => $request->input('code', $coupon->code),
-            'discount_amount' => $request->input('discount_amount', $coupon->discount_amount),
-            'discount_percentage' => $request->input('discount_percentage', $coupon->discount_percentage),
-            'quantity' => $request->input('quantity', $coupon->quantity),
-            'min_order_value' => $request->input('min_order_value', $coupon->min_order_value),
-            'max_order_value' => $request->input('max_order_value', $coupon->max_order_value),
-            'condition' => $request->input('condition', $coupon->condition),
-            'is_public' => $request->input('is_public', $coupon->is_public),
-            'start_date' => $request->input('start_date', $coupon->start_date),
-            'end_date' => $request->input('end_date', $coupon->end_date),
-            'is_active' => $request->input('is_active', $coupon->is_active),
+            'code' => $request->input('code'),
+            'discount_amount' => $request->input('discount_amount'),
+            'discount_percentage' => $request->input('discount_percentage'),
+            'quantity' => $request->input('quantity'),
+            'min_order_value' => $request->input('min_order_value'),
+            'max_order_value' => $request->input('max_order_value'),
+            'condition' => $request->input('condition'),
+            'is_public' => $request->input('is_public'),
+            'start_date' => $request->input('start_date'),
+            'end_date' => $request->input('end_date'),
         ]);
 
         $couponUsers = [];
-        $couponProducts = [];
+        // $couponProducts = [];
 
         // Update user associations if provided
         if ($request->has('user_id')) {
@@ -111,27 +129,33 @@ class CouponController extends Controller
             }
         }
 
-        // Update product associations if provided
-        if ($request->has('product_id')) {
-            // Remove old associations
-            CouponProduct::where('coupon_id', $id)->delete();
+        // // Update product associations if provided
+        // if ($request->has('product_id')) {
+        //     // Remove old associations
+        //     CouponProduct::where('coupon_id', $id)->delete();
 
-            // Add new associations and collect updated data
-            foreach ($request->input('product_id') as $productId) {
-                $couponPro = CouponProduct::create([
-                    'coupon_id' => $id,
-                    'product_id' => $productId,
-                ]);
-                $couponProducts[] = $couponPro;
-            }
-        }
+        //     // Add new associations and collect updated data
+        //     foreach ($request->input('product_id') as $productId) {
+        //         $couponPro = CouponProduct::create([
+        //             'coupon_id' => $id,
+        //             'product_id' => $productId,
+        //         ]);
+        //         $couponProducts[] = $couponPro;
+        //     }
+        // }
 
         // Return updated coupon with associated users and products
-        return response()->json([
+        return redirect()->route('admin.coupons.index')->with([
             'coupon' => $coupon,
             'couponUsers' => $couponUsers,
-            'couponProducts' => $couponProducts,
             'message' => 'Coupon updated successfully!',
         ], 200);
     }
+    public function destroyCoupon($id)
+    {
+        $coupon = Coupon::findOrFail($id);
+        $coupon->delete();
+        return redirect()->back()->with('message' ,'Coupon delEted successfully!',);
+    }
+
 }

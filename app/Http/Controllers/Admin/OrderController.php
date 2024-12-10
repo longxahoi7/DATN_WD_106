@@ -13,12 +13,12 @@ class OrderController extends Controller
     {
         return view('admin.index');
     }
-    public function index()
-    {
-        return view('admin.pages.order_management');
-        $orders = Order::with('orderItems')->get(); // Lấy tất cả đơn hàng cùng các item
-        return response()->json($orders);
-    }
+    // public function index()
+    // {
+    //     return view('admin.pages.order_management');
+    //     $orders = Order::with('orderItems')->get(); // Lấy tất cả đơn hàng cùng các item
+    //     return response()->json($orders);
+    // }
 
     // Lấy chi tiết một đơn hàng
     public function showAllOrders()
