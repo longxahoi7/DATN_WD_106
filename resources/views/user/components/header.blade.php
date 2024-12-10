@@ -110,6 +110,7 @@
 </div>
 
 <script>
+    
     function toggleCartPopup() {
         const cartPopup = document.getElementById('cart-popup');
         cartPopup.classList.toggle('d-none');
@@ -118,4 +119,5 @@
             fetchCartItems();
         }
     }
+    
 </script>

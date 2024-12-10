@@ -70,7 +70,7 @@ class OrderController extends Controller
     public function orderSuccess($orderId)
     {
         $order = Order::with('payment')->find($orderId);
-
+        
         if (!$order) {
             return redirect()->route('home')->with('error', 'Order not found.');
         }
