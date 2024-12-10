@@ -43,16 +43,16 @@ class CommentController extends Controller
 
         return response()->json(['message' => 'Bình luận thành công', 'comment' => $comment], 201);
     }
-    public function index($commentable_id)
-    {
-        // Lấy tất cả bình luận cho một đối tượng cụ thể (ví dụ: sản phẩm)
-        $comments = Comment::where('commentable_id', $commentable_id)
-            ->where('commentable_type', Product::class)
-            ->with('user') // Đưa thông tin người dùng vào nếu cần
-            ->get();
+    // public function index($commentable_id)
+    // {
+    //     // Lấy tất cả bình luận cho một đối tượng cụ thể (ví dụ: sản phẩm)
+    //     $comments = Comment::where('commentable_id', $commentable_id)
+    //         ->where('commentable_type', Product::class)
+    //         ->with('user') // Đưa thông tin người dùng vào nếu cần
+    //         ->get();
 
-        return response()->json($comments);
-    }
+    //     return response()->json($comments);
+    // }
     public function update(Request $request, Comment $comment)
     {
         $user = Auth::user();
