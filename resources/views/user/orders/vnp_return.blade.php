@@ -16,7 +16,7 @@
 @section('content')
     
         <?php
-        require_once("../vnpay_php/config.php");
+        require_once("./resources/vnpay_php/config.php");
         $vnp_SecureHash = $_GET['vnp_SecureHash'];
         $inputData = array();
         foreach ($_GET as $key => $value) {
@@ -87,7 +87,7 @@
                                 echo "<span style='color:red'>GD Khong thanh cong</span>";
                             }
                         } else {
-                            echo "<span style='color:blue'>GD Thanh cong</span>";
+                            echo "<span style='color:blue'>hascreat khong hop le</span>";
                         }
                         ?>
 
@@ -98,7 +98,7 @@
                 &nbsp;
             </p>
             <button>
-                <a href="{{route('product.list')}}">Back home</a>
+                <a href="{{route('home')}}">Back home</a>
             </button>
             <footer class="footer">
                    <p>&copy; VNPAY <?php echo date('Y')?></p>

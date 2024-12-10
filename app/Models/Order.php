@@ -18,13 +18,16 @@ class Order extends Model
         'payment_status',
         // Thêm các thuộc tính khác nếu cần
     ];
-    public function orderItems()
-    {
-        return $this->hasMany(OrderItem::class, 'order_id');
-    }
+    protected $casts = [
+        'order_date' => 'datetime', // Chuyển đổi cột order_date thành Carbon
+    ];
     public function payment()
     {
         return $this->hasOne(Payment::class, 'order_id', 'order_id');
+    }
+    public function orderItems()
+    {
+        return $this->hasMany(OrderItem::class, 'order_id');
     }
     public function user()
     {
@@ -34,4 +37,8 @@ class Order extends Model
 {
     return $this->belongsToMany(Product::class, 'order_product', 'order_id', 'product_id');
 }
+public function items()
+    {
+        return $this->hasMany(OrderItem::class, 'order_id', 'id');  // Đảm bảo mối quan hệ sử dụng đúng trường order_id
+    }
 }

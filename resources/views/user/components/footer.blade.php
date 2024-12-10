@@ -1,7 +1,7 @@
 <div class="custom-footer"
     style="background-color: #f8f9fa; padding: 20px 0; font-family: Arial, sans-serif; color: #333;">
     <hr style="margin-top: 20px; border: 0.5px solid #ddd;" />
-    <div class="container" style="max-width: 1200px; margin: 0 auto;">
+    <div class="container-footer" style="max-width: 1200px; margin: 0 auto;">
         <div class="header-title" style="text-align: center; margin-bottom: 20px;">
             <div class="custom-logo" style="margin-bottom: 10px;">
                 <img src="{{ asset('imagePro/image/logo/logo-remove.png') }}" alt="logo" style="max-width: 150px;">

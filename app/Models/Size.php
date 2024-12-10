@@ -21,4 +21,5 @@ protected $primaryKey ='size_id';
         return $this->belongsToMany(Color::class, 'attribute_products', 'size_id', 'color_id')
                     ->withPivot('price', 'in_stock');  // Lấy các trường từ bảng trung gian
     }
+    
 }

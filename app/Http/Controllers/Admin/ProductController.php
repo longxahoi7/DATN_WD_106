@@ -69,7 +69,7 @@ class ProductController extends Controller
                 if ($anh->isValid()) {
                     $newAnh = time() . "." . $anh->getClientOriginalExtension();
                     // Save the image to the 'imagePro' directory in the public folder
-                    $image = $anh->move(public_path('imagePro/'), $newAnh);
+                    $image = $anh->move(public_path('storage/imagePro/'), $newAnh);
                 }
             }
 
@@ -85,7 +85,7 @@ class ProductController extends Controller
                 'sku' => $request->input('sku'),
                 'description' => $request->input('description'),
                 'subtitle' => $request->input('subtitle'),
-                'slug' => \Str::slug($request->input('name')),
+                'slug' => Str::slug($request->input('name')),
                 'is_active' => $request->has('is_active') ? 1 : 0,  // Check if is_active is present
             ]);
 
@@ -184,7 +184,7 @@ class ProductController extends Controller
                         'product_id' => json_encode($product_id)
                     ]);
                             // Lưu đường dẫn ảnh vào cơ sở dữ liệu
-                    \DB::table('product_images')->insert([
+                    DB::table('product_images')->insert([
                         'color_id' => $key,
                         'url' => (string)$item,
                         'product_id'=> $product_id
@@ -242,7 +242,7 @@ class ProductController extends Controller
             // Tạo tên ảnh mới
             $newAnh = time() . "." . $anh->getClientOriginalExtension();
             // Lưu ảnh vào thư mục 'imagePro'
-            $image = $anh->move(public_path('imagePro/'), $newAnh);
+            $image = $anh->move(public_path('storage/imagePro/'), $newAnh);
         }
     }
 
@@ -258,7 +258,7 @@ class ProductController extends Controller
         'sku' => $request->input('sku'),
         'description' => $request->input('description',''),
         'subtitle' => $request->input('subtitle'),
-        'slug' => \Str::slug($request->input('name')),
+        'slug' => Str::slug($request->input('name')),
         'is_active' => $request->has('is_active') ? 1 : 0,  // Kiểm tra nếu 'is_active' có trong request
     ]);
 

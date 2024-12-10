@@ -1,3 +1,4 @@
+/* Giảm chiều cao và các phần liên quan */
 .border-bottom {
     position: sticky;
     top: 0;
@@ -11,17 +12,16 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin: 0; /* Giảm margin cho row */
 }
 
 .nav-link,
 .custom-Navlink {
     position: relative;
-    text-align: center;
     color: inherit !important;
     display: flex;
     align-items: center;
     text-decoration: none;
-    padding-right: 20px;
 }
 
 .nav-link:last-child::after {
@@ -31,17 +31,19 @@
 .custom-Navlink::after {
     content: "|";
     position: absolute;
-    right: 20px;
+    right: 0px;
     top: 50%;
     transform: translateY(-50%);
-    margin-right: -10px;
+    margin-right: -8px;
     color: #151515;
+    font-size: 18px;
 }
 
 .custom-text a {
     color: #808080;
-    font-size: 14px;
+    font-size: 12px; /* Giảm kích thước font chữ */
     text-decoration: none;
+    margin-right: 10px; /* Giảm khoảng cách giữa các liên kết */
 }
 
 .custom-text a:hover {
@@ -50,7 +52,7 @@
 
 .custom-text p {
     color: #808080;
-    font-size: 13px;
+    font-size: 12px; /* Giảm kích thước font chữ */
 }
 
 .nav-link i {
@@ -62,17 +64,17 @@
 .shop-icon,
 .location-arrow-icon,
 .phone-alt-icon {
-    font-size: 18px;
-    margin-right: 10px;
+    font-size: 16px; /* Giảm kích thước các icon */
+    margin-right: 8px; /* Giảm khoảng cách giữa icon và văn bản */
 }
 
 .form-search .search-bar {
     width: 100%;
-    height: 45px;
-    padding: 10px 20px;
-    font-size: 16px;
+    height: 40px; /* Giảm chiều cao của thanh tìm kiếm */
+    padding: 8px 15px; /* Giảm padding */
+    font-size: 14px; /* Giảm kích thước font chữ */
     border: 1px solid #00cd66;
-    border-radius: 25px;
+    border-radius: 20px; /* Giảm bo tròn */
     background-color: #f9f9f9;
     transition: all 0.3s ease;
 }
@@ -109,7 +111,7 @@
     visibility: hidden;
     background-color: #fff;
     border: 1px solid #ddd;
-    padding: 10px 0;
+    padding: 8px 0; /* Giảm padding cho menu dropdown */
     margin: 0;
     z-index: 1000;
     border-radius: 10px;
@@ -139,4 +141,29 @@
 .mx-3 {
     margin-left: 1rem;
     margin-right: 1rem;
+}
+
+.col .nav-link {
+    font-size: 14px;
+}
+
+.custom-text a {
+    font-size: 12px;
+}
+
+.custom-text p {
+    font-size: 12px;
+}
+
+.custom-text a,
+.custom-text p {
+    margin-right: 8px;
+}
+
+.col .custom-text a {
+    color: #808080;
+}
+
+.col .custom-text a:hover {
+    color: #555;
 }
