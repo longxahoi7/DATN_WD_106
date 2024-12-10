@@ -24,9 +24,8 @@ Route::group(
         'as' => 'admin.'
     ],
     function () {
-        Route::get('/dashBoard', [Dasboard::class, 'dashBoard']);
-        // Thống kê
-        Route::get('stats', [StatsController::class, 'index']);
+        Route::get('/dashBoard', [StatsController::class, 'Stats'])->name('stats');
+
         // CRUD CATẺGORY
         Route::group(
             [
