@@ -74,7 +74,7 @@
 
                 <div class="d-flex">
                     <button type="button" class="custom-cart" onclick="addToCart()">Thêm vào giỏ hàng</button>
-                    <form id="add-to-cart-form" action="{{ route('cart.add') }}" method="POST">
+                    <form id="add-to-cart-form" action="{{ route('user.cart.add') }}" method="POST">
                         @csrf
                         <input type="hidden" name="product_id" value="{{ $product->product_id }}">
                         <input type="hidden" name="color_id" id="selected-color" value="">
@@ -170,7 +170,7 @@
                 <div class="product-slide">
                     @foreach($relatedProducts as $relatedProduct)
                     <div class="product-item">
-                        <a href="{{ route('product.detail', $relatedProduct->product_id) }}" class="product-card-link">
+                        <a href="{{ route('user.product.detail', $relatedProduct->product_id) }}" class="product-card-link">
                             <div class="card">
                                 <img src="{{ asset('storage/' . $relatedProduct->main_image_url) }}"
                                     alt="{{ $relatedProduct->name }}" class="product-image"
@@ -191,7 +191,7 @@
                                             {{ number_format($maxPrice, 0, ',', '.') }} VND
                                             @endif
                                         </span>
-                                        <a href="{{ route('product.detail', $relatedProduct->product_id) }}"
+                                        <a href="{{ route('user.product.detail', $relatedProduct->product_id) }}"
                                             class="cart-icon">
                                             <i class="fa fa-info-circle"></i>
                                         </a>

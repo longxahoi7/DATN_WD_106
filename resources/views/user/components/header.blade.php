@@ -29,7 +29,7 @@
 
                             @foreach ($categories as $category)
                             <li class="dropdown-item">
-                                <a href="{{ route('product.list', $category->category_id) }}">{{ $category->name }}</a>
+                                <a href="{{ route('user.product.list', $category->category_id) }}">{{ $category->name }}</a>
                                 <ul class="sub-dropdown-menu">
                                 </ul>
                             </li>
@@ -66,25 +66,24 @@
                             <div class="dropdown-menu text-center">
                                 @if(Auth::check())
                                 <a href="/profile" class="dropdown-item">Thông tin chung</a>
-                                <a href="/order-history" class="dropdown-item">Lịch sử mua hàng</a>
-                                <form id="logout-form" action="{{ route('logout') }}" method="POST"
-                                    style="display: none;">
+                                <a href="{{route('user.order.history')}}" class="dropdown-item">Lịch sử mua hàng</a>
+
+                                <!-- Kiểm tra nếu người dùng có role 'admin' -->
+                                @if(Auth::user()->role === [1,3])
+                                <a href="{{route('admin.dashboard')}}" class="dropdown-item">Trang quản trị</a>
+                                @endif
+
+                                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                                     @csrf
                                 </form>
-                                <a href="#"
-                                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Đăng
-                                    xuất</a>
+                                <a href="{{route('home')}}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Đăng xuất</a>
                                 @else
                                 <a href="/login" class="dropdown-item">Đăng nhập</a>
                                 <a href="/register" class="dropdown-item">Đăng ký</a>
-
                                 @endif
                             </div>
                         </div>
 
-                        <!-- <a href="{{ route('users.cart') }}" class="nav-link ml-3">
-                            <i class="fas fa-shopping-cart"></i>
-                        </a> -->
                         <a href="javascript:void(0);" class="nav-link ml-3" onclick="toggleCartPopup()">
                             <i class="fas fa-shopping-cart"></i>
                             <span class="custom-cart-count">2</span>
@@ -92,30 +91,31 @@
                     </nav>
                 </div>
             </div>
+        </div>
 
-            @include('user.components.cart-popup', ['cartItems' => $cartItems ?? [], 'total' => $total ?? 0])
-            <div class="row mt-3 mb-3">
-                <!-- Hàng ngang 2 - Địa chỉ và số điện thoại -->
-                <div class="col text-start custom-text d-flex">
-                    <a href="https://www.google.com/maps/search/13+P.+Trịnh+Văn+Bô,+Xuân+Phương,+Nam+Từ+Liêm,+Hà+Nội"
-                        target="_blank" rel="noopener noreferrer">
-                        <i class="fas fa-map-marker-alt"></i> Địa chỉ: 13 Trịnh Văn Bô
-                    </a>
-                    <a class="custom-text ms-3"><i class="fas fa-phone-alt"></i> Hotline: 0369312858</a>
-                </div>
+
+        @include('user.components.cart-popup', ['cartItems' => $cartItems ?? [], 'total' => $total ?? 0])
+        <div class="row mt-3 mb-3">
+            <!-- Hàng ngang 2 - Địa chỉ và số điện thoại -->
+            <div class="col text-start custom-text d-flex">
+                <a href="https://www.google.com/maps/search/13+P.+Trịnh+Văn+Bô,+Xuân+Phương,+Nam+Từ+Liêm,+Hà+Nội"
+                    target="_blank" rel="noopener noreferrer">
+                    <i class="fas fa-map-marker-alt"></i> Địa chỉ: 13 Trịnh Văn Bô
+                </a>
+                <a class="custom-text ms-3"><i class="fas fa-phone-alt"></i> Hotline: 0369312858</a>
             </div>
         </div>
     </div>
 </div>
+</div>
 
 <script>
     function toggleCartPopup() {
-    const cartPopup = document.getElementById('cart-popup');
-    cartPopup.classList.toggle('d-none');
-    
-    if (!cartPopup.classList.contains('d-none')) {
-        fetchCartItems();
-    }
-}
+        const cartPopup = document.getElementById('cart-popup');
+        cartPopup.classList.toggle('d-none');
 
+        if (!cartPopup.classList.contains('d-none')) {
+            fetchCartItems();
+        }
+    }
 </script>

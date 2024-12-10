@@ -13,7 +13,7 @@
         <div class="custom-cart-footer">
             <p class="custom-total-amount" id="total-amount">Tổng tiền: 0đ</p>
             <div class="custom-cart-actions">
-                <a href="{{ route('users.cart') }}" class="custom-add-cart-popup">Xem giỏ hàng</a>
+                <a href="{{ route('user.cart.index') }}" class="custom-add-cart-popup">Xem giỏ hàng</a>
                 <form action="{{ route('checkout.vnpay') }}" method="post">
                     @csrf
                     <input type="hidden" name="amount" id="total-amount-hidden">
@@ -27,7 +27,7 @@
 <script>
 
 function fetchCartItems() {
-    fetch('/cart-popup')
+    fetch('/cart/cart-popup')
         .then(response => response.json())
         .then(data => {
             if (data.cartItems && data.cartItems.length > 0) {

@@ -1,4 +1,5 @@
 <?php
+
 use App\Http\Controllers\Admin\ColorController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\User\CommentController;
@@ -21,187 +22,217 @@ use App\Http\Controllers\OrderController as OrderUserController;
 Route::group(
     [
         'prefix' => 'admin',
-        'as' => 'admin.'
+        'as' => 'admin.',
+        'middleware' => ['checkAdmin:admin,manager'] // Chỉ cho phép 'admin' và 'manager' truy cập
     ],
     function () {
-        Route::get('/dashBoard', [StatsController::class, 'Stats'])->name('stats');
+        Route::get('/dashBoard', [StatsController::class, 'Stats'])->name('dashboard');
 
-        // CRUD CATẺGORY
+        // CRUD CATEGORY - Manager chỉ được xem danh mục
         Route::group(
             [
-                'prefix' => '   ',
-                'as' => 'categories.'
+                'prefix' => 'categories',
+                'as' => 'categories.',
+                'middleware' => ['checkAdmin:admin,manager'] // Manager được phép xem danh mục
             ],
             function () {
-            Route::get('/list-category', [CategoryController::class, 'listCategory'])->name('index');
-            Route::post('/categories/{id}/toggle', [CategoryController::class, 'toggle'])->name('toggle');
-            Route::get('/create-category', [CategoryController::class, 'createCategory'])->name('create');
-            Route::post('/add-category', [CategoryController::class, 'addCategory'])->name('store');
-            Route::get('/detail-category/{id}', [CategoryController::class, 'detailCategory'])->name(name: 'detail');
-            Route::delete('/delete-category/{id}', [CategoryController::class, 'destroyCategory'])->name('delete');
-            Route::get('/detail-category/{id}', [CategoryController::class, 'detailCategory'])->name(name: 'detail');
-            Route::get('/edit-category/{id}', [CategoryController::class, 'editCategory'])->name(name: 'edit');
-            Route::put('/update-category/{id}', [CategoryController::class, 'updateCategory'])->name(name: 'update');
-        }
+                Route::get('/list-category', [CategoryController::class, 'listCategory'])->name('index');
+                Route::get('/detail-category/{id}', [CategoryController::class, 'detailCategory'])->name('detail');
+
+                // Admin mới có quyền CRUD
+                Route::middleware('checkAdmin:admin')->group(function () {
+                    Route::post('/categories/{id}/toggle', [CategoryController::class, 'toggle'])->name('toggle');
+                    Route::get('/create-category', [CategoryController::class, 'createCategory'])->name('create');
+                    Route::post('/add-category', [CategoryController::class, 'addCategory'])->name('store');
+                    Route::delete('/delete-category/{id}', [CategoryController::class, 'destroyCategory'])->name('delete');
+                    Route::get('/edit-category/{id}', [CategoryController::class, 'editCategory'])->name('edit');
+                    Route::put('/update-category/{id}', [CategoryController::class, 'updateCategory'])->name('update');
+                });
+            }
         );
+
         // CRUD BRAND
         Route::group(
             [
                 'prefix' => 'brands',
-                'as' => 'brands.'
+                'as' => 'brands.',
+                'middleware' => ['checkAdmin:admin,manager'] // Manager được phép xem nhưng không có quyền CRUD
             ],
             function () {
+                Route::get('/list-brand', [BrandController::class, 'listBrand'])->name('index');
+                Route::get('/detail-brand/{id}', [BrandController::class, 'detailBrand'])->name('detail');
 
-            Route::get('/list-brand', [BrandController::class, 'listBrand'])->name('index');
-            Route::post('/brands/{id}/toggle', [BrandController::class, 'toggle'])->name('toggle');
-            Route::get('/create-brand', [BrandController::class, 'createBrand'])->name('create');
-            Route::post('/add-brand', [BrandController::class, 'addBrand'])->name('store');
-            Route::get('/detail-brand/{id}', [BrandController::class, 'detailBrand'])->name(name: 'detail');
-            Route::get('/edit-brand/{id}', [BrandController::class, 'editBrand'])->name('edit');
-            Route::delete('/destroy-brand/{id}', [BrandController::class, 'destroyBrand'])->name('delete');
-            Route::put('/update-brand/{id}', [BrandController::class, 'updateBrand'])->name('update');
-        }
+                // Admin mới có quyền CRUD
+                Route::middleware('checkAdmin:admin')->group(function () {
+                    Route::post('/brands/{id}/toggle', [BrandController::class, 'toggle'])->name('toggle');
+                    Route::get('/create-brand', [BrandController::class, 'createBrand'])->name('create');
+                    Route::post('/add-brand', [BrandController::class, 'addBrand'])->name('store');
+                    Route::delete('/destroy-brand/{id}', [BrandController::class, 'destroyBrand'])->name('delete');
+                    Route::put('/update-brand/{id}', [BrandController::class, 'updateBrand'])->name('update');
+                });
+            }
         );
-        // CRUD color
+
+        // Các route CRUD khác (Color, Size, Product, Coupon, Order) sẽ tương tự.
+        // Đảm bảo rằng chỉ 'admin' có quyền thêm, sửa, xóa, còn 'manager' chỉ được xem thông tin.
+
+        // Ví dụ CRUD COLOR
         Route::group(
             [
                 'prefix' => 'colors',
-                'as' => 'colors.'
+                'as' => 'colors.',
+                'middleware' => ['checkAdmin:admin,manager']
             ],
             function () {
-            Route::get('/list-color', [ColorController::class, 'listColor'])->name('index');
-            Route::get('/create-color', [ColorController::class, 'createColor'])->name('create');
-            Route::post('/add-color', [ColorController::class, 'addColor'])->name('store');
+                Route::get('/list-color', [ColorController::class, 'listColor'])->name('index');
+                Route::get('/detail-color/{id}', [ColorController::class, 'detailColor'])->name('detail');
 
-            Route::get('/detail-color/{id}', [ColorController::class, 'detailColor'])->name(name: 'detail');
-            Route::get('/edit-color/{id}', [ColorController::class, 'editColor'])->name(name: 'edit');
-            Route::delete('/destroy-color/{id}', [ColorController::class, 'destroyColor'])->name(name: 'delete');
-            Route::put('/update-color/{id}', [ColorController::class, 'updateColor'])->name('update');
-        }
+                // Admin mới có quyền CRUD
+                Route::middleware('checkAdmin:admin')->group(function () {
+                    Route::get('/create-color', [ColorController::class, 'createColor'])->name('create');
+                    Route::post('/add-color', [ColorController::class, 'addColor'])->name('store');
+                    Route::delete('/destroy-color/{id}', [ColorController::class, 'destroyColor'])->name('delete');
+                    Route::put('/update-color/{id}', [ColorController::class, 'updateColor'])->name('update');
+                });
+            }
         );
+
         // CRUD size
         Route::group(
             [
                 'prefix' => 'sizes',
-                'as' => 'sizes.'
+                'as' => 'sizes.',
+                'middleware' => ['checkAdmin:admin,manager']
             ],
             function () {
-            Route::get('/list-size', [SizeController::class, 'listSize'])->name('index');
+                Route::get('/list-size', [SizeController::class, 'listSize'])->name('index');
 
-            Route::get('/create-size', [SizeController::class, 'createSize'])->name('create');
-            Route::post('/add-size', [SizeController::class, 'addSize'])->name('store');
-            Route::get('/detail-size/{id}', [SizeController::class, 'detailSize'])->name(name: 'detail');
-            Route::get('/edit-size/{id}', [SizeController::class, 'editSize'])->name(name: 'edit');
-            Route::delete('/destroy-size/{id}', [SizeController::class, 'destroySize'])->name('delete');
-            Route::put('/update-size/{id}', [SizeController::class, 'updateSize'])->name('update');
-        }
+                Route::get('/create-size', [SizeController::class, 'createSize'])->name('create');
+                Route::post('/add-size', [SizeController::class, 'addSize'])->name('store');
+                Route::get('/detail-size/{id}', [SizeController::class, 'detailSize'])->name(name: 'detail');
+                Route::get('/edit-size/{id}', [SizeController::class, 'editSize'])->name(name: 'edit');
+                Route::delete('/destroy-size/{id}', [SizeController::class, 'destroySize'])->name('delete');
+                Route::put('/update-size/{id}', [SizeController::class, 'updateSize'])->name('update');
+            }
         );
         // CRUD PRODUCT
         Route::group(
             [
                 'prefix' => 'products',
-                'as' => 'products.'
+                'as' => 'products.',
+                'middleware' => ['checkAdmin:admin,manager']
             ],
             function () {
-            Route::get('/list-product', [ProductController::class, 'listProduct'])->name(name: 'index');
-            Route::post('/product/{id}/toggle', [ProductController::class, 'toggle'])->name('toggle');
-            Route::get('/get-data', [ProductController::class, 'getData'])->name('create');
-            Route::post('/add-product', [ProductController::class, 'addProduct'])->name('store');
-            Route::get('/get-data-atrpro/{id}', [ProductController::class, 'getDataAtrPro'])->name('getDataAtrPro');
-            Route::post('/update-atrPro', [ProductController::class, 'updateAllAttributeProducts'])->name('updateAtrr');
-            Route::get('/get-dataId/{id}', [ProductController::class, 'editProduct'])->name(name: 'edit');
-            Route::get('/detail-product/{id}', [ProductController::class, 'detailProduct'])->name('detail');
-            Route::delete('/destroy-product/{id}', [ProductController::class, 'destroyProduct'])->name('delete');
-            Route::post('/products/{id}/restore', [ProductController::class, 'restoreProduct']);
-            Route::put('/update-product/{id}', [ProductController::class, 'updateProduct'])->name('update');
-            ;
-        }
+                Route::get('/list-product', [ProductController::class, 'listProduct'])->name(name: 'index');
+                Route::post('/product/{id}/toggle', [ProductController::class, 'toggle'])->name('toggle');
+                Route::get('/get-data', [ProductController::class, 'getData'])->name('create');
+                Route::post('/add-product', [ProductController::class, 'addProduct'])->name('store');
+                Route::get('/get-data-atrpro/{id}', [ProductController::class, 'getDataAtrPro'])->name('getDataAtrPro');
+                Route::post('/update-atrPro', [ProductController::class, 'updateAllAttributeProducts'])->name('updateAtrr');
+                Route::get('/get-dataId/{id}', [ProductController::class, 'editProduct'])->name(name: 'edit');
+                Route::get('/detail-product/{id}', [ProductController::class, 'detailProduct'])->name('detail');
+                Route::delete('/destroy-product/{id}', [ProductController::class, 'destroyProduct'])->name('delete');
+                Route::post('/products/{id}/restore', [ProductController::class, 'restoreProduct']);
+                Route::put('/update-product/{id}', [ProductController::class, 'updateProduct'])->name('update');;
+            }
         );
         // CRUD COUPON
         Route::group(
             [
                 'prefix' => 'coupons',
-                'as' => 'coupons.'
+                'as' => 'coupons.',
+                'middleware' => ['checkAdmin:admin,manager']
             ],
             function () {
-            Route::get('/list-coupon', [CouponController::class, 'listCoupon']);
-            Route::post('/add-coupon', [CouponController::class, 'addCoupon']);
-            Route::get('/detail-coupon/{id}', [CouponController::class, 'detailCoupon']);
-            Route::delete('/destroy-coupon/{id}', [CouponController::class, 'destroyCoupon']);
-            Route::put('/update-coupon/{id}', [CouponController::class, 'updateCoupon']);
-        }
+                Route::get('/list-coupon', [CouponController::class, 'listCoupon']);
+                Route::post('/add-coupon', [CouponController::class, 'addCoupon']);
+                Route::get('/detail-coupon/{id}', [CouponController::class, 'detailCoupon']);
+                Route::delete('/destroy-coupon/{id}', [CouponController::class, 'destroyCoupon']);
+                Route::put('/update-coupon/{id}', [CouponController::class, 'updateCoupon']);
+            }
         );
         //Quản lý đơn hàng
         Route::group(
             [
                 'prefix' => 'orders',
-                'as' => 'orders.'
+                'as' => 'orders.',
+                'middleware' => ['checkAdmin:admin,manager']
             ],
             function () {
-            Route::get('/orders', [OrderController::class, 'index']);         // Lấy danh sách đơn hàng
-            Route::get('/orders/{id}', [OrderController::class, 'show']);    // Lấy chi tiết đơn hàng
-            Route::put('/orders/{id}', [OrderController::class, 'updateStatus']); // Cập nhật trạng thái đơn hàng
-            Route::delete('/orders/{id}', [OrderController::class, 'destroy']);  // Xóa đơn hàng
-        }
+                Route::get('/orders', [OrderController::class, 'index']);         // Lấy danh sách đơn hàng
+                Route::get('/orders/{id}', [OrderController::class, 'show']);    // Lấy chi tiết đơn hàng
+                Route::put('/orders/{id}', [OrderController::class, 'updateStatus']); // Cập nhật trạng thái đơn hàng
+                Route::delete('/orders/{id}', [OrderController::class, 'destroy']);  // Xóa đơn hàng
+            }
         );
     }
 );
 
-
-Route::get('register', function () {
-    return view('auth.register');
-})->name('register');
-
-
-
 Auth::routes();
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
-Route::get('index', [BrandController::class, 'home']);
-Route::get('/brand', [BrandController::class, 'index'])->name('brand.index');
-Route::get('/category', [CategoryController::class, 'index'])->name('category.index');
-Route::get('/color', [ColorController::class, 'index'])->name('color.index');
-Route::get('/size', [SizeController::class, 'index'])->name('size.index');
+Route::group(
+    [
+        'middleware' => ['auth'], // Chỉ cho phép người dùng đã đăng nhập
+        'as' => 'user.' // Tiền tố cho các route của người dùng
+    ],
+    function () {
+        //danh mục sản phẩm
+        Route::get('/category', [CategoryController::class, 'index'])->name('category.index');
 
+        //sản phẩm
+        Route::group(
+            [
+                'prefix' => 'product',
+                'as' => 'product.',
+            ],
+            function () {
+                Route::get('product/{id}', [ProductsController::class, 'showProduct'])->name('detail');
+                Route::get('/product-list', [ProductsController::class, 'productList'])->name('list');
+                Route::get('/products/{categoryId?}', [ProductController::class, 'productList'])->name('user.proincate');
+                Route::get('/color', [ColorController::class, 'index'])->name('color.index');
+                Route::get('/size', [SizeController::class, 'index'])->name('size.index');
+                Route::get('/brand', [BrandController::class, 'index'])->name('brand.index');
+            }
+        );
+        // Quản lý đơn hàng
+        Route::group(
+            [
+                'prefix' => 'order',
+                'as' => 'order.',
+            ],
+            function () {
+                Route::get('/order-history', [OrderUserController::class, 'orderHistory'])->name('history');
+                Route::post('/order-confirm', [OrderUserController::class, 'confirmOrder'])->name('confirm');
+                Route::post('/cancel-order/{orderId}', [OrderUserController::class, 'cancelOrder'])->name('cancelOrder');
+                Route::post('/checkout/cod', [PaymentController::class, 'checkoutCOD'])->name('checkoutcod');
+                Route::get('order/success', [PaymentController::class, 'orderSuccess'])->name('order-cod');
+            }
+        );
+        // Giỏ hàng
+        Route::group(
+            [
+                'prefix' => 'cart',
+                'as' => 'cart.',
+            ],
+            function () {
+                Route::get('/cart-list', [CartController::class, 'viewCart'])->name('index');
+                Route::post('/cart/add', [CartController::class, 'addToCart'])->name('add');
+                Route::post('/cart/update/{id}', [CartController::class, 'update'])->name('cupdate');
+                Route::delete('/cart/remove/{id}', [CartController::class, 'removeItem'])->name('remove');
+                Route::get('/cart-popup', [CartController::class, 'viewCartPopup'])->name('popup');
+        
+            }
+        );
 
+    }
+);
 
-Route::get('/order-history', [OrderUserController::class, 'orderHistory'])->name('user.order_history');
-Route::post('/order-confirm', [OrderUserController::class, 'confirmOrder'])->name('user.order_confirm');
-Route::post('/cancel-order/{orderId}', [OrderUserController::class, 'cancelOrder'])->name('user.cancel_order');
-
-// Route cho người dùng
-// Route::prefix('/')->group(function () {
-// Route::get('/', [HomeController::class, 'index'])->name('home');
-
-// Route::get('home', [HomeController::class, 'index'])->name('product.list');
-
-// Route::get('product', [ProductsController::class, 'productList'])->name('product.list');
-
-Route::get('product/{id}', [ProductsController::class, 'showProduct'])->name('product.detail');
-Route::get('/product-list', [ProductsController::class, 'productList'])->name('product.list');
-Route::get('/products/{categoryId?}', [ProductController::class, 'productList'])->name('user.proincate');
-
-
-
-Route::get('/cart-list', [CartController::class, 'viewCart'])->name('users.cart');
-Route::post('/cart/add', [CartController::class, 'addToCart'])->name('cart.add');
-
-Route::post('/cart/update/{id}', [CartController::class, 'update'])->name('cart.update');
-
-Route::delete('/cart/remove/{id}', [CartController::class, 'removeItem'])->name('cart.remove');
-
-Route::get('/cart-popup', [CartController::class, 'viewCartPopup'])->name('cart.popup');
-
-Route::post('/checkout/cod', [PaymentController::class, 'checkoutCOD'])->name('checkout.cod');
-// Route trang thông báo thanh toán thành công
-Route::get('order/success', [PaymentController::class, 'orderSuccess'])->name('user.orders.order-cod');
-Route::get('/order-history', [OrderUserController::class, 'orderHistory'])->name('user.order_history');
-Route::post('/cancel-order/{orderId}', [OrderUserController::class, 'cancelOrder'])->name('user.cancel_order');
 Route::post('/vnp_payment', [PaymentVnPayController::class, 'vnp_payment'])
-->name('checkout.vnpay');
+    ->name('checkout.vnpay');
 
 Route::get('/vnp_return', [PaymentVnPayController::class, 'handleVNPayCallback'])
-->name('vnpay.callback');
+    ->name('vnpay.callback');
 
 Route::get('/payment_vnpay', function () {
     return view('user.orders.orderVNPAY');
@@ -213,13 +244,7 @@ Route::get('/payment_vnpay', function () {
 Route::get('about', function () {
     return view('user.about');
 })->name('about');
-// });
 
-// Route cho admin (cần middleware xác thực admin)
-// Route::prefix('admin')->middleware(['auth', 'isAdmin'])->group(function () {
-Route::get('/dashboard', function () {
-    return view('admin.pages.orderDetail');
-})->name('admin.dashboard');
 Route::get('/orders', [OrderController::class, 'showAllOrders'])
     ->name('admin.orders');
 

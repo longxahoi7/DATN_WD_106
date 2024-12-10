@@ -22,7 +22,7 @@
             <div class="product-slide">
                 @foreach($listProduct as $product)
                 <div class="product-item">
-                    <a href="{{ route('product.detail', $product->product_id) }}" class="product-card-link">
+                    <a href="{{ route('user.product.detail', $product->product_id) }}" class="product-card-link">
                         <div class="card">
                             <img src="{{ asset('storage/' . $product->main_image_url) }}" alt="{{ $product->name }}"
                                 class="product-image"
@@ -43,7 +43,7 @@
                                         {{ number_format($maxPrice, 0, ',', '.') }} VND
                                         @endif
                                     </span>
-                                    <a href="{{ route('product.detail', $product->product_id) }}" class="cart-icon">
+                                    <a href="{{ route('user.product.detail', $product->product_id) }}" class="cart-icon">
                                         <i class="fa fa-info-circle"></i>
                                     </a>
                                 </div>

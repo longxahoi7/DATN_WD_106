@@ -57,7 +57,7 @@ class CartController extends Controller
             ]);
         }
         // Trả về thông báo và điều hướng về trang giỏ hàng
-        return redirect()->route('users.cart')->with('success', 'Sản phẩm đã được thêm vào giỏ hàng.');
+        return redirect()->route('user.cart.index')->with('success', 'Sản phẩm đã được thêm vào giỏ hàng.');
     }
 
     // API để xem giỏ hàng

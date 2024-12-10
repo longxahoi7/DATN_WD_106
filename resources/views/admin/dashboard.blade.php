@@ -8,7 +8,7 @@
     <div class="row g-2 mb-4">
         <!-- Form lọc doanh thu -->
         <div class="col-md-6">
-            <form method="GET" action="{{ route('admin.stats') }}">
+            <form method="GET" action="{{ route('admin.dashboard') }}">
                 <div class="row align-items-end">
                     <div class="col-md-6">
                         <label for="start_date_revenue" class="form-label">Từ ngày (Doanh thu):</label>
@@ -27,7 +27,7 @@
 
         <!-- Form lọc đơn hàng -->
         <div class="col-md-6">
-            <form method="GET" action="{{ route('admin.stats') }}">
+            <form method="GET" action="{{ route('admin.dashboard') }}">
                 <div class="row align-items-end">
                     <div class="col-md-6">
                         <label for="start_date_orders" class="form-label">Từ ngày (Đơn hàng):</label>
