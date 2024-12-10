@@ -1,0 +1,269 @@
+/* CSS cho bảng sản phẩm */
+.product-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 16px;
+    border: none;
+}
+
+.product-table th,
+.product-table td {
+    text-align: center;
+    border: 1px solid #ddd;
+    vertical-align: middle;
+    border: none;
+}
+
+.product-table th {
+    background-color: #f8f9fa;
+    font-size: 12px;
+}
+
+.product-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.product-table tr:hover {
+    background-color: #f1f1f1;
+}
+
+.product-table tbody td:nth-child(3) {
+    word-wrap: break-word;
+    max-width: 150px;
+    white-space: normal;
+}
+
+.product-table tbody td img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+}
+.product-table tbody td {
+    text-align: center;
+    max-width: 100px;
+}
+
+.table th,
+.table td {
+    font-size: 14px;
+    line-height: 1.2;
+}
+
+/* Button Thêm mới */
+.add-button {
+    padding: 5px 14px;
+    margin: 0px 20px 10px 0px;
+    font-size: 14px;
+    font-weight: 500;
+    float: right;
+    color: white;
+    border: 1px solid transparent;
+    background-color: #000000;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.add-button:hover {
+    background-color: #ffffff;
+    transform: scale(1.05);
+    box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.15);
+    border: 1px solid #000000;
+}
+
+
+
+/* Icon hành động */
+.icon-product {
+    display: flex;
+    gap: 18px;
+    justify-content: center;
+}
+
+.action-btn {
+    padding: 6px 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f8f9fa;
+    color: #495057;
+    transition: all 0.3s ease;
+}
+
+.action-btn i {
+    font-size: 12px;
+}
+
+.action-btn.eye:hover {
+    background-color: #17a2b8;
+    color: white;
+}
+
+.action-btn.edit:hover {
+    background-color: #ffc107;
+    color: white;
+}
+
+.btn-link.text-danger {
+    background-color: transparent;
+    color: #dc3545;
+    padding: 6px 10px;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+.btn-link.text-danger:hover {
+    background-color: #dc3545;
+    color: white;
+}
+
+/* Nút thêm mới */
+.add-button-product {
+    background-color: black;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 4px;
+    border: none;
+    font-size: 14px;
+    text-decoration: none;
+    cursor: pointer;
+    margin-bottom: 16px;
+}
+
+.add-button-product:hover {
+    background-color: transparent;
+    color: black;
+    border: 1px solid black;
+}
+
+/* Icon sản phẩm */
+.icon-product .action-btn {
+    background: none;
+    border: none;
+    font-size: 16px;
+    padding: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-radius: 50%;
+}
+
+.icon-product .eye {
+    color: #17a2b8;
+    transition: all 0.3s ease;
+}
+
+.icon-product .eye:hover {
+    color: white;
+    background-color: #17a2b8;
+    transform: scale(1.2);
+}
+
+.icon-product .edit {
+    color: #ffc107;
+    transition: all 0.3s ease;
+}
+
+.icon-product .edit:hover {
+    color: white;
+    background-color: #ffc107;
+    transform: scale(1.2);
+}
+
+.icon-product .delete {
+    color: #dc3545;
+    transition: all 0.3s ease;
+}
+
+.icon-product .delete:hover {
+    color: white;
+    background-color: #dc3545;
+    transform: scale(1.2);
+}
+
+/* CSS cho nút hoạt động/tắt hoạt động */
+.custom-btn-active-admin {
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+}
+
+.custom-btn-active-admin.btn-success {
+    background-color: #28a745;
+    color: white;
+}
+
+.custom-btn-active-admin.btn-success:hover {
+    background-color: #218838;
+}
+
+.custom-btn-active-admin.btn-danger {
+    background-color: #dc3545;
+    color: white;
+}
+
+.custom-btn-active-admin.btn-danger:hover {
+    background-color: #c82333;
+}
+
+.custom-btn-active-admin p {
+    margin: 0;
+    padding: 0;
+    font-size: 10px;
+}
+
+/* CSS pagination */
+.pagination {
+    justify-content: flex-end;
+    margin-right: 20px;
+    float: right;
+    padding-left: 10px;
+    margin-bottom: 20px;
+}
+
+.pagination-info {
+    font-size: 14px;
+    margin: 10px 0;
+    color: #555;
+    text-align: right;
+}
+
+.pagination .page-link {
+    color: #000000;
+    border: 1px solid #000;
+}
+
+.pagination .page-link:hover {
+    background-color: #000000;
+    color: #fff;
+}
+
+.pagination .active .page-link {
+    background-color: #000;
+    color: #fff;
+    border: 1px solid #000000;
+}
+
+.pagination .disabled .page-link {
+    background-color: #f1f1f1;
+    color: #000000;
+    border: 1px solid #2d2d2d;
+}
+
+.btn-close {
+    background: none;
+    border: none;
+    font-size: 20px;
+    color: #000;
+    cursor: pointer;
+}

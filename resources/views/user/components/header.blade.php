@@ -26,22 +26,17 @@
                 <div class="col">
                     <div class="header-nav align-items-center" style="display: flex; margin-top: 10px">
                         <ul class='d-flex'>
-                            <li class="dropdown text-center" style="color: gray; font-size: 16px; margin-right: 15px">
-                                <a href="#" style="color: gray; text-decoration: none;">Tên danh mục bố</a>
-                                <ul class="dropdown-menu text-center">
-                                    <li><a href="/products" style="text-decoration: none; font-size: 14px">Danh mục
-                                            con</a></li>
-                                    <li><a href="/products" style="text-decoration: none; font-size: 14px">Danh mục
-                                            con</a></li>
+
+                            @foreach ($categories as $category)
+                            <li class="dropdown-item">
+                                <a href="{{ route('product.list', $category->category_id) }}">{{ $category->name }}</a>
+                                <ul class="sub-dropdown-menu">
                                 </ul>
                             </li>
-                            <li class="dropdown text-center" style="color: gray; font-size: 16px">
-                                <a href="#" style="color: gray; text-decoration: none;">Tên danh mục bố</a>
-                                <ul class="dropdown-menu text-center">
-                                    <li><a href="/products" style="text-decoration: none; font-size: 14px">Danh mục
-                                            con</a></li>
-                                    <li><a href="/products" style="text-decoration: none; font-size: 14px">Danh mục
-                                            con</a></li>
+                            @endforeach
+                            <li class="dropdown-item">
+                                <a href="{{ asset('/product-list') }}">Danh sách sản phẩm</a>
+                                <ul class="sub-dropdown-menu">
                                 </ul>
                             </li>
                         </ul>
@@ -82,17 +77,23 @@
                                 @else
                                 <a href="/login" class="dropdown-item">Đăng nhập</a>
                                 <a href="/register" class="dropdown-item">Đăng ký</a>
+
                                 @endif
                             </div>
                         </div>
 
-                        <a href="{{ route('users.cart') }}" class="nav-link ml-3">
+                        <!-- <a href="{{ route('users.cart') }}" class="nav-link ml-3">
                             <i class="fas fa-shopping-cart"></i>
+                        </a> -->
+                        <a href="javascript:void(0);" class="nav-link ml-3" onclick="toggleCartPopup()">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span class="custom-cart-count">2</span>
                         </a>
                     </nav>
                 </div>
             </div>
 
+            @include('user.components.cart-popup', ['cartItems' => $cartItems ?? [], 'total' => $total ?? 0])
             <div class="row mt-3 mb-3">
                 <!-- Hàng ngang 2 - Địa chỉ và số điện thoại -->
                 <div class="col text-start custom-text d-flex">
@@ -106,3 +107,15 @@
         </div>
     </div>
 </div>
+
+<script>
+    function toggleCartPopup() {
+    const cartPopup = document.getElementById('cart-popup');
+    cartPopup.classList.toggle('d-none');
+    
+    if (!cartPopup.classList.contains('d-none')) {
+        fetchCartItems();
+    }
+}
+
+</script>

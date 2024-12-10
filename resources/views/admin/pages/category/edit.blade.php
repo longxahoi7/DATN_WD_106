@@ -1,7 +1,4 @@
 @extends('admin.index')
-@push('styles')
-    <link rel="stylesheet" href="{{asset('css/style.css')}}">
-@endpush
 @section('content')
 
 <body>
@@ -22,21 +19,28 @@
                     placeholder="Nhập mô tả">{{ $category->description }}</textarea>
             </div>
 
-            <div class="form-group">
-                <label for="image">Ảnh</label>
-                <img src="{{$category->image}}" width="100px" height="100px" alt="">
-                <input type="file" class="form-control" id="image" name="image" placeholder="Nhập tên đường dẫn" />
-            </div>
-            <div class="form-group">
-                <label for="productCategory">Chọn danh mục cha</label>
-                <select class="form-control" id="category" name="parent_id">
-                    <option value="0">Chọn danh mục cha</option>
-                    @foreach($categories as $subCategory)
-                            <option value="{{ $subCategory['category_id'] }}" @if(old('parent_id', $category->parent_id) == $subCategory['category_id']) selected @endif>
-                                {{ $subCategory['name'] }}
-                            </option>
-                    @endforeach
-                </select>
+    <div class="form-group">
+        <label for="image">Ảnh</label>
+        <img src="{{$category->image}}" width="100px" height="100px" alt="">
+        <input
+            type="file"
+            class="form-control"
+            id="image"
+            name="image"
+            placeholder="Nhập tên đường dẫn"
+        />
+    </div>
+    <div class="form-group">
+    <label for="productCategory">Chọn danh mục</label>
+    <select class="form-control" id="productCategory" name="product_category_id" required>
+    <option value="0">Chọn danh mục sản phẩm</option>
+    @foreach($categories as $category)
+        <option value="{{ $category['category_id'] }}"
+                @if(old('product_category_id', $product->category_id) == $category['category_id']) selected @endif>
+            {{ $category['name'] }}
+        </option>
+    @endforeach
+</select>
 
             </div>
 
@@ -53,7 +57,7 @@
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
         <script>
-
+          
         </script>
     @endpush
 </body>

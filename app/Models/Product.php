@@ -26,6 +26,9 @@ class Product extends Model
         'subtitle',
         'slug',
         'is_active',
+        'is_best_seller',
+        'is_hot',
+        'view_count',
     ];
     public function colors()
     {
@@ -70,9 +73,28 @@ class Product extends Model
     }
     public function orderItems()
     {
-        return $this->hasMany(OrderItem::class); 
+        return $this->hasMany(OrderItem::class);
     }
-    public function cartItems() {
+    public function cartItems()
+    {
         return $this->hasMany(CartItem::class, 'product_id');
     }
+
+
+    public static function getBestSellers()
+    {
+        return self::where('is_best_seller', 1)
+            ->where('is_active', 1)  // Kiểm tra sản phẩm có đang hoạt động
+            ->limit(10)  // Giới hạn số lượng sản phẩm bán chạy
+            ->get();
+    }
+
+    public static function getHotProducts()
+    {
+        return self::where('is_hot', 1)
+            ->where('is_active', 1)  // Kiểm tra sản phẩm có đang hoạt động
+            ->limit(10)  // Giới hạn số lượng sản phẩm hot
+            ->get();
+    }
+  
 }

@@ -24,7 +24,6 @@ public function down()
     Schema::table('cart_items', function (Blueprint $table) {
         $table->dropForeign(['color_id']);
         $table->dropColumn('color_id');
-
         $table->dropForeign(['size_id']);
         $table->dropColumn('size_id');
     });

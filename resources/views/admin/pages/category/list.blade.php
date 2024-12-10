@@ -1,7 +1,4 @@
 @extends('admin.index')
-@push('styles')
-    <link rel="stylesheet" href="{{asset('css/style.css')}}">
-@endpush
 @section('content')
 
 <body>
@@ -27,7 +24,7 @@
                         <tr>
                             <td>{{$category->category_id}}</td>
                             <td>{{$category->name}}</td>
-                            <td><img src=" {{ asset('storage/' . $user->image) }}" width="100px" height="100px" alt=""></td>
+                            <td><img src="{{$category->image}}" width="100px" height="100px" alt=""></td>
                             <td>{{$category->description}}</td>
                             <td>
                                 <form action="{{ route('admin.categories.toggle', $category->category_id) }}" method="POST"
@@ -62,34 +59,49 @@
                 </tbody>
             </table>
 
-            <nav>
-                <ul class="pagination justify-content-center">
-                    {{ $categories->links() }}
-                </ul>
-            </nav>
-        </div>
+            <!-- Modal Xóa Thương Hiệu -->
+            <div class="modal fade" id="deletecategoryModal" tabindex="-1" role="dialog"
+                aria-labelledby="deletecategoryModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="deletecategoryModalLabel">
+                                Xóa thương hiệu
+                            </h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span>&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <p>
+                                Bạn có chắc chắn muốn xóa thương hiệu
+                                <span id="deletecategoryName"></span>?
+                            </p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">
+                                Hủy
+                            </button>
+                            <button type="button" class="btn btn-success" onclick="confirmDelete();">
+                                Xóa
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<!-- Thêm các Scripts cần thiết -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
 
-    </body>
-    @push('scripts')
-        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
-        <script>
-            function setDeleteData(categoryName) {
-                document.getElementById("deletecategoryName").textContent =
-                    categoryName;
-            }
+<script>
+function confirmDelete() {
+    alert("Xóa danh mục thành công!");
+    $('#deleteModal').modal('hide');
+}
+</script>
 
-            function confirmDelete() {
-                alert("Thương hiệu đã được xóa!");
-                $("#deletecategoryModal").modal("hide");
-            }
-        </script>
-    @endpush
-</body>
+
 @endsection

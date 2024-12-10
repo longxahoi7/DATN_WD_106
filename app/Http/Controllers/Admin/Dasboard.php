@@ -9,6 +9,6 @@ class Dasboard extends Controller
 {
     //
     public function dashBoard(){
-        return view('admin.index');
+        return view('admin.pages.dashboard');
     }
 }

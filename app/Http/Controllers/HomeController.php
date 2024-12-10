@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
 
@@ -20,18 +21,11 @@ class HomeController extends Controller
     public function index()
     {
         // Eager load cả 'attributeProducts' từ bảng attribute_products
-        $listProduct = Product::with('attributeProducts')->get();
-
-        $productSoldCount = Product::where('sold_count', '>', 100)
-            ->where('is_active', true)
-            ->orderBy('sold_count', 'desc')
-            ->take(10) // Lấy top 10 sản phẩm bán chạy
+        $listProduct = Product::with('attributeProducts')
+            ->where('is_active', 1)  // Lọc sản phẩm có trạng thái is_active = 1 (sản phẩm đang hoạt động)
             ->get();
-        $productHot = Product::where('is_hot',0)
-            ->where('is_active', true)
-            ->get();
-
-        return view('user.home', compact('listProduct','productHot','productSoldCount'));
-
+        $bestSellers = Product::getBestSellers();
+        $hotProducts = Product::getHotProducts();
+        return view('user.home', compact('listProduct', 'hotProducts', 'bestSellers'));
     }
 }
