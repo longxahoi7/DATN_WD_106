@@ -29,7 +29,7 @@
                     </ul>
 
                     @if ($order->status === 'pending')
-                        <form action="{{ route('user.cancel_order', $order->order_id) }}" method="POST">
+                        <form action="{{ route('user.order.cancelOrder', $order->order_id) }}" method="POST">
                             @csrf
                             <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Bạn có chắc muốn hủy đơn hàng này?');">Hủy đơn hàng</button>
                         </form>
