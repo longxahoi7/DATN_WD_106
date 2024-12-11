@@ -69,13 +69,6 @@
                 </ul>
             </li>
 
-            <!-- Shipper -->
-            <li>
-                <a href="/shipper">
-                    <i class="icon-shipping">🚚</i> Shipper
-                </a>
-            </li>
-
             <!-- Mã giảm giá -->
             <li>
                 <a href="/coupon">

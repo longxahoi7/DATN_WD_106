@@ -70,7 +70,7 @@
         <div class="product-slide">
             @foreach($bestSellers as $soldProduct)
             <div class="product-item">
-                <a href="{{ route('product.detail', $soldProduct->product_id) }}" class="product-card-link">
+                <a href="{{ route('user.product.detail', $soldProduct->product_id) }}" class="product-card-link">
                     <div class="card">
                         <img src="{{ asset('storage/' . $soldProduct->main_image_url) }}" alt="{{ $soldProduct->name }}"
                             class="product-image"
@@ -91,7 +91,7 @@
                                     {{ number_format($maxPrice, 0, ',', '.') }} VND
                                     @endif
                                 </span>
-                                <a href="{{ route('product.detail', $product->product_id) }}" class="cart-icon">
+                                <a href="{{ route('user.product.detail', $product->product_id) }}" class="cart-icon">
                                     <i class="fa fa-info-circle"></i>
                                 </a>
                             </div>
@@ -118,7 +118,7 @@
         <div class="product-slide">
             @foreach($hotProducts as $hotProduct)
             <div class="product-item">
-                <a href="{{ route('product.detail', $hotProduct->product_id) }}" class="product-card-link">
+                <a href="{{ route('user.product.detail', $hotProduct->product_id) }}" class="product-card-link">
                     <div class="card">
                         <img src="{{ asset('storage/' . $hotProduct->main_image_url) }}" alt="{{ $hotProduct->name }}"
                             class="product-image"
@@ -139,7 +139,7 @@
                                     {{ number_format($maxPrice, 0, ',', '.') }} VND
                                     @endif
                                 </span>
-                                <a href="{{ route('product.detail', $product->product_id) }}" class="cart-icon">
+                                <a href="{{ route('user.product.detail', $product->product_id) }}" class="cart-icon">
                                     <i class="fa fa-info-circle"></i>
                                 </a>
                             </div>

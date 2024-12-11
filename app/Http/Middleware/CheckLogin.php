@@ -16,7 +16,7 @@ class CheckLogin
     public function handle(Request $request, Closure $next): Response
     {
         if(Auth::check()){
-            if(Auth::user()->role == 1){
+            if (in_array(Auth::user()->role, [1, 3])){
                 return $next($request);
             }else{
                 return redirect()->route('home')
@@ -25,7 +25,7 @@ class CheckLogin
             }
         }else{
             return redirect()->route('admin.dashboard')
-            ->with('error','Bạn phải đăng nhập trước');    
+            ->with('error','Bạn phải đăng nhập trước');
         }
     }
 }
