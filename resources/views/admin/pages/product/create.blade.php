@@ -1,3 +1,4 @@
+<link rel="stylesheet" href="{{asset('css/admin/formAddProduct.css')}}">
 <form id="productForm" method="POST" action="{{ route('admin.products.store') }}" class="custom-form-container"
     enctype="multipart/form-data">
     @csrf
@@ -193,47 +194,4 @@ function toggleAll(type) {
     console.log(document.getElementById(idToFind));
 
 }
-// document.addEventListener('DOMContentLoaded', function() {
-//     // Khởi tạo Quill editor
-//     const quill = new Quill('#editor', {
-//         theme: 'snow', // Dùng giao diện "snow"
-//         modules: {
-//             toolbar: [
-//                 [{
-//                     'font': []
-//                 }], // Thay đổi font chữ
-//                 ['bold', 'italic', 'underline'], // In đậm, nghiêng, gạch chân
-//                 [{
-//                     'color': []
-//                 }, {
-//                     'background': []
-//                 }], // Thêm màu chữ và nền
-//                 [{
-//                     'list': 'ordered'
-//                 }, {
-//                     'list': 'bullet'
-//                 }], // Danh sách
-//                 [{
-//                     'align': []
-//                 }], // Căn lề
-//                 ['link'], // Thêm liên kết
-
-//                 ['clean'] // Xóa định dạng
-//             ]
-//         }
-//     });
-
-//     // Ghi dữ liệu editor vào hidden field khi thay đổi
-//     quill.on('text-change', function() {
-//         const descriptionField = document.getElementById('productDescription');
-//         descriptionField.value = quill.root.innerHTML; // Ghi dữ liệu HTML vào hidden input
-//     });
-// });
-
-// tinymce.init({
-//     selector: '#productDescription',
-//     plugins: 'advlist autolink lists link image charmap print preview hr anchor pagebreak',
-//     toolbar_mode: 'floating',
-//     toolbar: 'undo redo | formatselect | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat',
-// });
 </script>

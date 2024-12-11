@@ -20,6 +20,27 @@
     <a href="{{ route('admin.categories.create') }}" class="btn add-button"> Thêm mới </a>
     @else
     @endif
+    <div class="modal fade" id="productCreateModal" tabindex="-1" aria-labelledby="productCreateModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="button-header">
+                        <button>
+                            Thêm mới danh mục <i class="fa fa-star"></i>
+                        </button>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">✖</button>
+                </div>
+                <div class="modal-body">
+                    <!-- AJAX nội dung sẽ được load tại đây -->
+                    <div id="modalContent">
+                        <p>Đang tải...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <!-- Bảng danh sách danh mục -->
     <table class="product-table table table-bordered text-center align-middle">
         <thead class="thead-dark">
@@ -32,9 +53,9 @@
             </tr>
         </thead>
         <tbody>
-            @foreach ($categories as $category)
+            @foreach ($categories as $index => $category)
             <tr>
-                <td>{{ $category->category_id }}</td>
+                <td>{{ $index + 1 }}</td>
                 <td>{{ $category->name }}</td>
                 <td>
                     <img src="{{ $category->image }}" class="cusstom-no-image"
@@ -44,8 +65,8 @@
                     <form action="{{ route('admin.categories.toggle', $category->category_id) }}" method="POST">
                         @csrf
                         <button type="submit"
-                            class="custom-btn-active-admin {{ $category->is_active ? 'btn-danger' : 'btn-success' }}">
-                            <p>{{ $category->is_active ? 'Tắt hoạt động' : 'họat động' }}</p>
+                            class="custom-btn-active-admin {{ $category->is_active ? 'btn-success' : 'btn-danger' }}">
+                            <p>{{ $category->is_active ? 'họat động' : 'Tắt hoạt động' }}</p>
                         </button>
                     </form>
                 </td>
@@ -90,32 +111,42 @@
     </nav>
 </div>
 
-<!-- Modal Xóa Thể Hiện -->
-<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="deleteModalLabel">Xác nhận xoá danh mục</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span>&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p id="modalContent">Bạn có chắc chắn muốn xóa danh mục này?</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
-                <button type="button" class="btn btn-danger" onclick="confirmDelete()">Xác nhận</button>
-            </div>
-        </div>
-    </div>
-</div>
+<script>
+$(document).ready(function() {
+    $('.btn-close').on('click', function() {
+        $('#productCreateModal').modal('hide');
+    });
+
+    $('.add-button').on('click', function(e) {
+        e.preventDefault();
+        $('#modalContent').html('<p>Đang tải...</p>');
+        $('#productCreateModal').modal('show');
+
+        $.ajax({
+            url: "{{ route('admin.categories.create') }}",
+            type: 'GET',
+            success: function(response) {
+                $('#modalContent').html(response);
+            },
+            error: function() {
+                $('#modalContent').html('<p>Lỗi! Không thể tải nội dung.</p>');
+            }
+        });
+    });
+});
+
+function confirmDelete() {
+    alert("Xóa danh mục thành công!");
+    $('#deleteModal').modal('hide');
+}
+</script>
+
 <!-- Thêm các Scripts cần thiết -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
+
 
 <script>
 function confirmDelete() {

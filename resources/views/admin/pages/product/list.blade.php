@@ -24,7 +24,7 @@
                         <div class="modal-header">
                             <div class="button-header">
                                 <button>
-                                    Thêm Sản Phẩm Mới <i class="fa fa-star"></i>
+                                    Thêm Mới Sản Phẩm<i class="fa fa-star"></i>
                                 </button>
                             </div>
                             <button type="button" class="btn-close" data-bs-dismiss="modal"
@@ -117,6 +117,10 @@
 
         <script>
         $(document).ready(function() {
+            $('.btn-close').on('click', function() {
+                $('#productCreateModal').modal('hide');
+            });
+
             $('.add-button').on('click', function(e) {
                 e.preventDefault();
                 $('#modalContent').html('<p>Đang tải...</p>');

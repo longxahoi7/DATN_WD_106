@@ -40,33 +40,6 @@
     background-color: #e9ecef;
 }
 
-.button-group .btn {
-    margin-right: 10px;
-    float: right;
-    background-color: #000;
-    border: 1px solid #000;
-}
-
-.button-group .btn:hover {
-    color: #000000;
-    background-color: #ffffff;
-    border: 1px solid #000;
-}
-
-.custom-btn-upload-admin {
-    background-color: white;
-    color: black;
-    border: 1px solid black;
-    padding: 8px 16px;
-    border-radius: 4px;
-    font-size: 14px;
-    font-weight: 500;
-    display: inline-flex;
-    align-items: center;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
 .custom-btn-upload-admin i {
     margin-right: 8px;
     font-weight: bold;
@@ -76,14 +49,6 @@
     background-color: black;
     color: white;
     border-color: black;
-}
-
-.custom-form-container{
-    padding: 10px 20px;
-}
-
-.custom-label{
-    margin-left: 8px;
 }
 
 .checkbox-group div {
@@ -106,19 +71,4 @@
 .checkbox-group input[type="checkbox"] {
   margin-right: 8px;
   cursor: pointer;
-}
-
-.custom-label {
-  font-weight: bold;
-  display: block;
-  margin-bottom: 10px;
-}
-
-.form-control:focus {
-    border-color: #2a9d8f;
-    box-shadow: 0 0 5px #2a9d8f;
-}
-
-.form-control:focus {
-    background-color: #e8f8f1;
 }
