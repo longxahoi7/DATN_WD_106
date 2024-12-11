@@ -158,40 +158,41 @@
 </div>
 
 <script>
-function openPopup(id) {
-    document.getElementById('popupOverlay').style.display = 'block';
-}
+    function openPopup(id) {
+        document.getElementById('popupOverlay').style.display = 'block';
+    }
 
-function closePopup() {
-    document.getElementById('popupOverlay').style.display = 'none';
-}
+    function closePopup() {
+        document.getElementById('popupOverlay').style.display = 'none';
+    }
 
-function confirmSelection() {
-    closePopup();
-}
-function changeQuantity(change) {
-                const quantityInput = document.getElementById('quantity');
-                let currentQuantity = parseInt(quantityInput.value) || 1;
-                currentQuantity += change;
+    function confirmSelection() {
+        closePopup();
+    }
 
-                if (currentQuantity < 1) currentQuantity = 1;
-                quantityInput.value = currentQuantity;
-                updateQuantity(currentQuantity);
-            }
+    function changeQuantity(change) {
+        const quantityInput = document.getElementById('quantity');
+        let currentQuantity = parseInt(quantityInput.value) || 1;
+        currentQuantity += change;
 
-            function updateQuantity(value) {
-                let qty = parseInt(value);
+        if (currentQuantity < 1) currentQuantity = 1;
+        quantityInput.value = currentQuantity;
+        updateQuantity(currentQuantity);
+    }
 
-                if (isNaN(qty) || qty < 1) {
-                    qty = 1;
-                }
+    function updateQuantity(value) {
+        let qty = parseInt(value);
 
-                // Cập nhật giá trị của input hiển thị
-                document.getElementById('quantity').value = qty;
+        if (isNaN(qty) || qty < 1) {
+            qty = 1;
+        }
 
-                // Cập nhật giá trị của hidden input
-                document.getElementById('qty-hidden').value = qty;
-            }
+        // Cập nhật giá trị của input hiển thị
+        document.getElementById('quantity').value = qty;
+
+        // Cập nhật giá trị của hidden input
+        document.getElementById('qty-hidden').value = qty;
+    }
 </script>
 
 
