@@ -73,15 +73,8 @@
                 </div>
 
                 <div class="d-flex">
-                    
-                    <form id="add-to-cart-form" action="{{ route('user.cart.add') }}" method="POST">
-                        @csrf
-                        <input type="hidden" name="product_id" value="{{ $product->product_id }}">
-                        <input type="hidden" name="color_id" id="selected-color" value="">
-                        <input type="hidden" name="size_id" id="selected-size" value="">
-                        <input type="hidden" name="qty" id="qty-hidden" min="1" value="1">
-                        <button type="submit" class="custom-cart" onclick="addToCart()">Thêm vào giỏ hàng</button>
-                    </form>
+                    <button type="button" class="custom-cart" onclick="addToCart()">Thêm vào giỏ hàng</button>
+
                     <form id="add-to-cart-form" action="{{ route('user.cart.add') }}" method="POST">
                         @csrf
                         <input type="hidden" name="product_id" value="{{ $product->product_id }}">
@@ -377,17 +370,29 @@
                     qty = 1;
                 }
 
-                // Kiểm tra nếu số lượng vượt quá số lượng có sẵn trong kho
                 if (qty > inStock) {
                     alert('Số lượng yêu cầu vượt quá số lượng sản phẩm có sẵn trong kho!');
                     return; // Dừng lại nếu vượt quá kho
                 }
-
-                // Cập nhật giá trị của input hiển thị
                 document.getElementById('quantity').value = qty;
 
-                // Cập nhật giá trị của hidden input
                 document.getElementById('qty-hidden').value = qty;
+            }
+
+            function addToCart() {
+                const color = document.getElementById('selected-color').value;
+                const size = document.getElementById('selected-size').value;
+                const qty = document.getElementById('qty-hidden').value;
+
+
+                if (!color || !size || !qty) {
+                    // Kiểm tra nếu các thuộc tính màu, size và số lượng chưa được chọn.
+                    alert("Vui lòng chọn đầy đủ màu sắc, kích thước và số lượng.");
+                    return;
+                }
+
+                // Nếu đã chọn đủ, tiến hành gửi form.
+                document.getElementById('add-to-cart-form').submit();
             }
 
             function showToast(message) {
