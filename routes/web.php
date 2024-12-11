@@ -146,11 +146,11 @@ Route::group(
                 'middleware' => ['checkAdmin:admin,manager']
             ],
             function () {
-                Route::get('/list-coupon', [CouponController::class, 'listCoupon']);
-                Route::post('/add-coupon', [CouponController::class, 'addCoupon']);
-                Route::get('/detail-coupon/{id}', [CouponController::class, 'detailCoupon']);
-                Route::delete('/destroy-coupon/{id}', [CouponController::class, 'destroyCoupon']);
-                Route::put('/update-coupon/{id}', [CouponController::class, 'updateCoupon']);
+                Route::get('/list-coupon', [CouponController::class, 'listCoupon'])->name(name: 'index');
+                Route::post('/add-coupon', [CouponController::class, 'addCoupon'])->name('create');
+                Route::get('/detail-coupon/{id}', [CouponController::class, 'detailCoupon'])->name('detail');
+                Route::delete('/destroy-coupon/{id}', [CouponController::class, 'destroyCoupon'])->name('delete');
+                Route::put('/update-coupon/{id}', [CouponController::class, 'updateCoupon'])->name(name: 'edit');
             }
         );
         //Quản lý đơn hàng
@@ -161,10 +161,10 @@ Route::group(
                 'middleware' => ['checkAdmin:admin,manager']
             ],
             function () {
-                Route::get('/orders', [OrderController::class, 'index']);         // Lấy danh sách đơn hàng
-                Route::get('/orders/{id}', [OrderController::class, 'show']);    // Lấy chi tiết đơn hàng
-                Route::put('/orders/{id}', [OrderController::class, 'updateStatus']); // Cập nhật trạng thái đơn hàng
-                Route::delete('/orders/{id}', [OrderController::class, 'destroy']);  // Xóa đơn hàng
+                Route::get('/orders', [OrderController::class, 'index']);
+                Route::get('/orders/{id}', [OrderController::class, 'show']);
+                Route::put('/orders/{id}', [OrderController::class, 'updateStatus']);
+                Route::delete('/orders/{id}', [OrderController::class, 'destroy']);
             }
         );
     }

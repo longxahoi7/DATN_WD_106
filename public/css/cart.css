@@ -470,3 +470,50 @@ input[type="number"] {
     font-weight: 500;
     color: #2a9d8f;
 }
+
+/* Không có giỏ hàng */
+.empty-cart-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-family: Arial, sans-serif;
+}
+
+.empty-cart-icon img {
+    width: 400px;
+    height: auto;
+    margin-bottom: 20px;
+}
+
+.empty-cart-title {
+    font-size: 32px;
+    color: #000;
+    font-weight: 600;
+    margin: 10px 0;
+}
+
+.empty-cart-subtitle {
+    font-size: 16px;
+    color: #555;
+    margin-bottom: 20px;
+}
+
+.btn-no-cart-user {
+    font-size: 14px;
+    padding: 10px 20px;
+    background-color: #ffffff;
+    border: 1px solid #000 !important;
+    color: rgb(0, 0, 0);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.btn-no-cart-user:hover {
+    background-color: #000000;
+    border: 1px solid #000;
+    color: #ffffff
+
+}

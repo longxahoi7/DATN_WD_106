@@ -164,12 +164,14 @@ a:hover {
 }
 
 /* Hiệu ứng active cho menu cha */
-.dropdown.active > li {
+.dropdown.active > li,
+.dropdown-coupon.active > li {
   background-color: #e9ecef;
   border-bottom: 3px solid #212529;
 }
 
-.submenu {
+.submenu,
+.submenu-coupon{
   display: none;
   position: absolute;
   top: 100%;
@@ -183,16 +185,19 @@ a:hover {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.submenu .show {
+.submenu .show,
+.submenu-coupon.show {
   display: block;
 }
 
-.submenu li {
+.submenu li,
+.submenu-coupon li {
     list-style: none;
     padding: 0 10px;
 }
 
-.submenu li a {
+.submenu li a,
+.submenu-coupon li a {
     display: flex;
     color: #212529;
     font-size: 14px;
@@ -201,11 +206,13 @@ a:hover {
     transition: color 0.3s ease;
 }
 
-.arrow {
+.arrow,
+.toggle-link-coupon.arrow {
   margin-left: 5px;
   transition: transform 0.3s ease;
 }
 
-.toggle-link.active .arrow {
+.toggle-link.active.arrow
+.toggle-link-coupon.arrow{
   transform: rotate(180deg);
 }
