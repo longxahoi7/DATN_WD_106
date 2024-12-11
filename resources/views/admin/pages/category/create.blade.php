@@ -1,58 +1,71 @@
-@extends('admin.index')
-@section('content')
-
-<body>
-    <div class="container mt-5">
-        <h1 class="text-center">Thêm Mới Danh Mục</h1>
-        <form action="{{route('admin.categories.store')}}" method="POST">
-            @csrf
-            <div class="form-group">
-                <label for="name">Tên danh mục <span class="required">*</span></label>
-                <input type="text" class="form-control" id="name" name="name" placeholder="Nhập tên thương hiệu"
-                    required />
-            </div>
-            <div class="form-group">
-                <label for="image">Ảnh danh mục <span class="required">*</span></label>
-                <input type="file" class="form-control" id="image" name="image" placeholder="Nhập tên thương hiệu"
-                    required />
-            </div>
-            <div class="form-group">
-                <label for="slug">Tên đường dẫn</label>
-                <input type="text" class="form-control" id="slug" name="slug" placeholder="Nhập tên đường dẫn" />
-            </div>
-            <div class="form-group">
-                <label for="productCategory">Chọn danh mục cha</label>
-                <select class="form-control" id="productCategory" name="parent_id" required> 
-                <option value="0">Chọn danh mục cha </option>
-                    @foreach($categories as $category)
-                    <option value="{{ $category['category_id'] }}">{{ $category['name'] }}</option>
-                    @endforeach
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="description">Mô tả</label>
-                <textarea class="form-control" id="description" rows="3" name="description"
-                    placeholder="Nhập mô tả"></textarea>
-            </div>
-
-
-            <div class="button-container">
-                <button type="submit" class="btn btn-primary">
-                    Thêm mới thương hiệu
-                </button>
-                <a href="{{route('admin.categories.index')}}" class="btn btn-secondary">Hủy</a>
-            </div>
-
-        </form>
+<link rel="stylesheet" href="{{asset('css/admin/formAddCategory.css')}}">
+<form action="{{route('admin.categories.store')}}" method="POST" class="custom-form-container"
+    enctype="multipart/form-data">
+    @csrf
+    <div class="form-group">
+        <label class="custom-label" for="name">Tên danh mục <span class="custom-required-star">*</span></label>
+        <input type="text" class="form-control" id="name" name="name" placeholder="Nhập tên danh mục" required />
     </div>
-    @push('scripts')
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
-    <script>
 
-    </script>
-    @endpush
-</body>
-@endsection
+    <div class="form-group">
+        <div class="d-flex align-items-center">
+            <!-- Image Preview Area -->
+            <div class="img-container mr-3">
+                <img src="#" alt="Ảnh danh mục" id="imagePreview" />
+                <span id="noImageText">Ảnh danh mục</span>
+            </div>
+            <!-- Upload Button -->
+            <button type="button" class="custom-btn-upload-admin" onclick="document.getElementById('image').click();">
+                <i class="bi bi-upload"></i> <span class="ml-2"> Tải lên</span>
+            </button>
+            <input type="file" class="form-control-file d-none" id="image" name="image" accept="image/*"
+                onchange="showImage(event)" />
+        </div>
+    </div>
+
+
+
+    <div class="form-group">
+        <label class="custom-label" for="slug">Tên đường dẫn <span class="custom-required-star">*</span></label>
+        <input type="text" class="form-control" id="slug" name="slug" placeholder="Nhập tên đường dẫn" required />
+    </div>
+    <div class="form-group">
+        <label class="custom-label" for="productCategory">Danh mục chính</label>
+        <select class="form-control" id="productCategory" name="parent_id" required>
+            <option value="0">Chọn danh mục chính </option>
+            @foreach($categories as $category)
+            <option value="{{ $category['category_id'] }}">{{ $category['name'] }}</option>
+            @endforeach
+        </select>
+    </div>
+    <div class="form-group">
+        <label class="custom-label" for="description">Mô tả<span class="custom-required-star">*</span></label>
+        <textarea class="form-control" id="description" rows="3" name="description" placeholder="Nhập mô tả"
+            required></textarea>
+    </div>
+    <div class="button-group">
+        <button type="submit" class="btn btn-primary">Thêm mới</button>
+    </div>
+</form>
+
+<script>
+function showImage(event) {
+    const file = event.target.files[0];
+    const preview = document.getElementById("imagePreview");
+    const noImageText = document.getElementById("noImageText");
+
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function() {
+            preview.src = reader.result;
+            preview.classList.add("show");
+            noImageText.style.display = "none";
+        };
+        reader.readAsDataURL(file);
+    } else {
+        preview.src = "#";
+        preview.classList.remove("show");
+        noImageText.style.display = "block";
+    }
+}
+</script>

@@ -105,7 +105,7 @@
                 </div>
                 <h2 class="empty-cart-title">"Hổng" có gì trong giỏ hết</h2>
                 <p class="empty-cart-subtitle">Lướt Gentle Manor, lựa hàng ngay đi!</p>
-                <a href="/product-list" class="btn btn-no-cart-user">Mua sắm ngay!</a>
+                <a href="/product/product-list" class="btn btn-no-cart-user">Mua sắm ngay!</a>
             </div>
             @endif
         </div>
@@ -160,7 +160,7 @@
                     <button type="submit" name="redirect" class="custom-btn-checkout">Thanh toán VNPay</button>
                 </form>
             </div>
-            <a href="/product-list" class="continue-shopping">
+            <a href="/product/product-list" class="continue-shopping">
                 <i class="fa fa-arrow-left"></i> Tiếp tục mua hàng
             </a>
         </div>
