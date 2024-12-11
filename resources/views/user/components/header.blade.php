@@ -69,10 +69,10 @@
                                 <a href="{{route('user.order.history')}}" class="dropdown-item">Lịch sử mua hàng</a>
 
                                 <!-- Kiểm tra nếu người dùng có role 'admin' -->
-                                @if(Auth::user()->role === [1,3])
-                                <a href="{{route('admin.dashboard')}}" class="dropdown-item">Trang quản trị</a>
+                                @if(in_array(Auth::user()->role, [1, 3]))
+                                <a href="{{ route('admin.dashboard') }}" class="dropdown-item">Trang quản trị</a>
                                 @endif
-
+    
                                 <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                                     @csrf
                                 </form>
@@ -110,7 +110,6 @@
 </div>
 
 <script>
-    
     function toggleCartPopup() {
         const cartPopup = document.getElementById('cart-popup');
         cartPopup.classList.toggle('d-none');
@@ -119,5 +118,4 @@
             fetchCartItems();
         }
     }
-    
 </script>

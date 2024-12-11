@@ -24,7 +24,7 @@ class CheckLogin
                 ;
             }
         }else{
-            return redirect()->route('viewLogin')
+            return redirect()->route('admin.dashboard')
             ->with('error','Bạn phải đăng nhập trước');    
         }
     }
