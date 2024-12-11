@@ -5,7 +5,8 @@
 }
 
 /* Style for the image upload area */
-.img-container {
+.img-container,
+.img-container-edit {
     width: 150px;
     height: 200px;
     margin-right: 20px;
@@ -25,6 +26,14 @@
     max-height: 100%;
     display: none;
     position: absolute;
+}
+
+
+.img-container-edit img{
+    max-width: 100%;
+    max-height: 100%;
+    position: absolute;
+
 }
 
 .img-container span {
@@ -55,6 +64,10 @@
   display: flex;
   align-items: center;
   margin-bottom: 8px;
+}
+
+.checkbox-group{
+    margin-left: 10px;
 }
 
 .checkbox-group.size-group div,

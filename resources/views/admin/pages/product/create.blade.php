@@ -102,10 +102,6 @@
         </div>
     </div>
 
-
-
-
-
     <div class="row gx-2 mb-3">
         <div class="col-12">
             <label class="custom-label" for="discount">Discount</label>
@@ -133,9 +129,6 @@
                 rows="5" required maxlength="255"></textarea>
         </div>
     </div>
-
-
-
 
     <!-- Buttons -->
     <div class="button-group">
