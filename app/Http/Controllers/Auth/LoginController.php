@@ -72,7 +72,7 @@ class LoginController extends Controller
         case 2: // user
             return redirect()->route('user.dashboard'); // Redirect to user dashboard
         case 3: // manager
-            return redirect()->route('manager.dashboard'); // Redirect to manager dashboard
+            return redirect()->route('admin.dashboard'); // Redirect to manager dashboard
         default:
             return redirect()->route('/'); // Default route
     }
