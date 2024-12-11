@@ -66,6 +66,7 @@ Route::group(
                 Route::middleware('checkAdmin:admin')->group(function () {
                     Route::post('/brands/{id}/toggle', [BrandController::class, 'toggle'])->name('toggle');
                     Route::get('/create-brand', [BrandController::class, 'createBrand'])->name('create');
+                    Route::get('/edit-brand/{id}', [BrandController::class, 'editBrand'])->name('edit');
                     Route::post('/add-brand', [BrandController::class, 'addBrand'])->name('store');
                     Route::delete('/destroy-brand/{id}', [BrandController::class, 'destroyBrand'])->name('delete');
                     Route::put('/update-brand/{id}', [BrandController::class, 'updateBrand'])->name('update');
@@ -91,6 +92,7 @@ Route::group(
                 Route::middleware('checkAdmin:admin')->group(function () {
                     Route::get('/create-color', [ColorController::class, 'createColor'])->name('create');
                     Route::post('/add-color', [ColorController::class, 'addColor'])->name('store');
+                    Route::get('/edit-color/{id}', [ColorController::class, 'editColor'])->name(name: 'edit');
                     Route::delete('/destroy-color/{id}', [ColorController::class, 'destroyColor'])->name('delete');
                     Route::put('/update-color/{id}', [ColorController::class, 'updateColor'])->name('update');
                 });
@@ -144,11 +146,11 @@ Route::group(
                 'middleware' => ['checkAdmin:admin,manager']
             ],
             function () {
-                Route::get('/list-coupon', [CouponController::class, 'listCoupon']);
-                Route::post('/add-coupon', [CouponController::class, 'addCoupon']);
-                Route::get('/detail-coupon/{id}', [CouponController::class, 'detailCoupon']);
-                Route::delete('/destroy-coupon/{id}', [CouponController::class, 'destroyCoupon']);
-                Route::put('/update-coupon/{id}', [CouponController::class, 'updateCoupon']);
+                Route::get('/list-coupon', [CouponController::class, 'listCoupon'])->name(name: 'index');
+                Route::post('/add-coupon', [CouponController::class, 'addCoupon'])->name('create');
+                Route::get('/detail-coupon/{id}', [CouponController::class, 'detailCoupon'])->name('detail');
+                Route::delete('/destroy-coupon/{id}', [CouponController::class, 'destroyCoupon'])->name('delete');
+                Route::put('/update-coupon/{id}', [CouponController::class, 'updateCoupon'])->name(name: 'edit');
             }
         );
         //Quản lý đơn hàng
@@ -159,10 +161,10 @@ Route::group(
                 'middleware' => ['checkAdmin:admin,manager']
             ],
             function () {
-                Route::get('/orders', [OrderController::class, 'index']);         // Lấy danh sách đơn hàng
-                Route::get('/orders/{id}', [OrderController::class, 'show']);    // Lấy chi tiết đơn hàng
-                Route::put('/orders/{id}', [OrderController::class, 'updateStatus']); // Cập nhật trạng thái đơn hàng
-                Route::delete('/orders/{id}', [OrderController::class, 'destroy']);  // Xóa đơn hàng
+                Route::get('/orders', [OrderController::class, 'index']);
+                Route::get('/orders/{id}', [OrderController::class, 'show']);
+                Route::put('/orders/{id}', [OrderController::class, 'updateStatus']);
+                Route::delete('/orders/{id}', [OrderController::class, 'destroy']);
             }
         );
     }
@@ -221,7 +223,7 @@ Route::group(
                 Route::post('/cart/update/{id}', [CartController::class, 'update'])->name('cupdate');
                 Route::delete('/cart/remove/{id}', [CartController::class, 'removeItem'])->name('remove');
                 Route::get('/cart-popup', [CartController::class, 'viewCartPopup'])->name('popup');
-        
+
             }
         );
 

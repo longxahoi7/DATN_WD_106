@@ -8,7 +8,10 @@
         <button>Danh Sách Thương Hiệu <i class="fa fa-star"></i></button>
     </div>
 
+    @if(Auth::user()->role !== 3)
     <a href="{{route('admin.brands.create')}}" class="btn btn-success add-button">Thêm mới</a>
+    @else
+    @endif
     <table class="product-table table table-bordered text-center align-middle">
         <thead class="thead-dark">
             <tr>
@@ -47,6 +50,7 @@
                                 <i class="fas fa-edit"></i>
                             </button>
                         </a>
+                        @if(Auth::user()->role !== 3)
                         <form action="{{ route('admin.brands.delete', $brand->brand_id) }}" method="POST"
                             onsubmit="return confirm('Bạn có chắc chắn muốn xóa thương hiệu này?');"
                             style="display:inline;">
@@ -56,6 +60,8 @@
                                 <i class="fas fa-trash-alt" title="Xóa"></i>
                             </button>
                         </form>
+                        @else
+                        @endif
                     </div>
                 </td>
             </tr>

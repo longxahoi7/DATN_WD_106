@@ -12,7 +12,11 @@
                 </button>
             </div>
 
+            @if(Auth::user()->role !== 3)
+            <!-- Kiểm tra nếu không phải manager -->
             <a href="" class="btn add-button">Thêm mới</a>
+            @else
+            @endif
             <div class="modal fade" id="productCreateModal" tabindex="-1" aria-labelledby="productCreateModalLabel"
                 aria-hidden="true">
                 <div class="modal-dialog modal-lg">
@@ -83,6 +87,8 @@
                                     <button class="action-btn edit"><i class="fas fa-edit"></i></button>
                                 </a>
                                 <!-- Xóa -->
+                                @if(Auth::user()->role !== 3)
+                                <!-- Kiểm tra nếu không phải manager -->
                                 <form action="{{ route('admin.products.delete', $product->product_id) }}" method="POST"
                                     onsubmit="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này?');">
                                     @csrf
@@ -91,6 +97,8 @@
                                         <i class="fas fa-trash-alt"></i>
                                     </button>
                                 </form>
+                                @else
+                                @endif
                             </div>
                         </td>
                     </tr>
