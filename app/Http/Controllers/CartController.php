@@ -157,7 +157,7 @@ class CartController extends Controller
         $cartItem = CartItem::findOrFail($id);
         $cartItem->delete();
 
-        return redirect()->route('users.cart')->with('success', 'Sản phẩm đã được xóa khỏi giỏ hàng.');
+        return redirect()->route('user.cart.index')->with('success', 'Sản phẩm đã được xóa khỏi giỏ hàng.');
     }
 
     // CartController.php
