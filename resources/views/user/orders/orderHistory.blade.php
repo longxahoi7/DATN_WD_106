@@ -23,7 +23,7 @@
                             <li>
                                 {{ $item->product->name }} - 
                                 Số lượng: {{ $item->quantity }} - 
-                                Giá: {{ number_format($item->price, 0, ',', '.') }} VND
+                                Giá: {{ number_format($item->total, 0, ',', '.') }} VND
                             </li>
                         @endforeach
                     </ul>

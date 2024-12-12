@@ -74,6 +74,7 @@ class OrderController extends Controller
         if (!$order) {
             return redirect()->route('home')->with('error', 'Order not found.');
         }
+        
 
         return view('user.orders.order-cod', compact('order'));
     }
