@@ -2,6 +2,7 @@
 use App\Http\Controllers\Admin\ColorController;
 use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\EmployeeController;
+use App\Http\Controllers\Admin\PromotionPeriodController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\User\CommentController;
 use App\Http\Controllers\Admin\BrandController;
@@ -135,6 +136,23 @@ Route::group(
             Route::get('/edit-coupon/{id}', [CouponController::class, 'editCoupon'])->name('edit');
             Route::delete('/destroy-coupon/{id}', [CouponController::class, 'destroyCoupon'])->name('delete');
             Route::put('/update-coupon/{id}', [CouponController::class, 'updateCoupon'])->name('update');
+        }
+        );
+          // CRUD COUPON
+          Route::group(
+            [
+                'prefix' => 'promotionPeriods',
+                'as' => 'promotionPeriods.'
+            ],
+            function () {
+            Route::get('/list-promotionPeriod', [PromotionPeriodController::class,'listPromotionPeriod'])->name('index');
+            Route::get('/create-promotionPeriod', [PromotionPeriodController::class,'createPromotionPeriod'])->name('create');
+            Route::post('/promotionPeriod/{id}/toggle', [PromotionPeriodController::class, 'toggle'])->name('toggle');
+            Route::post('/add-promotionPeriod', [PromotionPeriodController::class, 'addPromotionPeriod'])->name('store');
+            Route::get('/detail-promotionPeriod/{id}', [PromotionPeriodController::class, 'detailPromotionPeriod'])->name('detail');
+            Route::get('/edit-promotionPeriod/{id}', [PromotionPeriodController::class, 'editPromotionPeriod'])->name('edit');
+            Route::delete('/destroy-promotionPeriod/{id}', [PromotionPeriodController::class, 'destroyPromotionPeriod'])->name('delete');
+            Route::put('/update-promotionPeriod/{id}', [PromotionPeriodController::class, 'updatePromotionPeriod'])->name('update');
         }
         );
         //Quản lý đơn hàng

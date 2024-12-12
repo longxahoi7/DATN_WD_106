@@ -1,7 +1,8 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
-
+use Illuminate\Support\Facades\Mail;
+use App\Mail\CouponCreated;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Coupon;
@@ -13,7 +14,7 @@ class CouponController extends Controller
     //
     public function listCoupon(Request $request)
     {
-        $coupons = Coupon::with('users', 'products')->where('code', 'like', '%' . $request->nhap . '%')
+        $coupons = Coupon::with('users')->where('code', 'like', '%' . $request->nhap . '%')
             ->orWhere('is_active', 'like', '%' . $request->nhap . '%')
             ->orWhere('discount_percentage', 'like', '%' . $request->nhap . '%')
             ->orWhere('quantity', 'like', '%' . $request->nhap . '%')
@@ -64,6 +65,8 @@ class CouponController extends Controller
                     'user_id' => $userId,
                 ]);
                 $couponUsers[] = $couponUser;
+                   // Gửi email thông báo sau khi tạo coupon liên kết với người dùng
+            Mail::to(User::find($userId)->email)->send(new CouponCreated($coupon));
             }
         }
         // if ($request->has('product_id')) {

@@ -18,8 +18,8 @@ return new class extends Migration
             $table->unsignedInteger('user_id'); 
             $table->foreign('user_id')->references('user_id')->on('users')->onDelete('cascade');
             $table->integer('rating')->unsigned(); // 1-5 sao
-            $table->string('title')->nullable();
             $table->text('comment');
+            $table->boolean('is_active')->default(true);
             $table->timestamps();
         });
     }

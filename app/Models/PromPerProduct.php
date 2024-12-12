@@ -5,12 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class CouponProduct extends Model
+class PromPerProduct extends Model
 {
     use HasFactory;
-    protected $table='coupon_product';
-    protected $primaryKey='coupon_product_id';
+    protected $table='prom_per_product';
+    protected $primaryKey='prom_per_product_id';
     protected $fillable=[
-        'coupon_id','product_id'
+        'prom_per_id','product_id'
     ];
 }

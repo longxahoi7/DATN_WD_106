@@ -66,6 +66,8 @@
                     </li>
                     <li><a href="{{ route('admin.brands.index') }}"><i class="icon-tags">🏷️</i> Quản lý thương
                             hiệu</a></li>
+                            <li><a href="{{route('admin.coupons.index')}}">Phiếu giảm giá</a></li>
+                            <li><a href="{{route('admin.promotionPeriods.index')}}">Đợt giảm giá</a></li>
                 </ul>
             </li>
 
@@ -81,6 +83,12 @@
                 <a href="/coupon">
                     <i class="icon-discount">🏷️</i> Mã giảm giá
                 </a>
+                <ul id="managementSubmenu" class="submenu">
+                    <li><a href="{{ route('admin.products.index') }}"><i class="icon-product">🛒</i> Quản lý sản
+                            phẩm</a></li>
+                            <li><a href="{{route('admin.coupons.index')}}">Phiếu giảm giá</a></li>
+                
+                </ul>
             </li>
 
             <!-- Quản lý đơn hàng -->

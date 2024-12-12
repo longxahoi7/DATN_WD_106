@@ -50,9 +50,10 @@ class Product extends Model
     {
         return $this->belongsTo(Brand::class, 'brand_id');
     }
-    public function coupons()
+    public function promotionPeriods()
     {
-        return $this->belongsToMany(Coupon::class, 'coupon_product', 'product_id', 'coupon_id');
+        return $this->belongsToMany(PromPer::class, 'prom_per_product', 'product_id', 'prom_per_id')
+                    ->withTimestamps(); // Với các cột created_at và updated_at
     }
     public function productImages()
     {

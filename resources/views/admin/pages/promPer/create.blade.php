@@ -6,7 +6,7 @@
 @section('content')
 
 <body>
-    <form action="{{ route('admin.coupons.store') }}" method="POST">
+    <form action="{{ route('admin.promotionPeriods.store') }}" method="POST">
         @csrf
         <div class="container">
             <!-- phiếu -->
@@ -30,18 +30,6 @@
                     <input type="number" id="discount" placeholder="Nhập điều kiện áp dụng" />
                 </div>
                 <div class="form-group">
-                    <label for="condition">Gía trị tối thiểu</label>
-                    <input type="number" id="condition" name="min_order_value" placeholder="Nhập điều kiện áp dụng" />
-                </div>
-                <div class="form-group">
-                    <label for="max_order_value">Giá trị tối đa:</label>
-                    <input type="number" id="max_order_value" name="max_order_value" placeholder="Nhập giá trị tối đa" />
-                </div>
-                <div class="form-group">
-                    <label for="quantity">Số lượng:</label>
-                    <input type="number" id="quantity" name="quantity" placeholder="Nhập số lượng" />
-                </div>
-                <div class="form-group">
                     <label for="start_date">Thời gian từ ngày:</label>
                     <input type="datetime-local" name="start_date" id="start_date" />
                 </div>
@@ -49,46 +37,30 @@
                     <label for="end_date">Thời gian đến ngày:</label>
                     <input type="datetime-local" name="end_date"  id="end_date" />
                 </div>
-                <div class="form-group">
-    <label>Chọn kiểu</label>
-    <div class="form-check">
-        <input type="radio" name="is_public" id="public" value="1" class="form-check-input" checked>
-        <label for="public" class="form-check-label">Public</label>
-    </div>
-    <div class="form-check">
-        <input type="radio" name="is_public" id="private" value="0" class="form-check-input">
-        <label for="private"  class="form-check-label">Private</label>
-    </div>
-</div>
             </div>
             <!-- table -->
-            <div class="customer-section" style="display:none" id="customer-section">
-                <h2>Danh sách khách hàng</h2>
+            <div class="customer-section">
+                <h2>Danh sách sản phẩm</h2>
                 <div class="search-group">
                     <i class="fas fa-search icon"></i>
-                    <input type="text" placeholder="Tìm kiếm khách hàng" />
+                    <input type="text" placeholder="Tìm kiếm sản phẩm" />
                     <button>Tìm kiếm</button>
                 </div>
                 <table class="customer-list">
                     <thead>
                         <tr>
                             <th><input type="checkbox" /></th>
-                            <th>Tên</th>
-                            <th>Số điện thoại</th>
-                            <th>Email</th>
-                            <th>Địa chỉ</th>
+                            <th>Tên sản phẩm</th>
                         </tr>
                     </thead>
                     <tbody>
-                   @foreach ($users as $user )
+                   @foreach ($products as $product )
                    <tr>
                             <td class="checkbox">
-                                <input type="checkbox" name="user_id[]" value="{{ $user->user_id }}" />
+                                <input type="checkbox" name="product_id[]" value="{{ $product->product_id }}" />
                             </td>
-                            <td>{{ $user->name}}</td>
-                            <td>{{ $user->phone }}</td>
-                            <td>{{ $user->email }}</td>
-                            <td>{{ $user->address }}</td>
+                            <td>{{ $product->name}}</td>
+                           
                         </tr>
                    @endforeach
                     </tbody>
@@ -124,15 +96,6 @@
                 discount.setAttribute('placeholder', 'Nhập phần trăm giảm giá')
                 discount.setAttribute('name', 'discount_percentage')
             }
-        });
-        private=document.getElementById('private');
-         public=document.getElementById('public');
-        customer=document.getElementById('customer-section');
-        private.addEventListener('click',function(){
-            customer.style.display="block";
-        });
-        public.addEventListener('click',function(){
-            customer.style.display="none";
         });
     </script>
 @endpush

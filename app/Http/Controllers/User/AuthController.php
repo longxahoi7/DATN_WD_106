@@ -71,10 +71,6 @@ class AuthController extends Controller
 
         if (Auth::attempt($data, $remember)) {
             // pass login
-
-
-
-
             if (Auth::user()->role == 1) {
                 return redirect()->route('index')
                     ->with('success', "Đăng nhập thành công");
