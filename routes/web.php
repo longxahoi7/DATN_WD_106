@@ -220,6 +220,8 @@ Route::group(
                 'as' => 'cart.',
             ],
             function () {
+                Route::get('/get-cart-count', [CartController::class, 'getCartCount'])->name('getCartCount');
+
                 Route::get('/cart-list', [CartController::class, 'viewCart'])->name('index');
                 Route::post('/cart/add', [CartController::class, 'addToCart'])->name('add');
                 Route::post('/cart/update/{id}', [CartController::class, 'update'])->name('cupdate');

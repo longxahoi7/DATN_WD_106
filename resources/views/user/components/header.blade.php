@@ -36,7 +36,7 @@
                             </li>
                             @endforeach
                             <li class="dropdown-item">
-                                <a href="{{ asset('/product-list') }}">Danh sách sản phẩm</a>
+                                <a href="{{ route('user.product.list') }}">Danh sách sản phẩm</a>
                                 <ul class="sub-dropdown-menu">
                                 </ul>
                             </li>
@@ -91,8 +91,9 @@
 
                         <a href="javascript:void(0);" class="nav-link ml-3" onclick="toggleCartPopup()">
                             <i class="fas fa-shopping-cart"></i>
-                            <span class="custom-cart-count">2</span>
+                            <span class="custom-cart-count" id="cart-count">{{ $cartCount }}</span> <!-- Hiển thị số lượng giỏ hàng -->
                         </a>
+
                     </nav>
                 </div>
             </div>
@@ -112,12 +113,26 @@
 </div>
 
 <script>
-function toggleCartPopup() {
-    const cartPopup = document.getElementById('cart-popup');
-    cartPopup.classList.toggle('d-none');
+    function toggleCartPopup() {
+        const cartPopup = document.getElementById('cart-popup');
+        cartPopup.classList.toggle('d-none');
 
-    if (!cartPopup.classList.contains('d-none')) {
-        fetchCartItems();
+        if (!cartPopup.classList.contains('d-none')) {
+            fetchCartItems();
+        }
     }
-}
+    // Hàm cập nhật số lượng giỏ hàng
+    function updateCartCount() {
+        fetch('{{ route('user.cart.getCartCount') }}') // Gọi route lấy số lượng sản phẩm trong giỏ hàng
+            .then(response => response.json())
+            .then(data => {
+                // Cập nhật giá trị số lượng giỏ hàng vào phần tử có id "cart-count"
+                document.getElementById('cart-count').textContent = data.cart_count;
+            })
+            .catch(error => {
+                console.error('Error fetching cart count:', error);
+            });
+    }
+    updateCartCount();
+    
 </script>

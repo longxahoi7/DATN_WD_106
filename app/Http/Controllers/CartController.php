@@ -203,5 +203,21 @@ public function viewCartPopup()
         'order' => $order
     ]);
 }
+public function getCartCount()
+{
+    $user = Auth::user();
+    $cartCount = 0;
+
+    if ($user) {
+        $shoppingCart = ShoppingCart::where('user_id', $user->user_id)->first();
+        if ($shoppingCart) {
+            // Tính tổng số sản phẩm trong giỏ hàng
+            $cartCount = $shoppingCart->cartItems->sum('qty');
+        }
+    }
+
+    // Trả về số lượng sản phẩm dưới dạng JSON
+    return response()->json(['cart_count' => $cartCount]);
+}
 
 }
