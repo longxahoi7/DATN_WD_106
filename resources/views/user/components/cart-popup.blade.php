@@ -46,7 +46,9 @@ function fetchCartItems() {
                         <div class="custom-product-card">
                             <div class="custom-product-image">
                                 <a href="/product/${item.product.product_id}" class="custom-product-card-link">
-                                    <img src="${item.product.main_image_url}" alt="${item.product.name}">
+                                    <img src="/storage/${item.product.main_image_url}" alt="${item.product.name}"
+                                    class="product-image-detail"
+                                    onerror="this.onerror=null; this.src='{{ asset('imagePro/image/no-image.png') }}';">
                                 </a>
                             </div>
                             <div class="custom-product-details">

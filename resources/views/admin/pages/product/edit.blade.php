@@ -10,7 +10,7 @@
             <div class="d-flex align-items-center">
                 <!-- Image Preview Area -->
                 <div class="img-container-edit me-3">
-                    <img src="{{ asset('storage/' . $product->main_image_url) }}" alt="Preview" id="imagePreview" />
+                    <img src="{{ asset('storage/' . $product->main_image_url) }}" alt="No Image" id="imagePreview" />
                 </div>
                 <!-- Upload Button -->
                 <button type="button" class="custom-btn-upload-admin"
