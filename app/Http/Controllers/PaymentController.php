@@ -1,6 +1,9 @@
 <?php
 
 namespace App\Http\Controllers;
+
+use App\Mail\OrderConfirm;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Http\Request;
 use App\Models\Payment;
 use App\Models\ShoppingCart;
@@ -8,6 +11,7 @@ use App\Models\CartItem;
 use App\Models\OrderItem;
 use App\Models\Order;
 use Illuminate\Support\Facades\Auth;
+
 class PaymentController extends Controller
 {
     //
@@ -23,6 +27,10 @@ class PaymentController extends Controller
         // Lấy giỏ hàng của người dùng
         $shoppingCart = ShoppingCart::where('user_id', $user->user_id)->first();
         $cartItems = $shoppingCart->cartItems;
+    
+        // Lấy thông tin địa chỉ và số điện thoại của người dùng
+        $address = $user->address;
+        $phone = $user->phone;     
     
         // Tính tổng tiền đơn hàng (không bao gồm phí vận chuyển)
         $totalWithoutShipping = 0;
@@ -47,28 +55,18 @@ class PaymentController extends Controller
         $shippingFee = 40000;
         $total = $totalWithoutShipping + $shippingFee;
     
-        // Tạo bản ghi trong bảng orders
-        $order = Order::create([
-            'user_id' => $user->user_id,
-            'order_date' => now(),
-            'status' => 'pending',
+        // Tạo dữ liệu cho email
+        $emailData = [
+            'user' => $user,
+            'address' => $address,
+            'phone' => $phone,
+            'productDetails' => $productDetails,
             'total' => $total,
-            'payment_status' => 'paid', // Thanh toán COD
-        ]);
+            'shippingFee' => $shippingFee
+        ];
     
-        // Lưu thông tin sản phẩm vào order_items
-        foreach ($cartItems as $item) {
-            $attributeProduct = $item->product->attributeProducts->firstWhere('size_id', $item->size_id);
-    
-            if ($attributeProduct) {
-                OrderItem::create([
-                    'order_id' => $order->order_id,
-                    'product_id' => $item->product_id,
-                    'qty' => $item->qty,
-                    'price' => $attributeProduct->price,
-                ]);
-            }
-        }
+        // Gửi email
+        Mail::to($user->email)->send(new OrderConfirm($emailData));
     
         // Xóa các sản phẩm trong giỏ hàng sau khi thanh toán
         $shoppingCart->cartItems()->delete();
@@ -82,17 +80,15 @@ class PaymentController extends Controller
         ]);
     }
     
-    
-    
     // Trang thông báo thanh toán thành công
 
     public function orderSuccess()
-{
-    // Lấy thông tin tên người dùng từ session
-    $userName = session('userName');
-    $successMessage = session('success');
+    {
+        // Lấy thông tin tên người dùng từ session
+        $userName = session('userName');
+        $successMessage = session('success');
 
-    // Trả về view với thông báo và tên người dùng
-    return view('user.orders.order-cod', compact('userName', 'successMessage'));
-}
+        // Trả về view với thông báo và tên người dùng
+        return view('user.orders.order-cod', compact('userName', 'successMessage'));
+    }
 }

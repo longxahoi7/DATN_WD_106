@@ -61,7 +61,7 @@ function fetchCartItems() {
                                 <p class="custom-product-quantity">Số lượng: ${item.qty}</p>
                             </div>
                             <div class="custom-remove-btn">
-                                <form action="/cart/remove/${item.id}" method="POST">
+                                <form action="{{ route('user.cart.remove', '') }}/${item.id}" method="POST">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="custom-btn-remove">&times;</button>
