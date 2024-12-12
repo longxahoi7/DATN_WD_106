@@ -25,7 +25,7 @@
     <link rel="stylesheet" href="{{asset('css/admin/headerAdmin.css')}}">
     <link rel="stylesheet" href="{{asset('css/admin/admin.css')}}">
     <link rel="stylesheet" href="{{asset('css/admin/table.css')}}">
-    <link rel="stylesheet" href="{{asset('css/admin/formAddProduct.css')}}">
+    <link rel="stylesheet" href="{{asset('css/admin/form.css')}}">
     @stack('styles')
 </head>
 

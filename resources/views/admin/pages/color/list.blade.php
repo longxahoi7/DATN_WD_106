@@ -9,18 +9,37 @@
 
 <body>
     <div class="container mt-4">
-        <!-- Tiêu đề chính -->
         <div class="button-header">
             <button>
                 Danh Sách Màu Sắc <i class="fa fa-star"></i>
             </button>
         </div>
 
-
         @if(Auth::user()->role !== 3)
         <a href="{{ route('admin.colors.create') }}" class="btn add-button">Thêm mới</a>
         @else
         @endif
+        <div class="modal fade" id="productCreateModal" tabindex="-1" aria-labelledby="productCreateModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <div class="button-header">
+                            <button>
+                                Thêm mới Kích Thước <i class="fa fa-star"></i>
+                            </button>
+                        </div>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">✖</button>
+                    </div>
+                    <div class="modal-body">
+                        <!-- AJAX nội dung sẽ được load tại đây -->
+                        <div id="modalContent">
+                            <p>Đang tải...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <table class="product-table table table-bordered text-center align-middle">
             <thead class="thead-dark">
                 <tr>
@@ -80,12 +99,36 @@
             </ul>
         </nav>
     </div>
+    <script>
+    $(document).ready(function() {
+        $('.btn-close').on('click', function() {
+            $('#productCreateModal').modal('hide');
+        });
 
-    <!-- Scripts cần thiết -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        $('.add-button').on('click', function(e) {
+            e.preventDefault();
+            $('#modalContent').html('<p>Đang tải...</p>');
+            $('#productCreateModal').modal('show');
+
+            $.ajax({
+                url: "{{ route('admin.colors.create') }}",
+                type: 'GET',
+                success: function(response) {
+                    $('#modalContent').html(response);
+                },
+                error: function() {
+                    $('#modalContent').html('<p>Lỗi! Không thể tải nội dung.</p>');
+                }
+            });
+        });
+    });
+    </script>
+
+    @push('scripts')
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
-</body>
+    @endpush
 
-@endsection
+    @endsection

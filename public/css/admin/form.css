@@ -1,0 +1,53 @@
+.modal-body {
+    padding-bottom: 50px;
+    max-height: 550px;
+    overflow-y: auto;
+}
+
+.custom-label {
+  font-weight: 500;
+  display: block;
+  margin-bottom: 10px;
+  margin-left: 8px;
+}
+
+
+.button-group .btn {
+    margin-right: 10px;
+    float: right;
+    background-color: #000;
+    border: 1px solid #000;
+}
+
+.button-group .btn:hover {
+    color: #000000;
+    background-color: #ffffff;
+    border: 1px solid #000;
+}
+
+.form-control:focus {
+    border-color: #2a9d8f;
+    box-shadow: 0 0 5px #2a9d8f;
+}
+
+.custom-required-star{
+    color: red;
+}
+
+.custom-btn-upload-admin {
+    background-color: white;
+    color: black;
+    border: 1px solid black;
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.custom-form-container{
+    padding: 10px 20px;
+}
