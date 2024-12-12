@@ -36,6 +36,9 @@
                     @else
                         <p class="text-muted">Bạn không thể hủy đơn hàng ở trạng thái này.</p>
                     @endif
+
+                    <!-- Thêm nút Chi tiết đơn hàng -->
+                    <a href="{{ route('user.order.detail', $order->order_id) }}" class="btn btn-primary btn-sm mt-3">Chi tiết đơn hàng</a>
                 </div>
             </div>
         @endforeach

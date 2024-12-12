@@ -209,6 +209,8 @@ Route::group(
                 Route::post('/cancel-order/{orderId}', [OrderUserController::class, 'cancelOrder'])->name('cancelOrder');
                 Route::post('/checkout/cod', [PaymentController::class, 'checkoutCOD'])->name('checkoutcod');
                 Route::get('order/success', [PaymentController::class, 'orderSuccess'])->name('order-cod');
+                Route::get('/order/{orderId}/detail', [OrderUserController::class, 'show'])->name('detail');
+
             }
         );
         // Giỏ hàng

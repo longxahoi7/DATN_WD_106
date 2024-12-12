@@ -24,4 +24,9 @@ class Color extends Model
         return $this->belongsToMany(Size::class, 'attribute_products', 'color_id', 'size_id')
             ->withPivot('price', 'in_stock');  // Thêm các trường cần thiết từ bảng trung gian
     }
+    public function orderItems()
+    {
+        return $this->hasMany(OrderItem::class);
+    }
+    
 }

@@ -28,14 +28,12 @@ class OrderController extends Controller
     }
 
 
-    public function show($id)
+    public function show($orderId)
     {
         // Lấy thông tin đơn hàng của người dùng đang đăng nhập
-        $order = Order::where('order_id', $id)
-            ->where('user_id', auth()->id())->with('orderItems.product')->firstOrFail();
+        $order = Order::with(['orderItems.color', 'orderItems.size'])->find($orderId);
 
-        // Trả về view chi tiết đơn hàng
-        return view('user.orders.details', compact('order'));
+        return view('user.orders.detail', compact('order'));
     }
 
     public function store(Request $request)
@@ -74,7 +72,7 @@ class OrderController extends Controller
         if (!$order) {
             return redirect()->route('home')->with('error', 'Order not found.');
         }
-        
+
 
         return view('user.orders.order-cod', compact('order'));
     }
@@ -112,38 +110,45 @@ class OrderController extends Controller
     {
         // Lấy thông tin người dùng đang đăng nhập
         $user = Auth::user();
-
+    
         if (!$user) {
             return redirect()->route('login')->with('error', 'Vui lòng đăng nhập để thanh toán!');
         }
-
+    
         // Lấy giỏ hàng của người dùng
         $shoppingCart = ShoppingCart::where('user_id', $user->user_id)->first();
+        if (!$shoppingCart) {
+            return redirect()->route('shopping-cart')->with('error', 'Giỏ hàng trống!');
+        }
+    
         $cartItems = $shoppingCart->cartItems;
-
+    
         // Tính tổng tiền đơn hàng (không bao gồm phí vận chuyển)
         $totalWithoutShipping = 0;
         $productDetails = []; // Lưu thông tin chi tiết sản phẩm
         foreach ($cartItems as $item) {
+            // Lấy thông tin sản phẩm với size_id và color_id
             $attributeProduct = $item->product->attributeProducts->firstWhere('size_id', $item->size_id);
             if ($attributeProduct) {
                 $totalWithoutShipping += $attributeProduct->price * $item->qty;
-
+    
                 $productDetails[] = [
                     'name' => $item->product->name,
-                    'color' => $item->color->name,
-                    'size' => $item->size->name,
+                    'color' => $item->color->name,  // Lấy tên màu từ quan hệ color
+                    'size' => $item->size->name,    // Lấy tên size từ quan hệ size
                     'quantity' => $item->qty,
                     'price' => $attributeProduct->price,
-                    'subtotal' => $attributeProduct->price * $item->qty
+                    'subtotal' => $attributeProduct->price * $item->qty,
+                    'color_id' => $item->color_id,  // Lưu color_id
+                    'size_id' => $item->size_id    // Lưu size_id
                 ];
             }
         }
-
+    
         // Thêm phí vận chuyển
         $shippingFee = 40000;
         $total = $totalWithoutShipping + $shippingFee;
-
+    
         // Chuyển hướng đến trang thông báo thanh toán thành công và truyền thông tin
         return view('user.orders.orderConfirm', [
             'user' => $user,
@@ -152,4 +157,5 @@ class OrderController extends Controller
             'shippingFee' => $shippingFee
         ]);
     }
+    
 }
