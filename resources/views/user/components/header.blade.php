@@ -96,22 +96,19 @@
                     </nav>
                 </div>
             </div>
-        </div>
-
-
-        @include('user.components.cart-popup', ['cartItems' => $cartItems ?? [], 'total' => $total ?? 0])
-        <div class="row mt-3 mb-3">
-            <!-- Hàng ngang 2 - Địa chỉ và số điện thoại -->
-            <div class="col text-start custom-text d-flex">
-                <a href="https://www.google.com/maps/search/13+P.+Trịnh+Văn+Bô,+Xuân+Phương,+Nam+Từ+Liêm,+Hà+Nội"
-                    target="_blank" rel="noopener noreferrer">
-                    <i class="fas fa-map-marker-alt"></i> Địa chỉ: 13 Trịnh Văn Bô
-                </a>
-                <a class="custom-text ms-3"><i class="fas fa-phone-alt"></i> Hotline: 0369312858</a>
+            @include('user.components.cart-popup', ['cartItems' => $cartItems ?? [], 'total' => $total ?? 0])
+            <div class="row mt-3 mb-3">
+                <!-- Hàng ngang 2 - Địa chỉ và số điện thoại -->
+                <div class="col text-start custom-text d-flex">
+                    <a href="https://www.google.com/maps/search/13+P.+Trịnh+Văn+Bô,+Xuân+Phương,+Nam+Từ+Liêm,+Hà+Nội"
+                        target="_blank" rel="noopener noreferrer">
+                        <i class="fas fa-map-marker-alt"></i> Địa chỉ: 13 Trịnh Văn Bô
+                    </a>
+                    <a class="custom-text ms-3"><i class="fas fa-phone-alt"></i> Hotline: 0369312858</a>
+                </div>
             </div>
         </div>
     </div>
-</div>
 </div>
 
 <script>

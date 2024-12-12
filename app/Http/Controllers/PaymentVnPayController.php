@@ -30,7 +30,7 @@ class PaymentVnPayController extends Controller
     $vnp_Returnurl = route('vnpay.callback'); // URL trả về sau khi thanh toán
     $vnp_TmnCode = "L86V10FV"; // Mã website của bạn tại VNPAY
     $vnp_HashSecret = "UG0UNZZI4B5W1R0UMAAA4QBVU77GQN46"; // Khóa bí mật của bạn tại VNPAY
-    
+
     // Các thông tin thanh toán
     $vnp_TxnRef = $order_id; // Mã giao dịch duy nhất, có thể dùng thời gian
     $vnp_OrderInfo = 'Thanh toán đơn hàng'; // Thông tin đơn hàng
@@ -89,8 +89,8 @@ class PaymentVnPayController extends Controller
 
     // Trả về dữ liệu hoặc tự động chuyển hướng tới VNPAY
     $returnData = [
-        'code' => '00', 
-        'message' => 'success', 
+        'code' => '00',
+        'message' => 'success',
         'data' => $vnp_Url // URL chuyển hướng tới VNPAY
     ];
 
@@ -177,7 +177,7 @@ public function handleVNPayCallback(Request $request)
             return redirect()->route('home')->with('success', 'Thanh toán thành công!');
         } else {
             Log::info('Thanh toán thất bại cho đơn hàng: ' . $order->order_id);
-            return redirect()->route('vnp.failed')->with('error', 'Thanh toán thất bại.');
+            return redirect()->route('user.cart.index')->with('error', 'Thanh toán thất bại.');
         }
     } catch (\Exception $e) {
         // Log lỗi nếu có
