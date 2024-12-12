@@ -98,6 +98,16 @@
                 </div>
             </div>
             @endforeach
+            @if($cartItems->isEmpty())
+            <div class="empty-cart-container">
+                <div class="empty-cart-icon">
+                    <img src="{{ asset('imagePro/icon/cart-image.png') }}" alt="Empty Cart">
+                </div>
+                <h2 class="empty-cart-title">"Hổng" có gì trong giỏ hết</h2>
+                <p class="empty-cart-subtitle">Lướt Gentle Manor, lựa hàng ngay đi!</p>
+                <a href="/product-list" class="btn btn-no-cart-user">Mua sắm ngay!</a>
+            </div>
+            @endif
         </div>
     </div>
 
@@ -158,41 +168,41 @@
 </div>
 
 <script>
-    function openPopup(id) {
-        document.getElementById('popupOverlay').style.display = 'block';
+function openPopup(id) {
+    document.getElementById('popupOverlay').style.display = 'block';
+}
+
+function closePopup() {
+    document.getElementById('popupOverlay').style.display = 'none';
+}
+
+function confirmSelection() {
+    closePopup();
+}
+
+function changeQuantity(change) {
+    const quantityInput = document.getElementById('quantity');
+    let currentQuantity = parseInt(quantityInput.value) || 1;
+    currentQuantity += change;
+
+    if (currentQuantity < 1) currentQuantity = 1;
+    quantityInput.value = currentQuantity;
+    updateQuantity(currentQuantity);
+}
+
+function updateQuantity(value) {
+    let qty = parseInt(value);
+
+    if (isNaN(qty) || qty < 1) {
+        qty = 1;
     }
 
-    function closePopup() {
-        document.getElementById('popupOverlay').style.display = 'none';
-    }
+    // Cập nhật giá trị của input hiển thị
+    document.getElementById('quantity').value = qty;
 
-    function confirmSelection() {
-        closePopup();
-    }
-
-    function changeQuantity(change) {
-        const quantityInput = document.getElementById('quantity');
-        let currentQuantity = parseInt(quantityInput.value) || 1;
-        currentQuantity += change;
-
-        if (currentQuantity < 1) currentQuantity = 1;
-        quantityInput.value = currentQuantity;
-        updateQuantity(currentQuantity);
-    }
-
-    function updateQuantity(value) {
-        let qty = parseInt(value);
-
-        if (isNaN(qty) || qty < 1) {
-            qty = 1;
-        }
-
-        // Cập nhật giá trị của input hiển thị
-        document.getElementById('quantity').value = qty;
-
-        // Cập nhật giá trị của hidden input
-        document.getElementById('qty-hidden').value = qty;
-    }
+    // Cập nhật giá trị của hidden input
+    document.getElementById('qty-hidden').value = qty;
+}
 </script>
 
 

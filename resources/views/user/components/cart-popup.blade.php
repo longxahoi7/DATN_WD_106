@@ -4,12 +4,12 @@
     <div class="custom-cart-popup-content">
         <button class="custom-close-popup" onclick="toggleCartPopup()">&times;</button>
         <h4 class="custom-cart-title">Giỏ hàng của bạn</h4>
-        
+
         <!-- Danh sách sản phẩm trong giỏ hàng -->
         <div class="custom-cart-items-container" id="cart-items-list">
             <p id="loading-text">Đang tải giỏ hàng...</p>
         </div>
-        
+
         <div class="custom-cart-footer">
             <p class="custom-total-amount" id="total-amount">Tổng tiền: 0đ</p>
             <div class="custom-cart-actions">
@@ -25,7 +25,6 @@
 </div>
 
 <script>
-
 function fetchCartItems() {
     fetch('/cart/cart-popup')
         .then(response => response.json())
@@ -36,7 +35,7 @@ function fetchCartItems() {
 
                 data.cartItems.forEach(item => {
                     // Lấy thông tin màu sắc và kích thước từ attribute_products
-                    const attributeProduct = item.product.attribute_products.find(attr => 
+                    const attributeProduct = item.product.attribute_products.find(attr =>
                         attr.size_id === item.size_id && attr.color_id === item.color_id);
 
                     const price = attributeProduct ? attributeProduct.price : 0;
@@ -76,7 +75,11 @@ function fetchCartItems() {
                 document.getElementById('total-amount').innerText = `Tổng tiền: ${totalAmount.toLocaleString()}đ`;
                 document.getElementById('total-amount-hidden').value = totalAmount;
             } else {
-                document.getElementById('cart-items-list').innerHTML = '<p class="empty-cart">Giỏ hàng của bạn đang trống.</p>';
+                document.getElementById('cart-items-list').innerHTML = `
+                <div class="cart-empty-gm">
+                    <div class="cart-icon-gm">🛒</div>
+                    <p class="cart-message-gm">Giỏ hàng của bạn đang trống.</p>
+                </div>`;
             }
 
             document.getElementById('loading-text').style.display = 'none';
@@ -86,6 +89,4 @@ function fetchCartItems() {
             document.getElementById('loading-text').innerText = 'Không thể tải giỏ hàng.';
         });
 }
-
-
 </script>

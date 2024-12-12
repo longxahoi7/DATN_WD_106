@@ -7,7 +7,10 @@
         <button>Danh Sách Kích Thước <i class="fa fa-star"></i></button>
     </div>
 
+    @if(Auth::user()->role !== 3)
     <a href="{{ route('admin.sizes.create') }}" class="btn add-button">Thêm mới</a>
+    @else
+    @endif
     <table class="product-table table table-bordered text-center align-middle">
         <thead class="thead-dark">
             <tr>
@@ -33,6 +36,7 @@
                                 <i class="fas fa-edit"></i>
                             </button>
                         </a>
+                        @if(Auth::user()->role !== 3)
                         <form action="{{ route('admin.sizes.delete', $size->size_id) }}" method="POST" class="d-inline"
                             onsubmit="return confirm('Bạn có chắc chắn muốn xóa kích thước này?');">
                             @csrf
@@ -41,6 +45,8 @@
                                 <i class="fas fa-trash-alt"></i>
                             </button>
                         </form>
+                        @else
+                        @endif
                     </div>
                 </td>
             </tr>

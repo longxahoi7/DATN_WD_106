@@ -16,7 +16,11 @@
             </button>
         </div>
 
+
+        @if(Auth::user()->role !== 3)
         <a href="{{ route('admin.colors.create') }}" class="btn add-button">Thêm mới</a>
+        @else
+        @endif
         <table class="product-table table table-bordered text-center align-middle">
             <thead class="thead-dark">
                 <tr>
@@ -49,6 +53,8 @@
                             </a>
 
                             <!-- Xóa màu sắc -->
+                            @if(Auth::user()->role !== 3)
+                            <!-- Kiểm tra nếu không phải manager -->
                             <form action="{{ route('admin.colors.delete', $color->color_id) }}" method="POST"
                                 onsubmit="return confirm('Bạn có chắc chắn muốn xóa màu sắc này?');"
                                 style="display:inline;">
@@ -58,6 +64,8 @@
                                     <i class="fas fa-trash"></i>
                                 </button>
                             </form>
+                            @else
+                            @endif
                         </div>
                     </td>
                 </tr>

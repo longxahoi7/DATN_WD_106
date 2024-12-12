@@ -70,7 +70,7 @@ class OrderController extends Controller
     public function orderSuccess($orderId)
     {
         $order = Order::with('payment')->find($orderId);
-        
+
         if (!$order) {
             return redirect()->route('home')->with('error', 'Order not found.');
         }
@@ -91,11 +91,11 @@ class OrderController extends Controller
 
         // Kiểm tra xem đơn hàng có tồn tại và trạng thái là "pending" không
         if (!$order) {
-            return redirect()->route('user.order_history')->with('error', 'Đơn hàng không tồn tại.');
+            return redirect()->route('user.order.history')->with('error', 'Đơn hàng không tồn tại.');
         }
 
         if ($order->status !== 'pending') {
-            return redirect()->route('user.order_history')->with('error', 'Đơn hàng không thể hủy ở trạng thái này.');
+            return redirect()->route('user.order.history')->with('error', 'Đơn hàng không thể hủy ở trạng thái này.');
         }
 
         // Cập nhật trạng thái đơn hàng thành "canceled"
@@ -105,7 +105,7 @@ class OrderController extends Controller
 
         // Thực hiện các thao tác khác nếu cần, như gửi email hoặc xử lý tiền hoàn lại...
 
-        return redirect()->route('user.order_history')->with('success', 'Đơn hàng đã được hủy.');
+        return redirect()->route('user.order.history')->with('success', 'Đơn hàng đã được hủy.');
     }
     public function confirmOrder(Request $request)
     {

@@ -1,6 +1,25 @@
 @extends('admin.index')
 
 @section('content')
+<style>
+    .custom-btn-filte-dashboard {
+  background-color: #fff;
+  color: #000;
+  border: 1px solid #000;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.custom-btn-filte-dashboard:hover {
+  background-color: #000;
+  color: #fff; 
+  border: 1px solid #000;
+}
+
+</style>
 <div class="container">
     <h1 class="my-4">Thống kê</h1>
 
@@ -19,7 +38,7 @@
                         <input type="date" id="end_date_revenue" name="end_date_revenue" class="form-control" value="{{ request('end_date_revenue', $endDateRevenue) }}">
                     </div>
                     <div class="col-md-12 mt-3">
-                        <button type="submit" class="btn btn-primary w-100">Lọc (Doanh thu)</button>
+                        <button type="submit" class="custom-btn-filte-dashboard w-100">Lọc (Doanh thu)</button>
                     </div>
                 </div>
             </form>
@@ -38,7 +57,7 @@
                         <input type="date" id="end_date_orders" name="end_date_orders" class="form-control" value="{{ request('end_date_orders', $endDateOrders) }}">
                     </div>
                     <div class="col-md-12 mt-3">
-                        <button type="submit" class="btn btn-primary w-100">Lọc (Đơn hàng)</button>
+                        <button type="submit" class="custom-btn-filte-dashboard w-100">Lọc (Đơn hàng)</button>
                     </div>
                 </div>
             </form>
