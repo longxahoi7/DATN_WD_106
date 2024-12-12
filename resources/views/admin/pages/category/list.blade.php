@@ -20,6 +20,8 @@
     <a href="{{ route('admin.categories.create') }}" class="btn add-button"> Thêm mới </a>
     @else
     @endif
+
+    <!-- Modal Add -->
     <div class="modal fade" id="productCreateModal" tabindex="-1" aria-labelledby="productCreateModalLabel"
         aria-hidden="true">
         <div class="modal-dialog modal-lg">
@@ -41,6 +43,53 @@
             </div>
         </div>
     </div>
+
+    <!-- Modal Popup -->
+    <div class="modal fade" id="productDetailModal" tabindex="-1" aria-labelledby="productDetailModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="button-header">
+                        <button>
+                            Chi tiết danh mục<i class="fa fa-star"></i>
+                        </button>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">✖</button>
+                </div>
+                <div class="modal-body p-5">
+                    <!-- Nội dung chi tiết sản phẩm sẽ được load tại đây -->
+                    <div id="detailContent">
+                        <p>Đang tải...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Edit -->
+    <div class="modal fade" id="productEditModal" tabindex="-1" aria-labelledby="productEditModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="button-header">
+                        <button>
+                            Chỉnh Sửa danh mục<i class="fa fa-star"></i>
+                        </button>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">✖</button>
+                </div>
+                <div class="modal-body">
+                    <!-- Nội dung chỉnh sửa sản phẩm sẽ được load tại đây -->
+                    <div id="editContent">
+                        <p>Đang tải...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Bảng danh sách danh mục -->
     <table class="product-table table table-bordered text-center align-middle">
         <thead class="thead-dark">
@@ -66,23 +115,19 @@
                         @csrf
                         <button type="submit"
                             class="custom-btn-active-admin {{ $category->is_active ? 'btn-success' : 'btn-danger' }}">
-                            <p>{{ $category->is_active ? 'họat động' : 'Tắt hoạt động' }}</p>
+                            <p>{{ $category->is_active ? 'hoạt động' : 'Tắt hoạt động' }}</p>
                         </button>
                     </form>
                 </td>
                 <td>
                     <div class="icon-product d-flex justify-content-center gap-2">
-                        <!-- Chi tiết -->
-                        <a href="{{ route('admin.categories.detail', $category->category_id) }}">
-                            <button class="action-btn eye" title="Xem chi tiết">
-                                <i class="fas fa-eye"></i>
-                            </button>
+                        <!-- Xem -->
+                        <a href="" data-id="{{ $category->category_id }}">
+                            <button class="action-btn eye"><i class="fas fa-eye"></i></button>
                         </a>
                         <!-- Sửa -->
-                        <a href="{{ route('admin.categories.edit', $category->category_id) }}">
-                            <button class="action-btn edit" title="Chỉnh sửa">
-                                <i class="fas fa-edit"></i>
-                            </button>
+                        <a href="" data-id="{{ $category->category_id }}">
+                            <button class="action-btn edit"><i class="fas fa-edit"></i></button>
                         </a>
                         <!-- Xóa -->
                         @if(Auth::user()->role !== 3)
@@ -113,10 +158,6 @@
 
 <script>
 $(document).ready(function() {
-    $('.btn-close').on('click', function() {
-        $('#productCreateModal').modal('hide');
-    });
-
     $('.add-button').on('click', function(e) {
         e.preventDefault();
         $('#modalContent').html('<p>Đang tải...</p>');
@@ -130,6 +171,65 @@ $(document).ready(function() {
             },
             error: function() {
                 $('#modalContent').html('<p>Lỗi! Không thể tải nội dung.</p>');
+            }
+        });
+    });
+});
+
+
+$(document).ready(function() {
+    // Đóng modal thêm mới
+    $('#productCreateModal .btn-close').on('click', function() {
+        $('#productCreateModal').modal('hide');
+    });
+
+    // Đóng modal chi tiết
+    $('#productDetailModal .btn-close').on('click', function() {
+        $('#productDetailModal').modal('hide');
+    });
+
+    // Đóng modal sửa
+    $('#productEditModal .btn-close').on('click', function() {
+        $('#productEditModal').modal('hide');
+    });
+});
+
+$(document).ready(function() {
+
+    $('.eye').on('click', function(e) {
+        e.preventDefault();
+        let productId = $(this).closest('a').data('id');
+
+        // Hiển thị modal và tải nội dung chi tiết
+        $('#detailContent').html('<p>Đang tải...</p>');
+        $('#productDetailModal').modal('show');
+
+        $.ajax({
+            url: `/admin/categories/detail-category/${productId}`,
+            type: 'GET',
+            success: function(response) {
+                $('#detailContent').html(response);
+            },
+            error: function() {
+                $('#detailContent').html('<p>Lỗi! Không thể tải nội dung.</p>');
+            }
+        });
+    });
+
+    $('.edit').on('click', function(e) {
+        e.preventDefault();
+        let productId = $(this).closest('a').data('id');
+        $('#editContent').html('<p>Đang tải...</p>');
+        $('#productEditModal').modal('show');
+
+        $.ajax({
+            url: `/admin/categories/edit-category/${productId}`,
+            type: 'GET',
+            success: function(response) {
+                $('#editContent').html(response);
+            },
+            error: function() {
+                $('#editContent').html('<p>Lỗi! Không thể tải nội dung.</p>');
             }
         });
     });

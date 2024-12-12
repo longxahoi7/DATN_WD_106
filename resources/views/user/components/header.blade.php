@@ -96,7 +96,6 @@
                     </nav>
                 </div>
             </div>
-
             @include('user.components.cart-popup', ['cartItems' => $cartItems ?? [], 'total' => $total ?? 0])
             <div class="row mt-3 mb-3">
                 <!-- Hàng ngang 2 - Địa chỉ và số điện thoại -->
