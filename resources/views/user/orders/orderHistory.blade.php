@@ -15,6 +15,7 @@
                 </div>
                 <div class="card-body">
                     <p><strong>Trạng thái:</strong> {{ ucfirst($order->status) }}</p>
+                    <p><strong>Trạng thái thanh toán:</strong> {{ ucfirst($order->payment_status) }}</p>
                     <p><strong>Tổng tiền:</strong> {{ number_format($order->total, 0, ',', '.') }} VND</p>
                     
                     <h5>Danh sách sản phẩm:</h5>

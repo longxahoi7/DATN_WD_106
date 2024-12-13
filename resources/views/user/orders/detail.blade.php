@@ -30,9 +30,9 @@
             <td>{{ $item->id }}</td>
             <td>
                 @if($item->product->image)
-                    <img src="{{ asset('storage/' . $item->product->image) }}" alt="{{ $item->product->name }}" style="width: 50px; height: 50px; object-fit: cover;">
+                    <img src="/storage/{{ $item->product->main_image_url }}" alt="{{ $item->product->name }}" style="width: 50px; height: 50px; object-fit: cover;">
                 @else
-                    <img src="{{ asset('images/default-product.jpg') }}" alt="No Image" style="width: 50px; height: 50px;">
+                    <img src="/storage/{{ $item->product->main_image_url }}" alt="No Image" style="width: 50px; height: 50px;">
                 @endif
             </td>
             <td>{{ $item->product->name }}</td>

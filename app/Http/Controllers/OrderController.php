@@ -20,7 +20,7 @@ class OrderController extends Controller
         // Lấy danh sách đơn hàng của người dùng
         $orders = Order::where('user_id', auth()->id())
             ->with('orderItems.product') // Eager load thông tin sản phẩm
-            ->orderBy('order_date', 'desc') // Sắp xếp theo ngày đặt hàng mới nhất
+            ->orderBy('order_id', 'desc') // Sắp xếp theo ngày đặt hàng mới nhất
             ->get();
 
         // Trả về view danh sách đơn hàng

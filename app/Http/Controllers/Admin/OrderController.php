@@ -24,7 +24,9 @@ class OrderController extends Controller
     public function showAllOrders()
     {
         // Lấy toàn bộ orders, eager load quan hệ với bảng users
-        $orders = Order::with('user')->get();
+        $orders = Order::with('user')
+        ->orderBy('order_id', 'desc') 
+        ->get();
 
         // Trả dữ liệu về view
         return view('admin.pages.order.order_management', compact('orders'));
