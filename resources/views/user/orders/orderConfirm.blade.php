@@ -22,7 +22,7 @@
                 </div>
                 <div class="mb-3">
                     <label for="address" class="form-label">Địa Chỉ</label>
-                    <textarea name="address" id="address" class="form-control" rows="3" required>{{ old('address', $user->address ?? '') }}</textarea>
+                    <input name="shipping_address" id="shipping_address" class="form-control" required value="{{ old('shipping_address', $user->address ?? '') }}"></input>
                 </div>
 
                 <!-- Danh sách sản phẩm -->

@@ -5,8 +5,9 @@
 @section('content')
 <h1>Chi tiết đơn hàng #{{ $order->id }}</h1>
 
-<p><strong>Người đặt:</strong> {{ $order->user->name }}</p> <!-- Thêm tên người dùng -->
-<p><strong>Địa chỉ:</strong> {{ $order->user->address }}</p> <!-- Thêm địa chỉ người dùng -->
+<p><strong>Người đặt:</strong> {{ $order->user->name }}</p> 
+<p><strong>Địa chỉ:</strong> {{ $order->shipping_address }}</p> 
+<p><strong>Số điện thoại:</strong> {{ $order->phone }}</p> 
 <p><strong>Ngày đặt:</strong> {{ $order->created_at->format('d/m/Y') }}</p>
 <p><strong>Tổng tiền:</strong> {{ number_format($order->total, 0, ',', '.') }} VND</p>
 <p><strong>Trạng thái:</strong> {{ ucfirst($order->status) }}</p>

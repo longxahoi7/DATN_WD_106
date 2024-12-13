@@ -12,8 +12,8 @@
                     <h2>1. Thông tin khách hàng</h2>
                     <p><strong>Tên người mua:</strong>{{ $order->user->name }}</p>
                     <p><strong>Email:</strong>{{ $order->user->email }}</p>
-                    <p><strong>Điện thoại:</strong>{{ $order->user->phone }}</p>
-                    <p><strong>Địa chỉ:</strong>{{ $order->user->address }}</p>
+                    <p><strong>Điện thoại:</strong>{{ $order->phone }}</p>
+                    <p><strong>Địa chỉ:</strong>{{ $order->shipping_address  }}</p>
                 </div>
             </div>
             <div class="col-md-6">

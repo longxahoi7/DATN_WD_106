@@ -32,9 +32,9 @@ class PaymentController extends Controller
     
         $cartItems = $shoppingCart->cartItems;
     
-        // Lấy thông tin địa chỉ và số điện thoại của người dùng
-        $address = $user->address;
-        $phone = $user->phone;
+        // Lấy thông tin địa chỉ giao hàng và số điện thoại từ form
+        $shippingAddress = $request->input('shipping_address');  // Lấy địa chỉ giao hàng từ form
+        $phone = $request->input('phone');                        // Lấy số điện thoại từ form
     
         // Tính tổng tiền đơn hàng (không bao gồm phí vận chuyển)
         $totalWithoutShipping = 0;
@@ -62,27 +62,27 @@ class PaymentController extends Controller
         $shippingFee = 40000;
         $total = $totalWithoutShipping + $shippingFee;
     
-        // Tạo đơn hàng mới
+        // Tạo đơn hàng mới và lưu shipping_address
         $order = Order::create([
             'user_id' => $user->user_id,
-            'address' => $address,
-            'phone' => $phone,
+            'shipping_address' => $shippingAddress,
+            'phone'  => $phone,
             'total' => $total,
             'shipping_fee' => $shippingFee,
-            'status' => 'pending', // Trạng thái có thể là 'pending' hoặc 'awaiting_payment'
+            'status' => 'pending',    // Trạng thái đơn hàng
         ]);
     
         // Thêm các sản phẩm vào đơn hàng
         foreach ($productDetails as $product) {
             OrderItem::create([
-                'order_id' => $order->order_id,  // Đơn hàng ID
-                'product_id' => $product['product_id'],  // Lấy product_id từ item trong giỏ hàng
-                'product_name' => $product['name'],  // Tên sản phẩm
-                'color_id' => $product['color_id'],  // Lưu color_id từ item trong giỏ hàng
-                'size_id' => $product['size_id'],    // Lưu size_id từ item trong giỏ hàng
-                'quantity' => $product['quantity'],  // Số lượng
-                'price' => $product['price'],  // Giá mỗi sản phẩm
-                'subtotal' => $product['subtotal']  // Tổng tiền của sản phẩm
+                'order_id' => $order->order_id,
+                'product_id' => $product['product_id'],
+                'product_name' => $product['name'],
+                'color_id' => $product['color_id'],
+                'size_id' => $product['size_id'],
+                'quantity' => $product['quantity'],
+                'price' => $product['price'],
+                'subtotal' => $product['subtotal'],
             ]);
         }
     
@@ -98,6 +98,7 @@ class PaymentController extends Controller
             'shippingFee' => $shippingFee
         ]);
     }
+    
     
 
 
