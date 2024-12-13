@@ -7,13 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 class Category extends Model
 {
-    use HasFactory,SoftDeletes ;
-    protected $table='categories';
-    protected $primaryKey='category_id';
-    protected $fillable=['name','description','image','slug','is_active','parent_id'];
+    use HasFactory, SoftDeletes;
+    protected $table = 'categories';
+    protected $primaryKey = 'category_id';
+    protected $fillable = ['name', 'description', 'image', 'slug', 'is_active', 'parent_id'];
     public function products()
     {
-        return $this->hasMany(Product::class);
+        return $this->hasMany(Product::class, 'product_category_id', 'category_id');
     }
     public static function callTreeCategory($parent_id = 0, $levels = "", $notShow = null)
 {

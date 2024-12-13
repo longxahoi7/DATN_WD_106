@@ -57,7 +57,7 @@ class CartController extends Controller
             ]);
         }
         // Trả về thông báo và điều hướng về trang giỏ hàng
-        return redirect()->route('users.cart')->with('success', 'Sản phẩm đã được thêm vào giỏ hàng.');
+        return redirect()->route('user.cart.index')->with('success', 'Sản phẩm đã được thêm vào giỏ hàng.');
     }
 
     // API để xem giỏ hàng
@@ -194,29 +194,12 @@ public function viewCartPopup()
         return $item->qty * ($attributeProduct ? $attributeProduct->price : 0);
     });
 
-    // Kiểm tra mã giảm giá nếu có
-    $discount = 0;
-    $couponCode = session('coupon_code'); // Lấy mã giảm giá từ session (nếu có)
     $order = Order::where('user_id', auth()->id())->latest()->first();
-    
-    if ($couponCode) {
-        // Áp dụng mã giảm giá nếu có
-        $coupon = Coupon::where('code', $couponCode)->first();
-        if ($coupon) {
-            // Giảm giá theo tỷ lệ phần trăm hoặc giá trị cố định
-            if ($coupon->type == 'percentage') {
-                $discount = ($coupon->discount / 100) * $totalAmount; // Giảm giá theo phần trăm
-            } else {
-                $discount = $coupon->discount; // Giảm giá theo số tiền cố định
-            }
-        }
-    }
 
     // Trả về dữ liệu giỏ hàng dưới dạng JSON
     return response()->json([
         'cartItems' => $shoppingCart->cartItems,
         'total' => $totalAmount,
-        'couponCode' => $couponCode,
         'order' => $order
     ]);
 }

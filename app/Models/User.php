@@ -28,6 +28,7 @@ class User extends Authenticatable
         'is_active',
         'password',
         'remember_token',
+        'role'
     ];
 
  

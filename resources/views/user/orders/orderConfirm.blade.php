@@ -10,7 +10,7 @@
             Thông Tin Người Nhận
         </div>
         <div class="card-body">
-            <form action="{{ route('checkout.cod') }}" method="POST">
+            <form action="{{ route('user.order.checkoutcod') }}" method="POST">
                 @csrf
                 <div class="mb-3">
                     <label for="name" class="form-label">Họ và Tên</label>
@@ -68,12 +68,12 @@
 
                 <!-- Nút xác nhận -->
                 <div class="text-center mt-4">
-                    <form action="{{ route('checkout.cod') }}" method="POST">
+                    <form action="{{ route('user.order.checkoutcod') }}" method="POST">
                         @csrf
                         <input type="hidden" name="amount" value="{{ $total }}">
                         <button type="submit" class="btn btn-success btn-lg">Xác Nhận Đặt Hàng</button>
                     </form>
-                    <a href="{{ route('users.cart') }}" class="btn btn-secondary btn-lg">Quay Lại Giỏ Hàng</a>
+                    <a href="{{ route('user.cart.index') }}" class="btn btn-secondary btn-lg">Quay Lại Giỏ Hàng</a>
                 </div>
             </form>
         </div>

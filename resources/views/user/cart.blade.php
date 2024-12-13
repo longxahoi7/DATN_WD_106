@@ -21,7 +21,7 @@
             @foreach($cartItems as $item)
             <div class="product-card">
                 <div class="product-image">
-                    <a href="{{ route('product.detail', $item->product_id) }}" class="product-card-link">
+                    <a href="{{ route('user.product.detail', $item->product_id) }}" class="product-card-link">
                         <img src="/storage/{{ $item->product->main_image_url }}" alt="{{ $item->product->name }}"
                             class="product-image-detail"
                             onerror="this.onerror=null; this.src='{{ asset('imagePro/image/no-image.png') }}';">
@@ -30,7 +30,7 @@
 
                 <div class="product-details">
                     <div class="card-details">
-                        <a href="{{ route('product.detail', $item->product_id) }}" class="product-card-link">
+                        <a href="{{ route('user.product.detail', $item->product_id) }}" class="product-card-link">
                             <h5 class="product-name">{{ $item->product->name }}</h5>
                             @php
                             $attributeProduct = $item->product->attributeProducts->firstWhere('size_id',
@@ -88,7 +88,7 @@
                     </div>
                 </div>
                 <div class="remove-btn">
-                    <form action="{{ route('cart.remove', $item->id) }}" method="POST">
+                    <form action="{{ route('user.cart.remove', $item->id) }}" method="POST">
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="btn btn-remove">
@@ -98,6 +98,16 @@
                 </div>
             </div>
             @endforeach
+            @if($cartItems->isEmpty())
+            <div class="empty-cart-container">
+                <div class="empty-cart-icon">
+                    <img src="{{ asset('imagePro/icon/cart-image.png') }}" alt="Empty Cart">
+                </div>
+                <h2 class="empty-cart-title">"Hổng" có gì trong giỏ hết</h2>
+                <p class="empty-cart-subtitle">Lướt Gentle Manor, lựa hàng ngay đi!</p>
+                <a href="/product/product-list" class="btn btn-no-cart-user">Mua sắm ngay!</a>
+            </div>
+            @endif
         </div>
     </div>
 
@@ -139,7 +149,7 @@
 
             <!-- Thêm các nút thanh toán -->
             <div class="container-checkout">
-                <form action="{{ route('user.order_confirm') }}" method="POST" class="payment-form">
+                <form action="{{ route('user.order.confirm') }}" method="POST" class="payment-form">
                     @csrf
                     <input type="hidden" name="amount" value="{{ $finalTotal }}">
                     <button type="submit" class="custom-btn-cod">Thanh toán COD</button>
@@ -150,7 +160,7 @@
                     <button type="submit" name="redirect" class="custom-btn-checkout">Thanh toán VNPay</button>
                 </form>
             </div>
-            <a href="/product-list" class="continue-shopping">
+            <a href="/product/product-list" class="continue-shopping">
                 <i class="fa fa-arrow-left"></i> Tiếp tục mua hàng
             </a>
         </div>
@@ -169,29 +179,30 @@ function closePopup() {
 function confirmSelection() {
     closePopup();
 }
+
 function changeQuantity(change) {
-                const quantityInput = document.getElementById('quantity');
-                let currentQuantity = parseInt(quantityInput.value) || 1;
-                currentQuantity += change;
+    const quantityInput = document.getElementById('quantity');
+    let currentQuantity = parseInt(quantityInput.value) || 1;
+    currentQuantity += change;
 
-                if (currentQuantity < 1) currentQuantity = 1;
-                quantityInput.value = currentQuantity;
-                updateQuantity(currentQuantity);
-            }
+    if (currentQuantity < 1) currentQuantity = 1;
+    quantityInput.value = currentQuantity;
+    updateQuantity(currentQuantity);
+}
 
-            function updateQuantity(value) {
-                let qty = parseInt(value);
+function updateQuantity(value) {
+    let qty = parseInt(value);
 
-                if (isNaN(qty) || qty < 1) {
-                    qty = 1;
-                }
+    if (isNaN(qty) || qty < 1) {
+        qty = 1;
+    }
 
-                // Cập nhật giá trị của input hiển thị
-                document.getElementById('quantity').value = qty;
+    // Cập nhật giá trị của input hiển thị
+    document.getElementById('quantity').value = qty;
 
-                // Cập nhật giá trị của hidden input
-                document.getElementById('qty-hidden').value = qty;
-            }
+    // Cập nhật giá trị của hidden input
+    document.getElementById('qty-hidden').value = qty;
+}
 </script>
 
 

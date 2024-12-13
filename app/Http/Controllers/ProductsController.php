@@ -58,14 +58,14 @@ class ProductsController extends Controller
         if ($categoryId) {
             $listProduct = Product::with('attributeProducts')
                 ->where('category_id', $categoryId)
-                ->active() // Sử dụng scope 'active' để lọc sản phẩm đang hoạt động
+                ->where('is_active', true)
                 ->get();
         } else {
             $listProduct = Product::with('attributeProducts')
-                ->active() // Sử dụng scope 'active' để lọc sản phẩm đang hoạt động
+                ->where('is_active', true)
                 ->get();
         }
-        
+
 
         // Lấy top 10 sản phẩm bán chạy (sold_count > 100) và đang hoạt động
         $bestSellers = Product::getBestSellers();

@@ -66,28 +66,20 @@
                     </li>
                     <li><a href="{{ route('admin.brands.index') }}"><i class="icon-tags">🏷️</i> Quản lý thương
                             hiệu</a></li>
-                            <li><a href="{{route('admin.coupons.index')}}">Phiếu giảm giá</a></li>
-                            <li><a href="{{route('admin.promotionPeriods.index')}}">Đợt giảm giá</a></li>
+                           
                 </ul>
             </li>
 
-            <!-- Shipper -->
-            <li>
-                <a href="/shipper">
-                    <i class="icon-shipping">🚚</i> Shipper
-                </a>
-            </li>
-
             <!-- Mã giảm giá -->
-            <li>
-                <a href="/coupon">
-                    <i class="icon-discount">🏷️</i> Mã giảm giá
+            <li class="dropdown-coupon">
+                <a href="#" class="toggle-link-coupon dropdown-toggle">
+                    <i class="icon-management">🏷️</i> Mã giảm giá
                 </a>
-                <ul id="managementSubmenu" class="submenu">
-                    <li><a href="{{ route('admin.products.index') }}"><i class="icon-product">🛒</i> Quản lý sản
-                            phẩm</a></li>
-                            <li><a href="{{route('admin.coupons.index')}}">Phiếu giảm giá</a></li>
-                
+
+                <ul id="managementSubmenu-coupon" class="submenu-coupon">
+                <li><a href="{{route('admin.coupons.index')}}">Phiếu giảm giá</a></li>
+                <li><a href="{{route('admin.promotionPeriods.index')}}">Đợt giảm giá</a></li>
+
                 </ul>
             </li>
 
@@ -110,61 +102,60 @@
 
 <script>
 document.addEventListener("DOMContentLoaded", function() {
+    // Account Dropdown
     const accountToggle = document.querySelector('.nav-link.dropdown-toggle');
     const accountDropdown = document.querySelector('.dropdown-menu');
-    const accountArrow = accountToggle.querySelector('.arrow');
 
     accountToggle.addEventListener('click', function(e) {
         e.preventDefault();
         accountDropdown.classList.toggle('show');
-        accountArrow.classList.toggle('up');
     });
 
     document.addEventListener('click', function(e) {
         if (!accountDropdown.contains(e.target) && !accountToggle.contains(e.target)) {
             accountDropdown.classList.remove('show');
-            accountArrow.classList.remove('up');
         }
     });
 
+    // Management Dropdown
     const managementToggle = document.querySelector('.toggle-link.dropdown-toggle');
     const managementDropdown = document.querySelector('.submenu');
-    const managementArrow = managementToggle.querySelector('.arrow');
 
     managementToggle.addEventListener('click', function(e) {
         e.preventDefault();
+        console.log('Dropdown Mã giảm giá được click!');
         managementDropdown.classList.toggle('show');
-        managementArrow.classList.toggle('up');
     });
 
     document.addEventListener('click', function(e) {
         if (!managementDropdown.contains(e.target) && !managementToggle.contains(e.target)) {
             managementDropdown.classList.remove('show');
-            managementArrow.classList.remove('up');
-        }
-    });
-});
-document.addEventListener("DOMContentLoaded", function() {
-    const currentURL = window.location.href;
-
-    const menuLinks = document.querySelectorAll(".menu a");
-
-    menuLinks.forEach(link => {
-        if (link.href === currentURL) {
-            link.classList.add("active");
-            link.parentElement.classList.add("hover");
         }
     });
 
-});
-document.addEventListener("DOMContentLoaded", function() {
-    const currentURL = window.location.href;
+    // Coupon Dropdown
+    const couponToggle = document.querySelector('.toggle-link-coupon.dropdown-toggle');
+    const couponDropdown = document.querySelector('.submenu-coupon');
 
-    const menuItems = document.querySelectorAll(".submenu li a");
+    couponToggle.addEventListener('click', function(e) {
+        e.preventDefault();
+        console.log('Dropdown Mã giảm giá được click!');
+        couponDropdown.classList.toggle('show');
+    });
+
+    document.addEventListener('click', function(e) {
+        if (!couponDropdown.contains(e.target) && !couponToggle.contains(e.target)) {
+            couponDropdown.classList.remove('show');
+        }
+    });
+
+    // Highlight active menu item
+    const currentURL = window.location.href;
+    const menuItems = document.querySelectorAll(".submenu li a, .submenu-coupon li a");
 
     menuItems.forEach(item => {
         if (item.href === currentURL) {
-            const parentDropdown = item.closest('.dropdown');
+            const parentDropdown = item.closest('.dropdown, .dropdown-coupon');
             if (parentDropdown) {
                 parentDropdown.classList.add('active');
             }

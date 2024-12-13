@@ -66,6 +66,15 @@ class LoginController extends Controller
     Auth::login($user);
 
     // Chuyển hướng người dùng sau khi đăng nhập thành công
-    return redirect()->route('home');
+    switch ($user->role) {
+        case 1: // admin
+            return redirect()->route('admin.dashboard'); // Redirect to admin dashboard
+        case 2: // user
+            return redirect()->route('user.dashboard'); // Redirect to user dashboard
+        case 3: // manager
+            return redirect()->route('manager.dashboard'); // Redirect to manager dashboard
+        default:
+            return redirect()->route('/'); // Default route
+    }
 }
 }

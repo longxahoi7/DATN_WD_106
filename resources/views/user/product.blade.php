@@ -4,7 +4,7 @@
 @section('content')
 <div class="container mt-5">
     <h1 class="text-center mb-4">Danh Sách Sản Phẩm</h1>
-    
+
     <div class="row">
         @foreach ($listProduct as $product)
         <div class="col-md-4 mb-4">
@@ -31,8 +31,8 @@
                     </h6>
                 </div>
                 <div class="card-footer text-center">
-                    <a href="{{ route('product.detail', $product->product_id) }}" class="btn btn-primary">Xem Chi Tiết</a>
-                    <form action="{{ route('cart.add', $product->id) }}" method="POST" class="d-inline">
+                    <a href="{{ route('user.product.detail', $product->product_id) }}" class="btn btn-primary">Xem Chi Tiết</a>
+                    <form action="{{ route('user.cart.add', $product->id) }}" method="POST" class="d-inline">
                         @csrf
                         <button type="submit" class="btn btn-success">Thêm Vào Giỏ</button>
                     </form>
