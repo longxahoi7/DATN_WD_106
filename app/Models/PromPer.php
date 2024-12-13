@@ -23,4 +23,9 @@ class PromPer extends Model
         return $this->belongsToMany(Product::class, 'prom_per_product', 'prom_per_id', 'product_id')
                     ->withTimestamps(); // Với các cột created_at và updated_at
     }
+     // Quan hệ đến bảng `PromPerProduct`
+     public function promPerProducts()
+     {
+         return $this->hasMany(PromPerProduct::class, 'prom_per_id', 'prom_per_id');
+     }
 }

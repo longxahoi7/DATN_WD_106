@@ -10,8 +10,8 @@
             <h1 class="text-center">Danh Sách đợt giảm giá</h1>
             <a href="{{route('admin.promotionPeriods.create')}}"><button class="btn add-button">Thêm mới</button></a>
 
-            <table class="table table-bordered">
-                <thead class="thead-light">
+            <table class="product-table table table-bordered text-center align-middle">
+                <thead class="thead-dark">
                     <tr>
                         <th>STT</th>
                         <th>Tên mã phiếu giảm giá</th>
@@ -33,8 +33,8 @@
                         @else
                             <td>{{$promPer->discount_percentage	}}</td>
                         @endif
-                        <td>{{$promPer->created_at}}</td>
-                        <td>{{$promPer->updated_at}}</td>
+                        <td>{{$promPer->start_date}}</td>
+                        <td>{{$promPer->end_date}}</td>
                          <td>
                                 <form action="{{ route('admin.promotionPeriods.toggle', $promPer->prom_per_id) }}" method="POST"
                                     style="display:inline;">

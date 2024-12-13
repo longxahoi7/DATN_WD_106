@@ -53,7 +53,7 @@ class CartController extends Controller
                 'color_id' => $request->color_id,   // Nếu có màu sắc
                 'size_id' => $request->size_id,       // Nếu có kích thước
                 'qty' => $request->qty,
-                'price' => $product->price,
+                // 'price' => $product->price,
             ]);
         }
         // Trả về thông báo và điều hướng về trang giỏ hàng

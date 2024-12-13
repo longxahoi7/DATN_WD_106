@@ -97,7 +97,7 @@ class PromotionPeriodController extends Controller
      
         if ($request->has('product_id')) {
             // Remove old associations
-            PromPerProduct::where('promPer_id', $id)->delete();
+            PromPerProduct::where('prom_per_id', $id)->delete();
 
             // Add new associations and collect updated data
             foreach ($request->input('product_id') as $productId) {

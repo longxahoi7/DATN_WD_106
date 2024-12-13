@@ -69,15 +69,6 @@ class CouponController extends Controller
             Mail::to(User::find($userId)->email)->send(new CouponCreated($coupon));
             }
         }
-        // if ($request->has('product_id')) {
-        //     foreach ($request->input('product_id') as $productId) {
-        //         $couponPro = CouponProduct::create([
-        //             'coupon_id' => $coupon->coupon_id,
-        //             'product_id' => $productId
-        //         ]);
-        //         $couponProducts[] = $couponPro;
-        //     }
-        // }
         return redirect()->route('admin.coupons.index')->with([
             'coupon' => $coupon,
             'couponUsers' => $couponUsers,
@@ -115,14 +106,12 @@ class CouponController extends Controller
         ]);
 
         $couponUsers = [];
-        // $couponProducts = [];
-
-        // Update user associations if provided
+      
+      
         if ($request->has('user_id')) {
-            // Remove old associations
+           
             CouponUser::where('coupon_id', $id)->delete();
 
-            // Add new associations and collect updated data
             foreach ($request->input('user_id') as $userId) {
                 $couponUser = CouponUser::create([
                     'coupon_id' => $id,
@@ -132,22 +121,6 @@ class CouponController extends Controller
             }
         }
 
-        // // Update product associations if provided
-        // if ($request->has('product_id')) {
-        //     // Remove old associations
-        //     CouponProduct::where('coupon_id', $id)->delete();
-
-        //     // Add new associations and collect updated data
-        //     foreach ($request->input('product_id') as $productId) {
-        //         $couponPro = CouponProduct::create([
-        //             'coupon_id' => $id,
-        //             'product_id' => $productId,
-        //         ]);
-        //         $couponProducts[] = $couponPro;
-        //     }
-        // }
-
-        // Return updated coupon with associated users and products
         return redirect()->route('admin.coupons.index')->with([
             'coupon' => $coupon,
             'couponUsers' => $couponUsers,

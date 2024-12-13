@@ -150,10 +150,13 @@ Route::group(
             ],
             function () {
                 Route::get('/list-coupon', [CouponController::class, 'listCoupon'])->name(name: 'index');
-                Route::post('/add-coupon', [CouponController::class, 'addCoupon'])->name('create');
+                Route::post('/coupon/{id}/toggle', [CouponController::class, 'toggle'])->name('toggle');
+                Route::get('/create-coupon', [CouponController::class, 'createCoupon'])->name('create');
+                Route::post('/add-coupon', [CouponController::class, 'addCoupon'])->name('store');
                 Route::get('/detail-coupon/{id}', [CouponController::class, 'detailCoupon'])->name('detail');
+                Route::get('/edit-coupon/{id}', [CouponController::class, 'editCoupon'])->name('edit');
                 Route::delete('/destroy-coupon/{id}', [CouponController::class, 'destroyCoupon'])->name('delete');
-                Route::put('/update-coupon/{id}', [CouponController::class, 'updateCoupon'])->name(name: 'edit');
+                Route::put('/update-coupon/{id}', [CouponController::class, 'updateCoupon'])->name(name: 'update');
             }
         );
           // CRUD COUPON

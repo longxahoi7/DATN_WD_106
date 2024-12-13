@@ -10,8 +10,8 @@
             <h1 class="text-center">Danh Sách phiếu giảm giá</h1>
             <a href="{{route('admin.coupons.create')}}"><button class="btn add-button">Thêm mới</button></a>
 
-            <table class="table table-bordered">
-                <thead class="thead-light">
+            <table class="product-table table table-bordered text-center align-middle">
+                <thead class="thead-dark">
                     <tr>
                         <th>STT</th>
                         <th>Tên mã phiếu giảm giá</th>
@@ -32,9 +32,9 @@
                     <td>{{$coupon->coupon_id}}</td>
                     <td>{{$coupon->code}}</td>
                         @if($coupon->discount_amount)
-                            <td>{{$coupon->discount_amount}}</td>
+                            <td>{{ number_format($coupon->discount_amount, 0, ',', '.') }}</td>
                         @else
-                            <td>{{$coupon->discount_percentage	}}</td>
+                            <td>{{$coupon->discount_percentage	}}%</td>
                         @endif
                         <td>{{$coupon->quantity}}</td>
                         <td>{{$coupon->min_order_value}}</td>

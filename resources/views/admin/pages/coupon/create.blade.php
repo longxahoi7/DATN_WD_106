@@ -52,6 +52,7 @@
                     <input type="datetime-local" name="end_date" id="end_date" />
                 </div>
                 <div class="form-group">
+
     <label>Chọn kiểu</label>
     <div class="form-check">
         <input type="radio" name="is_public" id="public" value="1" class="form-check-input" checked>
@@ -59,9 +60,10 @@
     </div>
     <div class="form-check">
         <input type="radio" name="is_public" id="private" value="0" class="form-check-input">
-        <label for="private" class="form-check-label">Private</label>
+        <label for="private"  class="form-check-label">Private</label>
     </div>
 </div>
+
             </div>
             <!-- table -->
             <div class="customer-section" style="display:none" id="customer-section">
@@ -127,7 +129,29 @@ discount = document.getElementById('discount');
                 discount.setAttribute('name', 'discount_percentage')
             }
         });
+        private=document.getElementById('private');
+         public=document.getElementById('public');
+        customer=document.getElementById('customer-section');
+        private.addEventListener('click',function(){
+            customer.style.display="block";
+        });
+        public.addEventListener('click',function(){
+            customer.style.display="none";
+        });
     </script>
+
+<!-- value.addEventListener('change', function() {
+    if (value.value == 1) {
+        document.getElementById('value1').style.display = "block";
+        discount.setAttribute('placeholder', 'Nhập số tiền giảm giá')
+        discount.setAttribute('name', 'discount_amount')
+    } else {
+        document.getElementById('value1').style.display = "block";
+        discount.setAttribute('placeholder', 'Nhập phần trăm giảm giá')
+        discount.setAttribute('name', 'discount_percentage')
+    }
+}); -->
+
 @endpush
 </body>
 @endsection

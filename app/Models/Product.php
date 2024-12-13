@@ -11,7 +11,7 @@ class Product extends Model
     use HasFactory, SoftDeletes;
     protected $table = 'products';
     protected $primaryKey = 'product_id';
-    protected $with = ['category', 'coupons'];
+    protected $with = ['category'];
     protected $fillable = [
         'brand_id',
         'product_category_id',
@@ -50,10 +50,10 @@ class Product extends Model
     {
         return $this->belongsTo(Brand::class, 'brand_id');
     }
-    public function promotionPeriods()
+
+    public function promPerProducts()
     {
-        return $this->belongsToMany(PromPer::class, 'prom_per_product', 'product_id', 'prom_per_id')
-                    ->withTimestamps(); // Với các cột created_at và updated_at
+        return $this->hasMany(PromPerProduct::class, 'product_id', 'product_id');
     }
     public function productImages()
     {
@@ -97,5 +97,27 @@ class Product extends Model
             ->limit(10)  // Giới hạn số lượng sản phẩm hot
             ->get();
     }
+
+
+//     public function getFinalPriceAttribute()
+// {
+//     // Giá gốc của sản phẩm
+//     $originalPrice = $this->attributeProducts->first()?->price ?? 0;
+
+//     // Kiểm tra xem có giảm giá không
+//     $promotion = $this->promPerProducts->first()?->promPer;
+
+//     if ($promotion) {
+//         // Áp dụng giảm giá theo số tiền hoặc phần trăm
+//         if ($promotion->discount_amount) {
+//             return max(0, $originalPrice - $promotion->discount_amount); // Không để giá âm
+//         } elseif ($promotion->discount_percentage) {
+//             return max(0, $originalPrice * (1 - $promotion->discount_percentage / 100));
+//         }
+//     }
+
+//     // Trả về giá gốc nếu không có giảm giá
+//     return $originalPrice;
+// }
   
 }

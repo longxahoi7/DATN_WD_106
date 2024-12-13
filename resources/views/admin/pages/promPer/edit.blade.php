@@ -79,7 +79,7 @@
                                     </td>
                                 @else
                                     <td class="checkbox">
-                                        <input type="checkbox" name="product_id[]" value="{{ $product->user_id }}" />
+                                        <input type="checkbox" name="product_id[]" value="{{ $product->product_id }}" />
                                     </td>
                                 @endif
                                 <td>{{ $product->name}}</td>

@@ -13,4 +13,15 @@ class PromPerProduct extends Model
     protected $fillable=[
         'prom_per_id','product_id'
     ];
+
+    public function promPer()
+    {
+        return $this->belongsTo(PromPer::class, 'prom_per_id', 'prom_per_id');
+    }
+
+    // Quan hệ đến bảng `Product`
+    public function product()
+    {
+        return $this->belongsTo(Product::class, 'product_id', 'product_id');
+    }
 }

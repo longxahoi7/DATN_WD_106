@@ -104,7 +104,7 @@
                             <tr class="col-4 data-attribute" data-attribute_product_id="{{ $item->attribute_product_id }}">
                                 <td>{{ $item->product->name }}</td>
                                 <td>{{ $item->size->name }}</td>
-                                <td><input type="number" name="price[]" value="{{ number_format($item->price, 0, ',', '.') }}"></td>
+                                <td><input type="number" name="price[]" value="{{ number_format($item->price, 0, ',', '.')  }}VNĐ"></td>
                                 <td><input type="number" name="in_stock[]" value="{{ $item->in_stock }}"></td>
                             </tr>
 
