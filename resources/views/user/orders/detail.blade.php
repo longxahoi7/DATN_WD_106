@@ -90,8 +90,17 @@
 
                         <tfoot>
                             <tr>
-                                <td colspan="6">Tổng:</td>
+                                <td colspan="6">Tổng</td>
                                 <td>{{ number_format($order->orderItems->sum(function($item) { return $item->price * $item->quantity; }), 0, ',', '.') }}
+                                    VND</td>
+                            </tr>
+                            <tr>
+                                <td colspan="6">Phí Ship</td>
+                                <td>40,000 VND</td>
+                            </tr>
+                            <tr>
+                                <td colspan="6">Tổng cộng</td>
+                                <td>{{ number_format($order->orderItems->sum(function($item) { return $item->price * $item->quantity; }) + 40000, 0, ',', '.') }}
                                     VND</td>
                             </tr>
                         </tfoot>
