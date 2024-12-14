@@ -1,16 +1,11 @@
 <?php
-use Illuminate\Http\Request;
+
 use App\Http\Controllers\Admin\ColorController;
-use App\Http\Controllers\Admin\CustomerController;
-use App\Http\Controllers\Admin\EmployeeController;
-use App\Http\Controllers\Admin\PromotionPeriodController;
-use App\Http\Controllers\Admin\ReviewController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\User\CommentController;
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\CouponController;
-
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\SizeController;
 use App\Http\Controllers\ProductsController;
@@ -43,7 +38,6 @@ Route::group(
             function () {
                 Route::get('/list-category', [CategoryController::class, 'listCategory'])->name('index');
                 Route::get('/detail-category/{id}', [CategoryController::class, 'detailCategory'])->name('detail');
-
 
                 // Admin mới có quyền CRUD
                 Route::middleware('checkAdmin:admin')->group(function () {
@@ -153,52 +147,12 @@ Route::group(
             ],
             function () {
                 Route::get('/list-coupon', [CouponController::class, 'listCoupon'])->name(name: 'index');
-                Route::post('/coupon/{id}/toggle', [CouponController::class, 'toggle'])->name('toggle');
-                Route::get('/create-coupon', [CouponController::class, 'createCoupon'])->name('create');
-                Route::post('/add-coupon', [CouponController::class, 'addCoupon'])->name('store');
+                Route::post('/add-coupon', [CouponController::class, 'addCoupon'])->name('create');
                 Route::get('/detail-coupon/{id}', [CouponController::class, 'detailCoupon'])->name('detail');
-                Route::get('/edit-coupon/{id}', [CouponController::class, 'editCoupon'])->name('edit');
                 Route::delete('/destroy-coupon/{id}', [CouponController::class, 'destroyCoupon'])->name('delete');
-                Route::put('/update-coupon/{id}', [CouponController::class, 'updateCoupon'])->name(name: 'update');
+                Route::put('/update-coupon/{id}', [CouponController::class, 'updateCoupon'])->name(name: 'edit');
             }
         );
-          // CRUD COUPON
-          Route::group(
-            [
-                'prefix' => 'promotionPeriods',
-                'as' => 'promotionPeriods.'
-            ],
-            function () {
-            Route::get('/list-promotionPeriod', [PromotionPeriodController::class,'listPromotionPeriod'])->name('index');
-            Route::get('/create-promotionPeriod', [PromotionPeriodController::class,'createPromotionPeriod'])->name('create');
-            Route::post('/promotionPeriod/{id}/toggle', [PromotionPeriodController::class, 'toggle'])->name('toggle');
-            Route::post('/add-promotionPeriod', [PromotionPeriodController::class, 'addPromotionPeriod'])->name('store');
-            Route::get('/detail-promotionPeriod/{id}', [PromotionPeriodController::class, 'detailPromotionPeriod'])->name('detail');
-            Route::get('/edit-promotionPeriod/{id}', [PromotionPeriodController::class, 'editPromotionPeriod'])->name('edit');
-            Route::delete('/destroy-promotionPeriod/{id}', [PromotionPeriodController::class, 'destroyPromotionPeriod'])->name('delete');
-            Route::put('/update-promotionPeriod/{id}', [PromotionPeriodController::class, 'updatePromotionPeriod'])->name('update');
-        }
-        );
-        //Quản lí đánh giá
-            // CRUD COUPON
-            Route::group(
-                [
-                    'prefix' => 'reviews',
-                    'as' => 'reviews.'
-                ],
-                function () {
-                Route::get('/list-review', [ReviewController::class,'listReview'])->name('index');
-                Route::get('/create-review', [ReviewController::class,'createReview'])->name('create');
-                Route::post('/review/{id}/toggle', [ReviewController::class, 'toggle'])->name('toggle');
-                Route::get('/comments/{id}/reply', [ReviewController::class, 'reply'])->name('reply');
-                Route::post('/comments/{id}/reply', [ReviewController::class, 'storeReply'])->name('storeReply');
-                Route::get('/detail-review/{id}', [ReviewController::class, 'detailReview'])->name('detail');
-                Route::get('/edit-review/{id}', [ReviewController::class, 'editReview'])->name('edit');
-                Route::delete('/destroy-review/{id}', [ReviewController::class, 'destroyReview'])->name('delete');
-                Route::put('/update-review/{id}', [ReviewController::class, 'updateReview'])->name('update');
-            }
-            );
-
         //Quản lý đơn hàng
         Route::group(
             [
@@ -241,7 +195,6 @@ Route::group(
                 Route::get('/color', [ColorController::class, 'index'])->name('color.index');
                 Route::get('/size', [SizeController::class, 'index'])->name('size.index');
                 Route::get('/brand', [BrandController::class, 'index'])->name('brand.index');
-                Route::post('/comments', [ProductsController::class, 'addReview'])->name('addReview');
             }
         );
         // Quản lý đơn hàng
@@ -253,18 +206,9 @@ Route::group(
             function () {
                 Route::get('/order-history', [OrderUserController::class, 'orderHistory'])->name('history');
                 Route::post('/order-confirm', [OrderUserController::class, 'confirmOrder'])->name('confirm');
-                Route::post('/order-confirm_VNPay', [OrderUserController::class, 'confirmOrderVNPay'])->name('confirmVNPay');
                 Route::post('/cancel-order/{orderId}', [OrderUserController::class, 'cancelOrder'])->name('cancelOrder');
-                Route::post('/checkout/cod', function (Request $request) {
-                    // Kiểm tra quyền người dùng
-                    if (Auth::user()->role === 1 || Auth::user()->role === 3) {
-                        // Nếu là admin hoặc manager, chuyển hướng về trang chủ với thông báo lỗi
-                        return redirect()->route('home')->with('error', 'Bạn không có quyền mua hàng.');
-                    }
-                    // Nếu là user, thực hiện checkout
-                    return app(PaymentController::class)->checkoutCOD($request);
-                })->name('checkoutcod');
-                Route::get('order/success', [PaymentController::class, 'orderSuccess'])->name('order-cod');
+                Route::post('/checkout/cod', [PaymentController::class, 'checkoutCOD'])->name('checkoutcod');
+                Route::get('/order/success', [PaymentController::class, 'orderSuccess'])->name('order-cod');
                 Route::get('/order/{orderId}/detail', [OrderUserController::class, 'show'])->name('detail');
                 Route::get('/user/orders/filter', [OrderController::class, 'filter'])->name('user.orders.filter');
             }
@@ -277,14 +221,15 @@ Route::group(
             ],
             function () {
                 Route::get('/get-cart-count', [CartController::class, 'getCartCount'])->name('getCartCount');
-
                 Route::get('/cart-list', [CartController::class, 'viewCart'])->name('index');
                 Route::post('/cart/add', [CartController::class, 'addToCart'])->name('add');
                 Route::post('/cart/update/{id}', [CartController::class, 'update'])->name('cupdate');
                 Route::delete('/cart/remove/{id}', [CartController::class, 'removeItem'])->name('remove');
                 Route::get('/cart-popup', [CartController::class, 'viewCartPopup'])->name('popup');
+
             }
         );
+
     }
 );
 
@@ -314,108 +259,3 @@ Route::get('/orders-detail/{id}', [OrderController::class, 'showDetailOrder'])
 Route::post('/admin/update-order-status', [OrderController::class, 'updateOrderStatus'])->name('admin.updateOrderStatus');
 
 
-
-
-
-
-// Quản lý đơn hàng
-// Route::get('orders', function () {
-//     return view('admin.orders.index');
-// })->name('admin.orders');
-
-
-
-
-
-
-// Route::get('login', function () {
-//     return view('auth.login');
-// })->name('login');
-
-// Route::get('register', function () {
-//     return view('auth.register');
-// })->name('register');
-
-// // Route cho người dùng
-// // Route::prefix('/')->group(function () {
-//     Route::get('/', function () {
-//     return redirect()->route('home');
-//     });
-
-//     Route::get('home', function () {
-//         return view('layouts.app');
-//     })->name('home');
-
-//     Route::get('products', function () {
-//         return view('user.product');
-//     })->name('products');
-
-//     Route::get('product/{id}', function ($id) {
-//         return view('user.product-detail', ['id' => $id]);
-//     })->name('product.detail');
-
-//     Route::get('cart', function () {
-//         return view('user.cart');
-//     })->name('cart');
-
-//     Route::get('checkout', function () {
-//         return view('user.checkout');
-//     })->name('checkout');
-
-//     Route::get('about', function () {
-//         return view('user.about');
-//     })->name('about');
-// // });
-
-// // Route cho admin (cần middleware xác thực admin)
-// Route::prefix('admin')->middleware(['auth', 'isAdmin'])->group(function () {
-//     Route::get('dashboard', function () {
-//         return view('admin.dashboard');
-//     })->name('admin.dashboard');
-
-//     // Quản lý sản phẩm
-//     Route::prefix('products')->group(function () {
-//         Route::get('/', function () {
-//             return view('admin.products.index');
-//         })->name('admin.products.index');
-
-//         Route::get('create', function () {
-//             return view('admin.products.create');
-//         })->name('admin.products.create');
-
-//         Route::get('edit/{id}', function ($id) {
-//             return view('admin.products.edit', ['id' => $id]);
-//         })->name('admin.products.edit');
-
-//         Route::get('categories', function () {
-//             return view('admin.products.categories');
-//         })->name('admin.products.categories');
-//     });
-
-//     // Quản lý đơn hàng
-//     Route::get('orders', function () {
-//         return view('admin.orders.index');
-//     })->name('admin.orders');
-
-//     // Quản lý mã giảm giá
-//     Route::prefix('discounts')->group(function () {
-//         Route::get('/', function () {
-//             return view('admin.discounts.index');
-//         })->name('admin.discounts.index');
-
-//         Route::get('create', function () {
-//             return view('admin.discounts.create');
-//         })->name('admin.discounts.create');
-//     });
-
-//     // Quản lý tài khoản
-//     Route::get('accounts', function () {
-//         return view('admin.accounts.index');
-//     })->name('admin.accounts');
-// });
-
-// Quản lý tài khoản
-Route::get('accounts', function () {
-    return view('admin.accounts.index');
-})->name('admin.accounts');
-// });
