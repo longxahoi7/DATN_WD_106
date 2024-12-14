@@ -19,7 +19,7 @@
             <thead class="thead-light">
                 <tr>
                     <th>Mã đơn hàng</th>
-                    <th>Tình trạng</th>
+                    <th>Trạng thái đơn hàng</th>
                     <th>Khách hàng</th>
                     <th>Tổng tiền</th>
                     <th>Ngày mua hàng</th>

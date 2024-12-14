@@ -91,8 +91,8 @@
 
             <!-- Quản lý tài khoản -->
             <li>
-                <a href="user">
-                    <i class="icon-account">👥</i> Tài khoản
+                <a href="{{ route('admin.listUser') }}">
+                    <i class="icon-account" >👥</i> Tài khoản
                 </a>
             </li>
         </ul>
