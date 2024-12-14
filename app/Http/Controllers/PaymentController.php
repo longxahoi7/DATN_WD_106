@@ -17,6 +17,7 @@ class PaymentController extends Controller
     //
     public function checkoutCOD(Request $request)
     {
+        
         // Lấy thông tin người dùng đang đăng nhập
         $user = Auth::user();
     
@@ -68,6 +69,7 @@ class PaymentController extends Controller
             'shipping_address' => $shippingAddress,
             'phone'  => $phone,
             'total' => $total,
+            'invoice_date' => now(),
             'shipping_fee' => $shippingFee,
             'status' => 'pending',    // Trạng thái đơn hàng
         ]);

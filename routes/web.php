@@ -1,5 +1,5 @@
 <?php
-
+use Illuminate\Http\Request;
 use App\Http\Controllers\Admin\ColorController;
 use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\EmployeeController;
@@ -10,6 +10,7 @@ use App\Http\Controllers\User\CommentController;
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\CouponController;
+use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\SizeController;
 use App\Http\Controllers\ProductsController;
@@ -31,6 +32,7 @@ Route::group(
     ],
     function () {
         Route::get('/dashBoard', [StatsController::class, 'Stats'])->name('dashboard');
+        Route::get('/list-users', [CustomerController::class, 'listCustomer'])->name('listUser');
 
         // CRUD CATEGORY - Manager chỉ được xem danh mục
         Route::group(
@@ -42,6 +44,7 @@ Route::group(
             function () {
                 Route::get('/list-category', [CategoryController::class, 'listCategory'])->name('index');
                 Route::get('/detail-category/{id}', [CategoryController::class, 'detailCategory'])->name('detail');
+
 
                 // Admin mới có quyền CRUD
                 Route::middleware('checkAdmin:admin')->group(function () {
@@ -251,11 +254,20 @@ Route::group(
             function () {
                 Route::get('/order-history', [OrderUserController::class, 'orderHistory'])->name('history');
                 Route::post('/order-confirm', [OrderUserController::class, 'confirmOrder'])->name('confirm');
+                Route::post('/order-confirm_VNPay', [OrderUserController::class, 'confirmOrderVNPay'])->name('confirmVNPay');
                 Route::post('/cancel-order/{orderId}', [OrderUserController::class, 'cancelOrder'])->name('cancelOrder');
-                Route::post('/checkout/cod', [PaymentController::class, 'checkoutCOD'])->name('checkoutcod');
+                Route::post('/checkout/cod', function (Request $request) {
+                    // Kiểm tra quyền người dùng
+                    if (Auth::user()->role === 1 || Auth::user()->role === 3) {
+                        // Nếu là admin hoặc manager, chuyển hướng về trang chủ với thông báo lỗi
+                        return redirect()->route('home')->with('error', 'Bạn không có quyền mua hàng.');
+                    }
+                    // Nếu là user, thực hiện checkout
+                    return app(PaymentController::class)->checkoutCOD($request);
+                })->name('checkoutcod');
                 Route::get('order/success', [PaymentController::class, 'orderSuccess'])->name('order-cod');
                 Route::get('/order/{orderId}/detail', [OrderUserController::class, 'show'])->name('detail');
-
+                Route::get('/user/orders/filter', [OrderController::class, 'filter'])->name('user.orders.filter');
             }
         );
         // Giỏ hàng
@@ -272,10 +284,8 @@ Route::group(
                 Route::post('/cart/update/{id}', [CartController::class, 'update'])->name('cupdate');
                 Route::delete('/cart/remove/{id}', [CartController::class, 'removeItem'])->name('remove');
                 Route::get('/cart-popup', [CartController::class, 'viewCartPopup'])->name('popup');
-
             }
         );
-
     }
 );
 

@@ -154,10 +154,10 @@
                     <input type="hidden" name="amount" value="{{ $finalTotal }}">
                     <button type="submit" class="custom-btn-cod">Thanh toán COD</button>
                 </form>
-                <form action="{{ route('checkout.vnpay') }}" method="post">
+                <form action="{{ route('user.order.confirmVNPay') }}" method="post">
                     @csrf
                     <input type="hidden" name="amount" value="{{ $finalTotal }}">
-                    <button type="submit" name="redirect" class="custom-btn-checkout">Thanh toán VNPay</button>
+                    <button type="submit" class="custom-btn-checkout">Thanh toán VNPay</button>
                 </form>
             </div>
             <a href="/product/product-list" class="continue-shopping">

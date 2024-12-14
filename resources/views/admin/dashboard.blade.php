@@ -3,27 +3,26 @@
 @section('content')
 <style>
     .custom-btn-filte-dashboard {
-  background-color: #fff;
-  color: #000;
-  border: 1px solid #000;
-  padding: 10px 20px;
-  font-size: 16px;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
+        background-color: #fff;
+        color: #000;
+        border: 1px solid #000;
+        padding: 10px 20px;
+        font-size: 16px;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
 
-.custom-btn-filte-dashboard:hover {
-  background-color: #000;
-  color: #fff;
-  border: 1px solid #000;
-}
-
+    .custom-btn-filte-dashboard:hover {
+        background-color: #000;
+        color: #fff;
+        border: 1px solid #000;
+    }
 </style>
 <div class="container">
     <div class="button-header">
         <button>
-        Thống kê <i class="fa fa-star"></i>
+            Thống kê <i class="fa fa-star"></i>
         </button>
     </div>
 
@@ -90,7 +89,27 @@
             </div>
         </div>
     </div>
-
+    <div class="card mb-4">
+        <div class="card-header">Thống kê số lượng sản phẩm đã bán</div>
+        <div class="card-body">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Tên sản phẩm</th>
+                        <th scope="col">Số lượng bán</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($soldProductsStats as $product)
+                    <tr>
+                        <td>{{ $product->name }}</td>
+                        <td>{{ $product->sold_quantity }}</td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    </div>
     <!-- Thống kê tổng sản phẩm theo danh mục -->
     <!-- Biểu đồ sản phẩm theo danh mục -->
     <div class="card mb-4">

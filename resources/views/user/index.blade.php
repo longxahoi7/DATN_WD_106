@@ -17,6 +17,20 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 
     @stack('styles')
+    <style>
+    *:focus {
+        outline: none !important;
+        box-shadow: none !important;
+    }
+
+    button:focus,
+    input:focus,
+    textarea:focus,
+    a:focus {
+        outline: none !important;
+        box-shadow: none !important;
+    }
+    </style>
 
 </head>
 

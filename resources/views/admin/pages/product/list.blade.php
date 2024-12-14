@@ -136,7 +136,6 @@
                                 </a>
                                 <!-- Xóa -->
                                 @if(Auth::user()->role !== 3)
-                                <!-- Kiểm tra nếu không phải manager -->
                                 <form action="{{ route('admin.products.delete', $product->product_id) }}" method="POST"
                                     onsubmit="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này?');">
                                     @csrf

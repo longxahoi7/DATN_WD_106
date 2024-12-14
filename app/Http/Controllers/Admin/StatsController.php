@@ -9,6 +9,7 @@ use App\Models\Product;
 use App\Models\Order;
 use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class StatsController extends Controller
 {
@@ -19,11 +20,11 @@ class StatsController extends Controller
         $endDateRevenue = $request->input('end_date_revenue', Carbon::now()->toDateString());
     
         // Thống kê doanh thu theo ngày trong khoảng thời gian được chọn
-        $dailyStats = Order::selectRaw('DATE(order_date) as date, COUNT(*) as total_orders, SUM(total) as revenue')
-            ->whereBetween('order_date', [$startDateRevenue, $endDateRevenue])
-            ->groupBy('date')
-            ->orderBy('date')
-            ->get();
+        $dailyStats = Order::selectRaw('DATE(created_at) as date, COUNT(*) as total_orders, SUM(total) as revenue')
+        ->whereBetween('created_at', [$startDateRevenue, $endDateRevenue])
+        ->groupBy('date')
+        ->orderBy('date')
+        ->get();
     
         $dailyLabels = $dailyStats->pluck('date');
         $dailyOrders = $dailyStats->pluck('total_orders');
@@ -34,18 +35,25 @@ class StatsController extends Controller
         $endDateOrders = $request->input('end_date_orders', Carbon::now()->toDateString());
     
         // Thống kê đơn hàng theo ngày trong khoảng thời gian được chọn
-        $ordersStats = Order::selectRaw('DATE(order_date) as date, COUNT(*) as total_orders')
-            ->whereBetween('order_date', [$startDateOrders, $endDateOrders])
-            ->groupBy('date')
-            ->orderBy('date')
-            ->get();
+        $ordersStats = Order::selectRaw('DATE(created_at) as date, COUNT(*) as total_orders')
+        ->whereBetween('created_at', [$startDateOrders, $endDateOrders])
+        ->groupBy('date')
+        ->orderBy('date')
+        ->get();
     
         $ordersLabels = $ordersStats->pluck('date');
         $ordersTotal = $ordersStats->pluck('total_orders');
     
         // Thống kê tổng sản phẩm theo danh mục
         $categories = Category::withCount('products')->get(); // Đếm số sản phẩm trong mỗi danh mục
-    
+
+
+        $soldProductsStats = Product::select('products.product_id', 'products.name', DB::raw('SUM(order_items.quantity) as sold_quantity'))
+        ->join('order_items', 'order_items.product_id', '=', 'products.product_id')
+        ->join('orders', 'orders.order_id', '=', 'order_items.order_id')
+        ->whereBetween('orders.created_at', [$startDateRevenue, $endDateRevenue]) // Lọc theo khoảng thời gian
+        ->groupBy('products.product_id', 'products.name')
+        ->get();
         // Trả dữ liệu về view
         return view('admin.dashboard', compact(
             'dailyLabels',
@@ -57,7 +65,8 @@ class StatsController extends Controller
             'endDateRevenue',
             'startDateOrders',
             'endDateOrders',
-            'categories'  // Truyền dữ liệu danh mục vào view
+            'categories' ,
+            'soldProductsStats'
         ));
     }
     

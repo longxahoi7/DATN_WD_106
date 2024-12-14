@@ -24,22 +24,17 @@
             <div class="row">
                 <!-- Hàng ngang 2 - Danh mục -->
                 <div class="col">
-                    <div class="header-nav align-items-center" style="display: flex; margin-top: 10px">
-                        <ul class='d-flex'>
+                    <div class="header-nav align-items-center mt-2">
+                        <ul class="d-flex">
+                            <li class="dropdown-item">
+                                <a href="{{ route('user.product.list') }}">Sản Phẩm</a>
+                            </li>
 
                             @foreach ($categories as $category)
-                            <li class="dropdown-item">
-                                <a
-                                    href="{{ route('user.product.list', $category->category_id) }}">{{ $category->name }}</a>
-                                <ul class="sub-dropdown-menu">
-                                </ul>
-                            </li>
+                                <li class="dropdown-item">
+                                    <a href="{{ route('user.product.list', $category->category_id) }}">{{ $category->name }}</a>
+                                </li>
                             @endforeach
-                            <li class="dropdown-item">
-                                <a href="{{ route('user.product.list') }}">Danh sách sản phẩm</a>
-                                <ul class="sub-dropdown-menu">
-                                </ul>
-                            </li>
                         </ul>
                     </div>
                 </div>
@@ -79,7 +74,7 @@
                                     style="display: none;">
                                     @csrf
                                 </form>
-                                <a href="{{route('home')}}"
+                                <a href="{{route('home')}}"class="dropdown-item"
                                     onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Đăng
                                     xuất</a>
                                 @else
@@ -134,5 +129,5 @@
             });
     }
     updateCartCount();
-    
+
 </script>
