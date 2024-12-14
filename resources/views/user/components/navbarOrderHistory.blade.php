@@ -4,7 +4,7 @@
 <div class="menu-left">
     <div class="avatar-section d-flex">
         <img src="{{ asset('imagePro/icon/icon-avata.png')}}" alt="Avatar" class="avatar">
-        <h5 class="user-name">{{ $order->user->name }}</h5>
+        <h5 class="user-name">Tên người dùng</h5>
     </div>
 
     <div class="menu-item ml-4" id="profileLink">

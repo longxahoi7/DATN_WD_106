@@ -37,11 +37,11 @@
                 <div class="payment-info">
                     <div class="details d-flex">
                         <p><i class="fa fa-credit-card mr-2"></i> <strong> Hình thức thanh toán: </strong>
-                            {{ $order->payment_method }}</p>
+                            </p>
                         <p>
                             @if($order->payment_method == 'COD')
                             Thanh toán khi nhận hàng
-                            @else
+                            @else($order->payment_method == 'VNPAY')
                             VNPAY
                             @endif
                         </p>

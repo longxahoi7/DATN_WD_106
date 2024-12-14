@@ -25,7 +25,8 @@ class PaymentVnPayController extends Controller
             'invoice_date' => now(),
             'shipping_address' => $data['shipping_address'],
             'phone' => $data['phone'],
-            'payment_status' => 'pending', // Chưa thanh toán
+            'payment_status' => 'pending',
+            'payment_method'  => 'VNPAY' // Chưa thanh toán
         ]);
         $order_id = $order->order_id;
         // Các thông tin cần thiết cho VNPAY
