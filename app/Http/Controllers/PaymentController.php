@@ -71,7 +71,8 @@ class PaymentController extends Controller
             'total' => $total,
             'invoice_date' => now(),
             'shipping_fee' => $shippingFee,
-            'status' => 'pending',    // Trạng thái đơn hàng
+            'status' => 'pending',  
+            'payment_method'  => 'COD'// Trạng thái đơn hàng
         ]);
     
         // Thêm các sản phẩm vào đơn hàng

@@ -17,7 +17,8 @@ class Order extends Model
         'invoice_date',
         'payment_status',
         'shipping_address',
-        'phone'
+        'phone',
+        'payment_method'
         // Thêm các thuộc tính khác nếu cần
     ];
     protected $casts = [
@@ -33,14 +34,15 @@ class Order extends Model
     }
     public function user()
     {
-        return $this->belongsTo(User::class, 'user_id', 'user_id'); 
+        return $this->belongsTo(User::class, 'user_id', 'user_id');
     }
     public function products()
-{
-    return $this->belongsToMany(Product::class, 'order_product', 'order_id', 'product_id');
-}
-public function items()
+    {
+        return $this->belongsToMany(Product::class, 'order_product', 'order_id', 'product_id');
+    }
+    public function items()
     {
         return $this->hasMany(OrderItem::class, 'order_id', 'id');  // Đảm bảo mối quan hệ sử dụng đúng trường order_id
     }
+    
 }
