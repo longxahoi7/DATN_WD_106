@@ -1,5 +1,9 @@
 @extends('user.index')
-
+@if(session('error'))
+    <script>
+        alert("{{ session('error') }}");
+    </script>
+@endif
 @push('styles')
 <link rel="stylesheet" href="{{ asset('css/home.css') }}">
 @endpush

@@ -1,5 +1,5 @@
 <?php
-
+use Illuminate\Http\Request;
 use App\Http\Controllers\Admin\ColorController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\User\CommentController;
@@ -207,8 +207,16 @@ Route::group(
                 Route::get('/order-history', [OrderUserController::class, 'orderHistory'])->name('history');
                 Route::post('/order-confirm', [OrderUserController::class, 'confirmOrder'])->name('confirm');
                 Route::post('/cancel-order/{orderId}', [OrderUserController::class, 'cancelOrder'])->name('cancelOrder');
-                Route::post('/checkout/cod', [PaymentController::class, 'checkoutCOD'])->name('checkoutcod');
-                Route::get('/order/success', [PaymentController::class, 'orderSuccess'])->name('order-cod');
+                Route::post('/checkout/cod', function (Request $request) {
+                    // Kiểm tra quyền người dùng
+                    if (Auth::user()->role === 1 || Auth::user()->role === 3) {
+                        // Nếu là admin hoặc manager, chuyển hướng về trang chủ với thông báo lỗi
+                        return redirect()->route('home')->with('error', 'Bạn không có quyền mua hàng.');
+                    }
+                    // Nếu là user, thực hiện checkout
+                    return app(PaymentController::class)->checkoutCOD($request);
+                })->name('checkoutcod');
+                Route::get('order/success', [PaymentController::class, 'orderSuccess'])->name('order-cod');
                 Route::get('/order/{orderId}/detail', [OrderUserController::class, 'show'])->name('detail');
                 Route::get('/user/orders/filter', [OrderController::class, 'filter'])->name('user.orders.filter');
             }
