@@ -208,9 +208,9 @@ Route::group(
                 Route::post('/order-confirm', [OrderUserController::class, 'confirmOrder'])->name('confirm');
                 Route::post('/cancel-order/{orderId}', [OrderUserController::class, 'cancelOrder'])->name('cancelOrder');
                 Route::post('/checkout/cod', [PaymentController::class, 'checkoutCOD'])->name('checkoutcod');
-                Route::get('order/success', [PaymentController::class, 'orderSuccess'])->name('order-cod');
+                Route::get('/order/success', [PaymentController::class, 'orderSuccess'])->name('order-cod');
                 Route::get('/order/{orderId}/detail', [OrderUserController::class, 'show'])->name('detail');
-
+                Route::get('/user/orders/filter', [OrderController::class, 'filter'])->name('user.orders.filter');
             }
         );
         // Giỏ hàng
@@ -227,10 +227,8 @@ Route::group(
                 Route::post('/cart/update/{id}', [CartController::class, 'update'])->name('cupdate');
                 Route::delete('/cart/remove/{id}', [CartController::class, 'removeItem'])->name('remove');
                 Route::get('/cart-popup', [CartController::class, 'viewCartPopup'])->name('popup');
-
             }
         );
-
     }
 );
 

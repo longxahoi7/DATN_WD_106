@@ -18,12 +18,13 @@ class CheckLogin
         if (Auth::check()) {
             // Nếu người dùng là admin (role = 1) thì cho phép truy cập
             if (Auth::user()->role === 1) {
-                return $next($request);  // Admin có quyền thực hiện CRUD
+                return $next($request); 
             }
-
+            if (Auth::user()->role === 2) {
+                return $next($request);  
+            }
             // Nếu người dùng là manager (role = 3) chỉ có quyền xem
             if (Auth::user()->role === 3) {
-                // Kiểm tra xem người dùng đang truy cập vào các route CRUD hay không
                 // Kiểm tra các route có liên quan đến 'categories', 'brands', 'users', 'colors', 'sizes'
                 if (
                     $request->is('admin/categories/*') ||
