@@ -131,7 +131,6 @@
                                     <button class="action-btn eye"><i class="fas fa-eye"></i></button>
                                 </a>
                                 <!-- Sửa -->
-                                <!-- Sửa -->
                                 <a href="javascript:void(0);" data-id="{{ $product->product_id }}">
                                     <button class="action-btn edit"><i class="fas fa-edit"></i></button>
                                 </a>

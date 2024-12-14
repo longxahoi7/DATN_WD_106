@@ -1,4 +1,5 @@
-.img-container {
+.img-container,
+.img-container-edit {
     width: 500px;
     height: 125px;
     margin-bottom: 10px;
@@ -13,6 +14,14 @@
 }
 
 .img-container img {
+    width: 500px;
+    height: 125px;
+    object-fit: cover;
+    display: none;
+    position: absolute;
+}
+
+.img-container-edit img {
     width: 500px;
     height: 125px;
     object-fit: cover;

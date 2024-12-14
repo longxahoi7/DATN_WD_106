@@ -20,6 +20,7 @@
         </thead>
         <tbody>
             @foreach ($productDetails as $product)
+
             <tr>
                 <td>{{ $product['name'] }}</td>
                 <td>{{ $product['color'] }}</td>

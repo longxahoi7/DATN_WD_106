@@ -5,6 +5,7 @@ use App\Models\Payment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use App\Models\Order;
+use App\Models\OrderItem;
 use App\Models\ShoppingCart;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
@@ -30,7 +31,7 @@ class PaymentVnPayController extends Controller
     $vnp_Returnurl = route('vnpay.callback'); // URL trả về sau khi thanh toán
     $vnp_TmnCode = "L86V10FV"; // Mã website của bạn tại VNPAY
     $vnp_HashSecret = "UG0UNZZI4B5W1R0UMAAA4QBVU77GQN46"; // Khóa bí mật của bạn tại VNPAY
-    
+
     // Các thông tin thanh toán
     $vnp_TxnRef = $order_id; // Mã giao dịch duy nhất, có thể dùng thời gian
     $vnp_OrderInfo = 'Thanh toán đơn hàng'; // Thông tin đơn hàng
@@ -89,8 +90,8 @@ class PaymentVnPayController extends Controller
 
     // Trả về dữ liệu hoặc tự động chuyển hướng tới VNPAY
     $returnData = [
-        'code' => '00', 
-        'message' => 'success', 
+        'code' => '00',
+        'message' => 'success',
         'data' => $vnp_Url // URL chuyển hướng tới VNPAY
     ];
 
@@ -158,9 +159,36 @@ public function handleVNPayCallback(Request $request)
         // Cập nhật trạng thái thanh toán cho đơn hàng
         $order->update([
             'payment_status' => $paymentStatus,
-            'status' => $paymentStatus == 'paid' ? 'completed' : 'pending', // Hoàn thành hoặc vẫn chờ
+            'status' => 'pending', // Hoàn thành nếu thanh toán thành công
             'payment_date' => now(),
         ]);
+
+        // Lấy thông tin giỏ hàng của người dùng
+        $shoppingCart = ShoppingCart::where('user_id', $order->user_id)->first();
+        if (!$shoppingCart || $paymentStatus !== 'paid') {
+            return redirect()->route('user.cart.index')->with('error', 'Thanh toán thất bại hoặc giỏ hàng trống.');
+        }
+
+        $cartItems = $shoppingCart->cartItems;
+        foreach ($cartItems as $item) {
+            $attributeProduct = $item->product->attributeProducts->firstWhere('size_id', $item->size_id);
+
+            if ($attributeProduct) {
+                OrderItem::create([
+                    'order_id' => $order->order_id, // Đơn hàng ID
+                    'product_id' => $item->product_id,
+                    'product_name' => $item->product->name,
+                    'color_id' => $item->color_id,
+                    'size_id' => $item->size_id,
+                    'quantity' => $item->qty,
+                    'price' => $attributeProduct->price,
+                    'subtotal' => $attributeProduct->price * $item->qty,
+                ]);
+            }
+        }
+
+        // Xóa các sản phẩm trong giỏ hàng sau khi thêm vào đơn hàng
+        $shoppingCart->cartItems()->delete();
 
         // Cập nhật trạng thái thanh toán trong bảng Payment (nếu có)
         $payment = Payment::where('order_id', $order->order_id)->first();
@@ -173,11 +201,10 @@ public function handleVNPayCallback(Request $request)
         // Thông báo kết quả giao dịch
         if ($paymentStatus == 'paid') {
             Log::info('Thanh toán thành công cho đơn hàng: ' . $order->order_id);
-            ShoppingCart::where('user_id', Auth::id())->delete();
             return redirect()->route('home')->with('success', 'Thanh toán thành công!');
         } else {
             Log::info('Thanh toán thất bại cho đơn hàng: ' . $order->order_id);
-            return redirect()->route('vnp.failed')->with('error', 'Thanh toán thất bại.');
+            return redirect()->route('user.cart.index')->with('error', 'Thanh toán thất bại.');
         }
     } catch (\Exception $e) {
         // Log lỗi nếu có
@@ -185,6 +212,7 @@ public function handleVNPayCallback(Request $request)
         return redirect()->route('users.cart')->with('error', 'Đã xảy ra lỗi trong quá trình xử lý.');
     }
 }
+
 
 
 }

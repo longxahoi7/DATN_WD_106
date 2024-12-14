@@ -16,6 +16,8 @@ class Order extends Model
         'total',
         'invoice_date',
         'payment_status',
+        'shipping_address',
+        'phone'
         // Thêm các thuộc tính khác nếu cần
     ];
     protected $casts = [

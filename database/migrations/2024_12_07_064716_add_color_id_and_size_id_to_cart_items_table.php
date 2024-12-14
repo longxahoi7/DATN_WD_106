@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::table('cart_items', function (Blueprint $table) {
             $table->unsignedInteger('color_id')->after('product_id');
             $table->foreign('color_id')->references('color_id')->on('colors')->onDelete('cascade');
-    
             $table->unsignedInteger('size_id')->after('color_id');
             $table->foreign('size_id')->references('size_id')->on('sizes')->onDelete('cascade');
         });

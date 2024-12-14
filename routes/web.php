@@ -232,6 +232,8 @@ Route::group(
                 Route::post('/cancel-order/{orderId}', [OrderUserController::class, 'cancelOrder'])->name('cancelOrder');
                 Route::post('/checkout/cod', [PaymentController::class, 'checkoutCOD'])->name('checkoutcod');
                 Route::get('order/success', [PaymentController::class, 'orderSuccess'])->name('order-cod');
+                Route::get('/order/{orderId}/detail', [OrderUserController::class, 'show'])->name('detail');
+
             }
         );
         // Giỏ hàng
@@ -241,6 +243,8 @@ Route::group(
                 'as' => 'cart.',
             ],
             function () {
+                Route::get('/get-cart-count', [CartController::class, 'getCartCount'])->name('getCartCount');
+
                 Route::get('/cart-list', [CartController::class, 'viewCart'])->name('index');
                 Route::post('/cart/add', [CartController::class, 'addToCart'])->name('add');
                 Route::post('/cart/update/{id}', [CartController::class, 'update'])->name('cupdate');

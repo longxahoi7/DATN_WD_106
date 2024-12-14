@@ -15,13 +15,17 @@
 
 .custom-btn-filte-dashboard:hover {
   background-color: #000;
-  color: #fff; 
+  color: #fff;
   border: 1px solid #000;
 }
 
 </style>
 <div class="container">
-    <h1 class="my-4">Thống kê</h1>
+    <div class="button-header">
+        <button>
+        Thống kê <i class="fa fa-star"></i>
+        </button>
+    </div>
 
     <!-- Row chứa form lọc song song -->
     <div class="row g-2 mb-4">

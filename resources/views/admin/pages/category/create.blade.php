@@ -23,8 +23,6 @@
         </div>
     </div>
 
-
-
     <div class="form-group">
         <label class="custom-label" for="slug">Tên đường dẫn <span class="custom-required-star">*</span></label>
         <input type="text" class="form-control" id="slug" name="slug" placeholder="Nhập tên đường dẫn" required />

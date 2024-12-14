@@ -15,6 +15,7 @@
                 </div>
                 <div class="card-body">
                     <p><strong>Trạng thái:</strong> {{ ucfirst($order->status) }}</p>
+                    <p><strong>Trạng thái thanh toán:</strong> {{ ucfirst($order->payment_status) }}</p>
                     <p><strong>Tổng tiền:</strong> {{ number_format($order->total, 0, ',', '.') }} VND</p>
                     
                     <h5>Danh sách sản phẩm:</h5>
@@ -23,7 +24,7 @@
                             <li>
                                 {{ $item->product->name }} - 
                                 Số lượng: {{ $item->quantity }} - 
-                                Giá: {{ number_format($item->price, 0, ',', '.') }} VND
+                                Giá: {{ number_format($item->total, 0, ',', '.') }} VND
                             </li>
                         @endforeach
                     </ul>
@@ -36,6 +37,9 @@
                     @else
                         <p class="text-muted">Bạn không thể hủy đơn hàng ở trạng thái này.</p>
                     @endif
+
+                    <!-- Thêm nút Chi tiết đơn hàng -->
+                    <a href="{{ route('user.order.detail', $order->order_id) }}" class="btn btn-primary btn-sm mt-3">Chi tiết đơn hàng</a>
                 </div>
             </div>
         @endforeach

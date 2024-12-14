@@ -1,6 +1,6 @@
 @extends('admin.index')
 @push('styles')
-    <link rel="stylesheet" href="{{asset('css/style.css')}}">>
+<link rel="stylesheet" href="{{asset('css/style.css')}}">>
 @endpush
 @section('content')
 
@@ -12,15 +12,16 @@
                     <h2>1. Thông tin khách hàng</h2>
                     <p><strong>Tên người mua:</strong>{{ $order->user->name }}</p>
                     <p><strong>Email:</strong>{{ $order->user->email }}</p>
-                    <p><strong>Điện thoại:</strong>{{ $order->user->phone }}</p>
-                    <p><strong>Địa chỉ:</strong>{{ $order->user->address }}</p>
+                    <p><strong>Điện thoại:</strong>{{ $order->phone }}</p>
+                    <p><strong>Địa chỉ:</strong>{{ $order->shipping_address  }}</p>
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="order-card">
                     <h2>2. Thông tin đơn hàng</h2>
-                    <p><strong>Mã đơn hàng:</strong>  {{ $order->order_id }}</p>
+                    <p><strong>Mã đơn hàng:</strong> {{ $order->order_id }}</p>
                     <p><strong>Trạng thái đơn hàng:</strong> {{ $order->status }}</p>
+                    <p><strong>Trạng thái thanh toán:</strong> {{ $order->payment_status }}</p>
                     <p><strong>Ngày mua hàng:</strong>{{ $order->created_at->format('Y-m-d') }}</p>
                     <!-- <p><strong>Trạng thái:</strong> Chờ xác nhận</p> -->
                     <div class="mt-4">
@@ -39,22 +40,26 @@
                         <th>Ảnh</th>
                         <th>Tên sản phẩm</th>
                         <th>Giá</th>
+                        <th>Màu sắc</th>
+                        <th>Kích cỡ</th>
                         <th>Số lượng</th>
                         <th>Thành tiền</th>
                     </tr>
                 </thead>
                 <tbody>
-                @foreach ($order->orderItems as $index => $orderItem)
+                    @foreach ($order->orderItems as $index => $orderItem)
                     <tr>
                         <td class="text-center">
                             <img src="/storage/{{ $orderItem->product->main_image_url }}" alt="{{ $orderItem->product->name }}" width="50" height="50">
                         </td>
                         <td>{{ $orderItem->product->name }}</td>
                         <td>{{ number_format($orderItem->attributeProduct->price ?? 0) }} VND</td>
+                        <td>{{ $orderItem->color ? $orderItem->color->name : 'N/A' }}</td> <!-- Màu sắc -->
+                        <td>{{ $orderItem->size ? $orderItem->size->name : 'N/A' }}</td> <!-- Kích cỡ -->
                         <td class="text-center">{{ $orderItem->quantity }}</td>
                         <td class="text-right">{{ number_format($orderItem->attributeProduct->price * $orderItem->quantity, 0, 2) }} đ</td>
                     </tr>
-                @endforeach
+                    @endforeach
                 </tbody>
             </table>
             <!-- <div class="text-right mt-4">
@@ -88,28 +93,28 @@
         </div>
     </div>
     @push('scripts')
-        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-        <script>
-            document.getElementById('confirmOrderBtn').addEventListener('click', function () {
-                this.classList.add('btn-cancel');
-                document.getElementById('cancelOrderBtn').classList.add('btn-cancel');
-                document.getElementById('cancelOrderBtn').innerText = 'Đã hủy';
-                document.getElementById('cancelOrderBtn').disabled = true;
-            });
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        document.getElementById('confirmOrderBtn').addEventListener('click', function() {
+            this.classList.add('btn-cancel');
+            document.getElementById('cancelOrderBtn').classList.add('btn-cancel');
+            document.getElementById('cancelOrderBtn').innerText = 'Đã hủy';
+            document.getElementById('cancelOrderBtn').disabled = true;
+        });
 
-            document.getElementById('cancelOrderBtn').addEventListener('click', function () {
-                $('#cancelModal').modal('show');
-            });
+        document.getElementById('cancelOrderBtn').addEventListener('click', function() {
+            $('#cancelModal').modal('show');
+        });
 
-            document.getElementById('cancelForm').addEventListener('submit', function (event) {
-                event.preventDefault();
-                // Xử lý logic hủy đơn hàng ở đây
-                $('#cancelModal').modal('hide');
-                alert('Đơn hàng đã được hủy với lý do: ' + document.getElementById('reason').value);
-            });
-        </script>
+        document.getElementById('cancelForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            // Xử lý logic hủy đơn hàng ở đây
+            $('#cancelModal').modal('hide');
+            alert('Đơn hàng đã được hủy với lý do: ' + document.getElementById('reason').value);
+        });
+    </script>
     @endpush
 </body>
 @endsection

@@ -14,6 +14,8 @@ class OrderItem extends Model
         'quantity',
         'price',
         'total',
+        'color_id', 
+        'size_id', 
     ];
     public function product()
     {
@@ -24,14 +26,23 @@ class OrderItem extends Model
         return $this->belongsTo(Order::class, 'order_id');
     }
     public function attributeProduct()
-{
-    return $this->hasOneThrough(
-        AttributeProduct::class,
-        Product::class,
-        'product_id', // Foreign key trên bảng products
-        'product_id', // Foreign key trên bảng attribute_products
-        'product_id', // Local key trên bảng order_items
-        'product_id'  // Local key trên bảng products
-    );
-}
+    {
+        return $this->hasOneThrough(
+            AttributeProduct::class,
+            Product::class,
+            'product_id', // Foreign key trên bảng products
+            'product_id', // Foreign key trên bảng attribute_products
+            'product_id', // Local key trên bảng order_items
+            'product_id'  // Local key trên bảng products
+        );
+    }
+    public function color()
+    {
+        return $this->belongsTo(Color::class, 'color_id'); // Liên kết với bảng colors
+    }
+
+    public function size()
+    {
+        return $this->belongsTo(Size::class, 'size_id'); // Liên kết với bảng sizes
+    }
 }
