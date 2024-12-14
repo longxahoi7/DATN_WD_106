@@ -27,6 +27,12 @@
     <link rel="stylesheet" href="{{asset('css/admin/table.css')}}">
     <link rel="stylesheet" href="{{asset('css/admin/form.css')}}">
     @stack('styles')
+    <style>
+    *:focus {
+        outline: none !important;
+        box-shadow: none !important;
+    }
+    </style>
 </head>
 
 <body>

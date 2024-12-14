@@ -38,13 +38,14 @@
                             </span>
                             @enderror
                             <div class="eye-icon" onclick="togglePasswordVisibility()"></div>
-                            
+
                         </div>
                         <button type="submit" class="btn btn-success btn-block">Đăng nhập</button>
                     </form>
+                    <br/>
                     @if (Route::has('password.request'))
-                    <a class="btn btn-link" href="{{ route('password.request') }}">
-                        {{ __('Forgot Your Password?') }}
+                    <a class="register-link" href="{{ route('password.request') }}">
+                        {{ __('Bạn quên mật khẩu ư?') }}
                     </a>
                     @endif
                 </div>
