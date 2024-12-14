@@ -15,7 +15,7 @@ class CustomerController extends Controller
         ->orWhere('is_active', 'like', '%' . $request->nhap . '%')
         ->latest();
     
-        return view('admin.pages.account.customer.list') ->with(['  '=>$customers]);
+        return view('admin.pages.account.customer.list') ->with(['customers'=>$customers]);
     }
 
     public function toggle($id)
