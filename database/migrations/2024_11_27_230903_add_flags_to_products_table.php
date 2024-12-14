@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::table('products', function (Blueprint $table) {
             $table->boolean('is_hot')->default(false); // Đánh dấu sản phẩm hot
-            $table->boolean('is_sale')->default(false); // Đánh dấu sản phẩm đang sale
-            $table->unsignedBigInteger('sold_count')->default(0); // Số lượng đã bán
+            $table->boolean('is_best_seller')->default(false);  // Mặc định là 'không phải bán chạy'
+
         });
     }
 
@@ -24,7 +24,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('products', function (Blueprint $table) {
-            $table->dropColumn(['is_hot', 'is_sale', 'sold_count']);
+            $table->dropColumn(['is_hot', 'is_best_seller']);
         });
     }
 };

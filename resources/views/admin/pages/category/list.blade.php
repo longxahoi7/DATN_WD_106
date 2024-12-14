@@ -107,7 +107,7 @@
                 <td>{{ $index + 1 }}</td>
                 <td>{{ $category->name }}</td>
                 <td>
-                    <img src="{{ $category->image }}" class="cusstom-no-image"
+                    <img src="{{ Storage::url($category->image) }} " class="cusstom-no-image"
                         onerror="this.onerror=null; this.src='{{ asset('imagePro/icon/icon-no-image.png') }}';">
                 </td>
                 <td>

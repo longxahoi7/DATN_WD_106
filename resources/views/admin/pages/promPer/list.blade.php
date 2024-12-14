@@ -7,8 +7,8 @@
 
     <body>
         <div class="container">
-            <h1 class="text-center">Danh Sách phiếu giảm giá</h1>
-            <a href="{{route('admin.coupons.create')}}"><button class="btn add-button">Thêm mới</button></a>
+            <h1 class="text-center">Danh Sách đợt giảm giá</h1>
+            <a href="{{route('admin.promotionPeriods.create')}}"><button class="btn add-button">Thêm mới</button></a>
 
             <table class="product-table table table-bordered text-center align-middle">
                 <thead class="thead-dark">
@@ -16,9 +16,6 @@
                         <th>STT</th>
                         <th>Tên mã phiếu giảm giá</th>
                         <th>Loại</th>
-                        <th>Số lượng</th>
-                        <th>Gía trị tối thiểu</th>
-                        <th>Gía trị tối đa</th>
                         <th>Ngày bắt đầu </th>
                         <th>Ngày kết thúc</th>
                         <th>Trạng thái</th>
@@ -27,35 +24,32 @@
                 </thead>
                 <tbody>
                    
-                    @foreach ($coupons as $key => $coupon)
+                    @foreach ($promPers as $key => $promPer)
                     <tr>
-                    <td>{{$coupon->coupon_id}}</td>
-                    <td>{{$coupon->code}}</td>
-                        @if($coupon->discount_amount)
-                            <td>{{ number_format($coupon->discount_amount, 0, ',', '.') }}</td>
+                    <td>{{$promPer->prom_per_id}}</td>
+                    <td>{{$promPer->code}}</td>
+                        @if($promPer->discount_amount)
+                            <td>{{$promPer->discount_amount}}</td>
                         @else
-                            <td>{{$coupon->discount_percentage	}}%</td>
+                            <td>{{$promPer->discount_percentage	}}</td>
                         @endif
-                        <td>{{$coupon->quantity}}</td>
-                        <td>{{$coupon->min_order_value}}</td>
-                        <td>{{$coupon->max_order_value}}</td>
-                        <td>{{$coupon->start_date}}</td>
-                        <td>{{$coupon->end_date}}</td>
+                        <td>{{$promPer->start_date}}</td>
+                        <td>{{$promPer->end_date}}</td>
                          <td>
-                                <form action="{{ route('admin.coupons.toggle', $coupon->coupon_id) }}" method="POST"
+                                <form action="{{ route('admin.promotionPeriods.toggle', $promPer->prom_per_id) }}" method="POST"
                                     style="display:inline;">
                                     @csrf
                                     <button type="submit"
-                                        class="btn {{ $coupon->is_active ? 'btn-danger' : 'btn-success' }}">
-                                        {{ $coupon->is_active ? 'Tắt hoạt động' : 'Kích hoạt' }}
+                                        class="btn {{ $promPer->is_active ? 'btn-danger' : 'btn-success' }}">
+                                        {{ $promPer->is_active ? 'Tắt hoạt động' : 'Kích hoạt' }}
                                     </button>
                                 </form>
                             </td>
                             <td class="action-icons">
-                           <a href="{{route('admin.coupons.detail',$coupon->coupon_id)}}"> <i class="fas fa-eye text-info" title="Chi tiết"></i></a>
-                            <a href="{{route('admin.coupons.edit',$coupon->coupon_id)}}"><i class="fas fa-edit text-warning" title="Sửa"></i></a>
+                           <a href="{{route('admin.promotionPeriods.detail',$promPer->prom_per_id)}}"> <i class="fas fa-eye text-info" title="Chi tiết"></i></a>
+                            <a href="{{route('admin.promotionPeriods.edit',$promPer->prom_per_id)}}"><i class="fas fa-edit text-warning" title="Sửa"></i></a>
                            <!-- Form xóa -->
-                           <form action="{{ route('admin.coupons.delete', $coupon->coupon_id) }}" method="POST"
+                           <form action="{{ route('admin.promotionPeriods.delete', $promPer->prom_per_id) }}" method="POST"
                                     onsubmit="return confirm('Bạn có chắc chắn muốn xóa màu sắc này?');">
                                     @csrf
                                     @method('DELETE')

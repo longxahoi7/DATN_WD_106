@@ -71,10 +71,6 @@ class AuthController extends Controller
 
         if (Auth::attempt($data, $remember)) {
             // pass login
-
-
-
-
             if (Auth::user()->role == 1) {
                 return redirect()->route('index')
                     ->with('success', "Đăng nhập thành công");
@@ -90,23 +86,6 @@ class AuthController extends Controller
 
 
 
-        // if ($user->role === 1) {
-        //     return redirect()->route('admin.dashboard')->with('success', 'Đăng nhập thành công!');
-        // } elseif ($user->role === 0) {
-        //     $employee = $user->employee; // Lấy thông tin của nhân viên
-        //     if ($employee) {
-        //         if ($employee->role === 'editer') {
-        //             return redirect()->route('employee.editor.dashboard')->with('success', 'Đăng nhập thành công!');
-        //         } elseif ($employee->role === 'manager') {
-        //             return redirect()->route('employee.manager.dashboard')->with('success', 'Đăng nhập thành công!');
-        //         }
-        //     } else {
-        //         // Kiểm tra xem người dùng có phải là khách hàng không
-        //         $customer = Customer::where('user_id', $user->id)->first();
-        //         if ($customer) {
-        //             return redirect()->route('customer.dashboard')->with('success', 'Đăng nhập thành công!');
-        //         }
-        //     }
-        // }
+        
     }
 }

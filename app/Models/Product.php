@@ -11,7 +11,7 @@ class Product extends Model
     use HasFactory, SoftDeletes;
     protected $table = 'products';
     protected $primaryKey = 'product_id';
-    protected $with = ['category', 'coupons'];
+    protected $with = ['category'];
     protected $fillable = [
         'brand_id',
         'product_category_id',
@@ -50,9 +50,10 @@ class Product extends Model
     {
         return $this->belongsTo(Brand::class, 'brand_id');
     }
-    public function coupons()
+
+    public function promPerProducts()
     {
-        return $this->belongsToMany(Coupon::class, 'coupon_product', 'product_id', 'coupon_id');
+        return $this->hasMany(PromPerProduct::class, 'product_id', 'product_id');
     }
     public function productImages()
     {
@@ -95,6 +96,20 @@ class Product extends Model
             ->where('is_active', 1)  // Kiểm tra sản phẩm có đang hoạt động
             ->limit(10)  // Giới hạn số lượng sản phẩm hot
             ->get();
+    }
+
+    public function reviews()
+    {
+        return $this->hasMany(Reviews::class, 'product_id');
+    }
+
+    /**
+     * Mối quan hệ một-nhiều với các trả lời bình luận.
+     */
+    public function reviewsReplies()
+    {
+        return $this->hasManyThrough(ReviewsReply::class, Reviews::class, 
+        'product_id', 'review_id');
     }
   
 }

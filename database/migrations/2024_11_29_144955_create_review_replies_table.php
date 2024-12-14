@@ -17,6 +17,8 @@ return new class extends Migration
             $table->foreign('review_id')->references('review_id')->on('reviews')->onDelete('cascade');
             $table->unsignedInteger('user_id'); 
             $table->foreign('user_id')->references('user_id')->on('users')->onDelete('cascade');
+            $table->unsignedInteger('product_id'); 
+            $table->foreign('product_id')->references('product_id')->on('products')->onDelete('cascade');
             $table->text('content');
             $table->timestamps(); 
         });

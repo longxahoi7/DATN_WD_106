@@ -18,7 +18,6 @@ class Coupon extends Model
         'min_order_value',
         'max_order_value',
         'condition',
-        'user_id',
         'is_public',
         'start_date',
         'end_date',
@@ -28,8 +27,5 @@ class Coupon extends Model
     {
         return $this->belongsToMany(User::class, 'coupon_user', 'coupon_id', 'user_id');
     }
-    public function products()
-    {
-        return $this->belongsToMany(Product::class, 'coupon_product', 'coupon_id', 'product_id');
-    }
+    
 }

@@ -1,7 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Models\BannedWord;
+use App\Models\Reviews;
 use App\Models\Product;
 use App\Models\Attribute;
 use App\Models\AttributeProduct;
@@ -85,11 +86,50 @@ class ProductsController extends Controller
         //Hiển thj sản phẩm liên quan
         $relatedProducts = Product::where('product_category_id', $product->product_category_id)
             ->where('product_id', '!=', $product->product_id) // Loại trừ sản phẩm hiện tại
-            ->where('is_active', true) // Chỉ lấy sản phẩm đang hoạt động
+            ->where('is_active', 1) // Chỉ lấy sản phẩm đang hoạt động
             ->take(4) // Giới hạn 4 sản phẩm
             ->get();
 
-        // Trả về thông tin sản phẩm dưới dạng JSON
-        return view('user.detailProduct', compact('product', 'relatedProducts'));
+        //   lấy comment
+        $reviews = Reviews::where('product_id',$productId) // Lấy bình luận của sản phẩm (static Type $var = null;)
+        ->where('user_id', auth()->id()) // Chỉ lấy đánh giá của người dùng hiện tại
+        ->with(['user', 'replies' => function ($query) {
+            $query->whereHas('user', function ($userQuery) {
+                $userQuery->where('role', 1); // Chỉ lấy phản hồi của admin
+            });
+        }])
+        ->get();
+        return view('user.detailProduct', compact('product', 'relatedProducts', 'reviews'));
+    }
+    public function addReview(Request $request)
+    {
+       
+        $bannedWords = BannedWord::pluck('word')->toArray();
+        $comment=$request->input('comment');
+
+foreach ($bannedWords as $bannedWord) {
+    if (stripos($comment, $bannedWord) !== false) {
+        $comment = str_ireplace($bannedWord, str_repeat('*', strlen($bannedWord)), $comment);
+    }
+}
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $newImage = time() . "." . $image->getClientOriginalExtension();
+            $anh = $image->storeAs('/storage/imagePro/images', $newImage, 'public');
+        }else {
+
+            $anh = 'default.jpg';
+        }
+        // Thêm mới bình luận
+        $review = Reviews::create([
+            'product_id' => $request->input('product_id'), // Lưu product_id của review 'product_id'
+            'user_id' => auth()->id(),
+            'image' => $anh??null,
+         'rating' => $request->input(key: 'rating') ?? null,
+            'comment' =>$comment,
+        ]);
+     
+        return redirect()->back();
+
     }
 }

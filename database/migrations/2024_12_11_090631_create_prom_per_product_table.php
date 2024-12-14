@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('coupon_product', function (Blueprint $table) {
-            $table->increments('coupon_product_id');
-            $table->unsignedInteger('coupon_id');
-            $table->foreign('coupon_id')->references('coupon_id')->on('coupons')->onDelete('cascade');
+        Schema::create('prom_per_product', function (Blueprint $table) {
+            $table->increments('prom_per_product_id');
+            $table->unsignedInteger('prom_per_id');
+            $table->foreign('prom_per_id')->references('prom_per_id')->on('prom_pers')->onDelete('cascade');
             $table->unsignedInteger('product_id');
             $table->foreign('product_id')->references('product_id')->on('products')->onDelete('cascade');
             $table->timestamps();
@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('coupon_product');
+        Schema::dropIfExists('prom_per_product');
     }
 };

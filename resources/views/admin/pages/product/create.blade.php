@@ -102,24 +102,8 @@
         </div>
     </div>
 
-    <div class="row gx-2 mb-3">
-        <div class="col-12">
-            <label class="custom-label" for="discount">Discount</label>
-            <input type="number" class="form-control" id="productDiscount" name="discount" placeholder="Nhập giảm giá"
-                min="0" />
-        </div>
-    </div>
     <!-- Fourth Row -->
-    <div class="row gx-2 mb-3">
-        <div class="col-md-6">
-            <label class="custom-label" for="startDate">Ngày bắt đầu</label>
-            <input type="date" class="form-control" id="startDate" name="start_date" />
-        </div>
-        <div class="col-md-6">
-            <label class="custom-label" for="endDate">Ngày kết thúc</label>
-            <input type="date" class="form-control" id="endDate" name="end_date" />
-        </div>
-    </div>
+  
 
     <!-- Fifth Row -->
     <div class="row gx-2 mb-3">

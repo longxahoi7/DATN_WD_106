@@ -1,7 +1,8 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
-
+use Illuminate\Support\Facades\Mail;
+use App\Mail\CouponCreated;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Coupon;
@@ -13,7 +14,7 @@ class CouponController extends Controller
     //
     public function listCoupon(Request $request)
     {
-        $coupons = Coupon::with('users', 'products')->where('code', 'like', '%' . $request->nhap . '%')
+        $coupons = Coupon::with('users')->where('code', 'like', '%' . $request->nhap . '%')
             ->orWhere('is_active', 'like', '%' . $request->nhap . '%')
             ->orWhere('discount_percentage', 'like', '%' . $request->nhap . '%')
             ->orWhere('quantity', 'like', '%' . $request->nhap . '%')
@@ -64,17 +65,10 @@ class CouponController extends Controller
                     'user_id' => $userId,
                 ]);
                 $couponUsers[] = $couponUser;
+                   // Gửi email thông báo sau khi tạo coupon liên kết với người dùng
+            Mail::to(User::find($userId)->email)->send(new CouponCreated($coupon));
             }
         }
-        // if ($request->has('product_id')) {
-        //     foreach ($request->input('product_id') as $productId) {
-        //         $couponPro = CouponProduct::create([
-        //             'coupon_id' => $coupon->coupon_id,
-        //             'product_id' => $productId
-        //         ]);
-        //         $couponProducts[] = $couponPro;
-        //     }
-        // }
         return redirect()->route('admin.coupons.index')->with([
             'coupon' => $coupon,
             'couponUsers' => $couponUsers,
@@ -112,14 +106,12 @@ class CouponController extends Controller
         ]);
 
         $couponUsers = [];
-        // $couponProducts = [];
-
-        // Update user associations if provided
+      
+      
         if ($request->has('user_id')) {
-            // Remove old associations
+           
             CouponUser::where('coupon_id', $id)->delete();
 
-            // Add new associations and collect updated data
             foreach ($request->input('user_id') as $userId) {
                 $couponUser = CouponUser::create([
                     'coupon_id' => $id,
@@ -129,22 +121,6 @@ class CouponController extends Controller
             }
         }
 
-        // // Update product associations if provided
-        // if ($request->has('product_id')) {
-        //     // Remove old associations
-        //     CouponProduct::where('coupon_id', $id)->delete();
-
-        //     // Add new associations and collect updated data
-        //     foreach ($request->input('product_id') as $productId) {
-        //         $couponPro = CouponProduct::create([
-        //             'coupon_id' => $id,
-        //             'product_id' => $productId,
-        //         ]);
-        //         $couponProducts[] = $couponPro;
-        //     }
-        // }
-
-        // Return updated coupon with associated users and products
         return redirect()->route('admin.coupons.index')->with([
             'coupon' => $coupon,
             'couponUsers' => $couponUsers,
