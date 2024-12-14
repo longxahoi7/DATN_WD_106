@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PaymentVnPayController;
 use App\Http\Controllers\OrderController as OrderUserController;
+use App\Http\Controllers\Admin\UserController;
 
 Route::group(
     [
@@ -161,10 +162,22 @@ Route::group(
                 'middleware' => ['checkAdmin:admin,manager']
             ],
             function () {
-                Route::get('/orders', [OrderController::class, 'index']);
-                Route::get('/orders/{id}', [OrderController::class, 'show']);
-                Route::put('/orders/{id}', [OrderController::class, 'updateStatus']);
-                Route::delete('/orders/{id}', [OrderController::class, 'destroy']);
+                Route::get('/orders', [OrderController::class, 'index'])->name('index');
+                Route::get('/orders/{id}', [OrderController::class, 'show'])->name('show');
+                Route::put('/orders/{id}', [OrderController::class, 'updateStatus'])->name('updateStatus');
+                Route::delete('/orders/{id}', [OrderController::class, 'destroy'])->name('destroy');
+            }
+        );
+        Route::group(
+            [
+                'prefix' => 'users',
+                'as' => 'users.',
+                'middleware' => ['checkAdmin:admin,manager']
+            ],
+            function () {
+                Route::get('users', [UserController::class, 'index'])->name('index'); // Danh sách người dùng
+                Route::get('users/{id}/edit-role', [UserController::class, 'editRole'])->name('edit-role'); // Form chỉnh sửa role
+                Route::post('users/{id}/update-role', [UserController::class, 'updateRole'])->name('update-role'); // Cập nhật role
             }
         );
     }
@@ -226,10 +239,8 @@ Route::group(
                 Route::post('/cart/update/{id}', [CartController::class, 'update'])->name('cupdate');
                 Route::delete('/cart/remove/{id}', [CartController::class, 'removeItem'])->name('remove');
                 Route::get('/cart-popup', [CartController::class, 'viewCartPopup'])->name('popup');
-
             }
         );
-
     }
 );
 
@@ -257,5 +268,3 @@ Route::get('/orders-detail/{id}', [OrderController::class, 'showDetailOrder'])
     ->name('admin.orderDetail');
 
 Route::post('/admin/update-order-status', [OrderController::class, 'updateOrderStatus'])->name('admin.updateOrderStatus');
-
-
