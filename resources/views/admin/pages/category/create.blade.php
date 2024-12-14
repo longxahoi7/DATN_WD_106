@@ -2,10 +2,6 @@
 <form action="{{route('admin.categories.store')}}" method="POST" class="custom-form-container"
     enctype="multipart/form-data">
     @csrf
-    <div class="form-group">
-        <label class="custom-label" for="name">Tên danh mục <span class="custom-required-star">*</span></label>
-        <input type="text" class="form-control" id="name" name="name" placeholder="Nhập tên danh mục" required />
-    </div>
 
     <div class="form-group">
         <div class="d-flex align-items-center">
@@ -21,6 +17,10 @@
             <input type="file" class="form-control-file d-none" id="image" name="image" accept="image/*"
                 onchange="showImage(event)" />
         </div>
+    </div>
+    <div class="form-group">
+        <label class="custom-label" for="name">Tên danh mục <span class="custom-required-star">*</span></label>
+        <input type="text" class="form-control" id="name" name="name" placeholder="Nhập tên danh mục" required />
     </div>
 
     <div class="form-group">

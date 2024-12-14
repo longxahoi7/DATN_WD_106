@@ -91,7 +91,7 @@
     </div>
 
     <!-- Bảng danh sách danh mục -->
-    <table class="product-table table table-bordered text-center align-middle">
+    <table class="product-table table table-bordered text-center align-middle mb-5">
         <thead class="thead-dark">
             <tr>
                 <th style="width: 10%;">STT</th>
@@ -107,7 +107,7 @@
                 <td>{{ $index + 1 }}</td>
                 <td>{{ $category->name }}</td>
                 <td>
-                    <img src="{{ Storage::url($category->image) }} " class="cusstom-no-image"
+                    <img src="/{{ $category->image }} " class="cusstom-no-image"
                         onerror="this.onerror=null; this.src='{{ asset('imagePro/icon/icon-no-image.png') }}';">
                 </td>
                 <td>

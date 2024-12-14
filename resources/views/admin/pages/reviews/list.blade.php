@@ -7,7 +7,7 @@
     <div class="button-header">
         <button>Danh Sách Thương Hiệu <i class="fa fa-star"></i></button>
     </div>
-    <table class="product-table table table-bordered text-center align-middle">
+    <table class="product-table table table-bordered text-center align-middle mb-5">
         <thead class="thead-dark">
             <tr>
                 <th>STT</th>
@@ -29,7 +29,7 @@
                 <td>{{ $review->rating }}</td>
                 <td>{{ $review->comment }}</td>
                 <td>{{ $review->created_at }}</td>
-                
+
                 <td>
                     <form action="{{ route('admin.reviews.toggle', $review->review_id) }}" method="POST"
                         style="display:inline;">
@@ -75,10 +75,10 @@
 </div>
 
 @push('scripts')
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
 @endpush
 
 @endsection
