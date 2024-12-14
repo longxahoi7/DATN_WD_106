@@ -10,7 +10,7 @@ use App\Http\Controllers\User\CommentController;
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\CouponController;
-use App\Http\Controllers\Admin\CustomerController;
+
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\SizeController;
 use App\Http\Controllers\ProductsController;
@@ -32,7 +32,6 @@ Route::group(
     ],
     function () {
         Route::get('/dashBoard', [StatsController::class, 'Stats'])->name('dashboard');
-        Route::get('/list-users', [CustomerController::class, 'listCustomer'])->name('listUser');
 
         // CRUD CATEGORY - Manager chỉ được xem danh mục
         Route::group(
