@@ -29,7 +29,7 @@
                     <div class="details">
                         <p><strong>Người nhận:</strong> {{ $order->user->name }}</p>
                         <p><strong>Số điện thoại:</strong> {{ $order->user->phone }}</p>
-                        <p><strong>Nhận tại:</strong> {{ $order->shipping_andress }}</p>
+                        <p><strong>Nhận tại:</strong> {{ $order->shipping_address }}</p>
                     </div>
                 </div>
 
