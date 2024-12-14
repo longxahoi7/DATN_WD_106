@@ -45,7 +45,7 @@
         <ul class="d-flex justify-content-around menu-list">
             <!-- Thống kê -->
             <li>
-                <a href="http://localhost:8000/admin/dashBoard">
+                <a href="{{route('admin.dashboard')}}">
                     <i class="icon-dashboard">📊</i> Thống kê
                 </a>
             </li>
@@ -91,8 +91,8 @@
 
             <!-- Quản lý tài khoản -->
             <li>
-                <a href="user">
-                    <i class="icon-account">👥</i> Tài khoản
+                <a href="{{ route('admin.listUser') }}">
+                    <i class="icon-account" >👥</i> Tài khoản
                 </a>
             </li>
         </ul>

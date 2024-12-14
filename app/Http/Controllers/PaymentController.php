@@ -68,6 +68,7 @@ class PaymentController extends Controller
             'shipping_address' => $shippingAddress,
             'phone'  => $phone,
             'total' => $total,
+            'invoice_date' => now(),
             'shipping_fee' => $shippingFee,
             'status' => 'pending',    // Trạng thái đơn hàng
         ]);
