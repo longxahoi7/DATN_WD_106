@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\ColorController;
 use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\EmployeeController;
 use App\Http\Controllers\Admin\PromotionPeriodController;
+use App\Http\Controllers\Admin\ReviewController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\User\CommentController;
 use App\Http\Controllers\Admin\BrandController;
@@ -176,6 +177,26 @@ Route::group(
             Route::put('/update-promotionPeriod/{id}', [PromotionPeriodController::class, 'updatePromotionPeriod'])->name('update');
         }
         );
+        //Quản lí đánh giá
+            // CRUD COUPON
+            Route::group(
+                [
+                    'prefix' => 'reviews',
+                    'as' => 'reviews.'
+                ],
+                function () {
+                Route::get('/list-review', [ReviewController::class,'listReview'])->name('index');
+                Route::get('/create-review', [ReviewController::class,'createReview'])->name('create');
+                Route::post('/review/{id}/toggle', [ReviewController::class, 'toggle'])->name('toggle');
+                Route::get('/comments/{id}/reply', [ReviewController::class, 'reply'])->name('reply');
+                Route::post('/comments/{id}/reply', [ReviewController::class, 'storeReply'])->name('storeReply');
+                Route::get('/detail-review/{id}', [ReviewController::class, 'detailReview'])->name('detail');
+                Route::get('/edit-review/{id}', [ReviewController::class, 'editReview'])->name('edit');
+                Route::delete('/destroy-review/{id}', [ReviewController::class, 'destroyReview'])->name('delete');
+                Route::put('/update-review/{id}', [ReviewController::class, 'updateReview'])->name('update');
+            }
+            );
+
         //Quản lý đơn hàng
         Route::group(
             [
@@ -218,6 +239,7 @@ Route::group(
                 Route::get('/color', [ColorController::class, 'index'])->name('color.index');
                 Route::get('/size', [SizeController::class, 'index'])->name('size.index');
                 Route::get('/brand', [BrandController::class, 'index'])->name('brand.index');
+                Route::post('/comments', [ProductsController::class, 'addReview'])->name('addReview');
             }
         );
         // Quản lý đơn hàng

@@ -96,6 +96,18 @@
                     <i class="icon-account">👥</i> Tài khoản
                 </a>
             </li>
+              <!-- Quản lý bình luận -->
+              <li class="dropdown-coupon">
+                <a href="#" class="toggle-link-coupon dropdown-toggle">
+                    <i class="icon-management">🏷️</i> Bỉnh luận
+                </a>
+
+                <ul id="managementSubmenu-coupon" class="submenu-coupon">
+                <li><a href="{{route('admin.reviews.index')}}">Bình luận khách hàng</a></li>
+                <li><a href="">Bình luận quản lý </a></li>
+
+                </ul>
+            </li>
         </ul>
     </div>
 </div>

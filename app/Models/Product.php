@@ -98,26 +98,18 @@ class Product extends Model
             ->get();
     }
 
+    public function reviews()
+    {
+        return $this->hasMany(Reviews::class, 'product_id');
+    }
 
-//     public function getFinalPriceAttribute()
-// {
-//     // Giá gốc của sản phẩm
-//     $originalPrice = $this->attributeProducts->first()?->price ?? 0;
-
-//     // Kiểm tra xem có giảm giá không
-//     $promotion = $this->promPerProducts->first()?->promPer;
-
-//     if ($promotion) {
-//         // Áp dụng giảm giá theo số tiền hoặc phần trăm
-//         if ($promotion->discount_amount) {
-//             return max(0, $originalPrice - $promotion->discount_amount); // Không để giá âm
-//         } elseif ($promotion->discount_percentage) {
-//             return max(0, $originalPrice * (1 - $promotion->discount_percentage / 100));
-//         }
-//     }
-
-//     // Trả về giá gốc nếu không có giảm giá
-//     return $originalPrice;
-// }
+    /**
+     * Mối quan hệ một-nhiều với các trả lời bình luận.
+     */
+    public function reviewsReplies()
+    {
+        return $this->hasManyThrough(ReviewsReply::class, Reviews::class, 
+        'product_id', 'review_id');
+    }
   
 }
