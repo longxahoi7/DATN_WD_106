@@ -118,7 +118,7 @@
     <div class="order-summary">
         <h3>Tổng tiền đơn hàng: {{ number_format($emailData['total'], 0, ',', '.') }} VND</h3>
         <h3>Phí vận chuyển: {{ number_format($emailData['shippingFee'], 0, ',', '.') }} VND</h3>
-        <h3><strong>Tổng cộng: {{ number_format($emailData['total'] + $emailData['shippingFee'], 0, ',', '.') }} VND</strong></h3>
+        <h3><strong>Tổng cộng: {{ number_format($emailData['total'] , 0, ',', '.') }} VND</strong></h3>
     </div>
 
     <div class="footer">

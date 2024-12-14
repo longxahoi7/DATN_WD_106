@@ -46,6 +46,8 @@
                             @endif
                         </p>
                     </div>
+                    <strong>Trạng thái đơn hàng :</strong>
+                    <p>{{$order->status}} </p>
                 </div>
             </div>
 

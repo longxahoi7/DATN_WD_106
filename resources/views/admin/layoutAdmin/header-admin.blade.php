@@ -45,7 +45,7 @@
         <ul class="d-flex justify-content-around menu-list">
             <!-- Thống kê -->
             <li>
-                <a href="{{route('admin.dashboard')}}">
+                <a href="{{ route('admin.dashboard') }}">
                     <i class="icon-dashboard">📊</i> Thống kê
                 </a>
             </li>

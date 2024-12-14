@@ -17,6 +17,7 @@ class PaymentController extends Controller
     //
     public function checkoutCOD(Request $request)
     {
+        
         // Lấy thông tin người dùng đang đăng nhập
         $user = Auth::user();
     

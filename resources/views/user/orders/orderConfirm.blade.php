@@ -69,7 +69,7 @@
 
                 <!-- Nút xác nhận -->
                 <div class="text-center mt-4">
-                    <form action="{{ route('user.order.checkoutcod') }}" method="POST">
+                    <form action="{{ route('user.order.order-cod') }}" method="POST">
                         @csrf
                         <input type="hidden" name="amount" value="{{ $total }}">
                         <button type="submit" class="btn btn-success btn-lg">Xác Nhận Đặt Hàng</button>
