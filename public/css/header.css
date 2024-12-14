@@ -73,7 +73,7 @@
     height: 40px; /* Giảm chiều cao của thanh tìm kiếm */
     padding: 8px 15px; /* Giảm padding */
     font-size: 14px; /* Giảm kích thước font chữ */
-    border: 1px solid #00cd66;
+    border: 1px solid #000000;
     border-radius: 20px; /* Giảm bo tròn */
     background-color: #f9f9f9;
     transition: all 0.3s ease;

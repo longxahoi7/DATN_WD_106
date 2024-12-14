@@ -267,3 +267,15 @@
     color: #000;
     cursor: pointer;
 }
+
+/* Ẩn spinner cho input number trên Chrome, Safari, Edge */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Ẩn spinner trên Firefox */
+input[type="number"] {
+    -moz-appearance: textfield;
+}

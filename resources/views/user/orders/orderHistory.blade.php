@@ -7,13 +7,8 @@
 @section('content')
 <div class="container">
     <div class="row-order">
-        <!-- Bên trái: Menu -->
-        <div class="col-md-3 menu-left">
-            @include('user.components.navbarOrderHistory')
-        </div>
-
         <!-- Bên phải: Bộ lọc và danh sách đơn hàng -->
-        <div class="col-md-9 order-right">
+        <div class="col-md-12 order-right">
             <div class="button-header">
                 <button>
                     Lịch sử đơn hàng <i class="fa fa-star"></i>
@@ -70,14 +65,16 @@
                             @foreach ($order->orderItems as $item)
                             <li class="order-item {{ $loop->index >= 2 ? 'hidden-item' : '' }}">
                                 <div class="item-left">
-                                    <img src="{{ asset('storage/' . $item->product->main_image_url) }}" alt="{{ $item->product->name }}" />
+                                    <img src="{{ asset('storage/' . $item->product->main_image_url) }}"
+                                        alt="{{ $item->product->name }}" />
                                     <div class="item-info">
                                         <strong>{{ $item->product->name }}</strong><br>
                                         <span class="item-quantity">x{{ $item->quantity }}</span>
                                     </div>
                                 </div>
                                 <div class="item-right">
-                                    <span class="item-price"><span class="custom-font-text-total">Tổng tiền:</span> {{ number_format($item->total, 0, ',', '.') }} đ</span>
+                                    <span class="item-price"><span class="custom-font-text-total">Tổng tiền:</span>
+                                        {{ number_format($item->total, 0, ',', '.') }} đ</span>
                                 </div>
                             </li>
                             @endforeach
@@ -87,7 +84,8 @@
                         @endif
 
                         <hr />
-                        <p class="text-right"><strong>Tổng tiền:</strong> {{ number_format($order->total, 0, ',', '.') }} đ</p>
+                        <p class="text-right"><strong>Tổng tiền:</strong>
+                            {{ number_format($order->total, 0, ',', '.') }} đ</p>
 
                         @php
                         $paymentStatusTranslations = [
@@ -112,13 +110,16 @@
                             @if ($order->status === 'pending')
                             <form action="{{ route('user.order.cancelOrder', $order->order_id) }}" method="POST">
                                 @csrf
-                                <button type="submit" class="btn btn-danger" onclick="return confirm('Bạn có chắc muốn hủy đơn hàng này?');">Hủy đơn hàng</button>
+                                <button type="submit" class="btn btn-danger"
+                                    onclick="return confirm('Bạn có chắc muốn hủy đơn hàng này?');">Hủy đơn
+                                    hàng</button>
                             </form>
                             @else
                             <button type="submit" class="btn btn-danger" disabled>Hủy đơn hàng</button>
                             @endif
 
-                            <a href="{{ route('user.order.detail', $order->order_id) }}" class="btn btn-detail-custom">Chi tiết</a>
+                            <a href="{{ route('user.order.detail', $order->order_id) }}"
+                                class="btn btn-detail-custom">Chi tiết</a>
                         </div>
                     </div>
                 </div>
@@ -135,39 +136,40 @@
 
 @push('scripts')
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Toggle xem thêm ẩn bớt
-        document.querySelectorAll('.toggle-btn').forEach(button => {
-            button.addEventListener('click', function() {
-                const hiddenItems = this.closest('.card').querySelectorAll('.hidden-item');
-                const isExpanded = this.textContent.trim() === 'Ẩn bớt';
+document.addEventListener('DOMContentLoaded', function() {
+    // Toggle xem thêm ẩn bớt
+    document.querySelectorAll('.toggle-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            const hiddenItems = this.closest('.card').querySelectorAll('.hidden-item');
+            const isExpanded = this.textContent.trim() === 'Ẩn bớt';
 
-                hiddenItems.forEach(item => {
-                    item.style.display = isExpanded ? 'none' : 'flex';
-                });
-
-                this.textContent = isExpanded ? 'Xem thêm' : 'Ẩn bớt';
+            hiddenItems.forEach(item => {
+                item.style.display = isExpanded ? 'none' : 'flex';
             });
-        });
 
-        // Bộ lọc theo trạng thái đơn hàng
-        document.querySelectorAll('.custom-filter-btn').forEach(button => {
-            button.addEventListener('click', function() {
-                const filter = this.getAttribute('data-filter');
-
-                document.querySelectorAll('.order-card').forEach(card => {
-                    const status = card.getAttribute('data-status');
-                    if (filter === 'all' || status === filter) {
-                        card.style.display = '';
-                    } else {
-                        card.style.display = 'none';
-                    }
-                });
-
-                document.querySelectorAll('.custom-filter-btn').forEach(btn => btn.classList.remove('active'));
-                this.classList.add('active');
-            });
+            this.textContent = isExpanded ? 'Xem thêm' : 'Ẩn bớt';
         });
     });
+
+    // Bộ lọc theo trạng thái đơn hàng
+    document.querySelectorAll('.custom-filter-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            const filter = this.getAttribute('data-filter');
+
+            document.querySelectorAll('.order-card').forEach(card => {
+                const status = card.getAttribute('data-status');
+                if (filter === 'all' || status === filter) {
+                    card.style.display = '';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            document.querySelectorAll('.custom-filter-btn').forEach(btn => btn.classList.remove(
+                'active'));
+            this.classList.add('active');
+        });
+    });
+});
 </script>
 @endpush

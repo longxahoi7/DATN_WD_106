@@ -9,11 +9,6 @@
 @section('content')
 <div class="container">
     <div class="row-order">
-        <!-- Bên trái: Menu -->
-        <div class="col-md-3 menu-left">
-            @include('user.components.navbarOrderHistory')
-        </div>
-
         <!-- Bên phải: Chi tiết đơn hàng -->
         <div class="col-md-9 order-right">
             <div class="button-header">
@@ -37,7 +32,7 @@
                 <div class="payment-info">
                     <div class="details d-flex">
                         <p><i class="fa fa-credit-card mr-2"></i> <strong> Hình thức thanh toán: </strong>
-                            </p>
+                        </p>
                         <p>
                             @if($order->payment_method == 'COD')
                             Thanh toán khi nhận hàng

@@ -89,7 +89,7 @@
                 </div>
             </div>
 
-            <table class="product-table table table-bordered text-center align-middle">
+            <table class="product-table table table-bordered text-center align-middle mb-5">
                 <thead class="thead-dark">
                     <tr>
                         <th style="width: 5%;">STT</th>
@@ -136,14 +136,17 @@
                                 </a>
                                 <!-- Xóa -->
                                 @if(Auth::user()->role !== 3)
-                                <form action="{{ route('admin.products.delete', $product->product_id) }}" method="POST"
-                                    onsubmit="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này?');">
+                                <form id="delete-product-form-{{ $product->product_id }}"
+                                    action="{{ route('admin.products.delete', $product->product_id) }}" method="POST"
+                                    style="display: none;">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="action-btn delete">
-                                        <i class="fas fa-trash-alt"></i>
-                                    </button>
                                 </form>
+
+                                <button type="button" class="action-btn delete"
+                                    onclick="confirmDelete({{ $product->product_id }})">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
                                 @else
                                 @endif
                             </div>
@@ -250,15 +253,28 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
     function setDeleteData(productName) {
         document.getElementById("deleteproductName").textContent =
             productName;
     }
 
-    function confirmDelete() {
-        alert("Thương hiệu đã được xóa!");
-        $("#deleteproductModal").modal("hide");
+    function confirmDelete(productId) {
+        Swal.fire({
+            title: 'Bạn có chắc chắn?',
+            text: "Sản phẩm sẽ bị xóa vĩnh viễn!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Xóa',
+            cancelButtonText: 'Hủy'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById(`delete-product-form-${productId}`).submit();
+            }
+        });
     }
     </script>
     @endpush
