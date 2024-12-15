@@ -43,6 +43,7 @@
                             @endif
                         </p>
                     </div>
+
                     @php
                     $statusLabels = [
                     'pending' => 'Đang chờ xử lý',
@@ -73,6 +74,7 @@
                     <p><i class="fa-solid fa-clock"></i><strong>Thời gian cập nhật : </strong>
                         {{ $order->updated_at->format('d-m-Y H:i:s')}}
                     </p>
+
                 </div>
             </div>
 
