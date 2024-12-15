@@ -259,6 +259,22 @@
     color: #fff;
     font-weight: bold;
 }
+/* Viền bao quanh cho màu sắc */
+.color-option {
+    border: 2px solid transparent; /* Viền mặc định là trong suốt */
+    transition: all 0.3s ease; /* Thêm hiệu ứng khi thay đổi */
+}
+
+.color-option.selected {
+    border-color: #000; /* Viền màu đen khi được chọn */
+    transform: scale(1.2); /* Phóng to nhẹ khi chọn */
+}
+
+/* Nền màu đen khi chọn size */
+.size-option.selected {
+    background-color: #000; /* Nền đen khi chọn */
+    color: white; /* Màu chữ trắng khi chọn */
+}
 
 /* Số lượng */
 .quantity-container {
