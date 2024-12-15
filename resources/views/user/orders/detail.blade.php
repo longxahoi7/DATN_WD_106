@@ -66,10 +66,10 @@
                         {{ $statusLabels[$order->status] ?? 'Không xác định' }}
                     </p>
                     <p><i class="fa-solid fa-calendar-days"></i><strong>Ngày đặt</strong>
-                        {{ $order->order_date->format('d/m/Y H:i') }}
+                        {{ $order->created_at->format('d-m-Y H:i:s') }}
                     </p>
                     <p><i class="fa-solid fa-clock"></i><strong>Thời gian cập nhật</strong>
-                        {{ $order->updated_at }}
+                        {{ $order->updated_at->format('d-m-Y H:i:s')}}
                     </p>
                 </div>
             </div>

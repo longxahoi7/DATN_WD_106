@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Order;
+use Carbon\Carbon;
 
 class OrderController extends Controller
 {
@@ -21,14 +22,22 @@ class OrderController extends Controller
     // }
 
     // Lấy chi tiết một đơn hàng
-    public function showAllOrders()
+    public function showAllOrders(Request $request)
     {
-        // Lấy toàn bộ orders, eager load quan hệ với bảng users
-        $orders = Order::with('user')
-        ->orderBy('order_id', 'desc') 
-        ->get();
+        $startDate = $request->input('start_date'); // Ngày bắt đầu
+        $endDate = $request->input('end_date');     // Ngày kết thúc
+    
+        $query = Order::with('user');
+    
+        if ($startDate) {
+            $query->whereDate('created_at', '>=', Carbon::parse($startDate));
+        }
+        if ($endDate) {
+            $query->whereDate('created_at', '<=', Carbon::parse($endDate));
+        }
+    
+        $orders = $query->orderBy('order_id', 'desc')->get();
 
-        // Trả dữ liệu về view
         return view('admin.pages.order.order_management', compact('orders'));
     }
 

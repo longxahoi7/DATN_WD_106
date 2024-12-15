@@ -3,18 +3,20 @@
 
 <body>
     <div class="container mt-4">
-        <div class="form-row mb-4">
-            <div class="col">
-                <input type="date" class="form-control" placeholder="Từ ngày" />
+    <form method="GET" action="{{ route('admin.orders') }}" class="mb-4">
+        <div class="row">
+            <div class="col-md-3">
+                <input type="date" name="start_date" class="form-control" placeholder="Ngày bắt đầu" value="{{ request('start_date') }}">
             </div>
-            <div class="col-auto">
-                <span>-</span>
+            <div class="col-md-3">
+                <input type="date" name="end_date" class="form-control" placeholder="Ngày kết thúc" value="{{ request('end_date') }}">
             </div>
-            <div class="col">
-                <input type="date" class="form-control" placeholder="Đến ngày" />
+            <div class="col-md-3">
+                <button type="submit" class="btn btn-primary">Lọc</button>
+                <a href="{{ route('admin.orders') }}" class="btn btn-secondary">Đặt lại</a>
             </div>
         </div>
-        <button class="btn btn-success mb-4">CHỌN LẠI</button>
+    </form>
         <table class="table table-bordered">
             <thead class="thead-light">
                 <tr>

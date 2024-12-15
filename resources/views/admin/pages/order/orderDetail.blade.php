@@ -20,9 +20,27 @@
                 <div class="order-card">
                     <h2>2. Thông tin đơn hàng</h2>
                     <p><strong>Mã đơn hàng:</strong> {{ $order->order_id }}</p>
-                    <p><strong>Trạng thái đơn hàng:</strong> {{ $order->status }}</p>
-                    <p><strong>Trạng thái thanh toán:</strong> {{ $order->payment_status }}</p>
-                    <p><strong>Ngày mua hàng:</strong>{{ $order->created_at->format('Y-m-d') }}</p>
+                    @php
+                    $statusLabels = [
+                    'pending' => 'Đang chờ xử lý',
+                    'shipped' => 'Đang vận chuyển',
+                    'delivered' => 'Đã giao hàng',
+                    'cancelled' => 'Đã hủy',
+                    'completed' => 'Hoàn thành',
+                    ];
+                    $statusTranslations = [
+                    'pending' => 'Chờ xử lý',
+                    'paid' => 'Đã thanh toán',
+                    'failed' => 'Thanh toán thất bại',
+                    'refunded' => 'Hoàn tiền',
+                    'cancelled' => 'Đã hủy',
+                    ];
+
+                    @endphp
+                    <p><strong>Trạng thái đơn hàng:</strong>  {{ $statusLabels[$order->status] ?? 'Không xác định' }}</p>
+                    <p><strong>Trạng thái thanh toán:</strong> {{ $statusTranslations[$order->payment_status] ?? 'Không xác định' }}</p>
+                    <p><strong>Ngày mua hàng:</strong> {{ $order->created_at->format('d-m-Y H:i:s') }}</p>
+                    <p><strong>Ngày cập nhật đơn hàng:</strong> {{ $order->updated_at->format('d-m-Y H:i:s') }}</p>
                     <!-- <p><strong>Trạng thái:</strong> Chờ xác nhận</p> -->
                     <div class="mt-4">
                         <!-- <button class="btn btn-success" id="confirmOrderBtn">Xác nhận đơn hàng</button>
@@ -61,6 +79,22 @@
                     </tr>
                     @endforeach
                 </tbody>
+                <tfoot>
+                            <tr>
+                                <td colspan="6">Tổng giá trị đơn hàng</td>
+                                <td>{{ number_format($order->orderItems->sum(function($item) { return $item->price * $item->quantity; }), 0, ',', '.') }}
+                                    VND</td>
+                            </tr>
+                            <tr>
+                                <td colspan="6">Phí Ship</td>
+                                <td>40,000 VND</td>
+                            </tr>
+                            <tr>
+                                <td colspan="6">Thành tiền</td>
+                                <td>{{ number_format($order->orderItems->sum(function($item) { return $item->price * $item->quantity; }) + 40000, 0, ',', '.') }}
+                                    VND</td>
+                            </tr>
+                        </tfoot>
             </table>
             <!-- <div class="text-right mt-4">
                 <strong>Tổng tiền:</strong>
