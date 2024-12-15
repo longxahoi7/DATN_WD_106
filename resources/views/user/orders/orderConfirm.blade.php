@@ -10,7 +10,7 @@
             Thông Tin Người Nhận
         </div>
         <div class="card-body">
-            <form action="{{ route('user.order.checkoutcod') }}" method="POST">
+            <form id="orderForm" action="{{ route('user.order.checkoutcod') }}" method="POST">
                 @csrf
                 <div class="mb-3">
                     <label for="name" class="form-label">Họ và Tên</label>
@@ -24,7 +24,6 @@
                     <label for="address" class="form-label">Địa Chỉ</label>
                     <input name="shipping_address" id="shipping_address" class="form-control" required value="{{ old('shipping_address', $user->address ?? '') }}"></input>
                 </div>
-
                 <!-- Danh sách sản phẩm -->
                 <div class="card mt-4">
                     <div class="card-header bg-secondary text-white">
@@ -45,7 +44,6 @@
                             </thead>
                             <tbody>
                                 @foreach ($productDetails as $product)
-                 
                                 <tr>
                                     <td>{{ $product['name'] }}</td>
                                     <td>{{ $product['color'] }}</td>
@@ -69,15 +67,30 @@
 
                 <!-- Nút xác nhận -->
                 <div class="text-center mt-4">
-                    <form action="{{ route('user.order.order-cod') }}" method="POST">
-                        @csrf
-                        <input type="hidden" name="amount" value="{{ $total }}">
-                        <button type="submit" class="btn btn-success btn-lg">Xác Nhận Đặt Hàng</button>
-                    </form>
+                    <input type="hidden" name="amount" value="{{ $total }}">
+                    <button type="submit" class="btn btn-success btn-lg">Xác Nhận Đặt Hàng</button>
+                    <button name="redirect" type="button" id="btnVnPay" class="btn btn-success btn-lg">Thanh Toán VNPay</button>
                     <a href="{{ route('user.cart.index') }}" class="btn btn-secondary btn-lg">Quay Lại Giỏ Hàng</a>
                 </div>
             </form>
         </div>
     </div>
 </div>
+
+<!-- Form ẩn cho VNPay -->
+<form id="vnpayForm" action="{{ route('checkout.vnpay') }}" method="POST" style="display: none;">
+    @csrf
+    <input type="hidden" name="amount" value="{{ $total }}">
+    <input type="hidden" name="name" id="vnpayName" value="{{ old('name', $user->name ?? '') }}">
+    <input type="hidden" name="phone" id="vnpayPhone" value="{{ old('phone', $user->phone ?? '') }}">
+    <input type="hidden" name="shipping_address" id="vnpayAddress" value="{{ old('shipping_address', $user->address ?? '') }}">
+    <input type="hidden" name="redirect" value="1">
+</form>
+
+<script>
+   document.getElementById('btnVnPay').addEventListener('click', function() {
+    const form = document.getElementById('vnpayForm');
+    form.submit(); // Gửi form đến VNPay
+});
+</script>
 @endsection

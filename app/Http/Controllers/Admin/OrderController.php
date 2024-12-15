@@ -58,7 +58,4 @@ class OrderController extends Controller
         // Nếu không tìm thấy đơn hàng
         return response()->json(['success' => false, 'message' => 'Không tìm thấy đơn hàng!']);
     }
-
-
-
 }

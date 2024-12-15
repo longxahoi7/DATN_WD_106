@@ -214,7 +214,7 @@ public function handleVNPayCallback(Request $request)
     } catch (\Exception $e) {
         // Log lỗi nếu có
         Log::error('VNPAY Callback Error: ' . $e->getMessage());
-        return redirect()->route('users.cart')->with('error', 'Đã xảy ra lỗi trong quá trình xử lý.');
+        return redirect()->route('user.cart.index')->with('error', 'Đã xảy ra lỗi trong quá trình xử lý.');
     }
 }
 

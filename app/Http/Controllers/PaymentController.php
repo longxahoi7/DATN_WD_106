@@ -102,9 +102,6 @@ class PaymentController extends Controller
         ]);
     }
     
-    
-
-
     // Trang thông báo thanh toán thành công
 
     public function orderSuccess()
@@ -120,4 +117,5 @@ class PaymentController extends Controller
         // Trả về view với thông báo và tên người dùng
         return view('user.orders.order-cod', compact('userName', 'successMessage'));
     }
+
 }
