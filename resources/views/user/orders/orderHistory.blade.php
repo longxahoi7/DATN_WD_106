@@ -71,8 +71,10 @@
                                         <span class="item-quantity">x{{ $item->quantity }}</span>
                                     </div>
                                 </div>
+                                <div class="attribute-info"><strong>Màu sắc:{{ $item->color ? $item->color->name : 'N/A' }}</strong></div>
+                                <div class="attribute-info"><strong>Kích thước:{{ $item->size ? $item->size->name : 'N/A' }}</strong></div>
                                 <div class="item-right">
-                                    <span class="item-price"><span class="custom-font-text-total">Tổng tiền:</span> {{ number_format($item->total, 0, ',', '.') }} đ</span>
+                                    <span class="item-price"><span class="custom-font-text-total"></span> {{ number_format($item->total, 0, ',', '.') }} đ</span>
                                 </div>
                             </li>
                             @endforeach
@@ -82,8 +84,11 @@
                         @endif
 
                         <hr />
-                        <p class="text-right"><strong>Tổng tiền:</strong>
-                            {{ number_format($order->total, 0, ',', '.') }} đ</p>
+                        <p class="text-right">
+                            <strong>Thành tiền:</strong>
+                            {{ number_format($order->total, 0, ',', '.') }} đ
+
+                        </p>
 
                         @php
                         $paymentStatusTranslations = [
@@ -134,40 +139,40 @@
 
 @push('scripts')
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Toggle xem thêm ẩn bớt
-    document.querySelectorAll('.toggle-btn').forEach(button => {
-        button.addEventListener('click', function() {
-            const hiddenItems = this.closest('.card').querySelectorAll('.hidden-item');
-            const isExpanded = this.textContent.trim() === 'Ẩn bớt';
+    document.addEventListener('DOMContentLoaded', function() {
+        // Toggle xem thêm ẩn bớt
+        document.querySelectorAll('.toggle-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const hiddenItems = this.closest('.card').querySelectorAll('.hidden-item');
+                const isExpanded = this.textContent.trim() === 'Ẩn bớt';
 
-            hiddenItems.forEach(item => {
-                item.style.display = isExpanded ? 'none' : 'flex';
+                hiddenItems.forEach(item => {
+                    item.style.display = isExpanded ? 'none' : 'flex';
+                });
+
+                this.textContent = isExpanded ? 'Xem thêm' : 'Ẩn bớt';
             });
+        });
 
-            this.textContent = isExpanded ? 'Xem thêm' : 'Ẩn bớt';
+        // Bộ lọc theo trạng thái đơn hàng
+        document.querySelectorAll('.custom-filter-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const filter = this.getAttribute('data-filter');
+
+                document.querySelectorAll('.order-card').forEach(card => {
+                    const status = card.getAttribute('data-status');
+                    if (filter === 'all' || status === filter) {
+                        card.style.display = '';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+
+                document.querySelectorAll('.custom-filter-btn').forEach(btn => btn.classList.remove(
+                    'active'));
+                this.classList.add('active');
+            });
         });
     });
-
-    // Bộ lọc theo trạng thái đơn hàng
-    document.querySelectorAll('.custom-filter-btn').forEach(button => {
-        button.addEventListener('click', function() {
-            const filter = this.getAttribute('data-filter');
-
-            document.querySelectorAll('.order-card').forEach(card => {
-                const status = card.getAttribute('data-status');
-                if (filter === 'all' || status === filter) {
-                    card.style.display = '';
-                } else {
-                    card.style.display = 'none';
-                }
-            });
-
-            document.querySelectorAll('.custom-filter-btn').forEach(btn => btn.classList.remove(
-                'active'));
-            this.classList.add('active');
-        });
-    });
-});
 </script>
 @endpush
