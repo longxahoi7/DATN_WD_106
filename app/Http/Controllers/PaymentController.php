@@ -36,7 +36,7 @@ class PaymentController extends Controller
         // Lấy thông tin địa chỉ giao hàng và số điện thoại từ form
         $shippingAddress = $request->input('shipping_address');  // Lấy địa chỉ giao hàng từ form
         $phone = $request->input('phone');                        // Lấy số điện thoại từ form
-    
+        $recipients_name = $request->input('recipient_name'); // L
         // Tính tổng tiền đơn hàng (không bao gồm phí vận chuyển)
         $totalWithoutShipping = 0;
         $productDetails = []; // Lưu thông tin chi tiết sản phẩm
@@ -63,7 +63,6 @@ class PaymentController extends Controller
         $shippingFee = 40000;
         $total = $totalWithoutShipping + $shippingFee;
     
-        // Tạo đơn hàng mới và lưu shipping_address
         $order = Order::create([
             'user_id' => $user->user_id,
             'shipping_address' => $shippingAddress,
@@ -72,7 +71,9 @@ class PaymentController extends Controller
             'invoice_date' => now(),
             'shipping_fee' => $shippingFee,
             'status' => 'pending',  
-            'payment_method'  => 'COD'// Trạng thái đơn hàng
+            'payment_method'  => 'COD',
+            'recipient_name' => $recipients_name
+
         ]);
     
         // Thêm các sản phẩm vào đơn hàng
@@ -91,7 +92,15 @@ class PaymentController extends Controller
     
         // Xóa các sản phẩm trong giỏ hàng sau khi thanh toán
         $shoppingCart->cartItems()->delete();
-    
+        $emailData = [
+            'user' => $user,
+            'address' => $shippingAddress,
+            'phone' => $phone,
+            'productDetails' => $productDetails,
+            'total' => $total,
+            'shippingFee' => $shippingFee
+        ];
+        Mail::to($user->email)->send(new OrderConfirm($emailData));
         // Chuyển hướng đến trang thông báo thanh toán thành công và truyền thông tin
         return view('user.orders.order-cod', [
             'order' => $order,

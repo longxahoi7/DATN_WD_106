@@ -14,7 +14,7 @@
                 @csrf
                 <div class="mb-3">
                     <label for="name" class="form-label">Họ và Tên</label>
-                    <input type="text" name="name" id="name" class="form-control" value="{{ old('name', $user->name ?? '') }}" required>
+                    <input type="text" name="recipient_name" id="recipient_name" class="form-control" value="{{ old('name', $user->name ?? '') }}" required>
                 </div>
                 <div class="mb-3">
                     <label for="phone" class="form-label">Số Điện Thoại</label>

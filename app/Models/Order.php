@@ -20,7 +20,8 @@ class Order extends Model
         'phone',
         'payment_method',
         'create_at',
-        'update_at'
+        'update_at',
+        'recipient_name'
         // Thêm các thuộc tính khác nếu cần
     ];
     protected $casts = [
