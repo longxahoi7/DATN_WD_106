@@ -148,7 +148,7 @@
                     <input type="hidden" name="amount" value="{{ $finalTotal }}">
                     <button type="submit" class="custom-btn-cod">Thanh toán</button>
                 </form>
-                
+
             </div>
             <a href="/product/product-list" class="continue-shopping">
                 <i class="fa fa-arrow-left"></i> Tiếp tục mua hàng

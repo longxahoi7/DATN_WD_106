@@ -206,7 +206,7 @@ public function handleVNPayCallback(Request $request)
         // Thông báo kết quả giao dịch
         if ($paymentStatus == 'paid') {
             Log::info('Thanh toán thành công cho đơn hàng: ' . $order->order_id);
-            return redirect()->route('home')->with('success', 'Thanh toán thành công!');
+            return redirect()->route('user.order.order-cod')->with('success', 'Thanh toán thành công!');
         } else {
             Log::info('Thanh toán thất bại cho đơn hàng: ' . $order->order_id);
             return redirect()->route('user.cart.index')->with('error', 'Thanh toán thất bại.');
@@ -216,8 +216,7 @@ public function handleVNPayCallback(Request $request)
         Log::error('VNPAY Callback Error: ' . $e->getMessage());
         return redirect()->route('user.cart.index')->with('error', 'Đã xảy ra lỗi trong quá trình xử lý.');
     }
+
 }
-
-
 
 }

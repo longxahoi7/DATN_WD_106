@@ -66,7 +66,7 @@
                     </li>
                     <li><a href="{{ route('admin.brands.index') }}"><i class="icon-tags">🏷️</i> Quản lý thương
                             hiệu</a></li>
-                           
+
                 </ul>
             </li>
 
@@ -77,8 +77,8 @@
                 </a>
 
                 <ul id="managementSubmenu-coupon" class="submenu-coupon">
-                <li><a href="{{route('admin.coupons.index')}}">Phiếu giảm giá</a></li>
-                <li><a href="{{route('admin.promotionPeriods.index')}}">Đợt giảm giá</a></li>
+                    <li><a href="{{route('admin.coupons.index')}}">Phiếu giảm giá</a></li>
+                    <li><a href="{{route('admin.promotionPeriods.index')}}">Đợt giảm giá</a></li>
 
                 </ul>
             </li>
@@ -93,18 +93,18 @@
             <!-- Quản lý tài khoản -->
             <li>
                 <a href="{{ route('admin.users.listUser') }}">
-                    <i class="icon-account" >👥</i> Tài khoản
+                    <i class="icon-account">👥</i> Tài khoản
                 </a>
             </li>
-              <!-- Quản lý bình luận -->
-              <li class="dropdown-coupon">
-                <a href="#" class="toggle-link-coupon dropdown-toggle">
+            <!-- Quản lý bình luận -->
+            <li class="dropdown-coupon">
+                <a href="{{route('admin.reviews.index')}}" class="toggle-link-coupon dropdown-toggle">
                     <i class="icon-management">🏷️</i> Bỉnh luận
                 </a>
 
                 <ul id="managementSubmenu-coupon" class="submenu-coupon">
-                <li><a href="{{route('admin.reviews.index')}}">Bình luận khách hàng</a></li>
-                <li><a href="">Bình luận quản lý </a></li>
+                    <li><a href="{{route('admin.reviews.index')}}">Bình luận khách hàng</a></li>
+                    <li><a href="">Bình luận quản lý </a></li>
 
                 </ul>
             </li>
