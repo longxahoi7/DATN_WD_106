@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="vi">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Trang Nữ Ảnh</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                margin: 0;
+                padding: 20px;
+                background-color: #f4f4f4;
+            }
+            .container {
+                background: #fff;
+                padding: 20px;
+                border-radius: 5px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            }
+            .header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                border-bottom: 2px solid #eee;
+                padding-bottom: 10px;
+            }
+            .header h1 {
+                font-size: 24px;
+                color: #333;
+            }
+            .create-order-button {
+                background-color: #28a745;
+                color: white;
+                border: none;
+                padding: 10px 20px;
+                border-radius: 5px;
+                cursor: pointer;
+                font-size: 16px;
+            }
+            .create-order-button:hover {
+                background-color: #0056b3;
+            }
+            .order-numbers {
+                display: flex;
+                justify-content: space-between;
+                flex-grow: 1;
+                margin-top: 10px;
+            }
+            .order-number {
+                display: flex;
+                align-items: center;
+                cursor: pointer;
+                padding: 5px;
+                position: relative;
+            }
+            .order-number.active {
+                color: #28a745;
+            }
+            .order-number.active::after {
+                content: "";
+                position: absolute;
+                width: 100%;
+                height: 2px;
+                background-color: #28a745;
+                bottom: -5px;
+                left: 0;
+            }
+            .icon {
+                margin-left: 5px;
+                cursor: pointer;
+                font-size: 18px;
+                color: #d9534f;
+            }
+            .product-header {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                margin-top: 20px;
+            }
+            .product-header h2 {
+                margin: 0;
+                color: #333;
+            }
+            .order-list {
+                margin: 20px 0;
+            }
+            .order-item {
+                background: #f9f9f9;
+                padding: 10px;
+                margin: 10px 0;
+                border-radius: 5px;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+            }
+            .product {
+                display: flex;
+                align-items: center;
+                flex-grow: 1;
+            }
+            .product img {
+                width: 100px;
+                height: 100px;
+                margin-right: 10px;
+                position: relative;
+            }
+            .discount-label {
+                position: absolute;
+                top: 0;
+                left: 0;
+                background-color: #28a745;
+                color: white;
+                padding: 5px;
+                font-size: 14px;
+                border-radius: 3px;
+            }
+            .product-info {
+                margin-right: auto;
+            }
+            .price {
+                color: #d9534f;
+                font-weight: bold;
+                margin: 0 20px;
+            }
+            .size {
+                margin-top: 5px;
+                font-size: 14px;
+                color: #666;
+            }
+            .size-label {
+                color: #d9534f;
+                font-weight: bold;
+                display: block;
+                margin-bottom: 5px;
+            }
+            .checkbox {
+                margin-right: 10px;
+            }
+            .quantity {
+                display: flex;
+                align-items: center;
+                margin-right: 20px;
+            }
+            .quantity button {
+                width: 30px;
+                height: 30px;
+                border: none;
+                background-color: #28a745;
+                color: white;
+                cursor: pointer;
+                font-size: 16px;
+            }
+            .quantity input {
+                width: 40px;
+                text-align: center;
+                border: 1px solid #ccc;
+                margin: 0 5px;
+            }
+            .total {
+                display: flex;
+                align-items: center;
+                justify-content: flex-end;
+                color: red;
+                font-weight: bold;
+                margin-top: 20px;
+            }
+            .form-container {
+                margin-top: 20px;
+                padding: 20px;
+                border: 1px solid #ddd;
+                border-radius: 5px;
+                background-color: #f9f9f9;
+            }
+            .form-container h3 {
+                margin-top: 0;
+            }
+            .form-group {
+                margin-bottom: 15px;
+            }
+            .form-group label {
+                display: block;
+                margin-bottom: 5px;
+            }
+            .form-group input {
+                width: 100%;
+                padding: 8px;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+            }
+            hr {
+                margin: 20px 0;
+            }
+            .buttons {
+                display: flex;
+                gap: 10px;
+                margin-top: 10px;
+            }
+            .button {
+                background-color: #28a745;
+                color: white;
+                border: none;
+                padding: 10px 20px;
+                border-radius: 5px;
+                cursor: pointer;
+                font-size: 16px;
+            }
+            .button:hover {
+                background-color: #218838;
+            }
+            .toggle-container {
+                display: flex;
+                align-items: center;
+                margin-top: 10px;
+            }
+            .toggle-label {
+                margin-right: 10px;
+                font-size: 16px;
+            }
+            .toggle {
+                position: relative;
+                display: inline-block;
+                width: 50px;
+                height: 26px;
+            }
+            .toggle input {
+                opacity: 0;
+                width: 0;
+                height: 0;
+            }
+            .slider {
+                position: absolute;
+                cursor: pointer;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background-color: #ccc;
+                transition: 0.4s;
+                border-radius: 34px;
+            }
+            .slider:before {
+                position: absolute;
+                content: "";
+                height: 18px;
+                width: 18px;
+                left: 4px;
+                bottom: 4px;
+                background-color: white;
+                border-radius: 50%;
+                transition: 0.4s;
+            }
+            input:checked + .slider {
+                background-color: #28a745;
+            }
+            input:checked + .slider:before {
+                transform: translateX(24px);
+            }
+            .two {
+                display: flex;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="header">
+                <h1>Bán hàng</h1>
+                <button class="create-order-button">Tạo đơn hàng</button>
+            </div>
+            <div class="order-numbers">
+                <div class="order-number" onclick="setActiveOrder(1)">
+                    Đơn hàng 1
+                    <i class="icon">🛒</i>
+                    <i class="icon">❌</i>
+                </div>
+                <div class="order-number" onclick="setActiveOrder(2)">
+                    Đơn hàng 2
+                    <i class="icon">🛒</i>
+                    <i class="icon">❌</i>
+                </div>
+                <div class="order-number" onclick="setActiveOrder(3)">
+                    Đơn hàng 3
+                    <i class="icon">🛒</i>
+                    <i class="icon">❌</i>
+                </div>
+            </div>
+            <div class="product-header">
+                <div class="two">
+                    <h2>Sản phẩm</h2>
+                    <span class="icon" style="color: red">🗑️</span>
+                </div>
+                <div class="buttons">
+                    <button class="button">Quét mã QR sản phẩm</button>
+                    <button class="button">Thêm sản phẩm</button>
+                </div>
+            </div>
+            <div class="order-list">
+                <div class="order-item">
+                    <div class="product">
+                        <input type="checkbox" class="checkbox" />
+                        <div style="position: relative">
+                            <img
+                                src="https://via.placeholder.com/100"
+                                alt="Sản phẩm"
+                            />
+                            <span class="discount-label">Giảm 20%</span>
+                        </div>
+                        <div class="product-info">
+                            <p>Kikk Skít Đế Sắt</p>
+                            <div>
+                                <span class="size-label">240.000 VNĐ</span>
+                                <span class="size">Size: M</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="quantity">
+                        <button onclick="changeQuantity(event, -1)">-</button>
+                        <input type="number" value="1" min="1" readonly />
+                        <button onclick="changeQuantity(event, 1)">+</button>
+                    </div>
+                    <span class="price">240.000 VNĐ</span>
+                    <i class="icon" onclick="removeItem(event)">🗑️</i>
+                </div>
+                <div class="order-item">
+                    <div class="product">
+                        <input type="checkbox" class="checkbox" />
+                        <div style="position: relative">
+                            <img
+                                src="https://via.placeholder.com/100"
+                                alt="Sản phẩm"
+                            />
+                            <span class="discount-label">Giảm 20%</span>
+                        </div>
+                        <div class="product-info">
+                            <p>Giày Thể Thao</p>
+                            <div>
+                                <span class="size-label">300.000 VNĐ</span>
+                                <span class="size">Size: M</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="quantity">
+                        <button onclick="changeQuantity(event, -1)">-</button>
+                        <input type="number" value="1" min="1" readonly />
+                        <button onclick="changeQuantity(event, 1)">+</button>
+                    </div>
+                    <span class="price">300.000 VNĐ</span>
+                    <i class="icon" onclick="removeItem(event)">🗑️</i>
+                </div>
+                <div class="order-item">
+                    <div class="product">
+                        <input type="checkbox" class="checkbox" />
+                        <div style="position: relative">
+                            <img
+                                src="https://via.placeholder.com/100"
+                                alt="Sản phẩm"
+                            />
+                            <span class="discount-label">Giảm 20%</span>
+                        </div>
+                        <div class="product-info">
+                            <p>Áo Khoác Nam</p>
+                            <div>
+                                <span class="size-label">500.000 VNĐ</span>
+                                <span class="size">Size: M</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="quantity">
+                        <button onclick="changeQuantity(event, -1)">-</button>
+                        <input type="number" value="1" min="1" readonly />
+                        <button onclick="changeQuantity(event, 1)">+</button>
+                    </div>
+                    <span class="price">500.000 VNĐ</span>
+                    <i class="icon" onclick="removeItem(event)">🗑️</i>
+                </div>
+            </div>
+            <div class="total">Tổng tiền: 1.040.000 VNĐ</div>
+            <hr />
+
+            <div class="form-group">
+                <label for="discount-code">Phiếu giảm giá</label>
+                <input
+                    type="text"
+                    id="discount-code"
+                    placeholder="Nhập phiếu giảm giá"
+                />
+                <button class="button" onclick="applyDiscount()">
+                    Áp dụng
+                </button>
+            </div>
+            <div class="form-group">
+                <label for="discount-percentage">Giảm giá phần trăm</label>
+                <input
+                    type="number"
+                    id="discount-percentage"
+                    placeholder="Nhập phần trăm"
+                    min="0"
+                />
+                <button class="button" onclick="applyPercentageDiscount()">
+                    Áp dụng
+                </button>
+            </div>
+            <div class="toggle-container">
+                <label class="toggle-label" for="shipping-toggle"
+                    >Giao hàng</label
+                >
+                <label class="toggle">
+                    <input type="checkbox" id="shipping-toggle" />
+                    <span class="slider"></span>
+                </label>
+            </div>
+            <div class="form-container">
+                <h3>Khách hàng</h3>
+                <div class="form-group">
+                    <label for="customer-name">Tên khách hàng</label>
+                    <input
+                        type="text"
+                        id="customer-name"
+                        placeholder="khách lẻ"
+                    />
+                </div>
+                <div class="form-group">
+                    <label for="shipping-fee">Phí vận chuyển</label>
+                    <input
+                        type="text"
+                        id="shipping-fee"
+                        value="0 VNĐ"
+                        readonly
+                    />
+                </div>
+                <div class="form-group">
+                    <label for="discount">Giảm giá</label>
+                    <input
+                        type="text"
+                        id="discount"
+                        value="250.000 VNĐ"
+                        readonly
+                    />
+                </div>
+                <div class="form-group">
+                    <label for="total-amount">Tổng số tiền</label>
+                    <input
+                        type="text"
+                        id="total-amount"
+                        value="2.127.500 VNĐ"
+                        readonly
+                    />
+                </div>
+                <div class="form-group">
+                    <label for="amount-paid">Khách thanh toán</label>
+                    <input
+                        type="text"
+                        id="amount-paid"
+                        value="2.127.500 VNĐ"
+                        readonly
+                    />
+                </div>
+                <div class="form-group">
+                    <label for="amount-owed">Tiền thiếu</label>
+                    <input
+                        type="text"
+                        id="amount-owed"
+                        value="0 VNĐ"
+                        readonly
+                    />
+                </div>
+                <div class="buttons">
+                    <button class="button">Xác nhận đặt hàng</button>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            function setActiveOrder(orderNumber) {
+                const orderNumbers = document.querySelectorAll(".order-number");
+                orderNumbers.forEach((order, index) => {
+                    if (index === orderNumber - 1) {
+                        order.classList.add("active");
+                    } else {
+                        order.classList.remove("active");
+                    }
+                });
+            }
+
+            function changeQuantity(event, change) {
+                const input = event.target.parentElement.querySelector(
+                    'input[type="number"]'
+                );
+                let currentValue = parseInt(input.value);
+                currentValue += change;
+                if (currentValue < 1) currentValue = 1;
+                input.value = currentValue;
+            }
+
+            function removeItem(event) {
+                const item = event.target.closest(".order-item");
+                item.remove();
+            }
+
+            function applyDiscount() {
+                const discountCode =
+                    document.getElementById("discount-code").value;
+                // Xử lý logic áp dụng phiếu giảm giá ở đây
+                console.log("Áp dụng phiếu giảm giá:", discountCode);
+            }
+
+            function applyPercentageDiscount() {
+                const percentage = document.getElementById(
+                    "discount-percentage"
+                ).value;
+                // Xử lý logic áp dụng giảm giá phần trăm ở đây
+                console.log("Áp dụng giảm giá phần trăm:", percentage);
+            }
+        </script>
+    </body>
+</html>
