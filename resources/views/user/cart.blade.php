@@ -146,13 +146,9 @@
                 <form action="{{ route('user.order.confirm') }}" method="POST" class="payment-form">
                     @csrf
                     <input type="hidden" name="amount" value="{{ $finalTotal }}">
-                    <button type="submit" class="custom-btn-cod">Thanh toán COD</button>
+                    <button type="submit" class="custom-btn-cod">Thanh toán</button>
                 </form>
-                <form action="{{ route('user.order.confirmVNPay') }}" method="post">
-                    @csrf
-                    <input type="hidden" name="amount" value="{{ $finalTotal }}">
-                    <button type="submit" class="custom-btn-checkout">Thanh toán VNPay</button>
-                </form>
+                
             </div>
             <a href="/product/product-list" class="continue-shopping">
                 <i class="fa fa-arrow-left"></i> Tiếp tục mua hàng

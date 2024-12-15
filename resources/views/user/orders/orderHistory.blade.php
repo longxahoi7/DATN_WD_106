@@ -65,16 +65,14 @@
                             @foreach ($order->orderItems as $item)
                             <li class="order-item {{ $loop->index >= 2 ? 'hidden-item' : '' }}">
                                 <div class="item-left">
-                                    <img src="{{ asset('storage/' . $item->product->main_image_url) }}"
-                                        alt="{{ $item->product->name }}" />
+                                    <img src="{{ asset('storage/' . $item->product->main_image_url) }}" alt="{{ $item->product->name }}" />
                                     <div class="item-info">
                                         <strong>{{ $item->product->name }}</strong><br>
                                         <span class="item-quantity">x{{ $item->quantity }}</span>
                                     </div>
                                 </div>
                                 <div class="item-right">
-                                    <span class="item-price"><span class="custom-font-text-total">Tổng tiền:</span>
-                                        {{ number_format($item->total, 0, ',', '.') }} đ</span>
+                                    <span class="item-price"><span class="custom-font-text-total">Tổng tiền:</span> {{ number_format($item->total, 0, ',', '.') }} đ</span>
                                 </div>
                             </li>
                             @endforeach

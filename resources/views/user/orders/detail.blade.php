@@ -23,7 +23,7 @@
                     <p><i class="fa fa-map-marker-alt"></i> Thông tin nhận hàng</p>
                     <div class="details">
                         <p><strong>Người nhận:</strong> {{ $order->user->name }}</p>
-                        <p><strong>Số điện thoại:</strong> {{ $order->user->phone }}</p>
+                        <p><strong>Số điện thoại:</strong> {{ $order->phone }}</p>
                         <p><strong>Nhận tại:</strong> {{ $order->shipping_address }}</p>
                     </div>
                 </div>
