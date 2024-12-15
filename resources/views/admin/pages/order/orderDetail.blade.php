@@ -10,7 +10,7 @@
             <div class="col-md-6">
                 <div class="order-card">
                     <h2>1. Thông tin khách hàng</h2>
-                    <p><strong>Tên người mua: </strong>{{ $order->user->name }}</p>
+                    <p><strong>Tên người mua: </strong>{{ $order->recipient_name }}</p>
                     <p><strong>Email: </strong>{{ $order->user->email }}</p>
                     <p><strong>Số điện thoại nhận hàng: </strong>{{ $order->phone }}</p>
                     <p><strong>Địa chỉ nhận hàng: </strong>{{ $order->shipping_address  }}</p>

@@ -22,7 +22,7 @@
                 <div class="info-receive">
                     <p><i class="fa fa-map-marker-alt"></i> Thông tin nhận hàng</p>
                     <div class="details">
-                        <p><i class="fa-solid fa-person"></i><strong> Người nhận:</strong> {{ $order->user->name }}</p>
+                        <p><i class="fa-solid fa-person"></i><strong> Người nhận:</strong> {{ $order->recipient_name }}</p>
                         <p><i class="fa-solid fa-phone"></i><strong> Số điện thoại:</strong> {{ $order->phone }}</p>
                         <p><i class="fa-solid fa-house-user"></i><strong>Nhận tại:</strong> {{ $order->shipping_address }}</p>
 
