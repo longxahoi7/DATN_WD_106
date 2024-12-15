@@ -45,14 +45,15 @@
                             <span>Kích thước: {{ $item->size->name }} ▼</span>
                         </div>
                     </div>
-                    <div class="popup-overlay" id="popupOverlay" onclick="closePopup()">
+                    <p class="section-title">Số lượng:{{ $item->qty }}</p>
+                </div>
+                 <div class="popup-overlay" id="popupOverlay{{ $item->id }}" onclick="closePopup({{ $item->id }})">
                         <div class="popup-content" onclick="event.stopPropagation()">
                             <p>Màu sắc: </p>
                             <div class="color-options">
-                                @foreach($item->attributeProducts as $attributeProduct)
-                                <div class="color-option"
-                                    style="background-color: {{ $attributeProduct->color->name }};"
-                                    onclick="changeColor('{{ $attributeProduct->color->color_id }}', this)">
+                                @foreach($item->attributeProducts->unique('color_id') as $attributeProduct)
+                                <div class="color-option" style="background-color: {{ $attributeProduct->color->name }};"
+                                    onclick="changeColor({{ $item->id }}, '{{ $attributeProduct->color->color_id }}', this)">
                                 </div>
                                 @endforeach
                             </div>
@@ -61,32 +62,25 @@
                                 @foreach($item->attributeProducts->unique('size_id') as $attributeProduct)
                                 <button class="size-option" data-id="{{ $attributeProduct->size->size_id }}"
                                     data-price="{{ $attributeProduct->price }}"
-                                    onclick="selectSize('{{ $attributeProduct->size->size_id }}', this)">
+                                    onclick="selectSize({{ $item->id }}, '{{ $attributeProduct->size->size_id }}', this)">
                                     {{ $attributeProduct->size->name }}
                                 </button>
                                 @endforeach
                             </div>
                             <p class="section-title">Số lượng:</p>
                             <div class="quantity-container d-flex">
-                                <div class="custom-quantity" onclick="changeQuantity(-1, '{{ $item->id }}')">-</div>
-                                <input type="number" name="display-qty" class="custom-quantity-input" min="1"
-                                    value="{{ $item->qty }}" onchange="updateQuantity(this.value, '{{ $item->id }}')">
-                                <div class="custom-quantity" onclick="changeQuantity(1, '{{ $item->id }}')">+</div>
+                                <div class="custom-quantity" onclick="changeQuantity({{ $item->id }}, -1)">-</div>
+                                <input type="number" id="quantity{{ $item->id }}" name="display-qty" class="custom-quantity-input" min="1"
+                                    value="{{ $item->qty }}" onchange="updateQuantity({{ $item->id }}, this.value)">
+                                <div class="custom-quantity" onclick="changeQuantity({{ $item->id }}, 1)">+</div>
                             </div>
                             <hr class="divider-line mt-3">
-                            <div class="popup-buttons text-end ">
-                                <button onclick="confirmSelection()">Xác nhận</button>
-                                <button onclick="closePopup()">Hủy</button>
+                            <div class="popup-buttons text-end">
+                                <button onclick="confirmSelection({{ $item->id }})">Xác nhận</button>
+                                <button onclick="closePopup({{ $item->id }})">Hủy</button>
                             </div>
                         </div>
                     </div>
-                    <div class="quantity-container d-flex">
-                        <div class="custom-quantity" onclick="changeQuantity(-1, '{{ $item->id }}')">-</div>
-                        <input type="number" name="display-qty" class="custom-quantity-input" min="1"
-                            value="{{ $item->qty }}" onchange="updateQuantity(this.value, '{{ $item->id }}')">
-                        <div class="custom-quantity" onclick="changeQuantity(1, '{{ $item->id }}')">+</div>
-                    </div>
-                </div>
                 <div class="remove-btn">
                     <form action="{{ route('user.cart.remove', $item->id) }}" method="POST">
                         @csrf
@@ -168,42 +162,82 @@
 </div>
 
 <script>
-function openPopup(id) {
-    document.getElementById('popupOverlay').style.display = 'block';
-}
-
-function closePopup() {
-    document.getElementById('popupOverlay').style.display = 'none';
-}
-
-function confirmSelection() {
-    closePopup();
-}
-
-function changeQuantity(change) {
-    const quantityInput = document.getElementById('quantity');
-    let currentQuantity = parseInt(quantityInput.value) || 1;
-    currentQuantity += change;
-
-    if (currentQuantity < 1) currentQuantity = 1;
-    quantityInput.value = currentQuantity;
-    updateQuantity(currentQuantity);
-}
-
-function updateQuantity(value) {
-    let qty = parseInt(value);
-
-    if (isNaN(qty) || qty < 1) {
-        qty = 1;
+    function openPopup(itemId) {
+        document.getElementById('popupOverlay' + itemId).style.display = 'block';
     }
 
-    // Cập nhật giá trị của input hiển thị
-    document.getElementById('quantity').value = qty;
+    function closePopup(itemId) {
+        document.getElementById('popupOverlay' + itemId).style.display = 'none';
+    }
 
-    // Cập nhật giá trị của hidden input
-    document.getElementById('qty-hidden').value = qty;
+    function confirmSelection(itemId) {
+        const colorId = selectedColor[itemId];
+        const sizeId = selectedSize[itemId];
+        const quantity = document.getElementById('quantity' + itemId).value;
+        if (!colorId || !sizeId || quantity < 1) {
+            alert('Vui lòng chọn đủ màu sắc, kích thước và số lượng.');
+            return;
+        }
+
+        fetch('{{ route('user.cart.cupdate', ['id' => ':itemId ']) }}'.replace(':itemId', itemId), {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: JSON.stringify({
+                        color_id: colorId,
+                        size_id: sizeId,
+                        quantity: quantity
+                    })
+                })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(data.message);
+                    location.reload();
+                } else {
+                    alert('Có lỗi xảy ra: ' + data.message);
+                }
+            })
+            .catch(error => {
+                alert('Có lỗi xảy ra khi cập nhật giỏ hàng.');
+            });
+
+        closePopup(itemId);
+    }
+
+    let selectedColor = {};
+    let selectedSize = {};
+
+    function changeColor(itemId, colorId, element) {
+    selectedColor[itemId] = colorId;
+    const colorOptions = document.querySelectorAll(`#popupOverlay${itemId} .color-option`);
+    colorOptions.forEach(option => option.classList.remove('selected'));
+    element.classList.add('selected');
 }
+
+    function selectSize(itemId, sizeId, element) {
+        selectedSize[itemId] = sizeId;
+        const sizeOptions = document.querySelectorAll(`#popupOverlay${itemId} .size-option`);
+        sizeOptions.forEach(option => option.classList.remove('selected'));
+        element.classList.add('selected');
+    }
+
+    function changeQuantity(itemId, change) {
+        const quantityInput = document.getElementById('quantity' + itemId);
+        let newQuantity = parseInt(quantityInput.value) + change;
+
+        // Đảm bảo số lượng luôn lớn hơn hoặc bằng 1
+        if (newQuantity < 1) {
+            newQuantity = 1;
+        }
+
+        quantityInput.value = newQuantity;
+        updateQuantity(itemId, newQuantity);
+    }
 </script>
+
 
 
 

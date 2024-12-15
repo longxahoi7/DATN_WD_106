@@ -102,15 +102,12 @@
         </div>
     </div>
 
-    <!-- Fourth Row -->
-  
-
     <!-- Fifth Row -->
     <div class="row gx-2 mb-3">
         <div class="col-12">
             <label class="custom-label" for="productDescription">Mô tả sản phẩm</label>
             <textarea class="form-control" id="productDescription" name="description" placeholder="Nhập mô tả sản phẩm"
-                rows="5" required maxlength="255"></textarea>
+                rows="5" required maxlength="255" required></textarea>
         </div>
     </div>
 

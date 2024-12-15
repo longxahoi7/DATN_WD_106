@@ -18,9 +18,6 @@ class Product extends Model
         'sku',
         'name',
         'main_image_url',
-        'discount',
-        'start_date',
-        'end_date',
         'view_count',
         'description',
         'subtitle',
@@ -63,7 +60,7 @@ class Product extends Model
     {
         return $this->belongsToMany(AttributeProduct::class, 'attribute_products', 'product_id', 'attribute_id');
     }
-    
+
     public function orders()
     {
         return $this->belongsToMany(Order::class, 'product_id', 'order_id');
@@ -108,8 +105,8 @@ class Product extends Model
      */
     public function reviewsReplies()
     {
-        return $this->hasManyThrough(ReviewsReply::class, Reviews::class, 
+        return $this->hasManyThrough(ReviewsReply::class, Reviews::class,
         'product_id', 'review_id');
     }
-  
+
 }

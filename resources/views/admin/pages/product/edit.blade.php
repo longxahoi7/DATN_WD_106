@@ -115,14 +115,15 @@
     </div>
 
     <div class="row gx-2 mb-3">
-        <div class="col-12">
-            <label class="custom-label" for="discount">Discount</label>
+        <div class="col-12 mb-3">
+            <label class="custom-label" for="discount">Mã giảm giá</label>
             <input type="number" class="form-control" id="productDiscount" name="discount" placeholder="Nhập giảm giá"
                 min="0" value="{{$product->discount}}" />
         </div>
     </div>
     <!-- Fourth Row -->
     <div class="row gx-2 mb-3">
+
         <div class="col-md-6">
             <label class="custom-label" for="startDate">Ngày bắt đầu</label>
             <input type="date" class="form-control" id="startDate" name="start_date" value="{{$product->start_date}}" />
