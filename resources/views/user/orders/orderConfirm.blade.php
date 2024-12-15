@@ -38,7 +38,7 @@
                                     <th>Size</th>
                                     <th>Số lượng</th>
                                     <th>Đơn giá</th>
-                                    <th>Phí vận chuyển</th>
+                                    
                                     <th>Thành tiền</th>
                                 </tr>
                             </thead>
@@ -50,14 +50,17 @@
                                     <td>{{ $product['size'] }}</td>
                                     <td>{{ $product['quantity'] }}</td>
                                     <td>{{ number_format($product['price'], 0, ',', '.') }} VND</td>
-                                    <td>{{ number_format($shippingFee, 0, ',', '.') }} VND</td>
-                                    <td>{{ number_format($total, 0, ',', '.') }} VND</td>
+                                    <td>{{ number_format($product['price'] * $product['quantity'], 0, ',', '.') }} VND</td>
                                 </tr>
-                                @endforeach
+                                @endforeach 
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <th colspan="3" class="text-end">Tổng Cộng:</th>
+                                <th colspan="5" class="text-end">Phí Vận Chuyển:</th>
+                                    <td>{{ number_format($shippingFee, 0, ',', '.') }} VND</td>
+                                </tr>
+                                <tr>
+                                    <th colspan="5" class="text-end">Thành tiền:</th>
                                     <th>{{ number_format($total, 0, ',', '.') }} VND</th>
                                 </tr>
                             </tfoot>

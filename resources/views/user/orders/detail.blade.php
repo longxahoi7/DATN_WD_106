@@ -45,6 +45,7 @@
                     @php
                     $statusLabels = [
                     'pending' => 'Đang chờ xử lý',
+                    'processing' => 'Đã xác nhận',
                     'shipped' => 'Đang vận chuyển',
                     'delivered' => 'Đã giao hàng',
                     'cancelled' => 'Đã hủy',
@@ -60,10 +61,10 @@
 
                     @endphp
                     <p><i class="fa-solid fa-truck"></i><strong>Trạng thái đơn hàng</strong>
-                        {{ $statusTranslations[$order->payment_status] ?? 'Không xác định' }}
-                    </p>
-                    <p><i class="fa-solid fa-truck"></i><strong>Trạng thái đơn hàng</strong>
                         {{ $statusLabels[$order->status] ?? 'Không xác định' }}
+                    </p>
+                    <p><i class="fa-solid fa-truck"></i><strong>Trạng thái thanh toán</strong>
+                        {{ $statusTranslations[$order->payment_status] ?? 'Không xác định' }}
                     </p>
                     <p><i class="fa-solid fa-calendar-days"></i><strong>Ngày đặt</strong>
                         {{ $order->created_at->format('d-m-Y H:i:s') }}

@@ -71,7 +71,7 @@
             "pending": ["processing", "cancelled"],
             "processing": ["shipped"],
             "shipped": ["delivered"],
-            "delivered": ["completed"],
+            "delivered": [],
             "completed": [],
             "cancelled": [] // Không thể thay đổi trạng thái nếu đã bị hủy
         };

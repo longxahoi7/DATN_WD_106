@@ -118,7 +118,7 @@
                         @if ($order->status == 'delivered' && !$order->received_confirmation)
                         <form action="{{ route('user.order.confirmDelivery', $order->order_id) }}" method="POST">
                             @csrf
-                            <button type="submit" class="btn btn-success">Xác Nhận Đã Nhận Hàng</button>
+                            <button type="submit" class="btn btn-success">Đã Nhận Hàng</button>
                         </form>
                         @endif
                             @if ($order->status === 'pending')
