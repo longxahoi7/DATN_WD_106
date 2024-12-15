@@ -296,6 +296,7 @@ Route::group(
                 Route::get('order/success', [PaymentController::class, 'orderSuccess'])->name('order-cod');
                 Route::get('/order/{orderId}/detail', [OrderUserController::class, 'show'])->name('detail');
                 Route::get('/user/orders/filter', [OrderController::class, 'filter'])->name('user.orders.filter');
+                Route::post('order/{orderId}/confirm-delivery', [OrderUserController::class, 'confirmDelivery'])->name('confirmDelivery');
             }
         );
         // Giỏ hàng

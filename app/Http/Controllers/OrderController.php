@@ -26,7 +26,28 @@ class OrderController extends Controller
         // Trả về view danh sách đơn hàng
         return view('user.orders.orderHistory', compact('orders'));
     }
+    public function confirmDelivery($orderId)
+    {
+        $order = Order::findOrFail($orderId);
 
+        if ($order->user_id !== auth()->id()) {
+            return redirect()->route('user.order.history')->with('error', 'Vui lòng đăng nhập');
+        }
+        if ($order->received) {
+            return redirect()->route('user.order.history')->with('info', 'Đơn hàng này đã được xác nhận.');
+        }
+
+        $order->received = true;
+        $order->save();
+
+        // Nếu người dùng đã xác nhận, cập nhật trạng thái của đơn hàng cho Admin
+        if ($order->received && $order->status != 'completed') {
+            $order->status = 'completed'; // Chuyển trạng thái đơn hàng thành 'completed'
+            $order->save();
+        }
+
+        return redirect()->route('user.order.history')->with('alert', 'Đơn hàng đã được xác nhận nhận hàng.');
+    }
 
     public function show($orderId)
     {

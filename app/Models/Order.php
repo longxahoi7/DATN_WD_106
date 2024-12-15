@@ -21,7 +21,8 @@ class Order extends Model
         'payment_method',
         'create_at',
         'update_at',
-        'recipient_name'
+        'recipient_name',
+        'received'
         // Thêm các thuộc tính khác nếu cần
     ];
     protected $casts = [

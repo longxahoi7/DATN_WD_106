@@ -5,6 +5,11 @@
 @endpush
 
 @section('content')
+@if(session('alert'))
+    <div class="alert alert-info" id="alert-message">
+        {{ session('alert') }}
+    </div>
+@endif
 <div class="container">
     <div class="row-order">
         <!-- Bên phải: Bộ lọc và danh sách đơn hàng -->
@@ -108,8 +113,14 @@
                                 {{ $paymentStatusTranslations[strtolower($order->payment_status)] ?? ucfirst($order->payment_status) }}
                             </span>
                         </p>
-
+                        
                         <div class="order-actions">
+                        @if ($order->status == 'delivered' && !$order->received_confirmation)
+                        <form action="{{ route('user.order.confirmDelivery', $order->order_id) }}" method="POST">
+                            @csrf
+                            <button type="submit" class="btn btn-success">Xác Nhận Đã Nhận Hàng</button>
+                        </form>
+                        @endif
                             @if ($order->status === 'pending')
                             <form action="{{ route('user.order.cancelOrder', $order->order_id) }}" method="POST">
                                 @csrf
@@ -139,6 +150,14 @@
 
 @push('scripts')
 <script>
+        window.onload = function() {
+        var alertMessage = document.getElementById('alert-message');
+        if (alertMessage) {
+            setTimeout(function() {
+                alertMessage.style.display = 'none'; // Ẩn thông báo sau 2 giây
+            }, 2000); // 2000ms = 2 giây
+        }
+    };
     document.addEventListener('DOMContentLoaded', function() {
         // Toggle xem thêm ẩn bớt
         document.querySelectorAll('.toggle-btn').forEach(button => {
