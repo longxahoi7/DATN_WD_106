@@ -69,11 +69,11 @@
                 </div>
 
                 <!-- Nút xác nhận -->
-                <div class="text-center mt-4">
+                <div class="text-center mt-4 d-flex justify-content-around">
                     <input type="hidden" name="amount" value="{{ $total }}">
-                    <button type="submit" class="btn btn-success btn-lg">Xác Nhận Đặt Hàng</button>
-                    <button name="redirect" type="button" id="btnVnPay" class="btn btn-success btn-lg">Thanh Toán VNPay</button>
                     <a href="{{ route('user.cart.index') }}" class="btn btn-secondary btn-lg">Quay Lại Giỏ Hàng</a>
+                    <button type="submit" class="btn btn-success btn-lg">Thanh toán COD</button>
+                    <button name="redirect" type="button" id="btnVnPay" class="btn btn-success btn-lg">Thanh Toán VNPay</button>
                 </div>
             </form>
         </div>
