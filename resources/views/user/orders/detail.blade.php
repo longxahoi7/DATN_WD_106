@@ -22,6 +22,7 @@
                 <div class="info-receive">
                     <p><i class="fa fa-map-marker-alt"></i> Thông tin nhận hàng</p>
                     <div class="details">
+                    <p><i class="fa-solid fa-house-user"></i><strong>Mã đơn hàng:</strong> {{ $order->order_id }}</p>
                         <p><i class="fa-solid fa-person"></i><strong> Người nhận:</strong> {{ $order->recipient_name }}</p>
                         <p><i class="fa-solid fa-phone"></i><strong> Số điện thoại:</strong> {{ $order->phone }}</p>
                         <p><i class="fa-solid fa-house-user"></i><strong>Nhận tại:</strong> {{ $order->shipping_address }}</p>
@@ -52,7 +53,7 @@
                     'completed' => 'Hoàn thành',
                     ];
                     $statusTranslations = [
-                    'pending' => 'Chờ xử lý',
+                    'pending' => 'Chờ thanh toán',
                     'paid' => 'Đã thanh toán',
                     'failed' => 'Thanh toán thất bại',
                     'refunded' => 'Hoàn tiền',
@@ -60,16 +61,16 @@
                     ];
 
                     @endphp
-                    <p><i class="fa-solid fa-truck"></i><strong>Trạng thái đơn hàng</strong>
+                    <p><i class="fa-solid fa-truck"></i><strong>Trạng thái đơn hàng : </strong>
                         {{ $statusLabels[$order->status] ?? 'Không xác định' }}
                     </p>
-                    <p><i class="fa-solid fa-truck"></i><strong>Trạng thái thanh toán</strong>
+                    <p><i class="fa-solid fa-truck"></i><strong>Trạng thái thanh toán : </strong>
                         {{ $statusTranslations[$order->payment_status] ?? 'Không xác định' }}
                     </p>
-                    <p><i class="fa-solid fa-calendar-days"></i><strong>Ngày đặt</strong>
+                    <p><i class="fa-solid fa-calendar-days"></i><strong>Ngày đặt : </strong>
                         {{ $order->created_at->format('d-m-Y H:i:s') }}
                     </p>
-                    <p><i class="fa-solid fa-clock"></i><strong>Thời gian cập nhật</strong>
+                    <p><i class="fa-solid fa-clock"></i><strong>Thời gian cập nhật : </strong>
                         {{ $order->updated_at->format('d-m-Y H:i:s')}}
                     </p>
                 </div>
@@ -87,8 +88,8 @@
                                 <th>Tên sản phẩm</th>
                                 <th>Màu sắc</th>
                                 <th>Kích cỡ</th>
-                                <th>Số lượng</th>
                                 <th>Giá</th>
+                                <th>Số lượng</th>
                                 <th>Tổng tiền</th>
                             </tr>
                         </thead>
@@ -109,8 +110,8 @@
                                 <td>{{ $item->product->name }}</td>
                                 <td>{{ $item->color ? $item->color->name : 'N/A' }}</td>
                                 <td>{{ $item->size ? $item->size->name : 'N/A' }}</td>
-                                <td>{{ $item->quantity }}</td>
                                 <td>{{ number_format($item->price, 0, ',', '.') }} VND</td>
+                                <td>{{ $item->quantity }}</td>
                                 <td>{{ number_format($item->price * $item->quantity, 0, ',', '.') }} VND</td>
                             </tr>
                             @endforeach
@@ -118,16 +119,16 @@
 
                         <tfoot>
                             <tr>
-                                <td colspan="6">Tổng giá trị đơn hàng</td>
+                                <td colspan="7">Tổng giá trị đơn hàng</td>
                                 <td>{{ number_format($order->orderItems->sum(function($item) { return $item->price * $item->quantity; }), 0, ',', '.') }}
                                     VND</td>
                             </tr>
                             <tr>
-                                <td colspan="6">Phí Ship</td>
+                                <td colspan="7">Phí Ship</td>
                                 <td>40,000 VND</td>
                             </tr>
                             <tr>
-                                <td colspan="6">Thành tiền</td>
+                                <td colspan="7">Thành tiền</td>
                                 <td>{{ number_format($order->orderItems->sum(function($item) { return $item->price * $item->quantity; }) + 40000, 0, ',', '.') }}
                                     VND</td>
                             </tr>
