@@ -131,19 +131,19 @@ class OrderController extends Controller
     {
         // Lấy thông tin người dùng đang đăng nhập
         $user = Auth::user();
-    
+
         if (!$user) {
             return redirect()->route('login')->with('error', 'Vui lòng đăng nhập để thanh toán!');
         }
-    
+
         // Lấy giỏ hàng của người dùng
         $shoppingCart = ShoppingCart::where('user_id', $user->user_id)->first();
         if (!$shoppingCart) {
             return redirect()->route('shopping-cart')->with('error', 'Giỏ hàng trống!');
         }
-    
+
         $cartItems = $shoppingCart->cartItems;
-    
+
         // Tính tổng tiền đơn hàng (không bao gồm phí vận chuyển)
         $totalWithoutShipping = 0;
         $productDetails = []; // Lưu thông tin chi tiết sản phẩm
@@ -152,9 +152,10 @@ class OrderController extends Controller
             $attributeProduct = $item->product->attributeProducts->firstWhere('size_id', $item->size_id);
             if ($attributeProduct) {
                 $totalWithoutShipping += $attributeProduct->price * $item->qty;
-    
+
                 $productDetails[] = [
                     'name' => $item->product->name,
+                    'img' => $item->product->main_image_url,
                     'color' => $item->color->name,  // Lấy tên màu từ quan hệ color
                     'size' => $item->size->name,    // Lấy tên size từ quan hệ size
                     'quantity' => $item->qty,
@@ -165,11 +166,11 @@ class OrderController extends Controller
                 ];
             }
         }
-    
+
         // Thêm phí vận chuyển
         $shippingFee = 40000;
         $total = $totalWithoutShipping + $shippingFee;
-    
+
         // Chuyển hướng đến trang thông báo thanh toán thành công và truyền thông tin
         return view('user.orders.orderConfirm', [
             'user' => $user,
@@ -182,19 +183,19 @@ class OrderController extends Controller
     {
         // Lấy thông tin người dùng đang đăng nhập
         $user = Auth::user();
-    
+
         if (!$user) {
             return redirect()->route('login')->with('error', 'Vui lòng đăng nhập để thanh toán!');
         }
-    
+
         // Lấy giỏ hàng của người dùng
         $shoppingCart = ShoppingCart::where('user_id', $user->user_id)->first();
         if (!$shoppingCart) {
             return redirect()->route('shopping-cart')->with('error', 'Giỏ hàng trống!');
         }
-    
+
         $cartItems = $shoppingCart->cartItems;
-    
+
         // Tính tổng tiền đơn hàng (không bao gồm phí vận chuyển)
         $totalWithoutShipping = 0;
         $productDetails = []; // Lưu thông tin chi tiết sản phẩm
@@ -203,7 +204,7 @@ class OrderController extends Controller
             $attributeProduct = $item->product->attributeProducts->firstWhere('size_id', $item->size_id);
             if ($attributeProduct) {
                 $totalWithoutShipping += $attributeProduct->price * $item->qty;
-    
+
                 $productDetails[] = [
                     'name' => $item->product->name,
                     'color' => $item->color->name,  // Lấy tên màu từ quan hệ color
@@ -216,11 +217,11 @@ class OrderController extends Controller
                 ];
             }
         }
-    
+
         // Thêm phí vận chuyển
         $shippingFee = 40000;
         $total = $totalWithoutShipping + $shippingFee;
-    
+
         // Chuyển hướng đến trang thông báo thanh toán thành công và truyền thông tin
         return view('user.orders.orderConfirmVNPay', [
             'user' => $user,
@@ -229,5 +230,5 @@ class OrderController extends Controller
             'shippingFee' => $shippingFee
         ]);
     }
-    
+
 }

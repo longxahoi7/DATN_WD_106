@@ -17,22 +17,22 @@ class PaymentController extends Controller
     //
     public function checkoutCOD(Request $request)
     {
-        
+
         // Lấy thông tin người dùng đang đăng nhập
         $user = Auth::user();
-    
+
         if (!$user) {
             return redirect()->route('login')->with('error', 'Vui lòng đăng nhập để thanh toán!');
         }
-    
+
         // Lấy giỏ hàng của người dùng
         $shoppingCart = ShoppingCart::where('user_id', $user->user_id)->first();
         if (!$shoppingCart) {
             return redirect()->route('shopping-cart')->with('error', 'Giỏ hàng trống!');
         }
-    
+
         $cartItems = $shoppingCart->cartItems;
-    
+
         // Lấy thông tin địa chỉ giao hàng và số điện thoại từ form
         $shippingAddress = $request->input('shipping_address');  // Lấy địa chỉ giao hàng từ form
         $phone = $request->input('phone');                        // Lấy số điện thoại từ form
@@ -44,7 +44,7 @@ class PaymentController extends Controller
             $attributeProduct = $item->product->attributeProducts->firstWhere('size_id', $item->size_id);
             if ($attributeProduct) {
                 $totalWithoutShipping += $attributeProduct->price * $item->qty;
-    
+
                 $productDetails[] = [
                     'product_id' => $item->product_id,
                     'name' => $item->product->name,
@@ -58,11 +58,11 @@ class PaymentController extends Controller
                 ];
             }
         }
-    
+
         // Thêm phí vận chuyển
         $shippingFee = 40000;
         $total = $totalWithoutShipping + $shippingFee;
-    
+
         $order = Order::create([
             'user_id' => $user->user_id,
             'shipping_address' => $shippingAddress,
@@ -70,12 +70,12 @@ class PaymentController extends Controller
             'total' => $total,
             'invoice_date' => now(),
             'shipping_fee' => $shippingFee,
-            'status' => 'pending',  
+            'status' => 'pending',
             'payment_method'  => 'COD',
             'recipient_name' => $recipients_name
 
         ]);
-    
+
         // Thêm các sản phẩm vào đơn hàng
         foreach ($productDetails as $product) {
             OrderItem::create([
@@ -89,7 +89,7 @@ class PaymentController extends Controller
                 'subtotal' => $product['subtotal'],
             ]);
         }
-    
+
         // Xóa các sản phẩm trong giỏ hàng sau khi thanh toán
         $shoppingCart->cartItems()->delete();
         $emailData = [
@@ -110,7 +110,7 @@ class PaymentController extends Controller
             'shippingFee' => $shippingFee
         ]);
     }
-    
+
     // Trang thông báo thanh toán thành công
 
     public function orderSuccess()
