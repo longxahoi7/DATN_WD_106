@@ -248,6 +248,7 @@ Route::group(
 Auth::routes();
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
+
 Route::group(
     [
         'middleware' => ['auth'], // Chỉ cho phép người dùng đã đăng nhập
@@ -264,6 +265,7 @@ Route::group(
                 'as' => 'product.',
             ],
             function () {
+                Route::get('/search', [ProductsController::class, 'search'])->name('search');
                 Route::get('product/{id}', [ProductsController::class, 'showProduct'])->name('detail');
                 Route::get('/product-list', [ProductsController::class, 'productList'])->name('list');
                 Route::get('/products/{categoryId?}', [ProductController::class, 'productList'])->name('user.proincate');

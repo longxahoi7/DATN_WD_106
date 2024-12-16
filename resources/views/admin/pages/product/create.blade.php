@@ -65,7 +65,6 @@
             </select>
         </div>
     </div>
-
     <!-- Third Row -->
     <div class="row gx-2 mb-3">
         <!-- Dropdown Kích thước sản phẩm -->

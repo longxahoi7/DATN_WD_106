@@ -14,10 +14,10 @@
             <div class="row">
                 <!-- Hàng ngang 1 - Thanh tìm kiếm -->
                 <div class="col-12 mb-1 pt-4 form-search">
-                    <form class="d-flex justify-content-center">
-                        <input type="search" placeholder="Tìm kiếm sản phẩm" class="form-control search-bar"
-                            aria-label="Search">
-                    </form>
+                <form class="d-flex justify-content-center" action="{{ route('user.product.search') }}" method="GET">
+                <input type="search" name="search" placeholder="Tìm kiếm sản phẩm" class="form-control search-bar" aria-label="Search" value="{{ request()->input('search') }}">
+                <button type="submit" class="d-none">Tìm kiếm</button> <!-- Optional: to show the button -->
+            </form>
                 </div>
             </div>
 
