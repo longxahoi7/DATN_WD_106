@@ -60,7 +60,7 @@ class PaymentController extends Controller
                 ];
             }
         }
-<<<<<<< HEAD
+
         $discountAmount = 0;
         $discountCode = $request->input('discount_code'); // Lấy mã giảm giá từ form
         if ($discountCode) {
@@ -77,13 +77,7 @@ class PaymentController extends Controller
         $total = $totalWithoutShipping + $shippingFee - $discountAmount; // Cập nhật tổng tiền sau khi trừ mã giảm giá
         // dd( $total);
         // Kiểm tra kết quả tính toán
-=======
-    
-        // Thêm phí vận chuyển
-        $shippingFee = 40000;
-        $total = $totalWithoutShipping + $shippingFee;
-    
->>>>>>> 76246f4cc8932c97ba5456a0b6cc9fbe147dee24
+
         $order = Order::create([
             'user_id' => $user->user_id,
             'shipping_address' => $shippingAddress,
