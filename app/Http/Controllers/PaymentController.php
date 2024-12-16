@@ -60,7 +60,6 @@ class PaymentController extends Controller
                 ];
             }
         }
-
         $discountAmount = 0;
         $discountCode = $request->input('discount_code'); // Lấy mã giảm giá từ form
         if ($discountCode) {
