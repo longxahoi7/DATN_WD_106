@@ -131,8 +131,12 @@ class CartController extends Controller
 
         // Tính tổng tiền giỏ hàng
         $totalAmount = $shoppingCart->cartItems->sum(function ($item) {
-            // Lấy giá từ bảng attribute_products qua quan hệ với product
-            $attributeProduct = $item->product->attributeProducts->first();
+            // Lấy giá của thuộc tính sản phẩm dựa trên color_id và size_id của sản phẩm trong giỏ hàng
+            $attributeProduct = $item->product->attributeProducts
+                ->where('size_id', $item->size_id)   // Lọc theo size_id
+                ->first();
+        
+            // Tính tổng tiền: số lượng * giá của thuộc tính sản phẩm
             return $item->qty * ($attributeProduct ? $attributeProduct->price : 0);
         });
 
