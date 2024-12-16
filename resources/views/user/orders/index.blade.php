@@ -3,11 +3,7 @@
 @section('title', 'Danh sách đơn hàng')
 
 @section('content')
-@if(session('alert'))
-    <div class="alert alert-info" id="alert-message">
-        {{ session('alert') }}
-    </div>
-@endif
+
 <h1>Danh sách đơn hàng</h1>
 
 <table class="table">
