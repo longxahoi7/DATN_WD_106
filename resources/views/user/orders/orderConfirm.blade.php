@@ -36,13 +36,13 @@
                     <input name="shipping_address" id="shipping_address" class="form-control" required
                         value="{{ old('shipping_address', $user->address ?? '') }}"></input>
                 </div>
+                <input type="hidden" name="discount_code" id="hiddenDiscountCode" value="">
 
                 <!-- Nút xác nhận -->
                 <div class="text-center mt-4 d-flex ">
-                    <input type="hidden" name="amount" value="{{ $total }}">
-                    <a href="{{ route('user.cart.index') }}" class="custom-text-back-home">Giỏ Hàng</a>
-                    <div>
-                        <button type="submit" class="custom-btn-order-cod">Thanh toán COD</button>
+                <a href="{{ route('user.cart.index') }}" class="custom-text-back-home">Giỏ Hàng</a>
+
+                <button type="submit" class="custom-btn-order-cod">Thanh toán COD</button>
                         <button name="redirect" type="button" id="btnVnPay" class="custom-btn-order-vnpay">
                             Thanh Toán VNPay
                         </button>
@@ -89,10 +89,14 @@
                     <span class="order-label">Phí vận chuyển:</span>
                     <span class="order-value">40.000 đ</span>
                 </div>
+                <div class="order-item">    
+                    <input type="text" name="discount_code" id="discountCode" placeholder="Nhập mã giảm giá" class="form-control">
+                    <button type="button" id="applyDiscount" class="btn btn-primary mt-2">Áp dụng</button>
+                </div>
                 <hr class="order-divider">
                 <div class="order-item total">
                     <span class="order-label">Tổng cộng:</span>
-                    <span class="order-value">{{ number_format($total, 0, ',', '.') }} đ</span>
+                    <span class="order-value" id="total">{{ number_format($total, 0, ',', '.') }} đ</span>
                 </div>
             </div>
         </section>
@@ -102,13 +106,96 @@
 <!-- Form ẩn cho VNPay -->
 <form id="vnpayForm" action="{{ route('checkout.vnpay') }}" method="POST" style="display: none;">
     @csrf
-    <input type="hidden" name="amount" value="{{ $total }}">
+   <input type="hidden" name="amount" id="vnpayAmount" value="{{ $total }}">
     <input type="hidden" name="recipient_name" id="vnpayName" value="{{ old('name', $user->name ?? '') }}">
     <input type="hidden" name="phone" id="vnpayPhone" value="{{ old('phone', $user->phone ?? '') }}">
     <input type="hidden" name="shipping_address" id="vnpayAddress"
         value="{{ old('shipping_address', $user->address ?? '') }}">
     <input type="hidden" name="redirect" value="1">
 </form>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> 
+<script>
+    $(document).ready(function () {
+        // Hàm để cập nhật giá trị tổng tiền vào input hidden và nút COD
+        function updateTotalAmount() {
+            var total = $('#total').text().replace(' đ', '').replace(',', '') * 1000; // Lấy giá trị tổng từ #total
+            $('#hiddenTotalAmount').val(total); // Gán giá trị vào input hidden
+            $('#order-cod').text('Thanh toán COD (' + total + ' đ)'); // Cập nhật giá trị cho nút thanh toán COD
+            $('#vnpayAmount').val(total); // Cập nhật giá trị vào form ẩn VNPay
+        }
+        
+        // Hàm để format lại giá trị tổng tiền theo định dạng số tiền
+        function formatTotalAmount(amount) {
+            return amount.toLocaleString('vi-VN'); // Định dạng tiền theo kiểu Việt Nam
+        }
+
+        // Gọi hàm updateTotalAmount khi tải trang hoặc khi mã giảm giá được áp dụng
+        updateTotalAmount();
+
+        // Áp dụng mã giảm giá
+        $('#applyDiscount').click(function () {
+            const discountCode = $('#discountCode').val();
+            const subtotal = {{ $total }}; // Tổng tiền ban đầu
+
+            $.ajax({
+                url: '{{ route("user.order.applyDiscount") }}',
+                type: 'POST',
+                data: {
+                    discount_code: discountCode,
+                    amount: subtotal,
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function (response) {
+                    if (response.success) {
+                        // Cập nhật tổng tiền trực tiếp trong thẻ .order-value
+                        $('#total').text(formatTotalAmount(response.newTotal) + ' đ');
+                        alert(response.message);  // Thông báo thành công
+                    } else {
+                        alert(response.message);  // Thông báo lỗi
+                    }
+
+                    // Cập nhật lại giá trị tổng vào input hidden, nút COD và form ẩn VNPay
+                    updateTotalAmount();
+                },
+                error: function () {
+                    alert('Có lỗi xảy ra, vui lòng thử lại.');
+                }
+            });
+        });
+    });
+    $('#applyDiscount').click(function () {
+    const discountCode = $('#discountCode').val(); // Lấy mã giảm giá người dùng nhập
+    $('#hiddenDiscountCode').val(discountCode); // Cập nhật giá trị vào input ẩn
+
+    // Tiến hành xử lý mã giảm giá qua AJAX (nếu cần)
+    const subtotal = {{ $total }}; // Tổng tiền ban đầu
+
+    $.ajax({
+        url: '{{ route("user.order.applyDiscount") }}',
+        type: 'POST',
+        data: {
+            discount_code: discountCode,
+            amount: subtotal,
+            _token: '{{ csrf_token() }}'
+        },
+        success: function (response) {
+            if (response.success) {
+                // Cập nhật tổng tiền trực tiếp trong thẻ .order-value
+                $('#total').text(formatTotalAmount(response.newTotal) + ' đ');
+                alert(response.message);  // Thông báo thành công
+            } else {
+                alert(response.message);  // Thông báo lỗi
+            }
+
+            // Cập nhật lại giá trị tổng vào input hidden, nút COD và form ẩn VNPay
+            updateTotalAmount();
+        },
+        error: function () {
+            alert('Có lỗi xảy ra, vui lòng thử lại.');
+        }
+    });
+});
+</script>
 
 <script>
 document.getElementById('btnVnPay').addEventListener('click', function () {

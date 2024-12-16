@@ -319,6 +319,7 @@ Route::group(
     }
 );
 
+Route::post('/apply-discount', [PaymentController::class, 'applyDiscount'])->name('user.order.applyDiscount');
 
 Route::post('/vnp_payment', [PaymentVnPayController::class, 'vnp_payment'])
     ->name('checkout.vnpay');
