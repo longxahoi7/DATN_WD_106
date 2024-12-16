@@ -105,6 +105,11 @@
             <div class="summary-content">
                 <span class="summary-title">Tổng đơn hàng({{ count($cartItems) }} sản phẩm):</span>
                 <span class="summary-price">{{ number_format($finalTotal , 0, ',', '.') }} đ</span>
+
+            </div>
+            <div class="summary-content">
+            <span class="summary-title">Phí ship:</span>
+                <span class="summary-price">{{ number_format($shippingFee , 0, ',', '.') }} đ</span>
             </div>
             <div class="container-checkout">
                 <form action="{{ route('user.order.confirm') }}" method="POST" class="payment-form">
