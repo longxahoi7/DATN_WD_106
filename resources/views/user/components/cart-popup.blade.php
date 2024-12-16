@@ -14,10 +14,10 @@
             <p class="custom-total-amount" id="total-amount">Tổng tiền: 0đ</p>
             <div class="custom-cart-actions">
                 <a href="{{ route('user.cart.index') }}" class="custom-add-cart-popup">Xem giỏ hàng</a>
-                <form action="{{ route('checkout.vnpay') }}" method="post">
+                <form action="{{ route('user.order.confirm') }}" method="post">
                     @csrf
                     <input type="hidden" name="amount" id="total-amount-hidden">
-                    <button type="submit" name="redirect" class="custom-btn-checkout-popup">Thanh toán VNPay</button>
+                    <button type="submit" name="redirect" class="custom-btn-checkout-popup">Thanh toán ngay</button>
                 </form>
             </div>
         </div>

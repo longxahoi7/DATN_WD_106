@@ -41,8 +41,9 @@ class OrderController extends Controller
         $order->save();
 
         // Nếu người dùng đã xác nhận, cập nhật trạng thái của đơn hàng cho Admin
-        if ($order->received && $order->status != 'completed') {
-            $order->status = 'completed'; // Chuyển trạng thái đơn hàng thành 'completed'
+        if ($order->received && $order->status != 'completed'&& $order->paymentstatus != 'paid') {
+            $order->status = 'completed';
+            $order->payment_status = 'paid'; // Chuyển trạng thái đơn hàng thành 'completed'
             $order->save();
         }
         session()->flash('alert', 'Đã xác nhận nhận hàng thành công!');

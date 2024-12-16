@@ -103,7 +103,7 @@ class PaymentController extends Controller
         Mail::to($user->email)->send(new OrderConfirm($emailData));
     
         // Chuyển hướng đến trang thông báo thanh toán thành công và truyền thông tin
-        return redirect()->route('user.order.success')->with('alert', 'Đơn hàng của bạn đã được thanh toán thành công. Cảm ơn bạn!');
+        return redirect()->route('user.order.order-cod')->with('alert', 'Đơn hàng của bạn đã được thanh toán thành công. Cảm ơn bạn!');
     }
 
     // Trang thông báo thanh toán thành công
