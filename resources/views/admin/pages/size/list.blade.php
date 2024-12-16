@@ -94,11 +94,11 @@
                 <td>{{ $size->name }}</td>
                 <td>
                     <div class="icon-product d-flex justify-content-center gap-2">
-                        <a href="" data-id="{{ $size->size_id }}" class=" text-info action-icons">
+                        <!-- <a href="" data-id="{{ $size->size_id }}" class=" text-info action-icons">
                             <button class="action-btn eye" title="Xem chi tiết">
                                 <i class="fas fa-eye"></i>
                             </button>
-                        </a>
+                        </a> -->
                         <a href="" data-id="{{ $size->size_id }}" class="text-warning action-icons">
                             <button class="action-btn edit" title="Chỉnh sửa">
                                 <i class="fas fa-edit"></i>

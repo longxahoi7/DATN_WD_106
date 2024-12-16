@@ -90,23 +90,23 @@
                 </a>
             </li>
 
+            <!-- Quản lý bình luận -->
+            <li class="dropdown-comment">
+                <a href="#" class="toggle-link-comment dropdown-toggle">
+                    <i class="icon-management">🏷️</i> Bỉnh luận
+                </a>
+
+                <ul id="managementSubmenu-comment" class="submenu-comment">
+                    <li><a href="{{route('admin.reviews.index')}}">Bình luận khách hàng</a></li>
+                    <li><a href="">Bình luận quản lý </a></li>
+                </ul>
+            </li>
+
             <!-- Quản lý tài khoản -->
             <li>
                 <a href="{{ route('admin.users.listUser') }}">
                     <i class="icon-account">👥</i> Tài khoản
                 </a>
-            </li>
-            <!-- Quản lý bình luận -->
-            <li class="dropdown-coupon">
-                <a href="{{route('admin.reviews.index')}}" class="toggle-link-coupon dropdown-toggle">
-                    <i class="icon-management">🏷️</i> Bỉnh luận
-                </a>
-
-                <ul id="managementSubmenu-coupon" class="submenu-coupon">
-                    <li><a href="{{route('admin.reviews.index')}}">Bình luận khách hàng</a></li>
-                    <li><a href="">Bình luận quản lý </a></li>
-
-                </ul>
             </li>
         </ul>
     </div>
@@ -161,13 +161,27 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     });
 
+    // Coupon Dropdown
+    const commentToggle = document.querySelector('.toggle-link-comment.dropdown-toggle');
+    const commentDropdown = document.querySelector('.submenu-comment');
+    commentToggle.addEventListener('click', function(e) {
+        e.preventDefault();
+        console.log('Dropdown Mã giảm giá được click!');
+        commentDropdown.classList.toggle('show');
+    });
+    document.addEventListener('click', function(e) {
+        if (!commentDropdown.contains(e.target) && !commentToggle.contains(e.target)) {
+            commentDropdown.classList.remove('show');
+        }
+    });
+
     // Highlight active menu item
     const currentURL = window.location.href;
-    const menuItems = document.querySelectorAll(".submenu li a, .submenu-coupon li a");
+    const menuItems = document.querySelectorAll(".submenu li a, .submenu-coupon li a, .submenu-comment li a");
 
     menuItems.forEach(item => {
         if (item.href === currentURL) {
-            const parentDropdown = item.closest('.dropdown, .dropdown-coupon');
+            const parentDropdown = item.closest('.dropdown, .dropdown-coupon, .dropdown-comment');
             if (parentDropdown) {
                 parentDropdown.classList.add('active');
             }

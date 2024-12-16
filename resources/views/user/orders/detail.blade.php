@@ -11,7 +11,7 @@
 <div class="container">
     <div class="row-order">
         <!-- Bên phải: Chi tiết đơn hàng -->
-        <div class="col-md-9 order-right">
+        <div class="col-md-12 order-right">
             <div class="button-header">
                 <button>
                     Chi tiết đơn hàng <i class="fa fa-star"></i>
@@ -86,14 +86,14 @@
                     <table class="table">
                         <thead>
                             <tr>
-                                <th></th>
-                                <th>Ảnh sản phẩm</th>
-                                <th>Tên sản phẩm</th>
-                                <th>Màu sắc</th>
-                                <th>Kích cỡ</th>
-                                <th>Giá</th>
-                                <th>Số lượng</th>
-                                <th>Tổng tiền</th>
+                            <th class="text-center" style="width: 5%"></th>
+                            <th class="text-center" style="width: 15%">Ảnh sản phẩm</th>
+                            <th class="text-center" style="width: 20%">Tên sản phẩm</th>
+                            <th class="text-center" style="width: 10%">Màu sắc</th>
+                            <th class="text-center" style="width: 10%">Kích cỡ</th>
+                            <th class="text-center" style="width: 15%">Giá</th>
+                            <th class="text-center" style="width: 10%">Số lượng</th>
+                            <th class="text-center" style="width: 15%">Tổng tiền</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -122,18 +122,27 @@
 
                         <tfoot>
                             <tr>
-                                <td colspan="7">Tổng giá trị đơn hàng</td>
+                                <td colspan="7">Tổng giá trị đơn hàng:</td>
                                 <td>{{ number_format($order->orderItems->sum(function($item) { return $item->price * $item->quantity; }), 0, ',', '.') }}
                                     VND</td>
                             </tr>
                             <tr>
-                                <td colspan="7">Phí Ship</td>
+                                <td colspan="7">Phí Ship:</td>
                                 <td>40,000 VND</td>
                             </tr>
                             <tr>
-                                <td colspan="7">Thành tiền</td>
-                                <td>{{ number_format($order->orderItems->sum(function($item) { return $item->price * $item->quantity; }) + 40000, 0, ',', '.') }}
-                                    VND</td>
+                                <!-- Dòng hiển thị giảm giá -->
+                                <td colspan="7">
+                                    Giảm giá:
+                                </td>
+                                <td>{{ number_format(
+                                        ($order->orderItems->sum(function($item) { return $item->price * $item->quantity; }) + 40000) - $order->total
+                                        , 0, ',', '.') }} đ
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="7">Thành tiền:</td>
+                                <td>{{ number_format($order->total, 0, ',', '.') }} đ</td>
                             </tr>
                         </tfoot>
                     </table>

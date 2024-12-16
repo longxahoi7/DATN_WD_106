@@ -103,11 +103,11 @@
                     <td>
                         <div class="icon-product d-flex justify-content-center gap-2">
                             <!-- Xem chi tiết -->
-                            <a href="" data-id="{{ $color->color_id }}">
+                            <!-- <a href="" data-id="{{ $color->color_id }}">
                                 <button class="action-btn eye" title="Xem chi tiết">
                                     <i class="fas fa-eye"></i>
                                 </button>
-                            </a>
+                            </a> -->
 
                             <!-- Chỉnh sửa thông tin -->
                             <a href="" data-id="{{ $color->color_id }}">
