@@ -51,7 +51,23 @@ class ProductsController extends Controller
     //     ]);
     // }
 
+    public function search(Request $request)
+    {
+        $searchTerm = $request->input('search'); // Lấy từ khóa tìm kiếm
 
+        // Kiểm tra nếu từ khóa tìm kiếm có tồn tại và không rỗng
+        if ($searchTerm) {
+            $products = Product::where('name', 'LIKE', '%' . $searchTerm . '%')
+                ->orWhere('sku', 'LIKE', '%' . $searchTerm . '%')
+                ->get();
+        } else {
+            // Nếu không có từ khóa tìm kiếm, trả về tất cả sản phẩm đang hoạt động
+            $products = Product::where('is_active', true)->get();
+        }
+
+        // Trả về view với danh sách sản phẩm tìm được
+        return view('user.product', compact('products'));
+    }
     // API để lấy danh sách sản phẩm
     public function productList($categoryId = null)
     {
@@ -104,7 +120,7 @@ class ProductsController extends Controller
     }
     public function addReview(Request $request)
     {
-       
+
         $bannedWords = BannedWord::pluck('word')->toArray();
         $comment=$request->input('comment');
 
@@ -129,7 +145,7 @@ foreach ($bannedWords as $bannedWord) {
          'rating' => $request->input(key: 'rating') ?? null,
             'comment' =>$comment,
         ]);
-     
+
         return redirect()->back();
 
     }
