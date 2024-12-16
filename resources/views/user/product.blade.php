@@ -4,7 +4,11 @@
 @section('content')
 <div class="container mt-5">
     <h1 class="text-center mb-4">Danh Sách Sản Phẩm</h1>
-
+    @if(session('alert'))
+    <div class="alert alert-info" id="alert-message">
+        {{ session('alert') }}
+    </div>
+@endif
     <div class="row">
         @foreach ($listProduct as $product)
         <div class="col-md-4 mb-4">

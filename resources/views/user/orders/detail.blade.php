@@ -7,6 +7,11 @@
 @section('title', 'Chi tiết đơn hàng')
 
 @section('content')
+@if(session('alert'))
+    <div class="alert alert-info" id="alert-message">
+        {{ session('alert') }}
+    </div>
+@endif
 <div class="container">
     <div class="row-order">
         <!-- Bên phải: Chi tiết đơn hàng -->

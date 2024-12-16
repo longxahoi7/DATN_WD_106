@@ -11,7 +11,11 @@
 @section('content')
 
 <div class="container mb-5">
-
+@if(session('alert'))
+    <div class="alert alert-info" id="alert-message">
+        {{ session('alert') }}
+    </div>
+@endif
     <!-- Danh sách sản phẩm -->
     <div class="button-header mt-5">
         <button>

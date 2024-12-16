@@ -54,7 +54,7 @@ class OrderController extends Controller
         // Lấy thông tin đơn hàng của người dùng đang đăng nhập
         $order = Order::with(['orderItems.color', 'orderItems.size'])->find($orderId);
 
-        return view('user.orders.detail', compact('order'));
+        return view('user.orders.detail', compact('order'))->with('alert', 'Chi tiết đơn hàng');
     }
 
     public function store(Request $request)
@@ -83,7 +83,7 @@ class OrderController extends Controller
         $cart->cartItems()->delete();
         $cart->delete();
 
-        return redirect()->route('user.orders.index')->with('success', 'Đơn hàng đã được tạo thành công!');
+        return redirect()->route('user.orders.index')->with('alert', 'Đơn hàng đã được tạo thành công!');
     }
 
     public function orderSuccess($orderId)
@@ -91,17 +91,17 @@ class OrderController extends Controller
         $order = Order::with('payment')->find($orderId);
 
         if (!$order) {
-            return redirect()->route('home')->with('error', 'Order not found.');
+            return redirect()->route('home')->with('alert', 'Order not found.');
         }
 
 
-        return view('user.orders.order-cod', compact('order'));
+        return view('user.orders.order-cod', compact('order'))->with('alert', 'Đã tạo đơn hàng thành công');
     }
     public function cancelOrder($orderId)
     {
         // Kiểm tra nếu người dùng đã đăng nhập
         if (!auth()->check()) {
-            return redirect()->route('login')->with('error', 'Vui lòng đăng nhập để hủy đơn hàng.');
+            return redirect()->route('login')->with('alert', 'Vui lòng đăng nhập để hủy đơn hàng.');
         }
 
         // Lấy đơn hàng
@@ -111,11 +111,11 @@ class OrderController extends Controller
 
         // Kiểm tra xem đơn hàng có tồn tại và trạng thái là "pending" không
         if (!$order) {
-            return redirect()->route('user.order.history')->with('error', 'Đơn hàng không tồn tại.');
+            return redirect()->route('user.order.history')->with('alert', 'Đơn hàng không tồn tại.');
         }
 
         if ($order->status !== 'pending') {
-            return redirect()->route('user.order.history')->with('error', 'Đơn hàng không thể hủy ở trạng thái này.');
+            return redirect()->route('user.order.history')->with('alert', 'Đơn hàng không thể hủy ở trạng thái này.');
         }
 
         // Cập nhật trạng thái đơn hàng thành "canceled"
@@ -125,7 +125,7 @@ class OrderController extends Controller
 
         // Thực hiện các thao tác khác nếu cần, như gửi email hoặc xử lý tiền hoàn lại...
 
-        return redirect()->route('user.order.history')->with('success', 'Đơn hàng đã được hủy.');
+        return redirect()->route('user.order.history')->with('alert', 'Đơn hàng đã được hủy.');
     }
     public function confirmOrder(Request $request)
     {
@@ -133,13 +133,13 @@ class OrderController extends Controller
         $user = Auth::user();
     
         if (!$user) {
-            return redirect()->route('login')->with('error', 'Vui lòng đăng nhập để thanh toán!');
+            return redirect()->route('login')->with('alert', 'Vui lòng đăng nhập để thanh toán!');
         }
     
         // Lấy giỏ hàng của người dùng
         $shoppingCart = ShoppingCart::where('user_id', $user->user_id)->first();
         if (!$shoppingCart) {
-            return redirect()->route('shopping-cart')->with('error', 'Giỏ hàng trống!');
+            return redirect()->route('shopping-cart')->with('alert', 'Giỏ hàng trống!');
         }
     
         $cartItems = $shoppingCart->cartItems;
@@ -155,6 +155,7 @@ class OrderController extends Controller
     
                 $productDetails[] = [
                     'name' => $item->product->name,
+                    'img'=>$item->product->main_image_url,
                     'color' => $item->color->name,  // Lấy tên màu từ quan hệ color
                     'size' => $item->size->name,    // Lấy tên size từ quan hệ size
                     'quantity' => $item->qty,
@@ -184,13 +185,13 @@ class OrderController extends Controller
         $user = Auth::user();
     
         if (!$user) {
-            return redirect()->route('login')->with('error', 'Vui lòng đăng nhập để thanh toán!');
+            return redirect()->route('login')->with('alert', 'Vui lòng đăng nhập để thanh toán!');
         }
     
         // Lấy giỏ hàng của người dùng
         $shoppingCart = ShoppingCart::where('user_id', $user->user_id)->first();
         if (!$shoppingCart) {
-            return redirect()->route('shopping-cart')->with('error', 'Giỏ hàng trống!');
+            return redirect()->route('shopping-cart')->with('alert', 'Giỏ hàng trống!');
         }
     
         $cartItems = $shoppingCart->cartItems;
@@ -227,7 +228,7 @@ class OrderController extends Controller
             'productDetails' => $productDetails,
             'total' => $total,
             'shippingFee' => $shippingFee
-        ]);
+        ])->with('alert', 'Đã tạo đơn hàng thành công');
     }
     
 }

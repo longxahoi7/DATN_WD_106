@@ -3,12 +3,14 @@
 <link rel="stylesheet" href="{{ asset('css/order-user/orderConfirm.css') }}">
 
 @section('content')
+
 <div class="container">
     <div class="button-header mt-3">
         <button>
         Xác Nhận Đơn Hàng <i class="fa fa-star"></i>
         </button>
     </div>
+    
     <!-- Thông Tin Người Nhận -->
     <div class="card mb-4">
         <div class="card-header bg-primary text-white">

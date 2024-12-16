@@ -1,4 +1,9 @@
 <div class="product">
+@if(session('alert'))
+    <div class="alert alert-info" id="alert-message">
+        {{ session('alert') }}
+    </div>
+@endif
     <h1>{{ $product->name }}</h1>
     <p><strong>Subtitle:</strong> {{ $product->subtitle }}</p>
     <p><strong>Description:</strong> {{ $product->description }}</p>
