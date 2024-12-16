@@ -17,6 +17,7 @@ class PaymentVnPayController extends Controller
         // Lấy dữ liệu từ request
         $data = $request->all();
         // Tạo đơn hàng
+        // dd($data);
         $order = Order::create([
             'user_id' => Auth::id(),
             'order_date' => now(),
@@ -26,6 +27,7 @@ class PaymentVnPayController extends Controller
             'shipping_address' => $data['shipping_address'],
             'phone' => $data['phone'],
             'payment_status' => 'pending',
+            'recipient_name' => $data['recipient_name'],
             'payment_method'  => 'VNPAY' // Chưa thanh toán
         ]);
         $order_id = $order->order_id;
