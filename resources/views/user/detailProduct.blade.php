@@ -283,6 +283,7 @@
             </form>
         </div>
     </div>
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             var reviewsContainer = document.getElementById('reviewsContainer');
@@ -313,17 +314,6 @@
                 // Hiển thị thông báo lỗi
                 alert(message);
                 return;
-            }
-        });
-        document.querySelector('.custom-cart').addEventListener('click', function(e) {
-            const color = document.getElementById('selected-color').value;
-            const size = document.getElementById('selected-size').value;
-
-            if (!color || !size) {
-                e.preventDefault(); // Ngăn gửi form nếu chưa chọn thuộc tính
-                showToast('Vui lòng chọn màu sắc và kích thước.', true);
-            } else {
-                showToast('Thêm vào giỏ hàng thành công!', false);
             }
         });
 
@@ -458,7 +448,7 @@
                 .then(data => {
                     if (data.success) {
                         alert('Sản phẩm đã được thêm vào giỏ hàng.');
-                        location.reload(); // Tự động reload lại trang sau khi thêm giỏ hàng thành công
+                        location.reload();
                     } else {
                         alert('Có lỗi xảy ra, vui lòng thử lại.');
                     }

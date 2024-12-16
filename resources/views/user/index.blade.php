@@ -20,47 +20,97 @@
 
     @stack('styles')
     <style>
-        *:focus {
-            outline: none !important;
-            box-shadow: none !important;
+    *:focus {
+        outline: none !important;
+        box-shadow: none !important;
+    }
+
+    button:focus,
+    input:focus,
+    textarea:focus,
+    a:focus {
+        outline: none !important;
+        box-shadow: none !important;
+    }
+
+    body {
+        font-family: 'Roboto', sans-serif;
+        font-smooth: always;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+
+    html,
+    body {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        text-rendering: optimizeLegibility;
+        font-size: 16px;
+        line-height: 1.6;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        font-weight: 700;
+    }
+
+    p {
+        font-weight: 400;
+    }
+
+    /* Tổng quan cho alert */
+    #alert {
+        position: fixed;
+        /* Cố định ở một vị trí */
+        top: 20px;
+        right: 20px;
+        /* Đẩy về bên phải */
+        max-width: 300px;
+        /* Giới hạn chiều rộng */
+        padding: 15px;
+        border-radius: 5px;
+        color: #fff;
+        /* Màu chữ trắng */
+        font-size: 14px;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+        animation: slideIn 0.5s ease-out;
+        z-index: 1000;
+        /* Đảm bảo hiển thị trên các phần khác */
+    }
+
+    /* Hiệu ứng trượt vào từ bên phải */
+    @keyframes slideIn {
+        from {
+            transform: translateX(100%);
+            opacity: 0;
         }
 
-        button:focus,
-        input:focus,
-        textarea:focus,
-        a:focus {
-            outline: none !important;
-            box-shadow: none !important;
+        to {
+            transform: translateX(0);
+            opacity: 1;
         }
+    }
 
-        body {
-            font-family: 'Roboto', sans-serif;
-            font-smooth: always;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-        }
+    /* Alert thành công màu xanh lá */
+    .alert-success {
+        background-color: #28a745;
+        border: 1px solid #218838;
+    }
 
-        html,
-        body {
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-            text-rendering: optimizeLegibility;
-            font-size: 16px;
-            line-height: 1.6;
-        }
+    .alert-fail {
+        background-color: #333;
+        border: 1px solid #222;
+    }
 
-        h1,
-        h2,
-        h3,
-        h4,
-        h5,
-        h6 {
-            font-weight: 700;
-        }
-
-        p {
-            font-weight: 400;
-        }
+    .alert {
+        position: relative;
+        z-index: 1200;
+        margin-top: 10px;
+    }
     </style>
 
 </head>
@@ -70,13 +120,15 @@
         @include('user.components.header')
     </header>
 
-@if(session('alert'))
+    @if(!empty(session('alert')))
     <div class="alert alert-success" id="alert" role="alert">
         {{ session('alert') }}
+        @if(!empty(session('alert_2')))
         <br>
         {{ session('alert_2') }}
+        @endif
     </div>
-@endif
+    @endif
 
     @if(Request::is('/'))
     <div class="slide-show">
@@ -97,16 +149,15 @@
     @stack('scripts')
 </body>
 <script>
-    window.onload = function() {
-        var alertElement = document.getElementById('alert','alert_2');
-        if (alertElement) {
-            // Sau 2 giây (2000ms), ẩn đi thông báo alert
-            setTimeout(function() {
-                alertElement.style.display = 'none';
-            }, 2000); // 2000 milliseconds = 2 seconds
-        }
+window.onload = function() {
+    var alertElement = document.getElementById('alert', 'alert_2');
+    if (alertElement) {
+        // Sau 2 giây (2000ms), ẩn đi thông báo alert
+        setTimeout(function() {
+            alertElement.style.display = 'none';
+        }, 2000); // 2000 milliseconds = 2 seconds
     }
-
+}
 </script>
 
 </html>
