@@ -53,39 +53,39 @@
                         {{ number_format(($attributeProduct ? $attributeProduct->price : 0) * $item->qty, 0, ',', '.') }} đ
                     </span>
                 </div>
-                 <div class="popup-overlay" id="popupOverlay{{ $item->id }}" onclick="closePopup({{ $item->id }})">
-                        <div class="popup-content" onclick="event.stopPropagation()">
-                            <p>Màu sắc: </p>
-                            <div class="color-options">
-                                @foreach($item->attributeProducts->unique('color_id') as $attributeProduct)
-                                <div class="color-option" style="background-color: {{ $attributeProduct->color->name }};"
-                                    onclick="changeColor({{ $item->id }}, '{{ $attributeProduct->color->color_id }}', this)">
-                                </div>
-                                @endforeach
+                <div class="popup-overlay" id="popupOverlay{{ $item->id }}" onclick="closePopup({{ $item->id }})">
+                    <div class="popup-content" onclick="event.stopPropagation()">
+                        <p>Màu sắc: </p>
+                        <div class="color-options">
+                            @foreach($item->attributeProducts->unique('color_id') as $attributeProduct)
+                            <div class="color-option" style="background-color: {{ $attributeProduct->color->name }};"
+                                onclick="changeColor({{ $item->id }}, '{{ $attributeProduct->color->color_id }}', this)">
                             </div>
-                            <p class="section-title">Size:</p>
-                            <div class="size-options">
-                                @foreach($item->attributeProducts->unique('size_id') as $attributeProduct)
-                                <button class="size-option" data-id="{{ $attributeProduct->size->size_id }}"
-                                    data-price="{{ $attributeProduct->price }}"
-                                    onclick="selectSize({{ $item->id }}, '{{ $attributeProduct->size->size_id }}', this)">
-                                    {{ $attributeProduct->size->name }}
-                                </button>
-                                @endforeach
-                            </div>
-                            <p class="section-title">Số lượng:</p>
-                            <div class="quantity-container d-flex">
-                                <div class="custom-quantity" onclick="changeQuantity({{ $item->id }}, -1)">-</div>
-                                <input type="number" id="quantity{{ $item->id }}" name="display-qty" class="custom-quantity-input" min="1"
-                                    value="{{ $item->qty }}" onchange="updateQuantity({{ $item->id }}, this.value)">
-                                <div class="custom-quantity" onclick="changeQuantity({{ $item->id }}, 1)">+</div>
-                            </div>
-                            <div class="popup-buttons text-end">
-                                <button onclick="confirmSelection({{ $item->id }})">Xác nhận</button>
-                                <button onclick="closePopup({{ $item->id }})">Hủy</button>
-                            </div>
+                            @endforeach
+                        </div>
+                        <p class="section-title">Size:</p>
+                        <div class="size-options">
+                            @foreach($item->attributeProducts->unique('size_id') as $attributeProduct)
+                            <button class="size-option" data-id="{{ $attributeProduct->size->size_id }}"
+                                data-price="{{ $attributeProduct->price }}"
+                                onclick="selectSize({{ $item->id }}, '{{ $attributeProduct->size->size_id }}', this)">
+                                {{ $attributeProduct->size->name }}
+                            </button>
+                            @endforeach
+                        </div>
+                        <p class="section-title">Số lượng:</p>
+                        <div class="quantity-container d-flex">
+                            <div class="custom-quantity" onclick="changeQuantity({{ $item->id }}, -1)">-</div>
+                            <input type="number" id="quantity{{ $item->id }}" name="display-qty" class="custom-quantity-input" min="1"
+                                value="{{ $item->qty }}" onchange="updateQuantity({{ $item->id }}, this.value)">
+                            <div class="custom-quantity" onclick="changeQuantity({{ $item->id }}, 1)">+</div>
+                        </div>
+                        <div class="popup-buttons text-end">
+                            <button onclick="confirmSelection({{ $item->id }})">Xác nhận</button>
+                            <button onclick="closePopup({{ $item->id }})">Hủy</button>
                         </div>
                     </div>
+                </div>
                 <div class="remove-btn">
                     <form action="{{ route('user.cart.remove', $item->id) }}" method="POST">
                         @csrf
@@ -104,7 +104,7 @@
         <div class="cart-summary">
             <div class="summary-content">
                 <span class="summary-title">Tổng đơn hàng({{ count($cartItems) }} sản phẩm):</span>
-                <span class="summary-price">{{ number_format($finalTotal - 40000, 0, ',', '.') }} đ</span>
+                <span class="summary-price">{{ number_format($finalTotal , 0, ',', '.') }} đ</span>
             </div>
             <div class="container-checkout">
                 <form action="{{ route('user.order.confirm') }}" method="POST" class="payment-form">
@@ -142,22 +142,22 @@
         const colorId = selectedColor[itemId];
         const sizeId = selectedSize[itemId];
         const quantity = document.getElementById('quantity' + itemId).value;
-         if (!colorId || !sizeId || quantity < 1) {
-        let message = '';
-        if (!colorId) {
-            message += 'Vui lòng chọn màu sắc.\n';
+        if (!colorId || !sizeId || quantity < 1) {
+            let message = '';
+            if (!colorId) {
+                message += 'Vui lòng chọn màu sắc.\n';
+            }
+            if (!sizeId) {
+                message += 'Vui lòng chọn kích thước.\n';
+            }
+            if (quantity < 1) {
+                message += 'Vui lòng chọn số lượng hợp lệ.\n';
+            }
+            alert(message);
+            return;
         }
-        if (!sizeId) {
-            message += 'Vui lòng chọn kích thước.\n';
-        }
-        if (quantity < 1) {
-            message += 'Vui lòng chọn số lượng hợp lệ.\n';
-        }
-        alert(message);
-        return;
-    }
 
-        fetch('{{ route('user.cart.cupdate', ['id' => ':itemId ']) }}'.replace(':itemId', itemId), {
+        fetch('{{ route('user.cart.cupdate', ['id' => ':itemId']) }}'.replace(':itemId', itemId), {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -188,18 +188,24 @@
     let selectedColor = {};
     let selectedSize = {};
 
-    function changeColor(itemId, colorId, element) {
-    selectedColor[itemId] = colorId;
-    const colorOptions = document.querySelectorAll(`#popupOverlay${itemId} .color-option`);
-    colorOptions.forEach(option => option.classList.remove('selected'));
-    element.classList.add('selected');
-}
-
     function selectSize(itemId, sizeId, element) {
         selectedSize[itemId] = sizeId;
         const sizeOptions = document.querySelectorAll(`#popupOverlay${itemId} .size-option`);
         sizeOptions.forEach(option => option.classList.remove('selected'));
         element.classList.add('selected');
+
+        // Cập nhật giá sau khi thay đổi kích thước
+        updatePrice(itemId);
+    }
+
+    function changeColor(itemId, colorId, element) {
+        selectedColor[itemId] = colorId;
+        const colorOptions = document.querySelectorAll(`#popupOverlay${itemId} .color-option`);
+        colorOptions.forEach(option => option.classList.remove('selected'));
+        element.classList.add('selected');
+
+        // Cập nhật giá sau khi thay đổi màu sắc
+        updatePrice(itemId);
     }
 
     function changeQuantity(itemId, change) {
