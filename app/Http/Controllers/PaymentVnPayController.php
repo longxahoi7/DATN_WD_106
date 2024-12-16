@@ -16,6 +16,7 @@ class PaymentVnPayController extends Controller
     {
         // Lấy dữ liệu từ request
         $data = $request->all();
+        $user = Auth::user();
         // Tạo đơn hàng
         // dd($data);
         $order = Order::create([
@@ -30,6 +31,66 @@ class PaymentVnPayController extends Controller
             'recipient_name' => $data['recipient_name'],
             'payment_method'  => 'VNPAY' // Chưa thanh toán
         ]);
+        // Lấy giỏ hàng của người dùng
+        $shoppingCart = ShoppingCart::where('user_id', $user->user_id)->first();
+        if (!$shoppingCart) {
+            return redirect()->route('shopping-cart')->with('error', 'Giỏ hàng trống!');
+        }
+    
+        $cartItems = $shoppingCart->cartItems;
+    
+        // Lấy thông tin địa chỉ giao hàng và số điện thoại từ form
+        $shippingAddress = $request->input('shipping_address');
+        $phone = $request->input('phone');
+        $recipients_name = $request->input('recipient_name');
+    
+        // Tính tổng tiền đơn hàng (không bao gồm phí vận chuyển)
+        $totalWithoutShipping = 0;
+        $productDetails = []; // Lưu thông tin chi tiết sản phẩm
+        foreach ($cartItems as $item) {
+            $attributeProduct = $item->product->attributeProducts->firstWhere('size_id', $item->size_id);
+            if ($attributeProduct) {
+                $totalWithoutShipping += $attributeProduct->price * $item->qty;
+    
+                $productDetails[] = [
+                    'product_id' => $item->product_id,
+                    'name' => $item->product->name,
+                    'color' => $item->color->name,
+                    'size' => $item->size->name,
+                    'quantity' => $item->qty,
+                    'price' => $attributeProduct->price,
+                    'subtotal' => $attributeProduct->price * $item->qty,
+                    'color_id' => $item->color_id,
+                    'size_id' => $item->size_id
+                ];
+            }
+        }
+        $discountAmount = 0;
+        $discountCode = $request->input('discount_code'); // Lấy mã giảm giá từ form
+        if ($discountCode) {
+            $coupon = Coupon::where('code', $discountCode)->first();
+            if ($coupon && $coupon->is_active && $coupon->is_public) {
+                // Tính toán giảm giá sau khi đã cộng phí vận chuyển
+                $shippingFee = 40000; // Phí vận chuyển
+                $totalAfterShipping = $totalWithoutShipping + $shippingFee; // Tổng tiền sau khi cộng phí vận chuyển
+$discountAmount = $this->calculateDiscount($coupon, $totalAfterShipping);
+            }
+        }
+        // Thêm phí vận chuyển
+        $shippingFee = 40000;
+        $total = $totalWithoutShipping + $shippingFee - $discountAmount;
+        foreach ($productDetails as $product) {
+            OrderItem::create([
+                'order_id' => $order->order_id,
+                'product_id' => $product['product_id'],
+                'product_name' => $product['name'],
+                'color_id' => $product['color_id'],
+                'size_id' => $product['size_id'],
+                'quantity' => $product['quantity'],
+                'price' => $product['price'],
+                'subtotal' => $product['subtotal'],
+            ]);
+        }
         $order_id = $order->order_id;
         // Các thông tin cần thiết cho VNPAY
         $vnp_Url = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html"; // URL VNPAY
@@ -65,7 +126,7 @@ class PaymentVnPayController extends Controller
         ];
 
         // Nếu có mã ngân hàng cụ thể, thêm vào đây
-        if (!empty($vnp_BankCode)) {
+if (!empty($vnp_BankCode)) {
             $inputData['vnp_BankCode'] = $vnp_BankCode;
         }
 
