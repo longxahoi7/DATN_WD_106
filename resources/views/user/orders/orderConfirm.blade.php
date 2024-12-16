@@ -42,7 +42,7 @@
                 <div class="text-center mt-4 d-flex ">
                 <a href="{{ route('user.cart.index') }}" class="custom-text-back-home">Giỏ Hàng</a>
 
-                <button type="submit" class="custom-btn-order-cod">Thanh toán COD</button>
+                        <button type="submit" class="custom-btn-order-cod">Thanh toán COD</button>
                         <button name="redirect" type="button" id="btnVnPay" class="custom-btn-order-vnpay">
                             Thanh Toán VNPay
                         </button>
