@@ -71,7 +71,7 @@ class PaymentController extends Controller
                 $discountAmount = $this->calculateDiscount($coupon, $totalAfterShipping);
             }
         }
-        dd($totalAfterShipping);
+        // dd($totalAfterShipping);
         // Thêm phí vận chuyển
         $shippingFee = 40000;
         $total = $totalWithoutShipping + $shippingFee - $discountAmount; // Cập nhật tổng tiền sau khi trừ mã giảm giá
@@ -141,7 +141,20 @@ class PaymentController extends Controller
     {
         $code = $request->input('discount_code');
         $amount = $request->input('amount');
+        $discountAmount = 0;
+        $coupon = Coupon::where('code', $code)->first();
+        if ($coupon && $coupon->is_active && $coupon->is_public) {
+            // Tính toán số tiền được giảm
+            $discountAmount = $amount * ($coupon->discount_percentage / 100); // Giảm giá theo %
+            $newTotal = $amount - $discountAmount; // Tổng tiền sau giảm giá
 
+            return response()->json([
+                'success' => true,
+                'message' => 'Áp dụng mã giảm giá thành công!',
+                'discountAmount' => $discountAmount,
+                'newTotal' => $newTotal,
+            ]);
+        }
         // Nếu không có mã giảm giá, trả về tổng không thay đổi
         if (!$code) {
             return response()->json([

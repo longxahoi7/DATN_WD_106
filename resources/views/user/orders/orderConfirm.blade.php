@@ -81,24 +81,24 @@
                 @endforeach
             </div>
             <div class="total-order-confirm mt-3">
-                <div class="order-item">
-                    <span class="order-label">Tạm tính:</span>
-                    <span class="order-value">{{ number_format($product['price'] * $product['quantity'], 0, ',', '.') }}
-                        đ</span>
-                </div>
-                <div class="order-item">
+            <div class="order-item">
                     <span class="order-label">Phí vận chuyển:</span>
                     <span class="order-value">40.000 đ</span>
                 </div>
+                <div class="order-item">
+                    <span class="order-label">Tạm tính:</span>
+                    <span class="order-value">
+                    {{ number_format($total, 0, ',', '.') }} đ</span>
+                </div>
+                
                 <div class="order-item">
                     <input type="text" name="discount_code" id="discountCode" placeholder="Nhập mã giảm giá" class="form-control">
                     <button type="button" id="applyDiscount" class="custom-btn-apply-order">Áp dụng</button>
                 </div>
                 <div class="order-item">
-                    @if (isset($discountAmount))
-                        <span class="order-label">Mã giảm giá:</span>
-                        <span class="order-value">{{ number_format($discountAmount) }} đ</span>
-                    @endif
+                <span class="order-label">Giảm giá: </span>
+                <span class="order-value" id="discountAmount">0 đ</span>
+
                 </div>
                 <hr class="order-divider">
                 <div class="order-item total">
@@ -156,6 +156,8 @@
                     if (response.success) {
                         // Cập nhật tổng tiền trực tiếp trong thẻ .order-value
                         $('#total').text(formatTotalAmount(response.newTotal) + ' đ');
+
+                        $('#discountAmount').text('-' + formatTotalAmount(response.discountAmount) + ' đ');
                         alert(response.message);  // Thông báo thành công
                     } else {
                         alert(response.message);  // Thông báo lỗi
