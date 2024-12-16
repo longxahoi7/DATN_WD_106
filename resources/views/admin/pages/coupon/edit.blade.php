@@ -1,3 +1,10 @@
+@extends('admin.index')
+
+<link rel="stylesheet" href="{{asset('css/admin/coupon.css')}}">
+
+@section('content')
+
+<body></body>
 <body>
     <form action="{{ route('admin.coupons.update', $coupon->coupon_id) }}" method="POST">
         @csrf
