@@ -11,7 +11,6 @@
     </button>
 </div>
 <div class="cart-container">
-    <!-- Phần giỏ hàng bên trái -->
     <div class="cart-items-section">
         <div class="cart-header">
             <hr class="divider-line">
@@ -27,25 +26,31 @@
                             onerror="this.onerror=null; this.src='{{ asset('imagePro/image/no-image.png') }}';">
                     </a>
                 </div>
-
                 <div class="product-details">
-                    <div class="card-details">
-                        <a href="{{ route('user.product.detail', $item->product_id) }}" class="product-card-link">
-                            <h5 class="product-name">{{ $item->product->name }}</h5>
-                            @php
-                            $attributeProduct = $item->product->attributeProducts->firstWhere('size_id',
-                            $item->size_id);
-                            @endphp
-                            <span class="product-price">
-                                {{ number_format($attributeProduct ? $attributeProduct->price : 0, 0, ',', '.') }} đ
-                            </span>
-                        </a>
-                        <div class="attribute hover-info" onclick="openPopup('{{ $item->id }}')">
-                            <span>Màu: {{ $item->color->name }}</span>
-                            <span>Kích thước: {{ $item->size->name }} ▼</span>
-                        </div>
+                    <a href="{{ route('user.product.detail', $item->product_id) }}" class="product-card-link">
+                        <p class="product-name mb-1">{{ $item->product->name }}</p>
+                        @php
+                        $attributeProduct = $item->product->attributeProducts->firstWhere('size_id',
+                        $item->size_id);
+                        @endphp
+                        <span class="product-price">
+                            {{ number_format($attributeProduct ? $attributeProduct->price : 0, 0, ',', '.') }} đ
+                        </span>
+                    </a>
+                </div>
+                <div class="product-attribute">
+                    <div class="attribute" onclick="openPopup('{{ $item->id }}')">
+                        <span>Phân loại hàng: ▼</span>
                     </div>
-                    <p class="section-title">Số lượng:{{ $item->qty }}</p>
+                    <span>{{ $item->color->name }}, {{ $item->size->name }}</span>
+                    <p class="section-title">Số lượng: {{ $item->qty }}</p>
+                </div>
+                <div class="product-price-quantity">
+                </div>
+                <div class="product-total-cart mr-5">
+                    <span>
+                        {{ number_format(($attributeProduct ? $attributeProduct->price : 0) * $item->qty, 0, ',', '.') }} đ
+                    </span>
                 </div>
                  <div class="popup-overlay" id="popupOverlay{{ $item->id }}" onclick="closePopup({{ $item->id }})">
                         <div class="popup-content" onclick="event.stopPropagation()">
@@ -74,7 +79,6 @@
                                     value="{{ $item->qty }}" onchange="updateQuantity({{ $item->id }}, this.value)">
                                 <div class="custom-quantity" onclick="changeQuantity({{ $item->id }}, 1)">+</div>
                             </div>
-                            <hr class="divider-line mt-3">
                             <div class="popup-buttons text-end">
                                 <button onclick="confirmSelection({{ $item->id }})">Xác nhận</button>
                                 <button onclick="closePopup({{ $item->id }})">Hủy</button>
@@ -92,68 +96,35 @@
                 </div>
             </div>
             @endforeach
-            @if($cartItems->isEmpty())
-            <div class="empty-cart-container">
-                <div class="empty-cart-icon">
-                    <img src="{{ asset('imagePro/icon/cart-image.png') }}" alt="Empty Cart">
-                </div>
-                <h2 class="empty-cart-title">"Hổng" có gì trong giỏ hết</h2>
-                <p class="empty-cart-subtitle">Lướt Gentle Manor, lựa hàng ngay đi!</p>
-                <a href="/product/product-list" class="btn btn-no-cart-user">Mua sắm ngay!</a>
-            </div>
-            @endif
         </div>
-    </div>
 
-    <!-- Phần thông tin giỏ hàng bên phải -->
-    <div class="cart-summary-section">
+        @if($cartItems->isEmpty())
+        @else
         <div class="cart-summary">
-            <!-- Tiêu đề thông tin đơn hàng -->
-            <h3 class="order-title">Thông tin đơn hàng</h3>
-            <table>
-                <tr>
-                    <th>Tạm tính:</th>
-                    <td>{{ number_format($total, 0, ',', '.') }} VND</td>
-                </tr>
-                <tr>
-                    <th>Giảm giá:</th>
-                    <td>{{ number_format($discount, 0, ',', '.') }} VND</td>
-                </tr>
-                <tr>
-                    <th>Phí vận chuyển:</th>
-                    <td>{{ number_format($shippingFee, 0, ',', '.') }} VND</td>
-                </tr>
-                <tr>
-                    <th>Tổng cộng:</th>
-                    <td>{{ number_format($finalTotal, 0, ',', '.') }} VND</td>
-                </tr>
-            </table>
-
-            <!-- Mục nhập mã giảm giá -->
-            <div class="discount-section">
-                <input type="text" id="discount-code" name="discount_code" placeholder="Nhập mã giảm giá">
-                <button class="btn btn-link">Xem tất cả</button>
+            <div class="summary-content">
+                <span class="summary-title">Tổng đơn hàng({{ count($cartItems) }} sản phẩm):</span>
+                <span class="summary-price">{{ number_format($finalTotal - 40000, 0, ',', '.') }} đ</span>
             </div>
-
-            <!-- Ghi chú đơn hàng -->
-            <div class="note-section">
-                <label for="order-note">Ghi chú đơn hàng:</label>
-                <textarea id="order-note" name="order_note" placeholder="Nhập ghi chú cho đơn hàng"></textarea>
-            </div>
-
-            <!-- Thêm các nút thanh toán -->
             <div class="container-checkout">
                 <form action="{{ route('user.order.confirm') }}" method="POST" class="payment-form">
                     @csrf
                     <input type="hidden" name="amount" value="{{ $finalTotal }}">
                     <button type="submit" class="custom-btn-cod">Thanh toán</button>
                 </form>
-
             </div>
-            <a href="/product/product-list" class="continue-shopping">
-                <i class="fa fa-arrow-left"></i> Tiếp tục mua hàng
-            </a>
         </div>
+        @endif
+
+        @if($cartItems->isEmpty())
+        <div class="empty-cart-container">
+            <div class="empty-cart-icon">
+                <img src="{{ asset('imagePro/icon/cart-image.png') }}" alt="Empty Cart">
+            </div>
+            <h2 class="empty-cart-title">"Hổng" có gì trong giỏ hết</h2>
+            <p class="empty-cart-subtitle">Lướt Gentle Manor, lựa hàng ngay đi!</p>
+            <a href="/product/product-list" class="btn btn-no-cart-user">Mua sắm ngay!</a>
+        </div>
+        @endif
     </div>
 </div>
 
