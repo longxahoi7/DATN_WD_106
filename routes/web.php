@@ -347,3 +347,11 @@ Route::get('/orders-detail/{id}', [OrderController::class, 'showDetailOrder'])
     ->name('admin.orderDetail');
 
 Route::post('/admin/update-order-status', [OrderController::class, 'updateOrderStatus'])->name('admin.updateOrderStatus');
+
+Route::get('/profile', function () {
+    return view('user.profiles.index');
+});
+
+Route::get('/profile-edit', function () {
+    return view('user.profiles.edit');
+});

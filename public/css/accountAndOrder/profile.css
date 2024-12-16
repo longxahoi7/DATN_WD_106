@@ -1,0 +1,132 @@
+*{
+    font-family: Arial, sans-serif;
+}
+.profile-container {
+    display: flex;
+    padding: 30px;
+}
+
+/* Bên trái */
+.profile-sidebar {
+    width: 30%;
+    background-color: #ffffff;
+    padding: 30px;
+    border-right: 1px solid #ddd;
+}
+
+.profile-sidebar h3 {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+}
+
+.profile-sidebar p {
+    font-size: 1rem;
+    margin-bottom: 10px;
+}
+
+.btn-logout {
+    background-color: #dc3545;
+    color: #fff;
+    border: none;
+    padding: 8px 15px;
+    text-decoration: none;
+    display: inline-block;
+    border-radius: 5px;
+}
+
+.btn-logout:hover {
+    background-color: #c82333;
+    text-decoration: none;
+    color: #fff;
+}
+
+/* Bên phải */
+.profile-main {
+    flex: 1;
+    background-color: #fff;
+    padding: 30px;
+}
+
+.profile-main h3 {
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+}
+
+.profile-info {
+    font-size: 1rem;
+    margin-bottom: 15px;
+}
+
+.profile-info i {
+    margin-right: 10px;
+    color: #555;
+}
+
+.custom-text-link-profile{
+    color: #000;
+    text-decoration: none;
+}
+
+.custom-text-link-profile:hover{
+    color: #2a9d8f;
+    text-decoration: none;
+}
+
+/* form edit */
+/* Tổng quan form */
+.custom-form-profile {
+    background-color: #ffffff;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.custom-form-profile form input,
+.custom-form-profile form button {
+    font-size: 16px;
+    padding: 10px 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 15px;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+/* Input tone trắng - đen */
+.custom-form-profile form input {
+    background-color: #f9f9f9;
+    color: #333;
+}
+
+/* Focus xanh lá và đổ bóng */
+.custom-form-profile form input:focus {
+    border-color: #28a745; /* Màu xanh lá */
+    box-shadow: 0px 0px 8px rgba(40, 167, 69, 0.5);
+    background-color: #ffffff;
+}
+
+/* Placeholder tone đen nhạt */
+.custom-form-profile form input::placeholder {
+    color: #777;
+    font-style: italic;
+}
+
+/* Nút Lưu */
+.custom-form-profile form button {
+    background-color: #333;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.custom-form-profile form button:hover {
+    background-color: #28a745; /* Màu xanh lá */
+    color: #fff;
+    box-shadow: 0px 4px 6px rgba(40, 167, 69, 0.3);
+}
+
+.custom-menu-profile{
+    margin-left: 10px;
+}
