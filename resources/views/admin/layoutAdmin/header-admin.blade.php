@@ -25,7 +25,7 @@
                 <div class="dropdown-menu">
                     @if(Auth::check())
                     <a href="{{route('user.profiles.showUserInfo')}}" class="dropdown-item">Thông tin chung</a>
-                    
+
                     <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                         @csrf
                     </form>
@@ -91,15 +91,10 @@
             </li>
 
             <!-- Quản lý bình luận -->
-            <li class="dropdown-comment">
-                <a href="#" class="toggle-link-comment dropdown-toggle">
+            <li>
+                <a href="{{route('admin.reviews.index')}}">
                     <i class="icon-management">🏷️</i> Bỉnh luận
                 </a>
-
-                <ul id="managementSubmenu-comment" class="submenu-comment">
-                    <li><a href="{{route('admin.reviews.index')}}">Bình luận khách hàng</a></li>
-                    <li><a href="">Bình luận quản lý </a></li>
-                </ul>
             </li>
 
             <!-- Quản lý tài khoản -->
@@ -151,7 +146,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
     couponToggle.addEventListener('click', function(e) {
         e.preventDefault();
-        console.log('Dropdown Mã giảm giá được click!');
         couponDropdown.classList.toggle('show');
     });
 
@@ -166,7 +160,6 @@ document.addEventListener("DOMContentLoaded", function() {
     const commentDropdown = document.querySelector('.submenu-comment');
     commentToggle.addEventListener('click', function(e) {
         e.preventDefault();
-        console.log('Dropdown Mã giảm giá được click!');
         commentDropdown.classList.toggle('show');
     });
     document.addEventListener('click', function(e) {
