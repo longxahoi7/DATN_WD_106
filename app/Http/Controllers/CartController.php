@@ -197,7 +197,7 @@ class CartController extends Controller
         $cartItem = CartItem::findOrFail($id);
         $cartItem->delete();
 
-        return redirect()->back()->with('success', 'Sản phẩm đã được xóa khỏi giỏ hàng.');
+        return redirect()->back()->with('alert', 'Sản phẩm đã được xóa khỏi giỏ hàng.');
     }
 
 

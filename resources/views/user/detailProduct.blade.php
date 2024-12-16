@@ -7,11 +7,6 @@
 @section("content")
 
 <div class="body">
-    @if(session('alert'))
-    <div class="alert alert-info" id="alert-message">
-        {{ session('alert') }}
-    </div>
-    @endif
     <div class="container">
         <div class="container-product">
             <div>
@@ -297,16 +292,29 @@
             let selectedColor = '';
             let selectedSize = '';
             let inStock = parseInt(document.getElementById('product-stock').innerText) || 0;
+
+            //Mua ngay
             document.getElementById('add-to-cart-form').addEventListener('submit', function(e) {
                 const color = document.getElementById('selected-color').value;
                 const size = document.getElementById('selected-size').value;
+                const qty = document.getElementById('qty-hidden').value;
 
-                if (!color || !size) {
-                    e.preventDefault(); // Ngăn form gửi đi
-                    showToast('Vui lòng chọn màu sắc và kích thước.', true);
+                // Kiểm tra các lựa chọn
+                if (!color || !size || !qty || qty < 1) {
+                    e.preventDefault(); // Ngừng gửi form nếu thiếu thông tin
+
+                    let message = '';
+                    if (!color) {
+                        message += 'Vui lòng chọn màu sắc.\n';
+                    }
+                    if (!size) {
+                        message += 'Vui lòng chọn kích thước.\n';
+                    }
+                    // Hiển thị thông báo lỗi
+                    alert(message);
+                    return;
                 }
             });
-
             document.querySelector('.custom-cart').addEventListener('click', function(e) {
                 const color = document.getElementById('selected-color').value;
                 const size = document.getElementById('selected-size').value;

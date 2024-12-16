@@ -5,11 +5,7 @@
 @endpush
 
 @section('content')
-@if(session('alert'))
-    <div class="alert alert-info" id="alert-message">
-        {{ session('alert') }}
-    </div>
-@endif
+
 <div class="container">
     <div class="row-order">
         <!-- Bên phải: Bộ lọc và danh sách đơn hàng -->
@@ -150,14 +146,6 @@
 
 @push('scripts')
 <script>
-        window.onload = function() {
-        var alertMessage = document.getElementById('alert-message');
-        if (alertMessage) {
-            setTimeout(function() {
-                alertMessage.style.display = 'none'; // Ẩn thông báo sau 2 giây
-            }, 2000); // 2000ms = 2 giây
-        }
-    };
     document.addEventListener('DOMContentLoaded', function() {
         // Toggle xem thêm ẩn bớt
         document.querySelectorAll('.toggle-btn').forEach(button => {

@@ -17,26 +17,26 @@ class PaymentController extends Controller
     //
     public function checkoutCOD(Request $request)
     {
-
         // Lấy thông tin người dùng đang đăng nhập
         $user = Auth::user();
-
+    
         if (!$user) {
             return redirect()->route('login')->with('error', 'Vui lòng đăng nhập để thanh toán!');
         }
-
+    
         // Lấy giỏ hàng của người dùng
         $shoppingCart = ShoppingCart::where('user_id', $user->user_id)->first();
         if (!$shoppingCart) {
             return redirect()->route('shopping-cart')->with('error', 'Giỏ hàng trống!');
         }
-
+    
         $cartItems = $shoppingCart->cartItems;
-
+    
         // Lấy thông tin địa chỉ giao hàng và số điện thoại từ form
-        $shippingAddress = $request->input('shipping_address');  // Lấy địa chỉ giao hàng từ form
-        $phone = $request->input('phone');                        // Lấy số điện thoại từ form
-        $recipients_name = $request->input('recipient_name'); // L
+        $shippingAddress = $request->input('shipping_address');
+        $phone = $request->input('phone');
+        $recipients_name = $request->input('recipient_name');
+    
         // Tính tổng tiền đơn hàng (không bao gồm phí vận chuyển)
         $totalWithoutShipping = 0;
         $productDetails = []; // Lưu thông tin chi tiết sản phẩm
@@ -44,7 +44,7 @@ class PaymentController extends Controller
             $attributeProduct = $item->product->attributeProducts->firstWhere('size_id', $item->size_id);
             if ($attributeProduct) {
                 $totalWithoutShipping += $attributeProduct->price * $item->qty;
-
+    
                 $productDetails[] = [
                     'product_id' => $item->product_id,
                     'name' => $item->product->name,
@@ -58,30 +58,28 @@ class PaymentController extends Controller
                 ];
             }
         }
-
+    
         // Thêm phí vận chuyển
         $shippingFee = 40000;
         $total = $totalWithoutShipping + $shippingFee;
-
+    
         $order = Order::create([
             'user_id' => $user->user_id,
             'shipping_address' => $shippingAddress,
-            'phone'  => $phone,
+            'phone' => $phone,
             'total' => $total,
             'invoice_date' => now(),
             'shipping_fee' => $shippingFee,
             'status' => 'pending',
-            'payment_method'  => 'COD',
+            'payment_method' => 'COD',
             'recipient_name' => $recipients_name
-
         ]);
-
+    
         // Thêm các sản phẩm vào đơn hàng
         foreach ($productDetails as $product) {
             OrderItem::create([
                 'order_id' => $order->order_id,
                 'product_id' => $product['product_id'],
-                
                 'product_name' => $product['name'],
                 'color_id' => $product['color_id'],
                 'size_id' => $product['size_id'],
@@ -90,9 +88,10 @@ class PaymentController extends Controller
                 'subtotal' => $product['subtotal'],
             ]);
         }
-
+    
         // Xóa các sản phẩm trong giỏ hàng sau khi thanh toán
         $shoppingCart->cartItems()->delete();
+    
         $emailData = [
             'user' => $user,
             'address' => $shippingAddress,
@@ -102,14 +101,9 @@ class PaymentController extends Controller
             'shippingFee' => $shippingFee
         ];
         Mail::to($user->email)->send(new OrderConfirm($emailData));
+    
         // Chuyển hướng đến trang thông báo thanh toán thành công và truyền thông tin
-        return view('user.orders.order-cod', [
-            'order' => $order,
-            'userName' => $user->name,
-            'productDetails' => $productDetails,
-            'total' => $total,
-            'shippingFee' => $shippingFee
-        ])->with('alert','Đơn hàng của bạn đã được thanh toán thành công. Cảm ơn bạn!');
+        return redirect()->route('user.order.success')->with('alert', 'Đơn hàng của bạn đã được thanh toán thành công. Cảm ơn bạn!');
     }
 
     // Trang thông báo thanh toán thành công
@@ -125,7 +119,7 @@ class PaymentController extends Controller
         $successMessage = session('success');
 
         // Trả về view với thông báo và tên người dùng
-        return view('user.orders.order-cod', compact('userName', 'successMessage'));
+        return view('user.orders.order-cod', compact('userName', 'successMessage'))->with('alert', 'Đơn hàng của bạn đã được thanh toán thành công. Cảm ơn bạn!');
     }
 
 }

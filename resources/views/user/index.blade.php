@@ -20,39 +20,47 @@
 
     @stack('styles')
     <style>
-    *:focus {
-        outline: none !important;
-        box-shadow: none !important;
-    }
+        *:focus {
+            outline: none !important;
+            box-shadow: none !important;
+        }
 
-    button:focus,
-    input:focus,
-    textarea:focus,
-    a:focus {
-        outline: none !important;
-        box-shadow: none !important;
-    }
-    body {
-    font-family: 'Roboto', sans-serif;
-    font-smooth: always;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    }
-    html, body {
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-        text-rendering: optimizeLegibility;
-        font-size: 16px;
-        line-height: 1.6;
-    }
-    h1, h2, h3, h4, h5, h6 {
-        font-weight: 700;
-    }
+        button:focus,
+        input:focus,
+        textarea:focus,
+        a:focus {
+            outline: none !important;
+            box-shadow: none !important;
+        }
 
-    p {
-        font-weight: 400;
-    }
+        body {
+            font-family: 'Roboto', sans-serif;
+            font-smooth: always;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
 
+        html,
+        body {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            text-rendering: optimizeLegibility;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-weight: 700;
+        }
+
+        p {
+            font-weight: 400;
+        }
     </style>
 
 </head>
@@ -61,6 +69,14 @@
     <header>
         @include('user.components.header')
     </header>
+
+@if(session('alert'))
+    <div class="alert alert-success" id="alert" role="alert">
+        {{ session('alert') }}
+        <br>
+        {{ session('alert_2') }}
+    </div>
+@endif
 
     @if(Request::is('/'))
     <div class="slide-show">
@@ -80,5 +96,17 @@
 
     @stack('scripts')
 </body>
+<script>
+    window.onload = function() {
+        var alertElement = document.getElementById('alert','alert_2');
+        if (alertElement) {
+            // Sau 2 giây (2000ms), ẩn đi thông báo alert
+            setTimeout(function() {
+                alertElement.style.display = 'none';
+            }, 2000); // 2000 milliseconds = 2 seconds
+        }
+    }
+
+</script>
 
 </html>

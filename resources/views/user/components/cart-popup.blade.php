@@ -64,7 +64,7 @@ function fetchCartItems() {
                                 <form action="{{ route('user.cart.remove', '') }}/${item.id}" method="POST">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="custom-btn-remove">&times;</button>
+                                    <button type="submit" class="custom-btn-remove" onclick="confirm('Bạn có muốn xóa sản phẩm này hay không ?')">&times;</button>
                                 </form>
                             </div>
                         </div>

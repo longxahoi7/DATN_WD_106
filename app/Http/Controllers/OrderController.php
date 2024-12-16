@@ -22,7 +22,7 @@ class OrderController extends Controller
             ->with('orderItems.product') // Eager load thông tin sản phẩm
             ->orderBy('order_id', 'desc') // Sắp xếp theo ngày đặt hàng mới nhất
             ->paginate(10);
-
+            session()->flash('alert', 'Bạn đang vào trang lịch sử mua hàng');
         // Trả về view danh sách đơn hàng
         return view('user.orders.orderHistory', compact('orders'));
     }
@@ -45,7 +45,7 @@ class OrderController extends Controller
             $order->status = 'completed'; // Chuyển trạng thái đơn hàng thành 'completed'
             $order->save();
         }
-
+        session()->flash('alert', 'Đã xác nhận nhận hàng thành công!');
         return redirect()->route('user.order.history')->with('alert', 'Đơn hàng đã được xác nhận nhận hàng.');
     }
 
@@ -53,7 +53,7 @@ class OrderController extends Controller
     {
         // Lấy thông tin đơn hàng của người dùng đang đăng nhập
         $order = Order::with(['orderItems.color', 'orderItems.size'])->find($orderId);
-
+        session()->flash('alert', 'Bạn đang vào trang chi tiết đơn hàng');
         return view('user.orders.detail', compact('order'));
     }
 
@@ -82,7 +82,7 @@ class OrderController extends Controller
         // Xóa giỏ hàng sau khi đặt hàng
         $cart->cartItems()->delete();
         $cart->delete();
-
+        session()->flash('alert', 'Đặt hàng thành công!');
         return redirect()->route('user.orders.index')->with('success', 'Đơn hàng đã được tạo thành công!');
     }
 
@@ -94,7 +94,7 @@ class OrderController extends Controller
             return redirect()->route('home')->with('error', 'Order not found.');
         }
 
-
+        session()->flash('alert', 'Đặt hàng thành công!');
         return view('user.orders.order-cod', compact('order'));
     }
     public function cancelOrder($orderId)
@@ -106,10 +106,10 @@ class OrderController extends Controller
 
         // Lấy đơn hàng
         $order = Order::where('order_id', $orderId)
-            ->where('user_id', auth()->id()) // Đảm bảo là người dùng của đơn hàng này
+            ->where('user_id', auth()->id())
             ->first();
 
-        // Kiểm tra xem đơn hàng có tồn tại và trạng thái là "pending" không
+
         if (!$order) {
             return redirect()->route('user.order.history')->with('error', 'Đơn hàng không tồn tại.');
         }
@@ -123,9 +123,8 @@ class OrderController extends Controller
             'status' => 'cancelled',
         ]);
 
-        // Thực hiện các thao tác khác nếu cần, như gửi email hoặc xử lý tiền hoàn lại...
-
-        return redirect()->route('user.order.history')->with('success', 'Đơn hàng đã được hủy.');
+        session()->flash('alert_2', 'Đơn hàng đã được hủy thành công.');
+        return redirect()->route('user.order.history');
     }
     public function confirmOrder(Request $request)
     {

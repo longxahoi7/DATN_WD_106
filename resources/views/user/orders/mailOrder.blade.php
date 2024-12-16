@@ -74,11 +74,7 @@
     </style>
 </head>
 <body>
-@if(session('alert'))
-    <div class="alert alert-info" id="alert-message">
-        {{ session('alert') }}
-    </div>
-@endif
+
 <div class="container">
 
     <div class="header">
