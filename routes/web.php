@@ -25,6 +25,7 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PaymentVnPayController;
 use App\Http\Controllers\OrderController as OrderUserController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\UserController as ProfileController;
 
 Route::group(
     [
@@ -324,6 +325,18 @@ Route::group(
                 Route::post('/cart/update/{id}', [CartController::class, 'update'])->name('cupdate');
                 Route::delete('/cart/remove/{id}', [CartController::class, 'removeItem'])->name('remove');
                 Route::get('/cart-popup', [CartController::class, 'viewCartPopup'])->name('popup');
+            }
+        );
+        Route::group(
+            [
+                'prefix' => 'profiles',
+                'as' => 'profiles.',
+                
+            ],
+            function () {
+                Route::get('/profiles', [ProfileController::class, 'showUserInfo'])->name('showUserInfo'); 
+                Route::get('/profiles/{id}/edit', [ProfileController::class, 'edit'])->name('edit-profile'); 
+                Route::post('/profiles/{id}/update', [ProfileController::class, 'updateUser'])->name('update-profile');
             }
         );
     }

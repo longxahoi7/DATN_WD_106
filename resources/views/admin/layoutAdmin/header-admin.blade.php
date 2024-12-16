@@ -10,11 +10,11 @@
 
         <!-- Thông tin nằm bên phải trong header -->
         <div class="header-right">
-            <a href="/" class="">
+            <a href="{{route('user.profiles.showUserInfo')}}" class="">
                 <span class="icon-home">🏠</span> Quay về trang chủ
             </a>
             <div class="dropdown">
-                <a href="#" class="nav-link dropdown-toggle">
+                <a href="{{route('user.profiles.showUserInfo')}}" class="nav-link dropdown-toggle">
                     <span class="icon-user">👤</span>
                     @if(Auth::check())
                     {{ Auth::user()->name }}
@@ -24,8 +24,8 @@
                 </a>
                 <div class="dropdown-menu">
                     @if(Auth::check())
-                    <a href="/profile" class="dropdown-item">Thông tin chung</a>
-                    <a href="/order-history" class="dropdown-item">Cài đặt</a>
+                    <a href="{{route('user.profiles.showUserInfo')}}" class="dropdown-item">Thông tin chung</a>
+                    
                     <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                         @csrf
                     </form>

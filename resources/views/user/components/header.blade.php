@@ -47,11 +47,11 @@
                 <!-- Hàng ngang 1 - Các icon và liên kết -->
                 <div class="col">
                     <nav class="header-nav mt-3">
-                        <a href="/" class="nav-link">
+                        <a href="{{route('user.profiles.showUserInfo')}}" class="nav-link">
                             <i class="fas fa-home"></i> Trang chủ
                         </a>
                         <div class="dropdown">
-                            <a href="#" class="nav-link custom-Navlink">
+                            <a href="{{route('user.profiles.showUserInfo')}}" class="nav-link custom-Navlink">
                                 <i class="fas fa-user"></i>
                                 @if(Auth::check())
                                 {{ Auth::user()->name }}
@@ -61,7 +61,7 @@
                             </a>
                             <div class="dropdown-menu text-center">
                                 @if(Auth::check())
-                                <a href="/profile" class="dropdown-item">Thông tin chung</a>
+                                <a href="{{route('user.profiles.showUserInfo')}}" class="dropdown-item">Thông tin chung</a>
 
                                 <!-- Kiểm tra nếu người dùng có role 'admin' -->
                                 @if(in_array(Auth::user()->role, [1, 3]))
