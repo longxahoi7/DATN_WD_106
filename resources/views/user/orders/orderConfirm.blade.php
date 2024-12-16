@@ -4,84 +4,98 @@
 
 @section('content')
 <div class="container">
-    <div class="button-header mt-3">
-        <button>
-        Xác Nhận Đơn Hàng <i class="fa fa-star"></i>
-        </button>
-    </div>
     <!-- Thông Tin Người Nhận -->
-    <div class="card mb-4">
-        <div class="card-header bg-primary text-white">
-            Thông Tin Người Nhận
+    <div class="container-form-order-confirm">
+        <!-- Phần điền thông tin -->
+        <div class="custom-header-order-confirm">
+            <div class="logo">Gentle Manor - Shop thời trang nam <i class="fa fa-star"></i></div>
         </div>
-        <div class="card-body">
+        <section class="info-form-order-confirm">
+            <p>Thông Tin Giao Hàng</p>
+            <div class="user-info">
+                <div class="avatar">
+                    <img src="{{asset('imagePro/icon/icon-avata.png')}}" alt="Avatar của người dùng"
+                        onerror="this.src='default-avatar.png'">
+                </div>
+                <div class="user-details">
+                    <p class="user-name">{{ old('name', $user->name ?? '') }}</p>
+                    <p class="user-email">{{ old('name', $user->email ?? '') }}</p>
+                </div>
+            </div>
             <form id="orderForm" action="{{ route('user.order.checkoutcod') }}" method="POST">
                 @csrf
                 <div class="mb-3">
-                    <label for="name" class="form-label">Họ và Tên</label>
-                    <input type="text" name="recipient_name" id="recipient_name" class="form-control" value="{{ old('name', $user->name ?? '') }}" required>
+                    <input type="text" name="recipient_name" id="recipient_name" class="form-control"
+                        value="{{ old('name', $user->name ?? '') }}" required>
                 </div>
                 <div class="mb-3">
-                    <label for="phone" class="form-label">Số Điện Thoại</label>
-                    <input type="text" name="phone" id="phone" class="form-control" value="{{ old('phone', $user->phone ?? '') }}" required>
+                    <input type="text" name="phone" id="phone" class="form-control"
+                        value="{{ old('phone', $user->phone ?? '') }}" required>
                 </div>
                 <div class="mb-3">
-                    <label for="address" class="form-label">Địa Chỉ</label>
-                    <input name="shipping_address" id="shipping_address" class="form-control" required value="{{ old('shipping_address', $user->address ?? '') }}"></input>
-                </div>
-                <!-- Danh sách sản phẩm -->
-                <div class="card mt-4">
-                    <div class="card-header bg-secondary text-white">
-                        Sản Phẩm Trong Đơn Hàng
-                    </div>
-                    <div class="card-body">
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th>Tên sản phẩm</th>
-                                    <th>Màu</th>
-                                    <th>Size</th>
-                                    <th>Số lượng</th>
-                                    <th>Đơn giá</th>
-
-                                    <th>Thành tiền</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($productDetails as $product)
-                                <tr>
-                                    <td>{{ $product['name'] }}</td>
-                                    <td>{{ $product['color'] }}</td>
-                                    <td>{{ $product['size'] }}</td>
-                                    <td>{{ $product['quantity'] }}</td>
-                                    <td>{{ number_format($product['price'], 0, ',', '.') }} VND</td>
-                                    <td>{{ number_format($product['price'] * $product['quantity'], 0, ',', '.') }} VND</td>
-                                </tr>
-                                @endforeach
-                            </tbody>
-                            <tfoot>
-                                <tr>
-                                <th colspan="5" class="text-end">Phí Vận Chuyển:</th>
-                                    <td>{{ number_format($shippingFee, 0, ',', '.') }} VND</td>
-                                </tr>
-                                <tr>
-                                    <th colspan="5" class="text-end">Thành tiền:</th>
-                                    <th>{{ number_format($total, 0, ',', '.') }} VND</th>
-                                </tr>
-                            </tfoot>
-                        </table>
-                    </div>
+                    <input name="shipping_address" id="shipping_address" class="form-control" required
+                        value="{{ old('shipping_address', $user->address ?? '') }}"></input>
                 </div>
 
                 <!-- Nút xác nhận -->
-                <div class="text-center mt-4 d-flex justify-content-around">
+                <div class="text-center mt-4 d-flex ">
                     <input type="hidden" name="amount" value="{{ $total }}">
-                    <a href="{{ route('user.cart.index') }}" class="btn btn-secondary btn-lg">Quay Lại Giỏ Hàng</a>
-                    <button type="submit" class="btn btn-success btn-lg">Thanh toán COD</button>
-                    <button name="redirect" type="button" id="btnVnPay" class="btn btn-success btn-lg">Thanh Toán VNPay</button>
+                    <a href="{{ route('user.cart.index') }}" class="custom-text-back-home">Giỏ Hàng</a>
+                    <div>
+                        <button type="submit" class="custom-btn-order-cod">Thanh toán COD</button>
+                        <button name="redirect" type="button" id="btnVnPay" class="custom-btn-order-vnpay">
+                            Thanh Toán VNPay
+                        </button>
+                    </div>
                 </div>
             </form>
-        </div>
+
+        </section>
+
+        <!-- Phần danh sách sản phẩm -->
+        <section class="products-detail-order-confirm">
+            <div class="cart-items-container">
+                @foreach ($productDetails as $product)
+                <div class="product-card">
+                    <div class="product-image">
+                        <!-- Hình ảnh sản phẩm -->
+                        <img src="/storage/{{ $product['img'] }}" alt="{{ $product['name'] }}"
+                            class="product-image-detail"
+                            onerror="this.onerror=null; this.src='{{ asset('imagePro/image/no-image.png') }}';">
+                        <!-- Hiển thị số lượng trên ảnh -->
+                        <div class="product-quantity-circle">{{ $product['quantity'] }}</div>
+                    </div>
+                    <div class="product-details">
+                        <!-- Tên sản phẩm -->
+                        <p class="product-name">{{ $product['name'] }}</p>
+                        <!-- Màu và kích thước -->
+                        <span class="product-attribute">Size:{{ $product['size'] }}</span>
+                        <span class="product-attribute">Màu:{{ $product['color'] }}</span>
+                    </div>
+                    <div class="product-price">
+                        <!-- Giá sản phẩm -->
+                        {{ number_format($product['price'] * $product['quantity'], 0, ',', '.') }} đ
+                    </div>
+                </div>
+                @endforeach
+            </div>
+            <div class="total-order-confirm mt-3">
+                <div class="order-item">
+                    <span class="order-label">Tạm tính:</span>
+                    <span class="order-value">{{ number_format($product['price'] * $product['quantity'], 0, ',', '.') }}
+                        đ</span>
+                </div>
+                <div class="order-item">
+                    <span class="order-label">Phí vận chuyển:</span>
+                    <span class="order-value">40.000 đ</span>
+                </div>
+                <hr class="order-divider">
+                <div class="order-item total">
+                    <span class="order-label">Tổng cộng:</span>
+                    <span class="order-value">{{ number_format($total, 0, ',', '.') }} đ</span>
+                </div>
+            </div>
+        </section>
     </div>
 </div>
 
@@ -91,12 +105,13 @@
     <input type="hidden" name="amount" value="{{ $total }}">
     <input type="hidden" name="name" id="vnpayName" value="{{ old('name', $user->name ?? '') }}">
     <input type="hidden" name="phone" id="vnpayPhone" value="{{ old('phone', $user->phone ?? '') }}">
-    <input type="hidden" name="shipping_address" id="vnpayAddress" value="{{ old('shipping_address', $user->address ?? '') }}">
+    <input type="hidden" name="shipping_address" id="vnpayAddress"
+        value="{{ old('shipping_address', $user->address ?? '') }}">
     <input type="hidden" name="redirect" value="1">
 </form>
 
 <script>
-   document.getElementById('btnVnPay').addEventListener('click', function() {
+document.getElementById('btnVnPay').addEventListener('click', function() {
     const form = document.getElementById('vnpayForm');
     form.submit(); // Gửi form đến VNPay
 });

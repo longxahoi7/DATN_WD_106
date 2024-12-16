@@ -222,6 +222,8 @@
 }
 
 .custom-product-name {
+    max-width: 260px;
+    min-width: 260px;
     font-size: 14px;
     font-weight: 300;
     margin: 0 20px 8px 0;
