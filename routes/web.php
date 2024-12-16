@@ -283,7 +283,15 @@ Route::group(
             ],
             function () {
                 Route::get('/order-history', [OrderUserController::class, 'orderHistory'])->name('history');
-                Route::post('/order-confirm', [OrderUserController::class, 'confirmOrder'])->name('confirm');
+                Route::post('/order-confirm', function (Request $request) {
+                    // Kiểm tra quyền người dùng
+                    if (Auth::user()->role === 1 || Auth::user()->role === 3) {
+                        // Nếu là admin hoặc manager, chuyển hướng về trang chủ với thông báo lỗi
+                        return redirect()->route('home')->with('error', 'Bạn không có quyền mua hàng.');
+                    }
+                    // Nếu là user, thực hiện checkout
+                    return app(OrderUserController::class)->confirmOrder($request);
+                })->name('confirm');
                 Route::post('/order-confirm_VNPay', [OrderUserController::class, 'confirmOrderVNPay'])->name('confirmVNPay');
                 Route::post('/cancel-order/{orderId}', [OrderUserController::class, 'cancelOrder'])->name('cancelOrder');
                 Route::post('/checkout/cod', function (Request $request) {

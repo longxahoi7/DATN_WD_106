@@ -23,7 +23,7 @@
                 <div class="info-receive">
                     <p><i class="fa fa-map-marker-alt"></i> Thông tin nhận hàng</p>
                     <div class="details">
-                    <p><i class="fa-solid fa-house-user"></i><strong>Mã đơn hàng:</strong> {{ $order->order_id }}</p>
+                        <p><i class="fa-solid fa-house-user"></i><strong>Mã đơn hàng:</strong> {{ $order->order_id }}</p>
                         <p><i class="fa-solid fa-person"></i><strong> Người nhận:</strong> {{ $order->recipient_name }}</p>
                         <p><i class="fa-solid fa-phone"></i><strong> Số điện thoại:</strong> {{ $order->phone }}</p>
                         <p><i class="fa-solid fa-house-user"></i><strong>Nhận tại:</strong> {{ $order->shipping_address }}</p>
@@ -86,14 +86,14 @@
                     <table class="table">
                         <thead>
                             <tr>
-                            <th class="text-center" style="width: 5%"></th>
-                            <th class="text-center" style="width: 15%">Ảnh sản phẩm</th>
-                            <th class="text-center" style="width: 20%">Tên sản phẩm</th>
-                            <th class="text-center" style="width: 10%">Màu sắc</th>
-                            <th class="text-center" style="width: 10%">Kích cỡ</th>
-                            <th class="text-center" style="width: 15%">Giá</th>
-                            <th class="text-center" style="width: 10%">Số lượng</th>
-                            <th class="text-center" style="width: 15%">Tổng tiền</th>
+                                <th class="text-center" style="width: 5%"></th>
+                                <th class="text-center" style="width: 15%">Ảnh sản phẩm</th>
+                                <th class="text-center" style="width: 20%">Tên sản phẩm</th>
+                                <th class="text-center" style="width: 10%">Màu sắc</th>
+                                <th class="text-center" style="width: 10%">Kích cỡ</th>
+                                <th class="text-center" style="width: 15%">Giá</th>
+                                <th class="text-center" style="width: 10%">Số lượng</th>
+                                <th class="text-center" style="width: 15%">Tổng tiền</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -101,21 +101,23 @@
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
                                 <td>
-                                    @if($item->product->image)
+                                    @if($item->product)
                                     <img src="/storage/{{ $item->product->main_image_url }}"
                                         alt="{{ $item->product->name }}"
                                         style="width: 50px; height: 50px; object-fit: cover;">
                                     @else
-                                    <img src="/storage/{{ $item->product->main_image_url }}" alt="No Image"
-                                        style="width: 50px; height: 50px;">
+                                    <img src="/storage/default_image.png" alt="Sản phẩm đã bị xóa"
+                                        style="width: 50px; height: 50px; object-fit: cover;">
                                     @endif
                                 </td>
-                                <td>{{ $item->product->name }}</td>
-                                <td>{{ $item->color ? $item->color->name : 'N/A' }}</td>
-                                <td>{{ $item->size ? $item->size->name : 'N/A' }}</td>
-                                <td>{{ number_format($item->price, 0, ',', '.') }} VND</td>
+                                <td>
+                                    {{ $item->product ? $item->product->name : 'Sản phẩm này đã bị xóa' }}
+                                </td>
+                                <td>{{ $item->color ? $item->color->name : 'Không có thông tin' }}</td>
+                                <td>{{ $item->size ? $item->size->name : 'Không có thông tin' }}</td>
+                                <td>{{ $item->product ? number_format($item->price, 0, ',', '.') . ' VND' : 'Không có thông tin' }}</td>
                                 <td>{{ $item->quantity }}</td>
-                                <td>{{ number_format($item->price * $item->quantity, 0, ',', '.') }} VND</td>
+                                <td>{{ $item->product ? number_format($item->price * $item->quantity, 0, ',', '.') . ' VND' : 'Không có thông tin' }}</td>
                             </tr>
                             @endforeach
                         </tbody>

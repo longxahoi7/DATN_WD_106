@@ -66,16 +66,29 @@
                             @foreach ($order->orderItems as $item)
                             <li class="order-item {{ $loop->index >= 2 ? 'hidden-item' : '' }}">
                                 <div class="item-left">
+                                    @if ($item->product)
                                     <img src="{{ asset('storage/' . $item->product->main_image_url) }}" alt="{{ $item->product->name }}" />
                                     <div class="item-info">
                                         <strong>{{ $item->product->name }}</strong><br>
                                         <span class="item-quantity">x{{ $item->quantity }}</span>
                                     </div>
+                                    @else
+                                    <div class="item-info">
+                                        <strong>Sản phẩm này đã bị xóa</strong><br>
+                                        <span class="item-quantity">x{{ $item->quantity }}</span>
+                                    </div>
+                                    @endif
                                 </div>
-                                <div class="attribute-info"><strong>Màu sắc:{{ $item->color ? $item->color->name : 'N/A' }}</strong></div>
-                                <div class="attribute-info"><strong>Kích thước:{{ $item->size ? $item->size->name : 'N/A' }}</strong></div>
+                                <div class="attribute-info">
+                                    <strong>Màu sắc: {{ $item->color ? $item->color->name : 'Không có thông tin' }}</strong>
+                                </div>
+                                <div class="attribute-info">
+                                    <strong>Kích thước: {{ $item->size ? $item->size->name : 'Không có thông tin' }}</strong>
+                                </div>
                                 <div class="item-right">
-                                    <span class="item-price"><span class="custom-font-text-total"></span> {{ number_format($item->total, 0, ',', '.') }} đ</span>
+                                    <span class="item-price">
+                                        {{ $item->product ? number_format($item->total, 0, ',', '.') . ' đ' : 'Không có thông tin' }}
+                                    </span>
                                 </div>
                             </li>
                             @endforeach
@@ -109,14 +122,14 @@
                                 {{ $paymentStatusTranslations[strtolower($order->payment_status)] ?? ucfirst($order->payment_status) }}
                             </span>
                         </p>
-                        
+
                         <div class="order-actions">
-                        @if ($order->status == 'delivered' && !$order->received_confirmation)
-                        <form action="{{ route('user.order.confirmDelivery', $order->order_id) }}" method="POST">
-                            @csrf
-                            <button type="submit" class="btn btn-success">Đã Nhận Hàng</button>
-                        </form>
-                        @endif
+                            @if ($order->status == 'delivered' && !$order->received_confirmation)
+                            <form action="{{ route('user.order.confirmDelivery', $order->order_id) }}" method="POST">
+                                @csrf
+                                <button type="submit" class="btn btn-success">Đã Nhận Hàng</button>
+                            </form>
+                            @endif
                             @if ($order->status === 'pending')
                             <form action="{{ route('user.order.cancelOrder', $order->order_id) }}" method="POST">
                                 @csrf
