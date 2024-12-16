@@ -16,6 +16,8 @@
     <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+
     @stack('styles')
     <style>
     *:focus {
@@ -30,6 +32,27 @@
         outline: none !important;
         box-shadow: none !important;
     }
+    body {
+    font-family: 'Roboto', sans-serif;
+    font-smooth: always;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    }
+    html, body {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        text-rendering: optimizeLegibility;
+        font-size: 16px;
+        line-height: 1.6;
+    }
+    h1, h2, h3, h4, h5, h6 {
+        font-weight: 700;
+    }
+
+    p {
+        font-weight: 400;
+    }
+
     </style>
 
 </head>

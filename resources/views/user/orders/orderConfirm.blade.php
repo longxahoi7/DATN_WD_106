@@ -1,9 +1,14 @@
-@extends('user.index') <!-- Thay bằng layout chính của bạn -->
+@extends('user.index')
+
+<link rel="stylesheet" href="{{ asset('css/order-user/orderConfirm.css') }}">
 
 @section('content')
-<div class="container mt-5">
-    <h1 class="text-center mb-4">Xác Nhận Đơn Hàng</h1>
-
+<div class="container">
+    <div class="button-header mt-3">
+        <button>
+        Xác Nhận Đơn Hàng <i class="fa fa-star"></i>
+        </button>
+    </div>
     <!-- Thông Tin Người Nhận -->
     <div class="card mb-4">
         <div class="card-header bg-primary text-white">
@@ -38,7 +43,7 @@
                                     <th>Size</th>
                                     <th>Số lượng</th>
                                     <th>Đơn giá</th>
-                                    
+
                                     <th>Thành tiền</th>
                                 </tr>
                             </thead>
@@ -52,7 +57,7 @@
                                     <td>{{ number_format($product['price'], 0, ',', '.') }} VND</td>
                                     <td>{{ number_format($product['price'] * $product['quantity'], 0, ',', '.') }} VND</td>
                                 </tr>
-                                @endforeach 
+                                @endforeach
                             </tbody>
                             <tfoot>
                                 <tr>
