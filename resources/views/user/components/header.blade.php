@@ -93,12 +93,19 @@
                 </div>
             </div>
             @include('user.components.cart-popup', ['cartItems' => $cartItems ?? [], 'total' => $total ?? 0])
-            <div class="row mt-3 mb-3">
-                <!-- Hàng ngang 2 - Địa chỉ và số điện thoại -->
-                <div class="col text-start custom-text d-flex">
+            <div class="row mt-3 mb-3 ml-3">
+                <!-- Địa chỉ kéo dài -->
+                <div class="col-12 text-start custom-text mb-2">
                     <a href="https://www.google.com/maps/search/13+P.+Trịnh+Văn+Bô,+Xuân+Phương,+Nam+Từ+Liêm,+Hà+Nội"
                         target="_blank" rel="noopener noreferrer">
                         <i class="fas fa-map-marker-alt"></i> Địa chỉ: 13 Trịnh Văn Bô
+                    </a>
+                </div>
+                <!-- Liên hệ và Hotline trong một hàng ngang -->
+                <div class="col text-start custom-text d-flex">
+                    <a href="https://www.facebook.com/Ngheflorist"
+                        target="_blank" rel="noopener noreferrer">
+                        <i class="fab fa-facebook-f"></i> Liên hệ: fanpage
                     </a>
                     <a class="custom-text ms-3"><i class="fas fa-phone-alt"></i> Hotline: 0369312858</a>
                 </div>
