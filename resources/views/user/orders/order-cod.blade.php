@@ -81,5 +81,7 @@ document.addEventListener("DOMContentLoaded", function () {
         successDiv.style.transition = "all 0.5s ease";
     }, 100);
 });
-
+if ( window.history.replaceState ) {
+        window.history.replaceState( null, null, window.location.href );
+    }
 </script>
