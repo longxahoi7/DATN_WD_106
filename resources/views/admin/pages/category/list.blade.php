@@ -96,8 +96,9 @@
             <tr>
                 <th style="width: 10%;">STT</th>
                 <th style="width: 20%;">Tên Danh mục</th>
-                <th style="width: 20%;">Hình ảnh</th>
-                <th style="width: 20%;">Trạng thái</th>
+                <th style="width: 20%;">Mô tả</th>
+                <!-- <th style="width: 20%;">Hình ảnh</th> -->
+                <!-- <th style="width: 20%;">Trạng thái</th> -->
                 <th style="width: 20%;">Hành động</th>
             </tr>
         </thead>
@@ -106,11 +107,12 @@
             <tr>
                 <td>{{ $index + 1 }}</td>
                 <td>{{ $category->name }}</td>
-                <td>
+                <td>{{ $category->description }}</td>
+                <!-- <td>
                     <img src="/{{ $category->image }} " class="cusstom-no-image"
                         onerror="this.onerror=null; this.src='{{ asset('imagePro/icon/icon-no-image.png') }}';">
-                </td>
-                <td>
+                </td> -->
+                <!-- <td>
                     <form action="{{ route('admin.categories.toggle', $category->category_id) }}" method="POST">
                         @csrf
                         <button type="submit"
@@ -118,13 +120,13 @@
                             <p>{{ $category->is_active ? 'hoạt động' : 'Tắt hoạt động' }}</p>
                         </button>
                     </form>
-                </td>
+                </td> -->
                 <td>
                     <div class="icon-product d-flex justify-content-center gap-2">
                         <!-- Xem -->
-                        <a href="" data-id="{{ $category->category_id }}">
+                        <!-- <a href="" data-id="{{ $category->category_id }}">
                             <button class="action-btn eye"><i class="fas fa-eye"></i></button>
-                        </a>
+                        </a> -->
                         <!-- Sửa -->
                         <a href="" data-id="{{ $category->category_id }}">
                             <button class="action-btn edit"><i class="fas fa-edit"></i></button>

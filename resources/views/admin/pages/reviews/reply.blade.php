@@ -1,39 +1,83 @@
-@extends('admin.index')
-@push('styles')
-@endpush
-@section('content')
+<style>
+/* CSS cải tiến */
+.customer-comment {
+    background-color: #e9f7ef;
+    border: 1px solid #b2d8c7;
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
 
-<body>
-    <div class="container mt-5">
-        <h1 class="text-center">Thêm Mới Thương Hiệu</h1>
-        <form action="{{route('admin.reviews.storeReply',$review->review_id)}}" method="POST">
-            @csrf
-            <div class="form-group">
-                <input type="hidden" class="form-control" id="name" name="product_id" value="{{$product_id}}"/>
-            </div>
-            </div>
+.customer-comment h5 {
+    margin: 0 0 15px;
+    color: #333;
+    font-weight: bold;
+    border-bottom: 2px solid #28a745;
+    padding-bottom: 5px;
+}
 
-            <div class="form-group">
-                <label for="slug">Nhập câu trả lời</label>
-                <input type="text" class="form-control" id="slug" name="content" placeholder="Nhập câu trả lời" />
-            </div>
-            <div class="button-container">
-                <button type="submit" class="btn btn-primary">
-                    Gửi
-                </button>
-                <a href="{{route('admin.reviews.index')}}" class="btn btn-secondary">Hủy</a>
-            </div>
+.customer-comment .info {
+    font-size: 14px;
+    color: #777;
+    margin-bottom: 10px;
+}
 
-        </form>
-    </div>
-    @push('scripts')
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
-    <script>
+.customer-comment img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 5px;
+    margin: 10px 0;
+}
 
-    </script>
-    @endpush
-</body>
-@endsection
+.form-group label {
+    font-weight: bold;
+    color: #555;
+}
+
+.custom-content span {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.custom-content p {
+    margin-left: 10px;
+    font-size: 16px;
+}
+</style>
+
+<div class="container">
+    <form action="{{route('admin.reviews.storeReply',$review->review_id)}}" method="POST">
+        @csrf
+        <div class="form-group">
+            <input type="hidden" class="form-control" id="name" name="product_id" value="{{$product_id}}" />
+        </div>
+        <!-- Phần hiển thị bình luận của khách hàng -->
+        <div class="customer-comment">
+            <h5>Bình luận của khách hàng</h5>
+            <div class="info">
+                <span><strong>Email:</strong> {{ $review->user->email }}</span><br>
+                <span><strong>Thời gian:</strong>
+                    {{ $review->created_at->format('d/m/Y H:i') }}
+                </span><br>
+
+                <span><strong>Đánh giá:</strong> {{ $review->rating }} ★</span><br>
+                <span><strong>Sản phẩm:</strong> {{ $review->product->name }}</span><br>
+            </div>
+            <hr />
+            <div class="custom-content">
+                <span>Nội dung: </span>
+                <p>{{ $review->comment }}</p>
+            </div>
+            <!-- <img src="{{ $review->product->main_image_url }}" alt="Ảnh sản phẩm"> -->
+        </div>
+        <!-- Phần nhập trả lời -->
+        <div class="form-group">
+            <input type="text" class="form-control" id="slug" name="content" placeholder="Nhập câu trả lời" />
+        </div>
+
+        <div class="button-group">
+            <button type="submit" class="btn btn-primary">Gửi</button>
+        </div>
+    </form>
+</div>

@@ -83,7 +83,7 @@
                 <th>STT</th>
                 <th>Tên Thương Hiệu</th>
                 <th>Mô Tả</th>
-                <th>Trạng thái</th>
+                <!-- <th>Trạng thái</th> -->
                 <th>Hành Động</th>
             </tr>
         </thead>
@@ -93,7 +93,7 @@
                 <td>{{ $brand->brand_id }}</td>
                 <td>{{ $brand->name }}</td>
                 <td>{{ $brand->description }}</td>
-                <td>
+                <!-- <td>
                     <form action="{{ route('admin.brands.toggle', $brand->brand_id) }}" method="POST"
                         style="display:inline;">
                         @csrf
@@ -102,7 +102,7 @@
                             <p>{{ $brand->is_active ? 'Tắt hoạt động' : 'Kích hoạt' }}</p>
                         </button>
                     </form>
-                </td>
+                </td> -->
                 <td>
                     <div class="icon-product d-flex justify-content-center gap-2">
                         <!-- <a href="" data-id="{{ $brand->brand_id }}" class="text-info">
