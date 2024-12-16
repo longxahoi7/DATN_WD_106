@@ -1,6 +1,7 @@
 @extends('user.layouts.app')
 
 @section('content')
+
     <div class="container">
         <h1>Thanh toán thất bại!</h1>
         <p>Mã đơn hàng: {{ $order->order_id }}</p>

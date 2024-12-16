@@ -7,6 +7,7 @@
 @section('title', 'Chi tiết đơn hàng')
 
 @section('content')
+
 <div class="container">
     <div class="row-order">
         <!-- Bên phải: Chi tiết đơn hàng -->

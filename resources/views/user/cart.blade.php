@@ -5,6 +5,7 @@
 @endpush
 
 @section('content')
+
 <div class="button-header mt-3">
     <button>
         Gentle Manor - Giỏ hàng <i class="fa fa-star"></i>
@@ -89,7 +90,7 @@
                     <form action="{{ route('user.cart.remove', $item->id) }}" method="POST">
                         @csrf
                         @method('DELETE')
-                        <button type="submit" class="btn btn-remove">
+                        <button type="submit" class="btn btn-remove" onclick="confirm('Bạn có muốn xóa sản phẩm này hay không ?')">
                             <span class="icon-x">✖</span>
                         </button>
                     </form>
@@ -141,10 +142,20 @@
         const colorId = selectedColor[itemId];
         const sizeId = selectedSize[itemId];
         const quantity = document.getElementById('quantity' + itemId).value;
-        if (!colorId || !sizeId || quantity < 1) {
-            alert('Vui lòng chọn đủ màu sắc, kích thước và số lượng.');
-            return;
+         if (!colorId || !sizeId || quantity < 1) {
+        let message = '';
+        if (!colorId) {
+            message += 'Vui lòng chọn màu sắc.\n';
         }
+        if (!sizeId) {
+            message += 'Vui lòng chọn kích thước.\n';
+        }
+        if (quantity < 1) {
+            message += 'Vui lòng chọn số lượng hợp lệ.\n';
+        }
+        alert(message);
+        return;
+    }
 
         fetch('{{ route('user.cart.cupdate', ['id' => ':itemId ']) }}'.replace(':itemId', itemId), {
                     method: 'POST',

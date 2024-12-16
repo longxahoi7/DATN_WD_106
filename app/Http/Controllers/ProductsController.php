@@ -72,7 +72,7 @@ class ProductsController extends Controller
         $bestSellers = Product::getBestSellers();
         $hotProducts = Product::getHotProducts();
         // Trả về view với dữ liệu
-        return view('user.product', compact('listProduct', 'hotProducts', 'bestSellers'));
+        return view('user.product', compact('listProduct', 'hotProducts', 'bestSellers'))->with('alert', 'Bạn đang vào trang sản phẩm');
     }
 
 
@@ -99,6 +99,7 @@ class ProductsController extends Controller
             });
         }])
         ->get();
+        session()->flash('alert', 'Bạn đang vào trang chi tiết sản phẩm');
         return view('user.detailProduct', compact('product', 'relatedProducts', 'reviews'));
     }
     public function addReview(Request $request)

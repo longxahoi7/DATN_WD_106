@@ -57,9 +57,51 @@ class CartController extends Controller
             ]);
         }
         // Trả về thông báo và điều hướng về trang giỏ hàng
-        return redirect()->route('user.cart.index')->with('success', 'Sản phẩm đã được thêm vào giỏ hàng.');
+        return response()->json(['success' => 'Sản phẩm đã được thêm vào giỏ hàng.']);
     }
+    public function buyNow(Request $request)
+    {
+        if (!auth()->check()) {
+            // Nếu chưa đăng nhập, chuyển hướng đến trang đăng nhập với thông báo
+            return redirect()->route('login')->with('error', 'Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng.');
+        }
+        $product = Product::findOrFail($request->product_id);
 
+        // Kiểm tra nếu có lựa chọn màu sắc và kích thước
+        $color = $request->color_id ? Color::find($request->color_id) : null;
+        $size = $request->size_id ? Size::find($request->size_id) : null;
+
+
+        // Tìm hoặc tạo giỏ hàng cho người dùng
+        $cart = ShoppingCart::firstOrCreate([
+            'user_id' => auth()->id() // Người dùng phải đăng nhập
+        ]);
+
+        // Kiểm tra nếu sản phẩm đã tồn tại trong giỏ hàng với màu sắc và kích thước đã chọn
+        $cartItem = CartItem::where('shopping_cart_id', $cart->id)
+            ->where('product_id', $product->product_id)
+            ->where('color_id', $color ? $color->color_id : null) // Nếu có màu sắc
+            ->where('size_id', $size ? $size->size_id : null)   // Nếu có kích thước
+            ->first();
+
+        if ($cartItem) {
+            // Nếu sản phẩm đã tồn tại, tăng số lượng
+            $cartItem->qty += $request->qty;
+            $cartItem->save();
+        } else {
+            // Thêm sản phẩm mới vào giỏ hàng
+            CartItem::create([
+                'shopping_cart_id' => $cart->id,
+                'product_id' => $product->product_id,
+                'color_id' => $request->color_id,   // Nếu có màu sắc
+                'size_id' => $request->size_id,       // Nếu có kích thước
+                'qty' => $request->qty,
+                // 'price' => $product->price,
+            ]);
+        }
+        // Trả về thông báo và điều hướng về trang giỏ hàng
+        return redirect()->route('user.cart.index')->with('alert', 'Sản phẩm đã được thêm vào giỏ hàng.');
+    }
     // API để xem giỏ hàng
     public function viewCart()
     {
@@ -84,7 +126,7 @@ class CartController extends Controller
                 'discount' => 0,
                 'shippingFee' => 40000, // Phí ship mặc định
                 'finalTotal' => 40000, // Tổng cộng bao gồm phí ship
-            ]);
+            ])->with('alert', 'Đây là trang giỏ hàng');
         }
 
         // Tính tổng tiền giỏ hàng
@@ -155,7 +197,7 @@ class CartController extends Controller
         $cartItem = CartItem::findOrFail($id);
         $cartItem->delete();
 
-        return redirect()->back()->with('success', 'Sản phẩm đã được xóa khỏi giỏ hàng.');
+        return redirect()->back()->with('alert', 'Sản phẩm đã được xóa khỏi giỏ hàng.');
     }
 
 

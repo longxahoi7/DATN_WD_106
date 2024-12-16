@@ -3,6 +3,7 @@
 @section('title', 'Danh sách đơn hàng')
 
 @section('content')
+
 <h1>Danh sách đơn hàng</h1>
 
 <table class="table">

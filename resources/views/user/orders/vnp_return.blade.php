@@ -14,7 +14,7 @@
         <script src="/vnpay_php/assets/jquery-1.11.3.min.js"></script>
     </head>
 @section('content')
-    
+
         <?php
         require_once("./resources/vnpay_php/config.php");
         $vnp_SecureHash = $_GET['vnp_SecureHash'];
