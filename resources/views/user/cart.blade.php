@@ -5,6 +5,11 @@
 @endpush
 
 @section('content')
+@if(session('alert'))
+    <div class="alert alert-info" id="alert-message">
+        {{ session('alert') }}
+    </div>
+@endif
 <div class="button-header mt-3">
     <button>
         Gentle Manor - Giỏ hàng <i class="fa fa-star"></i>

@@ -81,6 +81,7 @@ class PaymentController extends Controller
             OrderItem::create([
                 'order_id' => $order->order_id,
                 'product_id' => $product['product_id'],
+                
                 'product_name' => $product['name'],
                 'color_id' => $product['color_id'],
                 'size_id' => $product['size_id'],
@@ -108,7 +109,7 @@ class PaymentController extends Controller
             'productDetails' => $productDetails,
             'total' => $total,
             'shippingFee' => $shippingFee
-        ]);
+        ])->with('alert','Đơn hàng của bạn đã được thanh toán thành công. Cảm ơn bạn!');
     }
 
     // Trang thông báo thanh toán thành công
