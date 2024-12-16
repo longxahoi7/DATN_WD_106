@@ -217,6 +217,34 @@ input, select {
     color: #555;
 }
 
+#discountCode {
+    flex: 1; /* Ô input sẽ chiếm hết phần không gian còn lại */
+    height: 40px; /* Độ cao của input */
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    margin-right: 10px;
+}
+
+.custom-btn-apply-order {
+    height: 40px; /* Đảm bảo độ cao bằng với ô input */
+    padding: 5px 15px;
+    background-color: black;
+    color: white;
+    border: 1px solid black;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.custom-btn-apply-order:hover {
+    background-color: white;
+    color: black;
+    border: 1px solid black;
+}
+
+
 .order-item.total {
     font-size: 1.1rem;
     color: #000;

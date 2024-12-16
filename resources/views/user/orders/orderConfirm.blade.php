@@ -25,23 +25,24 @@
             <form id="orderForm" action="{{ route('user.order.checkoutcod') }}" method="POST">
                 @csrf
                 <div class="mb-3">
-                    <input type="text" name="recipient_name" id="recipient_name" class="form-control"
+                    <input type="text" name="recipient_name" id="recipient_name" placeholder="Tên người nhận" class="form-control"
                         value="{{ old('name', $user->name ?? '') }}" required>
                 </div>
                 <div class="mb-3">
-                    <input type="text" name="phone" id="phone" class="form-control"
+                    <input type="text" name="phone" id="phone" class="form-control" placeholder="Số điện thoại nhận hàng"
                         value="{{ old('phone', $user->phone ?? '') }}" required>
                 </div>
                 <div class="mb-3">
-                    <input name="shipping_address" id="shipping_address" class="form-control" required
+                    <input name="shipping_address" id="shipping_address" class="form-control" required placeholder="Địa chỉ nhận hàng"
                         value="{{ old('shipping_address', $user->address ?? '') }}"></input>
                 </div>
                 <input type="hidden" name="discount_code" id="hiddenDiscountCode" value="">
 
                 <!-- Nút xác nhận -->
                 <div class="text-center mt-4 d-flex ">
-                <a href="{{ route('user.cart.index') }}" class="custom-text-back-home">Giỏ Hàng</a>
-
+                    <input type="hidden" name="amount" value="{{ $total }}">
+                    <a href="{{ route('user.cart.index') }}" class="custom-text-back-home">Giỏ Hàng</a>
+                    <div>
                         <button type="submit" class="custom-btn-order-cod">Thanh toán COD</button>
                         <button name="redirect" type="button" id="btnVnPay" class="custom-btn-order-vnpay">
                             Thanh Toán VNPay
@@ -89,9 +90,15 @@
                     <span class="order-label">Phí vận chuyển:</span>
                     <span class="order-value">40.000 đ</span>
                 </div>
-                <div class="order-item">    
+                <div class="order-item">
                     <input type="text" name="discount_code" id="discountCode" placeholder="Nhập mã giảm giá" class="form-control">
-                    <button type="button" id="applyDiscount" class="btn btn-primary mt-2">Áp dụng</button>
+                    <button type="button" id="applyDiscount" class="custom-btn-apply-order">Áp dụng</button>
+                </div>
+                <div class="order-item">
+                    @if (isset($discountAmount))
+                        <span class="order-label">Mã giảm giá:</span>
+                        <span class="order-value">{{ number_format($discountAmount) }} đ</span>
+                    @endif
                 </div>
                 <hr class="order-divider">
                 <div class="order-item total">
@@ -113,7 +120,7 @@
         value="{{ old('shipping_address', $user->address ?? '') }}">
     <input type="hidden" name="redirect" value="1">
 </form>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     $(document).ready(function () {
         // Hàm để cập nhật giá trị tổng tiền vào input hidden và nút COD
@@ -123,7 +130,7 @@
             $('#order-cod').text('Thanh toán COD (' + total + ' đ)'); // Cập nhật giá trị cho nút thanh toán COD
             $('#vnpayAmount').val(total); // Cập nhật giá trị vào form ẩn VNPay
         }
-        
+
         // Hàm để format lại giá trị tổng tiền theo định dạng số tiền
         function formatTotalAmount(amount) {
             return amount.toLocaleString('vi-VN'); // Định dạng tiền theo kiểu Việt Nam
