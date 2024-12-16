@@ -103,7 +103,7 @@
 <form id="vnpayForm" action="{{ route('checkout.vnpay') }}" method="POST" style="display: none;">
     @csrf
     <input type="hidden" name="amount" value="{{ $total }}">
-    <input type="hidden" name="name" id="vnpayName" value="{{ old('name', $user->name ?? '') }}">
+    <input type="hidden" name="recipient_name" id="vnpayName" value="{{ old('name', $user->name ?? '') }}">
     <input type="hidden" name="phone" id="vnpayPhone" value="{{ old('phone', $user->phone ?? '') }}">
     <input type="hidden" name="shipping_address" id="vnpayAddress"
         value="{{ old('shipping_address', $user->address ?? '') }}">
@@ -111,9 +111,26 @@
 </form>
 
 <script>
-document.getElementById('btnVnPay').addEventListener('click', function() {
-    const form = document.getElementById('vnpayForm');
-    form.submit(); // Gửi form đến VNPay
+document.getElementById('btnVnPay').addEventListener('click', function () {
+    // Lấy dữ liệu từ form chính
+    const recipientName = document.getElementById('recipient_name').value;
+    const phone = document.getElementById('phone').value;
+    const shippingAddress = document.getElementById('shipping_address').value;
+
+    // Gán dữ liệu vào form VNPay
+    document.getElementById('vnpayName').value = recipientName;
+    document.getElementById('vnpayPhone').value = phone;
+    document.getElementById('vnpayAddress').value = shippingAddress;
+
+    // Kiểm tra xem dữ liệu đã được gán chính xác chưa
+    console.log({
+        recipientName,
+        phone,
+        shippingAddress
+    });
+
+    // Gửi form VNPay
+    document.getElementById('vnpayForm').submit();
 });
 </script>
 @endsection

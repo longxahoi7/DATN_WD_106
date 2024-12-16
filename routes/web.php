@@ -319,8 +319,6 @@ Route::group(
     }
 );
 
-// Route::post('/order/process', [OrderController::class, 'processOrder'])->name('user.order.process');
-Route::post('/checkout/vnpay', [PaymentController::class, 'processVnPay'])->name('checkout.vnpay');
 
 Route::post('/vnp_payment', [PaymentVnPayController::class, 'vnp_payment'])
     ->name('checkout.vnpay');
