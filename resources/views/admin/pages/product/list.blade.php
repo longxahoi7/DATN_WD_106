@@ -1,16 +1,82 @@
 @extends('admin.index')
 @section('content')
+@push('styles')
+<style>
+    /* CSS */
+.form-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 100px; /* Khoảng cách giữa các form */
+    margin-top: 30px; /* Khoảng cách trên */
+}
 
+</style>
+@endpush
 <body>
 
     <body>
         <div class="container mt-2">
+        @if (session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
 
             <div class="button-header">
                 <button>
-                    Danh Sách sản Phẩm <i class="fa fa-star"></i>
+                    Danh sách sản phẩm <i class="fa fa-star"></i>
                 </button>
             </div>
+            <div class="container mt-5">
+    <div class="form-container">
+        <!-- Form Tìm kiếm -->
+        <form action="" method="get" class="d-flex">
+            <div class="input-group">
+                <button class="btn btn-primary" type="submit">
+                    <i class="bi bi-search"></i> <!-- Icon tìm kiếm -->
+                </button>
+                <input
+                    type="text"
+                    class="form-control"
+                    name="nhap"
+                    placeholder="Tìm kiếm sản phẩm..."
+                    aria-label="Search"
+                >
+            </div>
+        </form>
+
+        <!-- Form Lọc danh mục -->
+        <form action="" method="get" class="d-flex">
+        <div class="input-group">
+                <select class="form-select form-control" name="filter" aria-label="Lọc sản phẩm theo danh mục">
+                    <option value="">Lựa chọn danh mục...</option>
+                    @foreach ($products as $index => $product)
+                        <option value="{{$product->category->category_id}}">{{$product->category->name}}</option>
+                    @endforeach
+                </select>
+                <button class="btn btn-primary"  type="submit">
+                    Lọc</button>
+            </div>
+        </form>
+        <!-- form lọc thưogn hiệu -->
+        <form action="" method="get" class="d-flex">
+        <div class="input-group">
+                <select class="form-select form-control" name="brand" aria-label="Lọc sản phẩm theo danh mục">
+                    <option value="">Lựa chọn thưogn hiệu...</option>
+                    @foreach ($products as $index => $product)
+                        <option value="{{$product->brand->brand_id}}">{{$product->brand->name}}</option>
+                    @endforeach
+                </select>
+                <button class="btn btn-primary"  type="submit">
+                    Lọc</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
 
             @if(Auth::user()->role !== 3)
             <!-- Kiểm tra nếu không phải manager -->
@@ -26,7 +92,7 @@
                         <div class="modal-header">
                             <div class="button-header">
                                 <button>
-                                    Thêm Mới Sản Phẩm<i class="fa fa-star"></i>
+                                    Thêm mới sản phẩm<i class="fa fa-star"></i>
                                 </button>
                             </div>
                             <button type="button" class="btn-close" data-bs-dismiss="modal"
@@ -120,7 +186,7 @@
                                 @csrf
                                 <button type="submit"
                                     class="custom-btn-active-admin {{ $product->is_active ? 'btn-success' : 'btn-danger' }}">
-                                    <p>{{ $product->is_active ? 'Hoạt động' : 'Tắt hoạt động' }}</p>
+                                    <p>{{ $product->is_active ? 'Đang hoạt động' : 'Đã tắt hoạt động' }}</p>
                                 </button>
                             </form>
                         </td>

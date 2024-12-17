@@ -3,12 +3,14 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\AttributeProduct;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Models\Size;
 class SizeController extends Controller
 {
     //
-   
+
     public function listSize(Request $request)
     {
         $sizes = Size::where('name', 'like', '%' . $request->nhap . '%')
@@ -17,7 +19,7 @@ class SizeController extends Controller
     }
     public function createSize(Request $request)
     {
-        
+
         return view('admin.pages.size.create');
     }
     public function addSize(Request $request)
@@ -28,7 +30,7 @@ class SizeController extends Controller
         ]);
 
         $size = Size::create($validated);
-        return redirect()->route('admin.sizes.index')->with(['size'=>$size,'message' => 'Color add successfully!',],201);
+        return redirect()->route('admin.sizes.index')->with(['size'=>$size,'success' => 'Color add successfully!',],201);
 
     }
     public function detailSize($id)
@@ -50,13 +52,18 @@ class SizeController extends Controller
         $size = Size::findOrFail($id);
         $size->name = $validated['name'];
         $size->save();
-        return redirect()->route('admin.sizes.index')->with(['size'=>$size,'message' => 'Size add successfully!',],200);
+        return redirect()->route('admin.sizes.index')->with(['size'=>$size,'success' => 'Size add successfully!',],200);
 
     }
     public function destroySize($id)
     {
         $size = Size::findOrFail($id);
+        $productCount = AttributeProduct::where('size_id', $id)->count();
+
+        if ($productCount > 0) {
+            return redirect()->back()->with('success', 'Không thể xóa kích cỡ này vì còn sản phẩm liên quan.');
+        }
         $size->delete();
-        return redirect()->route('admin.sizes.index')->with(['message' => 'Size deleted successfully!',],200);
+        return redirect()->route('admin.sizes.index')->with(['success' => 'Size deleted successfully!',],200);
     }
 }

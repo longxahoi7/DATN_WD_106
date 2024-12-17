@@ -8,12 +8,44 @@
 </style>
 
 <body>
+@if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
     <div class="container mt-4">
+    @if (session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
         <div class="button-header">
             <button>
-                Danh Sách Màu Sắc <i class="fa fa-star"></i>
+                Danh sách màu sắc <i class="fa fa-star"></i>
             </button>
         </div>
+        <div class="container mt-5 ">
+    <form action="" method="get" class="d-flex justify-content-center">
+        <div class="input-group w-50">
+            <!-- Nút tìm kiếm -->
+            <button class="btn btn-primary" type="submit" name="btn">
+                <i class="bi bi-search"></i> <!-- Icon tìm kiếm -->
+            </button>
+            <!-- Ô input tìm kiếm -->
+            <input
+                type="text"
+                class="form-control"
+                name="nhap"
+                placeholder="Tìm kiếm sản phẩm..."
+                aria-label="Search"
+            >
+        </div>
+    </form>
+</div>
 
         @if(Auth::user()->role !== 3)
         <a href="{{ route('admin.colors.create') }}" class="btn add-button">Thêm mới</a>
@@ -103,11 +135,11 @@
                     <td>
                         <div class="icon-product d-flex justify-content-center gap-2">
                             <!-- Xem chi tiết -->
-                            <!-- <a href="" data-id="{{ $color->color_id }}">
+                            <a href="" data-id="{{ $color->color_id }}">
                                 <button class="action-btn eye" title="Xem chi tiết">
                                     <i class="fas fa-eye"></i>
                                 </button>
-                            </a> -->
+                            </a>
 
                             <!-- Chỉnh sửa thông tin -->
                             <a href="" data-id="{{ $color->color_id }}">
