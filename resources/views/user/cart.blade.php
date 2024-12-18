@@ -58,7 +58,7 @@
                         <p>Màu sắc: </p>
                         <div class="color-options">
                             @foreach($item->attributeProducts->unique('color_id') as $attributeProduct)
-                            <div class="color-option" style="background-color: {{ $attributeProduct->color->color_code }};"
+                            <div class="color-option" style="background-color: {{ $attributeProduct->color->name }};"
                                 onclick="changeColor({{ $item->id }}, '{{ $attributeProduct->color->color_id }}', this)">
                             </div>
                             @endforeach

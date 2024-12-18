@@ -1,52 +1,20 @@
 @extends('admin.index')
 @section('content')
-@push('styles')
+
 <style>
 .cusstom-no-image {
     width: 50px !important;
     height: 50px !important;
 }
 </style>
-@endpush
+
 <div class="container mt-4">
     <!-- Tiêu đề -->
-    @if ($errors->any())
-    <div class="alert alert-danger">
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-@endif
-    @if (session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
-        </div>
-    @endif
     <div class="button-header">
         <button>
-            Danh sách danh mục <i class="fa fa-star"></i>
+            Danh Sách Danh Mục <i class="fa fa-star"></i>
         </button>
     </div>
-    <div class="container mt-5 ">
-    <form action="" method="get" class="d-flex justify-content-center">
-        <div class="input-group w-50">
-            <!-- Nút tìm kiếm -->
-            <button class="btn btn-primary" type="submit" name="btn">
-                <i class="bi bi-search"></i> <!-- Icon tìm kiếm -->
-            </button>
-            <!-- Ô input tìm kiếm -->
-            <input
-                type="text"
-                class="form-control"
-                name="nhap"
-                placeholder="Tìm kiếm sản phẩm..."
-                aria-label="Search"
-            >
-        </div>
-    </form>
-</div>
 
     @if(Auth::user()->role !== 3)
     <a href="{{ route('admin.categories.create') }}" class="btn add-button"> Thêm mới </a>
@@ -128,8 +96,9 @@
             <tr>
                 <th style="width: 10%;">STT</th>
                 <th style="width: 20%;">Tên Danh mục</th>
-                <th style="width: 20%;">Hình ảnh</th>
-                <th style="width: 20%;">Trạng thái</th>
+                <th style="width: 20%;">Mô tả</th>
+                <!-- <th style="width: 20%;">Hình ảnh</th> -->
+                <!-- <th style="width: 20%;">Trạng thái</th> -->
                 <th style="width: 20%;">Hành động</th>
             </tr>
         </thead>
@@ -138,25 +107,26 @@
             <tr>
                 <td>{{ $index + 1 }}</td>
                 <td>{{ $category->name }}</td>
-                <td>
-                    <img src="{{Storage::url($category->image)}} " class="cusstom-no-image"
+                <td>{{ $category->description }}</td>
+                <!-- <td>
+                    <img src="/{{ $category->image }} " class="cusstom-no-image"
                         onerror="this.onerror=null; this.src='{{ asset('imagePro/icon/icon-no-image.png') }}';">
-                </td>
-                <td>
+                </td> -->
+                <!-- <td>
                     <form action="{{ route('admin.categories.toggle', $category->category_id) }}" method="POST">
                         @csrf
                         <button type="submit"
                             class="custom-btn-active-admin {{ $category->is_active ? 'btn-success' : 'btn-danger' }}">
-                            <p>{{ $category->is_active ? 'Đang hoạt động' : 'Đã tắt hoạt động' }}</p>
+                            <p>{{ $category->is_active ? 'hoạt động' : 'Tắt hoạt động' }}</p>
                         </button>
                     </form>
-                </td>
+                </td> -->
                 <td>
                     <div class="icon-product d-flex justify-content-center gap-2">
                         <!-- Xem -->
-                        <a href="" data-id="{{ $category->category_id }}">
+                        <!-- <a href="" data-id="{{ $category->category_id }}">
                             <button class="action-btn eye"><i class="fas fa-eye"></i></button>
-                        </a>
+                        </a> -->
                         <!-- Sửa -->
                         <a href="" data-id="{{ $category->category_id }}">
                             <button class="action-btn edit"><i class="fas fa-edit"></i></button>
