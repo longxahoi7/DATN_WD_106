@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
+use App\Http\Requests\CouponRequest;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\CouponCreated;
 use App\Http\Controllers\Controller;
@@ -14,27 +15,28 @@ class CouponController extends Controller
     //
     public function listCoupon(Request $request)
     {
-        $coupons = Coupon::with('users')->where('code', 'like', '%' . $request->nhap . '%')
-            ->orWhere('is_active', 'like', '%' . $request->nhap . '%')
-            ->orWhere('discount_percentage', 'like', '%' . $request->nhap . '%')
-            ->orWhere('quantity', 'like', '%' . $request->nhap . '%')
-            ->orWhere('min_order_value', 'like', '%' . $request->nhap . '%')
-            ->orWhere('max_order_value', 'like', '%' . $request->nhap . '%')
-            ->orWhere('condition', 'like', '%' . $request->nhap . '%')
-            ->orWhere('is_public', 'like', '%' . $request->nhap . '%')
-            ->orWhere('start_date', 'like', '%' . $request->nhap . '%')
-            ->orWhere('end_date', 'like', '%' . $request->nhap . '%')
+        $coupons = Coupon::with('users')
+        ->where('code', 'like', '%' . $request->nhap . '%')
+        ->when(request('start_date') && request('end_date'), function ($query) {
+            $query->whereBetween('start_date', [request('start_date'), request('end_date')]);
+        })
+        ->when(request('start_date') && !request('end_date'), function ($query) {
+            $query->where('start_date', '>=', request('start_date'));
+        })
+        ->when(request('end_date') && !request('start_date'), function ($query) {
+            $query->where('start_date', '<=', request('end_date'));
+        })
             ->latest()->paginate(5);
             return view('admin.pages.coupon.list',compact('coupons'));
     }
     public function toggle($id)
     {
         $coupon = Coupon::findOrFail($id);
-    
+
         // Thay đổi trạng thái is_active
         $coupon->is_active = !$coupon->is_active;
         $coupon->save();
-    
+
         return redirect()->back()->with('success', 'Trạng thái phiếu giảm giá đã được thay đổi!');
     }
 
@@ -42,7 +44,7 @@ class CouponController extends Controller
         $users=User::where('name', 'like', '%' . $request->nhap . '%')->get();
         return view('admin.pages.coupon.create',compact('users'));
     }
-    public function addCoupon(Request $request)
+    public function addCoupon(CouponRequest $request)
     {
         $coupon = Coupon::create([
             'code' => $request->input('code'),
@@ -72,7 +74,7 @@ class CouponController extends Controller
         return redirect()->route('admin.coupons.index')->with([
             'coupon' => $coupon,
             'couponUsers' => $couponUsers,
-            'message' => 'Coupon added successfully!',
+            'success' => 'Coupon added successfully!',
         ], 201);
 
     }
@@ -83,7 +85,7 @@ class CouponController extends Controller
     public function editCoupon(Request $request,$id){
         $coupon = Coupon::findOrFail($id);
         $users=User::where('name', 'like', '%' . $request->nhap . '%')->get();
-     
+
         $userCoupon = CouponUser::where('coupon_id', $id)->get();;
         return view('admin.pages.coupon.edit',
         compact('coupon','userCoupon','users'));
@@ -106,10 +108,10 @@ class CouponController extends Controller
         ]);
 
         $couponUsers = [];
-      
-      
+
+
         if ($request->has('user_id')) {
-           
+
             CouponUser::where('coupon_id', $id)->delete();
 
             foreach ($request->input('user_id') as $userId) {
@@ -131,7 +133,7 @@ class CouponController extends Controller
     {
         $coupon = Coupon::findOrFail($id);
         $coupon->delete();
-        return redirect()->back()->with('message' ,'Coupon delEted successfully!',);
+        return redirect()->back()->with('success' ,'Coupon delEted successfully!',);
     }
 
 }

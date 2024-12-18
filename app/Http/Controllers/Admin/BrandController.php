@@ -3,13 +3,14 @@
 namespace App\Http\Controllers\Admin;
 use App\Models\Brand;
 use App\Http\Controllers\Controller;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Http\Requests\BrandsRequest;
 use Illuminate\Support\Str;
 
 class BrandController extends Controller
 {
-  
+
     public function listBrand(Request $request)
     {
         $brands = Brand::where('name', 'like', '%' . $request->nhap . '%')
@@ -17,7 +18,7 @@ class BrandController extends Controller
             ->orWhere('slug', 'like', '%' . $request->nhap . '%')
             ->orWhere('description', 'like', '%' . $request->nhap . '%')
             ->latest()->paginate(5);
-           
+
         return view ('admin.pages.brand.list')
         ->with(['brands'=>$brands]);
     }
@@ -59,18 +60,18 @@ public function createBrand()
 
     }
 
-    public function updateBrand(Request $request, $id)
+    public function updateBrand(BrandsRequest $request, $id)
     {
         // Find the brand by ID
         $brand = Brand::findOrFail($id);
-    
+
         // Validate the incoming request data if needed
         $request->validate([
             'name' => 'required|string|max:255',
             'slug' => 'nullable|string|max:255',
             'description' => 'nullable|string',
         ]);
-    
+
         // Update the brand with the new data
         $brand->update([
             'name' => $request->input('name'),
@@ -78,7 +79,7 @@ public function createBrand()
             'description' => $request->input('description'),
             'is_active' => $request->input('is_active', 1),  // Set to 1 by default if not provided
         ]);
-    
+
         return redirect()->route('admin.brands.index')->with('success', 'Brand updated successfully!');
     }
 
@@ -86,8 +87,12 @@ public function createBrand()
     public function destroyBrand($id)
     {
         $product = Brand::findOrFail($id);
+        $count = Product::where('brand_id', $id)->count();
+        if($count > 0){
+            return redirect()->back()->with('success' ,'Brand không thể xóa vì có sản phẩm liên quan!');
+        }
         $product->delete();
-        return redirect()->back()->with('message' ,'Brand deleted successfully!',);
+        return redirect()->back()->with('success' ,'Brand deleted successfully!',);
     }
 
 
