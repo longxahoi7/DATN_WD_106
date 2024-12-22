@@ -25,12 +25,8 @@ class Reviews extends Model
 {
     return $this->hasMany(ReviewsReply::class, 'review_id');
 }
-public function likes(){
-    return $this->hasMany(Like::class,'review_id');
-}
-public function reports(){
-    return $this->hasMany(Report::class,'review_id');
-}
+
+
 
 
 }

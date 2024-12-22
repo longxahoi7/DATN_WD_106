@@ -42,16 +42,11 @@ class Order extends Model
     }
     public function products()
     {
-        return $this->belongsToMany(Product::class, 'order_items', 'order_id', 'product_id');
+        return $this->belongsToMany(Product::class, 'order_product', 'order_id', 'product_id');
     }
-
-    /**
-     * Mối quan hệ với User.
-     */
-
     public function items()
     {
         return $this->hasMany(OrderItem::class, 'order_id', 'id');  // Đảm bảo mối quan hệ sử dụng đúng trường order_id
     }
-
+    
 }
