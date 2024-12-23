@@ -166,7 +166,13 @@ class OrderController extends Controller
                 ];
             }
         }
+        if ($attributeProduct->in_stock < $item->qty) {
+            return redirect()->route('shopping-cart')->with('error', 'Sản phẩm "' . $item->product->name . '" không đủ số lượng trong kho!');
+        }
 
+        $attributeProduct->update([
+            'in_stock' => $attributeProduct->in_stock - $item->qty,
+        ]);
         // Thêm phí vận chuyển
         $shippingFee = 40000;
         $total = $totalWithoutShipping + $shippingFee;
