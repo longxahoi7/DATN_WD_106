@@ -9,6 +9,9 @@ use App\Models\OrderItem;
 use App\Models\ShoppingCart;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+use App\Models\Coupon;
+use App\Mail\OrderConfirm;
 class PaymentVnPayController extends Controller
 {
     //
@@ -73,7 +76,7 @@ class PaymentVnPayController extends Controller
                 // Tính toán giảm giá sau khi đã cộng phí vận chuyển
                 $shippingFee = 40000; // Phí vận chuyển
                 $totalAfterShipping = $totalWithoutShipping + $shippingFee; // Tổng tiền sau khi cộng phí vận chuyển
-$discountAmount = $this->calculateDiscount($coupon, $totalAfterShipping);
+        $discountAmount = $this->calculateDiscount($coupon, $totalAfterShipping);
             }
         }
         // Thêm phí vận chuyển
@@ -179,7 +182,7 @@ public function handleVNPayCallback(Request $request)
 {
     $vnp_HashSecret = "UG0UNZZI4B5W1R0UMAAA4QBVU77GQN46"; // Secret Key của bạn
     $data = $request->all();
-
+    $user = Auth::user();
     // Lấy chữ ký số từ callback
     $vnp_SecureHash = $data['vnp_SecureHash'];
     unset($data['vnp_SecureHash']); // Loại bỏ vnp_SecureHash khỏi dữ liệu callback
@@ -254,10 +257,52 @@ public function handleVNPayCallback(Request $request)
                 ]);
             }
         }
+        $shippingAddress = $request->input('shipping_address');
+        $phone = $request->input('phone');
+        $totalWithoutShipping = 0;
+        $productDetails = []; // Lưu thông tin chi tiết sản phẩm
+        foreach ($cartItems as $item) {
+            $attributeProduct = $item->product->attributeProducts->firstWhere('size_id', $item->size_id);
+            if ($attributeProduct) {
+                $totalWithoutShipping += $attributeProduct->price * $item->qty;
 
+                $productDetails[] = [
+                    'product_id' => $item->product_id,
+                    'name' => $item->product->name,
+                    'color' => $item->color->name,
+                    'size' => $item->size->name,
+                    'quantity' => $item->qty,
+                    'price' => $attributeProduct->price,
+                    'subtotal' => $attributeProduct->price * $item->qty,
+                    'color_id' => $item->color_id,
+                    'size_id' => $item->size_id
+                ];
+            }
+        }
+        $discountAmount = 0;
+        $discountCode = $request->input('discount_code'); // Lấy mã giảm giá từ form
+        if ($discountCode) {
+            $coupon = Coupon::where('code', $discountCode)->first();
+            if ($coupon && $coupon->is_active && $coupon->is_public) {
+                // Tính toán giảm giá sau khi đã cộng phí vận chuyển
+                $shippingFee = 40000; // Phí vận chuyển
+                $totalAfterShipping = $totalWithoutShipping + $shippingFee; // Tổng tiền sau khi cộng phí vận chuyển
+                $discountAmount = $this->calculateDiscount($coupon, $totalAfterShipping);
+            }
+        }
+        $shippingFee = 40000;
+        $total = $totalWithoutShipping + $shippingFee - $discountAmount;
         // Xóa các sản phẩm trong giỏ hàng sau khi thêm vào đơn hàng
         $shoppingCart->cartItems()->delete();
-
+        $emailData = [
+            'user' => $user,
+            'address' => $shippingAddress,
+            'phone' => $phone,
+            'productDetails' => $productDetails,
+            'total' => $total,
+            'shippingFee' => $shippingFee
+        ];
+        Mail::to($user->email)->send(new OrderConfirm($emailData));
         // Cập nhật trạng thái thanh toán trong bảng Payment (nếu có)
         $payment = Payment::where('order_id', $order->order_id)->first();
         if ($payment) {
