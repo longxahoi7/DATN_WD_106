@@ -10,7 +10,7 @@
 
         <!-- Thông tin nằm bên phải trong header -->
         <div class="header-right">
-            <a href="{{route('user.profiles.showUserInfo')}}" class="">
+            <a href="{{route('home')}}" class="">
                 <span class="icon-home">🏠</span> Quay về trang chủ
             </a>
             <div class="dropdown">

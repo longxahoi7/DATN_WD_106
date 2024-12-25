@@ -18,9 +18,9 @@ class OrderItem extends Model
         'size_id', 
     ];
     public function product()
-    {
-        return $this->belongsTo(Product::class, 'product_id');
-    }
+{
+    return $this->belongsTo(Product::class, 'product_id', 'product_id');
+}
     public function order()
     {
         return $this->belongsTo(Order::class, 'order_id');
@@ -38,11 +38,11 @@ class OrderItem extends Model
     }
     public function color()
     {
-        return $this->belongsTo(Color::class, 'color_id'); // Liên kết với bảng colors
+        return $this->belongsTo(Color::class, 'color_id','color_id'); // Liên kết với bảng colors
     }
 
     public function size()
     {
-        return $this->belongsTo(Size::class, 'size_id'); // Liên kết với bảng sizes
+        return $this->belongsTo(Size::class, 'size_id','size_id'); // Liên kết với bảng sizes
     }
 }
