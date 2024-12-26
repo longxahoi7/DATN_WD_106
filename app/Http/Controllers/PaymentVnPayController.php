@@ -241,22 +241,7 @@ public function handleVNPayCallback(Request $request)
         }
 
         $cartItems = $shoppingCart->cartItems;
-        foreach ($cartItems as $item) {
-            $attributeProduct = $item->product->attributeProducts->firstWhere('size_id', $item->size_id);
 
-            if ($attributeProduct) {
-                OrderItem::create([
-                    'order_id' => $order->order_id, // Đơn hàng ID
-                    'product_id' => $item->product_id,
-                    'product_name' => $item->product->name,
-                    'color_id' => $item->color_id,
-                    'size_id' => $item->size_id,
-                    'quantity' => $item->qty,
-                    'price' => $attributeProduct->price,
-                    'subtotal' => $attributeProduct->price * $item->qty,
-                ]);
-            }
-        }
         $shippingAddress = $request->input('shipping_address');
         $phone = $request->input('phone');
         $totalWithoutShipping = 0;
@@ -265,7 +250,6 @@ public function handleVNPayCallback(Request $request)
             $attributeProduct = $item->product->attributeProducts->firstWhere('size_id', $item->size_id);
             if ($attributeProduct) {
                 $totalWithoutShipping += $attributeProduct->price * $item->qty;
-
                 $productDetails[] = [
                     'product_id' => $item->product_id,
                     'name' => $item->product->name,
