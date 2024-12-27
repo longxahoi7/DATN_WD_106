@@ -21,18 +21,15 @@ class PaymentController extends Controller
     {
         // Lấy thông tin người dùng đang đăng nhập
         $user = Auth::user();
-
         if (!$user) {
             return redirect()->route('login')->with('error', 'Vui lòng đăng nhập để thanh toán!');
         }
 
-        // Lấy giỏ hàng của người dùng
-        $shoppingCart = ShoppingCart::where('user_id', $user->user_id)->first();
-        if (!$shoppingCart) {
-            return redirect()->route('shopping-cart')->with('error', 'Giỏ hàng trống!');
+        // Kiểm tra xem người dùng đã chọn sản phẩm chưa
+        $productDetails = session()->get('productDetails', []);
+        if (empty($productDetails)) {
+            return redirect()->route('shopping-cart')->with('error', 'Không có sản phẩm nào để thanh toán!');
         }
-
-        $cartItems = $shoppingCart->cartItems;
 
         // Lấy thông tin địa chỉ giao hàng và số điện thoại từ form
         $shippingAddress = $request->input('shipping_address');
@@ -41,25 +38,10 @@ class PaymentController extends Controller
 
         // Tính tổng tiền đơn hàng (không bao gồm phí vận chuyển)
         $totalWithoutShipping = 0;
-        $productDetails = []; // Lưu thông tin chi tiết sản phẩm
-        foreach ($cartItems as $item) {
-            $attributeProduct = $item->product->attributeProducts->firstWhere('size_id', $item->size_id);
-            if ($attributeProduct) {
-                $totalWithoutShipping += $attributeProduct->price * $item->qty;
-
-                $productDetails[] = [
-                    'product_id' => $item->product_id,
-                    'name' => $item->product->name,
-                    'color' => $item->color->name,
-                    'size' => $item->size->name,
-                    'quantity' => $item->qty,
-                    'price' => $attributeProduct->price,
-                    'subtotal' => $attributeProduct->price * $item->qty,
-                    'color_id' => $item->color_id,
-                    'size_id' => $item->size_id
-                ];
-            }
+        foreach ($productDetails as $product) {
+            $totalWithoutShipping += $product['price'] * $product['quantity'];
         }
+
         $discountAmount = 0;
         $discountCode = $request->input('discount_code'); // Lấy mã giảm giá từ form
         if ($discountCode) {
@@ -71,13 +53,12 @@ class PaymentController extends Controller
                 $discountAmount = $this->calculateDiscount($coupon, $totalAfterShipping);
             }
         }
-        // dd($totalAfterShipping);
+
         // Thêm phí vận chuyển
         $shippingFee = 40000;
-        $total = $totalWithoutShipping + $shippingFee - $discountAmount; // Cập nhật tổng tiền sau khi trừ mã giảm giá
-        // dd( $total);
-        // Kiểm tra kết quả tính toán
+        $total = $totalWithoutShipping + $shippingFee - $discountAmount;
 
+        // Tạo đơn hàng mới
         $order = Order::create([
             'user_id' => $user->user_id,
             'shipping_address' => $shippingAddress,
@@ -104,9 +85,7 @@ class PaymentController extends Controller
             ]);
         }
 
-        // Xóa các sản phẩm trong giỏ hàng sau khi thanh toán
-        $shoppingCart->cartItems()->delete();
-
+        //Gửi email xác nhận đơn hàng
         $emailData = [
             'user' => $user,
             'address' => $shippingAddress,
@@ -117,12 +96,14 @@ class PaymentController extends Controller
         ];
         Mail::to($user->email)->send(new OrderConfirm($emailData));
 
-        // Chuyển hướng đến trang thông báo thanh toán thành công và truyền thông tin
+        // Chuyển hướng đến trang thông báo thanh toán thành công
         return redirect()
-        ->route('user.order.order-cod')
-        ->with('alert', 'Đơn hàng của bạn đã được thanh toán thành công. Cảm ơn bạn!')
-        ->with(['discountAmount' => $discountAmount]);
+            ->route('user.order.order-cod')
+            ->with('alert', 'Đơn hàng của bạn đã được thanh toán thành công. Cảm ơn bạn!')
+            ->with(['discountAmount' => $discountAmount]);
     }
+
+
 
     private function calculateDiscount($coupon, $total)
     {
@@ -193,7 +174,7 @@ class PaymentController extends Controller
         // Tính giá trị giảm giá
         $discount = $coupon->discount_amount ? $coupon->discount_amount : ($amount * $coupon->discount_percentage / 100);
 
-            // Cập nhật số lượng mã giảm giá nếu có
+        // Cập nhật số lượng mã giảm giá nếu có
         if ($coupon->quantity > 0) {
             DB::table('coupons')
                 ->where('coupon_id', $coupon->coupon_id)
@@ -215,9 +196,29 @@ class PaymentController extends Controller
     public function orderSuccess()
     {
         $user = Auth::user();
+        // Lấy thông tin giỏ hàng của người dùng
         $shoppingCart = ShoppingCart::where('user_id', $user->user_id)->first();
-        // Xóa các sản phẩm trong giỏ hàng sau khi thanh toán
-        $shoppingCart->cartItems()->delete();
+        if ($shoppingCart) {
+            // Chuyển thông tin sản phẩm từ session thành collection để dễ thao tác
+            $productDetails = collect(session()->get('productDetails', []));
+
+            // Duyệt qua từng sản phẩm trong giỏ hàng và kiểm tra sự trùng lặp với sản phẩm trong session
+            foreach ($shoppingCart->cartItems as $cartItem) {
+                // Tìm kiếm sản phẩm trong session có trùng `product_id`, `size_id`, `color_id` với sản phẩm trong giỏ hàng
+                $matchingProduct = $productDetails->first(function ($product) use ($cartItem) {
+                    return $product['product_id'] == $cartItem->product_id
+                        && $product['size_id'] == $cartItem->size_id
+                        && $product['color_id'] == $cartItem->color_id;
+                });
+
+                // Nếu tìm thấy sản phẩm trùng khớp trong session, xóa sản phẩm đó khỏi giỏ hàng
+                if ($matchingProduct) {
+
+                    $cartItem->delete();
+                    // Xóa sản phẩm trùng khớp trong giỏ hàng
+                }
+            }
+        }
         // Lấy thông tin tên người dùng từ session
         $userName = session('userName');
         $successMessage = session('success');
@@ -225,5 +226,4 @@ class PaymentController extends Controller
         // Trả về view với thông báo và tên người dùng
         return view('user.orders.order-cod', compact('userName', 'successMessage'))->with('alert', 'Đơn hàng của bạn đã được thanh toán thành công. Cảm ơn bạn!');
     }
-
 }

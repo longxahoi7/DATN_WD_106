@@ -20,6 +20,7 @@
         <div class="cart-items-container">
             @foreach($cartItems as $item)
             <div class="product-card">
+            <input type="checkbox" name="product_checkbox[]" value="{{ $item->id }}" class="product-checkbox-item">
                 <div class="product-image">
                     <a href="{{ route('user.product.detail', $item->product_id) }}" class="product-card-link">
                         <img src="/storage/{{ $item->product->main_image_url }}" alt="{{ $item->product->name }}"
@@ -110,6 +111,7 @@
                 <form action="{{ route('user.order.confirm') }}" method="POST" class="payment-form">
                     @csrf
                     <input type="hidden" name="amount" value="{{ $finalTotal }}">
+                    <input type="hidden" name="selected_products" id="selected_products" value="">
                     <button type="submit" class="custom-btn-cod">Thanh toán</button>
                 </form>
             </div>
@@ -137,7 +139,21 @@
     function closePopup(itemId) {
         document.getElementById('popupOverlay' + itemId).style.display = 'none';
     }
+    document.querySelector('.payment-form').addEventListener('submit', function (e) {
+    e.preventDefault(); // Ngừng form submit mặc định
 
+    // Lấy tất cả các checkbox đã được chọn
+    let selectedProducts = [];
+    document.querySelectorAll('.product-checkbox-item:checked').forEach(function (checkbox) {
+        selectedProducts.push(checkbox.value);
+    });
+
+    // Cập nhật giá trị vào input hidden
+    document.getElementById('selected_products').value = selectedProducts.join(',');
+
+    // Gửi form sau khi cập nhật giá trị
+    this.submit();
+    });
     function confirmSelection(itemId) {
         const colorId = selectedColor[itemId];
         const sizeId = selectedSize[itemId];

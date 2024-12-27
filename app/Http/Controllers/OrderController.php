@@ -156,19 +156,29 @@ class OrderController extends Controller
     {
         // Lấy thông tin người dùng đang đăng nhập
         $user = Auth::user();
-
+    
         if (!$user) {
             return redirect()->route('login')->with('error', 'Vui lòng đăng nhập để thanh toán!');
         }
-
+    
         // Lấy giỏ hàng của người dùng
         $shoppingCart = ShoppingCart::where('user_id', $user->user_id)->first();
         if (!$shoppingCart) {
             return redirect()->route('shopping-cart')->with('error', 'Giỏ hàng trống!');
         }
-
-        $cartItems = $shoppingCart->cartItems;
-
+    
+        // Lấy các ID sản phẩm đã được chọn từ request
+        $selectedProductIds = explode(',', $request->input('selected_products'));
+    
+        // Lọc các items trong giỏ hàng dựa trên các ID đã được chọn
+        $cartItems = $shoppingCart->cartItems->filter(function ($item) use ($selectedProductIds) {
+            return in_array($item->id, $selectedProductIds);
+        });
+    
+        if ($cartItems->isEmpty()) {
+            return redirect()->back()->with('error', 'Không có sản phẩm nào được chọn để thanh toán!');
+        }
+    
         // Tính tổng tiền đơn hàng (không bao gồm phí vận chuyển)
         $totalWithoutShipping = 0;
         $productDetails = []; // Lưu thông tin chi tiết sản phẩm
@@ -176,10 +186,18 @@ class OrderController extends Controller
             // Lấy thông tin sản phẩm với size_id và color_id
             $attributeProduct = $item->product->attributeProducts->firstWhere('size_id', $item->size_id);
             if ($attributeProduct) {
+                // Kiểm tra số lượng sản phẩm trong kho
+                if ($attributeProduct->in_stock < $item->qty) {
+                    return redirect()->route('shopping-cart')->with('error', 'Sản phẩm "' . $item->product->name . '" không đủ số lượng trong kho!');
+                }
+    
+                // Tính tổng tiền
                 $totalWithoutShipping += $attributeProduct->price * $item->qty;
-
+    
+                // Lưu thông tin chi tiết sản phẩm
                 $productDetails[] = [
                     'name' => $item->product->name,
+                    'product_id' => $item->product->product_id,
                     'img' => $item->product->main_image_url,
                     'color' => $item->color->name,  // Lấy tên màu từ quan hệ color
                     'size' => $item->size->name,    // Lấy tên size từ quan hệ size
@@ -189,19 +207,17 @@ class OrderController extends Controller
                     'color_id' => $item->color_id,  // Lưu color_id
                     'size_id' => $item->size_id    // Lưu size_id
                 ];
+    
+                // Cập nhật số lượng tồn kho sau khi thanh toán
+                $attributeProduct->update([
+                    'in_stock' => $attributeProduct->in_stock - $item->qty,
+                ]);
             }
         }
-        if ($attributeProduct->in_stock < $item->qty) {
-            return redirect()->route('shopping-cart')->with('error', 'Sản phẩm "' . $item->product->name . '" không đủ số lượng trong kho!');
-        }
-
-        $attributeProduct->update([
-            'in_stock' => $attributeProduct->in_stock - $item->qty,
-        ]);
         // Thêm phí vận chuyển
         $shippingFee = 40000;
         $total = $totalWithoutShipping + $shippingFee;
-
+        session()->put('productDetails', $productDetails);
         // Chuyển hướng đến trang thông báo thanh toán thành công và truyền thông tin
         return view('user.orders.orderConfirm', [
             'user' => $user,
@@ -210,6 +226,7 @@ class OrderController extends Controller
             'shippingFee' => $shippingFee
         ]);
     }
+    
     public function confirmOrderVNPay(Request $request)
     {
         // Lấy thông tin người dùng đang đăng nhập
