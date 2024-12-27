@@ -24,7 +24,7 @@
                 </a>
                 <div class="dropdown-menu">
                     @if(Auth::check())
-                    <a href="{{route('user.profiles.showUserInfo')}}" class="dropdown-item">Thông tin chung</a>
+                    <a href="{{route('home')}}" class="dropdown-item">Thông tin chung</a>
 
                     <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                         @csrf
