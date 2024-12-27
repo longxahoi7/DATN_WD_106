@@ -10,12 +10,12 @@
     <ul class="menu">
         <li>
             <a href="{{ route('admin.dashboard') }}">
-                <i class="icon-dashboard">📊</i> Thống kê
+            <i class="fa-solid fa-chart-line"></i>Thống kê
             </a>
         </li>
         <li class="dropdown">
             <a href="#" class="toggle-link dropdown-toggle">
-                <i class="icon-management">🛠️</i> Quản lý
+            <i class="fa-sharp-duotone fa-solid fa-list-check"></i> Quản lý
             </a>
             <ul id="managementSubmenu" class="submenu">
                 <li><a href="{{ route('admin.products.index') }}"><i class="icon-product">🛒</i> Sản phẩm</a></li>
@@ -27,22 +27,22 @@
         </li>
         <li>
             <a href="{{ route('admin.orders') }}">
-                <i class="icon-orders">📦</i> Đơn hàng
+            <i class="fa-solid fa-box"></i> Đơn hàng
             </a>
         </li>
         <li>
             <a href="{{route('admin.reviews.index')}}">
-                <i class="icon-management">💬</i> Bình luận
+            <i class="fa-solid fa-comment"></i> Bình luận
             </a>
         </li>
         <li>
             <a href="{{ route('admin.users.listUser') }}">
-                <i class="icon-account">👥</i> Tài khoản
+            <i class="fa-solid fa-user"></i> Tài khoản
             </a>
         </li>
         <li>
             <a href="{{ route('home') }}">
-                <i class="icon-home">🏠</i> Trang chủ
+            <i class="fa-solid fa-house"></i> Trang chủ
             </a>
         </li>
     </ul>

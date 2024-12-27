@@ -6,33 +6,35 @@
 }
 
 body {
-  font-family: Arial, sans-serif;
-  background-color: #f9f9f9;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f4f4f4;
   color: #333;
+  line-height: 1.6;
 }
 
 /* Sidebar */
 .sidebar {
-  width: 250px;
+  width: 260px;
   height: 100vh;
-  background-color: #000000; /* Nền trắng */
-  color: #333; /* Chữ đen */
+  background-color: #222; /* Nền tối */
+  color: #fff; /* Chữ trắng */
   display: flex;
   flex-direction: column;
   position: fixed;
   top: 0;
   left: 0;
-  padding: 20px 10px;
-  border-right: 1px solid #ddd;
-  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  padding: 25px 20px;
+  border-right: 2px solid #444;
+  box-shadow: 3px 0 10px rgba(0, 0, 0, 0.2);
   z-index: 1000;
+  transition: all 0.3s ease;
 }
 
 /* Logo */
 .sidebar .logo img {
   max-width: 100%;
-  margin-bottom: 20px;
-  filter: brightness(0) invert(1); /* Đổi logo thành màu trắng */
+  margin-bottom: 30px;
+  filter: brightness(0) invert(1); /* Logo trắng */
 }
 
 /* Menu */
@@ -46,71 +48,81 @@ body {
 
 /* Mục menu */
 .sidebar .menu li {
-  margin-bottom: 10px;
+  margin-bottom: 15px;
 }
 
+/* Liên kết menu */
 .sidebar .menu li a {
   display: flex;
   align-items: center;
   text-decoration: none;
-  color: #ffffff;
-  padding: 10px 15px;
-  border-radius: 5px;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  color: #ddd;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 16px;
+  transition: background-color 0.3s ease, color 0.3s ease, padding-left 0.3s ease;
 }
 
+/* Hover hiệu ứng */
 .sidebar .menu li a:hover {
-  background-color: #ffffff;
-  color: #000000; /* Đổi thành chữ trắng khi hover */
+  background-color: #444;
+  color: #fff;
+  padding-left: 30px; /* Hiệu ứng đẩy sang trái khi hover */
 }
 
 /* Icon trong menu */
 .sidebar .menu li a i {
-  margin-right: 10px;
-  font-size: 18px;
+  margin-right: 15px;
+  font-size: 20px;
 }
 
-
-/* Dropdown Submenu */
+/* Dropdown Submenu (Chỉnh lại cho chiều ngang bên cạnh) */
 .sidebar .submenu {
   list-style: none;
   padding: 0;
   margin: 0;
   display: none; /* Ẩn submenu mặc định */
   flex-direction: column;
-  position: absolute; /* Để có thể định vị */
+  position: absolute; /* Để định vị submenu */
   top: 0; /* Căn chỉnh theo chiều dọc */
   left: 100%; /* Canh submenu hiển thị bên phải menu chính */
-  background-color: #fff;
-  border: 1px solid #ddd;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  z-index: 1000;
-  min-width: 200px; /* Đặt chiều rộng tối thiểu */
+  background-color: #333; /* Màu nền của submenu */
+  border: 1px solid #444;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  min-width: 230px;
   padding: 10px 0;
-  border-radius: 4px;
+  border-radius: 6px;
+  z-index: 999;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  margin-top: 10px; /* Đẩy submenu xuống dưới khi cần */
 }
 
+/* Hiển thị submenu khi hover */
 .sidebar .dropdown:hover .submenu {
-  display: flex; /* Hiển thị khi hover */
+  display: flex;
+  opacity: 1;
+  visibility: visible;
 }
 
-/* Hiệu ứng hover */
+/* Liên kết submenu */
 .sidebar .submenu li a {
   font-size: 14px;
-  color: #666; /* Màu chữ nhạt hơn */
-  padding: 10px 15px;
+  color: #bbb;
+  padding: 12px 20px;
   text-decoration: none;
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .sidebar .submenu li a:hover {
-  background-color: #333; /* Nền đen khi hover */
-  color: #fff; /* Chữ trắng khi hover */
+  background-color: #444;
+  color: #fff;
 }
 
 /* Mũi tên */
 .arrow {
-  margin-left: auto; /* Đẩy mũi tên sang bên phải */
+  margin-left: auto;
   transition: transform 0.3s ease;
 }
 
@@ -118,21 +130,34 @@ body {
   transform: rotate(180deg);
 }
 
-
-/* Highlight menu */
-.menu .menu li:hover,
-.menu .menu li.active {
-  border-left: 4px solid #333; /* Đánh dấu mục đang chọn */
+/* Đánh dấu mục menu đang chọn */
+.menu li.active > a {
+  background-color: #555;
+  color: #fff;
+  border-left: 5px solid #e74c3c; /* Đường viền đỏ cho mục đang chọn */
 }
 
-/* Keyframes cho hiệu ứng */
-@keyframes fadeIn {
+/* Hiệu ứng chuyển động khi hiển thị */
+@keyframes slideIn {
   from {
+    transform: translateX(-20px);
     opacity: 0;
-    transform: translateY(-10px);
   }
   to {
+    transform: translateX(0);
     opacity: 1;
-    transform: translateY(0);
   }
+}
+
+.sidebar .menu li, .sidebar .submenu li {
+  animation: slideIn 0.3s ease-out;
+}
+
+/* Các hiệu ứng trên toàn bộ sidebar */
+.sidebar .menu li a, .sidebar .submenu li a {
+  padding-left: 20px; /* Padding mặc định */
+}
+
+.sidebar .menu li:hover a, .sidebar .submenu li:hover a {
+  padding-left: 25px; /* Tăng padding khi hover */
 }
