@@ -89,7 +89,7 @@ class PaymentController extends Controller
             'order_id' => $order->order_id,
             'new_status' => 'pending',
             'status_change_date' => now(),
-            'user_id' => $user->user_id
+            'updated_by' => $user->user_id
         ]);
         //Gửi email xác nhận đơn hàng
         $emailData = [
