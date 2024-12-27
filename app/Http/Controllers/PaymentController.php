@@ -87,7 +87,6 @@ class PaymentController extends Controller
         }
         OrderStatusHistory::create([
             'order_id' => $order->order_id,
-            
             'new_status' => 'pending',
             'status_change_date' => now(),
             'user_id' => $user->user_id

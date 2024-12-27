@@ -286,6 +286,7 @@ public function handleVNPayCallback(Request $request)
             'total' => $total,
             'shippingFee' => $shippingFee
         ];
+        
         Mail::to($user->email)->send(new OrderConfirm($emailData));
         // Cập nhật trạng thái thanh toán trong bảng Payment (nếu có)
         $payment = Payment::where('order_id', $order->order_id)->first();
