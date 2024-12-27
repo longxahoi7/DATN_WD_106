@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Mail\OrderConfirm;
+use App\Models\OrderStatusHistory;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Http\Request;
 use App\Models\Payment;
@@ -84,7 +85,13 @@ class PaymentController extends Controller
                 'subtotal' => $product['subtotal'],
             ]);
         }
-
+        OrderStatusHistory::create([
+            'order_id' => $order->order_id,
+            
+            'new_status' => 'pending',
+            'status_change_date' => now(),
+            'user_id' => $user->user_id
+        ]);
         //Gửi email xác nhận đơn hàng
         $emailData = [
             'user' => $user,

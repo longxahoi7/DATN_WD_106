@@ -140,7 +140,7 @@ class OrderController extends Controller
 
         // Lưu lịch sử thay đổi trạng thái
         OrderStatusHistory::create([
-            'order_id' => $order->id,
+            'order_id' => $order->order_id,
             'previous_status' => $order->status,
             'new_status' => 'cancelled',
             'updated_by' => auth()->id(),
@@ -218,7 +218,7 @@ class OrderController extends Controller
         $shippingFee = 40000;
         $total = $totalWithoutShipping + $shippingFee;
         session()->put('productDetails', $productDetails);
-        // Chuyển hướng đến trang thông báo thanh toán thành công và truyền thông tin
+
         return view('user.orders.orderConfirm', [
             'user' => $user,
             'productDetails' => $productDetails,
