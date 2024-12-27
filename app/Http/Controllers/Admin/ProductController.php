@@ -16,6 +16,7 @@ use App\Models\AttributeProduct;
 use App\Models\Attribute;
 use App\Models\ProductImage;
 use Illuminate\Support\Facades\Storage;
+use App\Http\Requests\StoreProductRequest;
 class ProductController extends Controller
 {
     public function listProduct(Request $request)
@@ -60,38 +61,57 @@ class ProductController extends Controller
     }
     public function addProduct(Request $request)
     {
-        // Check if the request method is POST
-       
-            // Handle file upload for the product image
+        // Validate dữ liệu
+        try {
+            $validatedData = $request->validate([
+                'name' => 'required|max:50',
+                'sku' => 'required|unique:products,sku|max:50',
+                'subtitle' => 'required|max:100',
+                'product_category_id' => 'required|exists:categories,id',
+                'brand_id' => 'required|exists:brands,id',
+                'main_image_url' => 'required|image|max:2048',
+                'description' => 'required|max:255',
+            ], [
+                'name.required' => 'Tên sản phẩm không được để trống.',
+                'sku.required' => 'Mã sản phẩm không được để trống.',
+                'sku.unique' => 'Mã sản phẩm đã tồn tại.',
+                'subtitle.required' => 'Chú thích sản phẩm không được để trống.',
+                'product_category_id.required' => 'Danh mục sản phẩm là bắt buộc.',
+                'brand_id.required' => 'Thương hiệu sản phẩm là bắt buộc.',
+                'main_image_url.required' => 'Ảnh sản phẩm là bắt buộc.',
+                'main_image_url.image' => 'File tải lên phải là hình ảnh.',
+                'description.required' => 'Mô tả sản phẩm không được để trống.',
+            ]);
+
+            // Xử lý upload hình ảnh
             $image = null;
             if ($request->hasFile('main_image_url')) {
                 $anh = $request->file('main_image_url');
                 if ($anh->isValid()) {
                     $newAnh = time() . "." . $anh->getClientOriginalExtension();
-                    // Save the image to the 'imagePro' directory in the public folder
+                    // Lưu hình ảnh vào thư mục 'imagePro' trong thư mục public
                     $image = $anh->move(public_path('storage/imagePro/'), $newAnh);
                 }
             }
 
-            // Create a new product using the request data
+            // Tạo sản phẩm mới với dữ liệu đã validate
             $product = Product::create([
                 'brand_id' => $request->input('brand_id'),
                 'name' => $request->input('name'),
                 'product_category_id' => $request->input('product_category_id'),
-                'main_image_url' => $image ? 'imagePro/' . $image->getBasename() : null,  // Store the relative path/-strong/-heart:>:o:-((:-h 'view_count' => 0,
+                'main_image_url' => $image ? 'imagePro/' . $image->getBasename() : null,
                 'sku' => $request->input('sku'),
                 'description' => $request->input('description'),
                 'subtitle' => $request->input('subtitle'),
                 'slug' => Str::slug($request->input('name')),
-                'is_active' => $request->has('is_active') ? 1 : 0,  // Check if is_active is present
+                'is_active' => $request->has('is_active') ? 1 : 0,
             ]);
 
-            // Process color and size IDs (they could be comma-separated or an array)
+            // Xử lý dữ liệu màu sắc và kích thước
             $colors = is_array($request->input('color_id')) ? $request->input('color_id') : explode(',', $request->input('color_id'));
             $sizes = is_array($request->input('size_id')) ? $request->input('size_id') : explode(',', $request->input('size_id'));
 
-
-            // Prepare the data for the AttributeProduct table (product-color-size combinations)
+            // Chuẩn bị dữ liệu cho bảng AttributeProduct (kết hợp sản phẩm - màu sắc - kích thước)
             $productColorSizeData = [];
             foreach ($colors as $colorId) {
                 foreach ($sizes as $sizeId) {
@@ -103,14 +123,23 @@ class ProductController extends Controller
                 }
             }
 
-            // Insert the attribute product data (color-size combinations)
-          AttributeProduct::insert($productColorSizeData);
-             // Lấy sản phẩm cụ thể dựa trên id và thông tin liên quan
-           
-            // $listAttributeProduct = AttributeProduct::where
-            // ('product_id', $product->product_id)->get();
+            // Lưu dữ liệu vào bảng AttributeProduct
+            AttributeProduct::insert($productColorSizeData);
+
+            // Redirect đến trang quản lý sản phẩm với thông báo thành công
             return redirect()->route('admin.products.getDataAtrPro', ['id' => $product->product_id])->with('success', 'Thêm sản phẩm mới thành công!');
+            
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            // Nếu có lỗi validate, log vào file
+            Log::error('Validation failed: ' . $e->getMessage());
+            return back()->withErrors($e->errors())->withInput();
+        } catch (\Exception $e) {
+            // Log các lỗi không mong muốn khác
+            Log::error('Error occurred during product creation: ' . $e->getMessage());
+            return back()->with('error', 'Có lỗi xảy ra trong quá trình tạo sản phẩm, vui lòng thử lại!');
+        }
     }
+
 
 
     public function getDataAtrPro( $id){

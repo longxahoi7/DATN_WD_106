@@ -22,6 +22,10 @@ class PaymentVnPayController extends Controller
         $user = Auth::user();
         // Tạo đơn hàng
         // dd($data);
+        $productDetails = session()->get('productDetails', []);
+        if (empty($productDetails)) {
+            return redirect()->route('shopping-cart')->with('error', 'Không có sản phẩm nào để thanh toán!');
+        }
         $order = Order::create([
             'user_id' => Auth::id(),
             'order_date' => now(),
@@ -34,6 +38,18 @@ class PaymentVnPayController extends Controller
             'recipient_name' => $data['recipient_name'],
             'payment_method'  => 'VNPAY' // Chưa thanh toán
         ]);
+        foreach ($productDetails as $product) {
+            OrderItem::create([
+                'order_id' => $order->order_id,
+                'product_id' => $product['product_id'],
+                'product_name' => $product['name'],
+                'color_id' => $product['color_id'],
+                'size_id' => $product['size_id'],
+                'quantity' => $product['quantity'],
+                'price' => $product['price'],
+                'subtotal' => $product['subtotal'],
+            ]);
+        }
         // Lấy giỏ hàng của người dùng
         $shoppingCart = ShoppingCart::where('user_id', $user->user_id)->first();
         if (!$shoppingCart) {
@@ -49,7 +65,6 @@ class PaymentVnPayController extends Controller
     
         // Tính tổng tiền đơn hàng (không bao gồm phí vận chuyển)
         $totalWithoutShipping = 0;
-        $productDetails = []; // Lưu thông tin chi tiết sản phẩm
         foreach ($cartItems as $item) {
             $attributeProduct = $item->product->attributeProducts->firstWhere('size_id', $item->size_id);
             if ($attributeProduct) {
@@ -82,50 +97,36 @@ class PaymentVnPayController extends Controller
         // Thêm phí vận chuyển
         $shippingFee = 40000;
         $total = $totalWithoutShipping + $shippingFee - $discountAmount;
-        foreach ($productDetails as $product) {
-            OrderItem::create([
-                'order_id' => $order->order_id,
-                'product_id' => $product['product_id'],
-                'product_name' => $product['name'],
-                'color_id' => $product['color_id'],
-                'size_id' => $product['size_id'],
-                'quantity' => $product['quantity'],
-                'price' => $product['price'],
-                'subtotal' => $product['subtotal'],
-            ]);
-        }
+        
         $order_id = $order->order_id;
-        // Các thông tin cần thiết cho VNPAY
-        $vnp_Url = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html"; // URL VNPAY
-        $vnp_Returnurl = route('vnpay.callback'); // URL trả về sau khi thanh toán
-        $vnp_TmnCode = "L86V10FV"; // Mã website của bạn tại VNPAY
-        $vnp_HashSecret = "UG0UNZZI4B5W1R0UMAAA4QBVU77GQN46"; // Khóa bí mật của bạn tại VNPAY
+        $vnp_Url = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
+        $vnp_Returnurl = route('vnpay.callback');
+        $vnp_TmnCode = "L86V10FV";
+        $vnp_HashSecret = "UG0UNZZI4B5W1R0UMAAA4QBVU77GQN46";
 
-        // Các thông tin thanh toán
-        $vnp_TxnRef = $order_id; // Mã giao dịch duy nhất, có thể dùng thời gian
-        $vnp_OrderInfo = 'Thanh toán đơn hàng'; // Thông tin đơn hàng
-        $vnp_OrderType = 'billpayment'; // Loại giao dịch
-        $vnp_Amount = $data['amount'] * 100; // Số tiền thanh toán, nhân với 100 vì VNPAY yêu cầu tiền tệ là VND
-        $vnp_Locale = 'VN'; // Ngôn ngữ
-        $vnp_BankCode = 'NCB'; // Mã ngân hàng (có thể bỏ qua nếu không chọn ngân hàng cụ thể)
-        $vnp_IpAddr = $_SERVER['REMOTE_ADDR']; // Địa chỉ IP của người dùng
+        $vnp_TxnRef = $order_id;
+        $vnp_OrderInfo = 'Thanh toán đơn hàng';
+        $vnp_OrderType = 'billpayment';
+        $vnp_Amount = $data['amount'] * 100;
+        $vnp_Locale = 'VN';
+        $vnp_BankCode = 'NCB';
+        $vnp_IpAddr = $_SERVER['REMOTE_ADDR'];
 
-        // Dữ liệu gửi đến VNPAY
         $inputData = [
             // $shippingAddress = $request->input('shipping_address'),  // Lấy địa chỉ giao hàng từ form
             // $phone = $request->input('phone'),
-            "vnp_Amount" => $vnp_Amount, // Số tiền thanh toán
-            "vnp_Command" => "pay", // Lệnh thanh toán
-            "vnp_CreateDate" => date('YmdHis'), // Thời gian tạo giao dịch
-            "vnp_CurrCode" => "VND", // Mã tiền tệ
-            "vnp_IpAddr" => $vnp_IpAddr, // Địa chỉ IP của người dùng
-            "vnp_Locale" => $vnp_Locale, // Ngôn ngữ
-            "vnp_OrderInfo" => $vnp_OrderInfo, // Thông tin đơn hàng
-            "vnp_OrderType" => $vnp_OrderType, // Loại giao dịch
-            "vnp_ReturnUrl" => $vnp_Returnurl, // URL trả về sau khi thanh toán
-            "vnp_TmnCode" => $vnp_TmnCode, // Mã website của bạn tại VNPAY
-            "vnp_TxnRef" => $vnp_TxnRef, // Mã giao dịch duy nhất
-            "vnp_Version" => "2.1.0", // Phiên bản API của VNPAY
+            "vnp_Amount" => $vnp_Amount,
+            "vnp_Command" => "pay",
+            "vnp_CreateDate" => date('YmdHis'),
+            "vnp_CurrCode" => "VND",
+            "vnp_IpAddr" => $vnp_IpAddr,
+            "vnp_Locale" => $vnp_Locale,
+            "vnp_OrderInfo" => $vnp_OrderInfo,
+            "vnp_OrderType" => $vnp_OrderType,
+            "vnp_ReturnUrl" => $vnp_Returnurl,
+            "vnp_TmnCode" => $vnp_TmnCode, 
+            "vnp_TxnRef" => $vnp_TxnRef,
+            "vnp_Version" => "2.1.0",
         ];
 
         // Nếu có mã ngân hàng cụ thể, thêm vào đây
@@ -277,7 +278,6 @@ public function handleVNPayCallback(Request $request)
         $shippingFee = 40000;
         $total = $totalWithoutShipping + $shippingFee - $discountAmount;
         // Xóa các sản phẩm trong giỏ hàng sau khi thêm vào đơn hàng
-        $shoppingCart->cartItems()->delete();
         $emailData = [
             'user' => $user,
             'address' => $shippingAddress,

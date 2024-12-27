@@ -14,7 +14,10 @@
 
             @if(Auth::user()->role !== 3)
             <!-- Kiểm tra nếu không phải manager -->
-            <a href="" class="btn add-button">Thêm mới</a>
+            <!-- <a href="" id="productForm" class="btn add-button">Thêm mới</a> -->
+            <button type="button" class="btn add-button" data-bs-toggle="modal" data-bs-target="#productCreateModal">
+                Thêm mới
+            </button>
             @else
             @endif
 
@@ -34,6 +37,7 @@
                         </div>
                         <div class="modal-body">
                             <!-- AJAX nội dung sẽ được load tại đây -->
+                            <div id="errorMessages" class="alert alert-danger" style="display: none;"></div>
                             <div id="modalContent">
                                 <p>Đang tải...</p>
                             </div>
@@ -168,25 +172,38 @@
         <script>
         $(document).ready(function() {
 
-            $('.add-button').on('click', function(e) {
-                e.preventDefault();
+            // Khi nhấn nút "Thêm mới"
+            $('.add-button').on('click', function() {
+                // Hiển thị modal và tải nội dung
                 $('#modalContent').html('<p>Đang tải...</p>');
                 $('#productCreateModal').modal('show');
 
                 $.ajax({
-                    url: "{{ route('admin.products.create') }}",
+                    url: "{{ route('admin.products.create') }}",  // Địa chỉ URL cần tải nội dung
                     type: 'GET',
                     success: function(response) {
+                        // Sau khi tải nội dung thành công, hiển thị nó trong modal
                         $('#modalContent').html(response);
                     },
-                    error: function() {
-                        $('#modalContent').html('<p>Lỗi! Không thể tải nội dung.</p>');
+                    error: function(xhr) {
+                        // Xử lý lỗi nếu có
+                        if (xhr.status === 422) {  // Lỗi 422: lỗi validation
+                            var errors = xhr.responseJSON.errors;
+                            var errorHtml = '<ul>';
+                            $.each(errors, function(key, value) {
+                                errorHtml += '<li>' + value[0] + '</li>';
+                            });
+                            errorHtml += '</ul>';
+                            $('#modalContent').html('<p>Lỗi! Không thể tải nội dung.</p>' + errorHtml);
+                        } else {
+                            $('#modalContent').html('<p>Lỗi! Không thể tải nội dung.</p>');
+                        }
                     }
                 });
             });
 
-
         });
+
 
         $(document).ready(function() {
             // Đóng modal thêm mới

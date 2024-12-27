@@ -82,9 +82,9 @@
                                 <div class="attribute-info">
                                     <strong>Màu sắc: {{ $item->color ? $item->color->name : 'Không có thông tin' }}</strong>
                                 </div>
-                                <div class="attribute-info">
+                                <!-- <div class="attribute-info">
                                     <strong>Kích thước: {{ $item->size ? $item->size->name : 'Không có thông tin' }}</strong>
-                                </div>
+                                </div> -->
                                 <div class="item-right">
                                     <span class="item-price">
                                         {{ $item->product ? number_format($item->total, 0, ',', '.') . ' đ' : 'Không có thông tin' }}
