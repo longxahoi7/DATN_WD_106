@@ -37,7 +37,7 @@
                     ];
 
                     @endphp
-                    <p><strong>Trạng thái đơn hàng:</strong>  {{ $statusLabels[$order->status] ?? 'Không xác định' }}</p>
+                    <p><strong>Trạng thái đơn hàng:</strong> {{ $statusLabels[$order->status] ?? 'Không xác định' }}</p>
                     <p><strong>Trạng thái thanh toán:</strong> {{ $statusTranslations[$order->payment_status] ?? 'Không xác định' }}</p>
                     <p><strong>Ngày mua hàng:</strong> {{ $order->created_at->format('d-m-Y H:i:s') }}</p>
                     <p><strong>Ngày cập nhật đơn hàng:</strong> {{ $order->updated_at->format('d-m-Y H:i:s') }}</p>
@@ -78,23 +78,36 @@
                         <td class="text-right">{{ number_format($orderItem->attributeProduct->price * $orderItem->quantity, 0, 2) }} đ</td>
                     </tr>
                     @endforeach
+                    @if ($order->statusHistories->isNotEmpty())
+                    <hr />
+                    <p><strong>Lịch sử trạng thái đơn hàng:</strong></p>
+                    <ul class="status-history-list">
+                        @foreach ($order->statusHistories as $history)
+                        <li>
+                            <span class="status-timestamp">{{ $history->created_at->format('d/m/Y H:i') }}</span> -
+                            <span class="status-change">Trạng thái: <strong>{{ $statusTranslations[strtolower($history->new_status)] ?? $history->new_status }}</strong></span>
+                            - <span class="status-update-by">Cập nhật bởi: <strong>{{ $history->updatedBy->name ?? 'Không xác định' }}</strong></span>
+                        </li>
+                        @endforeach
+                    </ul>
+                    @endif
                 </tbody>
                 <tfoot>
-                            <tr>
-                                <td colspan="6">Tổng giá trị đơn hàng</td>
-                                <td>{{ number_format($order->orderItems->sum(function($item) { return $item->price * $item->quantity; }), 0, ',', '.') }}
-                                    VND</td>
-                            </tr>
-                            <tr>
-                                <td colspan="6">Phí Ship</td>
-                                <td>40,000 VND</td>
-                            </tr>
-                            <tr>
-                                <td colspan="6">Thành tiền</td>
-                                <td>{{ number_format($order->orderItems->sum(function($item) { return $item->price * $item->quantity; }) + 40000, 0, ',', '.') }}
-                                    VND</td>
-                            </tr>
-                        </tfoot>
+                    <tr>
+                        <td colspan="6">Tổng giá trị đơn hàng</td>
+                        <td>{{ number_format($order->orderItems->sum(function($item) { return $item->price * $item->quantity; }), 0, ',', '.') }}
+                            VND</td>
+                    </tr>
+                    <tr>
+                        <td colspan="6">Phí Ship</td>
+                        <td>40,000 VND</td>
+                    </tr>
+                    <tr>
+                        <td colspan="6">Thành tiền</td>
+                        <td>{{ number_format($order->orderItems->sum(function($item) { return $item->price * $item->quantity; }) + 40000, 0, ',', '.') }}
+                            VND</td>
+                    </tr>
+                </tfoot>
             </table>
             <!-- <div class="text-right mt-4">
                 <strong>Tổng tiền:</strong>

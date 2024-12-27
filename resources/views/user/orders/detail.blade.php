@@ -120,6 +120,18 @@
                                 <td>{{ $item->product ? number_format($item->price * $item->quantity, 0, ',', '.') . ' VND' : 'Không có thông tin' }}</td>
                             </tr>
                             @endforeach
+                            @if ($order->statusHistories->isNotEmpty())
+                            <hr />
+                            <p><strong>Lịch sử trạng thái đơn hàng:</strong></p>
+                            <ul class="status-history-list">
+                                @foreach ($order->statusHistories as $history)
+                                <li>
+                                    <span class="status-timestamp">{{ $history->created_at->format('d/m/Y H:i') }}</span> -
+                                    <span class="status-change">Trạng thái: <strong>{{ $statusTranslations[strtolower($history->new_status)] ?? $history->new_status }}</strong></span>
+                                </li>
+                                @endforeach
+                            </ul>
+                            @endif
                         </tbody>
 
                         <tfoot>

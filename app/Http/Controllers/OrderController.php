@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\OrderStatusHistory;
 use App\Models\ShoppingCart;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,39 +17,60 @@ class OrderController extends Controller
         if (!auth()->check()) {
             return redirect()->route('login')->with('error', 'Vui lòng đăng nhập để xem lịch sử mua hàng.');
         }
-
+    
         // Lấy danh sách đơn hàng của người dùng
         $orders = Order::where('user_id', auth()->id())
-            ->with('orderItems.product') // Eager load thông tin sản phẩm
+            ->with(['orderItems.product', 'statusHistories']) // Eager load thêm lịch sử trạng thái và người cập nhật
             ->orderBy('order_id', 'desc') // Sắp xếp theo ngày đặt hàng mới nhất
             ->paginate(10);
-            session()->flash('alert', 'Bạn đang vào trang lịch sử mua hàng');
+    
+        session()->flash('alert', 'Bạn đang vào trang lịch sử mua hàng');
         // Trả về view danh sách đơn hàng
         return view('user.orders.orderHistory', compact('orders'));
     }
     public function confirmDelivery($orderId)
     {
+        // Tìm đơn hàng, nếu không tồn tại trả về lỗi
         $order = Order::findOrFail($orderId);
-
+    
+        // Kiểm tra quyền truy cập: chỉ cho phép người dùng sở hữu đơn hàng xác nhận
         if ($order->user_id !== auth()->id()) {
-            return redirect()->route('user.order.history')->with('error', 'Vui lòng đăng nhập');
+            return redirect()->route('user.order.history')->with('error', 'Bạn không có quyền xác nhận đơn hàng này.');
         }
+    
+        // Kiểm tra nếu đơn hàng đã được xác nhận nhận hàng trước đó
         if ($order->received) {
-            return redirect()->route('user.order.history')->with('info', 'Đơn hàng này đã được xác nhận.');
+            return redirect()->route('user.order.history')->with('info', 'Đơn hàng này đã được xác nhận trước đó.');
         }
-
+    
+        // Cập nhật trạng thái "received" cho đơn hàng
         $order->received = true;
-        $order->save();
-
-        // Nếu người dùng đã xác nhận, cập nhật trạng thái của đơn hàng cho Admin
-        if ($order->received && $order->status != 'completed'&& $order->paymentstatus != 'paid') {
+    
+        // Nếu đơn hàng được nhận, tự động chuyển trạng thái thành "completed" và đánh dấu thanh toán
+        if ($order->status !== 'completed') {
             $order->status = 'completed';
-            $order->payment_status = 'paid'; // Chuyển trạng thái đơn hàng thành 'completed'
-            $order->save();
         }
+        if ($order->payment_status !== 'paid') {
+            $order->payment_status = 'paid';
+        }
+    
+        $order->save();
+    
+        // Ghi lại lịch sử thay đổi trạng thái
+        OrderStatusHistory::create([
+            'order_id' => $order->order_id,
+            'previous_status' => $order->status,
+            'new_status' => 'completed',
+            'updated_by' => auth()->id(),
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+    
+        // Gửi thông báo thành công
         session()->flash('alert', 'Đã xác nhận nhận hàng thành công!');
         return redirect()->route('user.order.history')->with('alert', 'Đơn hàng đã được xác nhận nhận hàng.');
     }
+    
 
     public function show($orderId)
     {
@@ -100,12 +122,10 @@ class OrderController extends Controller
     }
     public function cancelOrder($orderId)
     {
-        // Kiểm tra nếu người dùng đã đăng nhập
         if (!auth()->check()) {
             return redirect()->route('login')->with('error', 'Vui lòng đăng nhập để hủy đơn hàng.');
         }
 
-        // Lấy đơn hàng
         $order = Order::where('order_id', $orderId)
             ->where('user_id', auth()->id())
             ->first();
@@ -117,25 +137,17 @@ class OrderController extends Controller
         if ($order->status !== 'pending') {
             return redirect()->route('user.order.history')->with('error', 'Đơn hàng không thể hủy ở trạng thái này.');
         }
-        foreach ($order->orderItems as $orderItem) {
-            $product = $orderItem->product;
-        
-            if ($product && $product->attributeProducts) {
-                $attributeProduct = $product->attributeProducts
-                    ->where('size_id', $orderItem->size_id)
-                    ->first();
-        
-                if ($attributeProduct) {
-                    // Cộng lại số lượng vào in_stock
-                    $attributeProduct->in_stock += $orderItem->quantity; // Đổi `qty` thành `quantity`
-                    $attributeProduct->save();
-                }
-            }
-        }
-        // Cập nhật trạng thái đơn hàng thành "canceled"
-        $order->update([
-            'status' => 'cancelled',
+
+        // Lưu lịch sử thay đổi trạng thái
+        OrderStatusHistory::create([
+            'order_id' => $order->id,
+            'previous_status' => $order->status,
+            'new_status' => 'cancelled',
+            'updated_by' => auth()->id(),
         ]);
+
+        // Cập nhật trạng thái đơn hàng
+        $order->update(['status' => 'cancelled']);
 
         session()->flash('alert_2', 'Đơn hàng đã được hủy thành công.');
         return redirect()->route('user.order.history');
@@ -255,5 +267,4 @@ class OrderController extends Controller
             'shippingFee' => $shippingFee
         ]);
     }
-
 }

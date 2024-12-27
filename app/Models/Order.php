@@ -33,9 +33,9 @@ class Order extends Model
         return $this->hasOne(Payment::class, 'order_id', 'order_id');
     }
     public function orderItems()
-{
-    return $this->hasMany(OrderItem::class, 'order_id', 'order_id');
-}
+    {
+        return $this->hasMany(OrderItem::class, 'order_id', 'order_id');
+    }
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id', 'user_id');
@@ -48,5 +48,8 @@ class Order extends Model
     {
         return $this->hasMany(OrderItem::class, 'order_id', 'id');  // Đảm bảo mối quan hệ sử dụng đúng trường order_id
     }
-    
+    public function statusHistories()
+    {
+        return $this->hasMany(OrderStatusHistory::class, 'order_id');
+    }
 }

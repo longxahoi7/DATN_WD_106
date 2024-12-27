@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\OrderStatusHistory;
 use Illuminate\Http\Request;
 use App\Models\Order;
 use Carbon\Carbon;
@@ -54,17 +55,28 @@ class OrderController extends Controller
     {
         // Kiểm tra nếu đơn hàng tồn tại
         $order = Order::find($request->order_id);
-
+    
         if ($order) {
+            $previousStatus = $order->status; // Lưu trạng thái cũ trước khi cập nhật
+    
             // Cập nhật trạng thái đơn hàng
             $order->status = $request->status;
             $order->save();
-
-            // Trả về phản hồi JSON
+    
+            // Ghi lại lịch sử thay đổi trạng thái
+            OrderStatusHistory::create([
+                'order_id' => $order->order_id,
+                'previous_status' => $previousStatus, // Trạng thái cũ
+                'new_status' => $request->status,    // Trạng thái mới
+                'updated_by' => auth()->id(),        // ID người thực hiện thay đổi
+            ]);
+    
+            // Trả về phản hồi JSON thành công
             return response()->json(['success' => true, 'message' => 'Cập nhật trạng thái thành công!']);
         }
-
+    
         // Nếu không tìm thấy đơn hàng
         return response()->json(['success' => false, 'message' => 'Không tìm thấy đơn hàng!']);
     }
+    
 }
