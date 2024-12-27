@@ -80,6 +80,9 @@
                                     @endif
                                 </div>
                                 <div class="attribute-info">
+                                    <strong>Kích thước: {{ $item->color ? $item->size->name : 'Không có thông tin' }}</strong>
+                                </div>
+                                <div class="attribute-info">
                                     <strong>Màu sắc: {{ $item->color ? $item->color->name : 'Không có thông tin' }}</strong>
                                 </div>
                                 <!-- <div class="attribute-info">

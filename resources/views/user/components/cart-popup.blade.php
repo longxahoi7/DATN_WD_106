@@ -14,11 +14,6 @@
             <p class="custom-total-amount" id="total-amount">Tổng tiền: 0đ</p>
             <div class="custom-cart-actions">
                 <a href="{{ route('user.cart.index') }}" class="custom-add-cart-popup">Xem giỏ hàng</a>
-                <form action="{{ route('user.order.confirm') }}" method="post">
-                    @csrf
-                    <input type="hidden" name="amount" id="total-amount-hidden">
-                    <button type="submit" name="redirect" class="custom-btn-checkout-popup">Thanh toán ngay</button>
-                </form>
             </div>
         </div>
     </div>
@@ -37,7 +32,6 @@ function fetchCartItems() {
                     // Lấy thông tin màu sắc và kích thước từ attribute_products
                     const attributeProduct = item.product.attribute_products.find(attr =>
                         attr.size_id === item.size_id && attr.color_id === item.color_id);
-
                     const price = attributeProduct ? attributeProduct.price : 0;
                     const color = attributeProduct ? attributeProduct.color.name : 'Chưa có thông tin';
                     const size = attributeProduct ? attributeProduct.size.name : 'Chưa có thông tin';

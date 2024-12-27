@@ -28,7 +28,7 @@ class PaymentController extends Controller
         // Kiểm tra xem người dùng đã chọn sản phẩm chưa
         $productDetails = session()->get('productDetails', []);
         if (empty($productDetails)) {
-            return redirect()->route('shopping-cart')->with('error', 'Không có sản phẩm nào để thanh toán!');
+            return redirect()->back()->with('error', 'Không có sản phẩm nào để thanh toán!');
         }
 
         // Lấy thông tin địa chỉ giao hàng và số điện thoại từ form
