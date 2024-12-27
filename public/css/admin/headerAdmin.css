@@ -1,218 +1,138 @@
+/* Reset cơ bản */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-/* Header */
-.header {
-  width: 100%;
-  background-color: #ffffff;
-  border-bottom: 1px solid #ddd;
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f9f9f9;
+  color: #333;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 250px;
+  height: 100vh;
+  background-color: #000000; /* Nền trắng */
+  color: #333; /* Chữ đen */
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 0;
+  left: 0;
+  padding: 20px 10px;
+  border-right: 1px solid #ddd;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+}
+
+/* Logo */
+.sidebar .logo img {
+  max-width: 100%;
+  margin-bottom: 20px;
+  filter: brightness(0) invert(1); /* Đổi logo thành màu trắng */
+}
+
+/* Menu */
+.sidebar .menu {
+  list-style: none;
+  padding: 0;
+  margin: 0;
   display: flex;
   flex-direction: column;
 }
 
-.header-content {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 80%;
-  margin: 0 auto;
-  padding: 10px 0;
+/* Mục menu */
+.sidebar .menu li {
+  margin-bottom: 10px;
 }
 
-.header-right, .menu-header-item, .nav-link.custom-Navlink {
+.sidebar .menu li a {
   display: flex;
   align-items: center;
-  gap: 10px;
-}
-
-a {
   text-decoration: none;
-  color: #333;
-  transition: color 0.3s ease;
+  color: #ffffff;
+  padding: 10px 15px;
+  border-radius: 5px;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-a:hover {
-  color: #666;
-  text-decoration: none;
-
+.sidebar .menu li a:hover {
+  background-color: #ffffff;
+  color: #000000; /* Đổi thành chữ trắng khi hover */
 }
 
-.icon-home, .icon-user, .icon-dashboard, .icon-management, .icon-category,
-.icon-product, .icon-size, .icon-color, .icon-tags, .icon-shipping,
-.icon-orders, .icon-account {
-  font-size: 20px;
-  margin-right: 5px;
-}
-
-.menu-header-item, .nav-link.custom-Navlink {
-  font-size: 14px;
-}
-
-.menu-header-item:hover, .nav-link.custom-Navlink:hover {
-  color: #666;
-}
-
-/* dropdown menu */
-.dropdown-menu, .submenu {
-    display: none;
-    position: absolute;
-    background-color: #fff;
-    border: 1px solid #ccc;
-    z-index: 10;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.dropdown-menu {
-    position: absolute;
-    text-align: center;
-    top: 100%;
-    left: 0;
-    z-index: 1000;
-    display: none;
-    float: left;
-    min-width: 10rem;
-    padding: 0;
-    margin: 0;
-    font-size: 1rem;
-    color: #212529;
-    text-align: left;
-    list-style: none;
-    background-color: #fff;
-    background-clip: padding-box;
-    border: 1px solid rgba(0, 0, 0, .15);
-    border-radius: .25rem;
-}
-
-.dropdown-menu a {
-    display: block;
-    width: 100%;
-    text-align: center;
-    padding: 5px;
-    font-weight: 400;
-    color: #212529;
-    white-space: nowrap;
-    text-decoration: none;
-    background-color: transparent;
-    border: 0;
-}
-
-.dropdown-menu a:hover {
-    background-color: #f8f9fa;
+/* Icon trong menu */
+.sidebar .menu li a i {
+  margin-right: 10px;
+  font-size: 18px;
 }
 
 
-.dropdown-menu.show, .submenu.show {
-    display: block;
-}
-
-.arrow {
-    margin-left: 5px;
-    transition: transform 0.3s ease;
-}
-
-.arrow.up {
-    transform: rotate(180deg);
-}
-
-
-/* Menu */
-.menu {
-    border-top: 1px solid #666;
-    height: 60px;
-}
-
-.menu-list {
-  width: 80%;
+/* Dropdown Submenu */
+.sidebar .submenu {
   list-style: none;
-  margin: 0px auto;
-  padding: 15px;
-}
-
-.menu-list li {
-  margin: auto 1px;
-  position: relative;
-  height: 45px;
-}
-
-.menu-list li.active{
-  margin: auto 1px;
-  position: relative;
-  height: 45px;
-
-}
-
-.menu-list li:hover {
-    border-bottom: 3px solid #212529;
-}
-.menu-list li.hover ,
-.menu-list li.active {
-    border-bottom: 3px solid #212529;
-}
-
-.menu-list li a {
-  color: #555;
-  font-size: 18px;
-  padding: 5px;
-}
-
-.menu-list li a i {
-  margin-right: 8px;
-  font-size: 18px;
-}
-
-/* Hiệu ứng active cho menu cha */
-.dropdown.active > li,
-.dropdown-coupon.active > li {
-  background-color: #e9ecef;
-  border-bottom: 3px solid #212529;
-}
-
-.submenu,
-.submenu-coupon{
-  display: none;
-  position: absolute;
-  top: 100%;
-  left: 0;
-  background: #fff;
+  padding: 0;
+  margin: 0;
+  display: none; /* Ẩn submenu mặc định */
+  flex-direction: column;
+  position: absolute; /* Để có thể định vị */
+  top: 0; /* Căn chỉnh theo chiều dọc */
+  left: 100%; /* Canh submenu hiển thị bên phải menu chính */
+  background-color: #fff;
   border: 1px solid #ddd;
-  border-radius: 0;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   z-index: 1000;
-  width: 15vw;
-  white-space: nowrap;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  min-width: 200px; /* Đặt chiều rộng tối thiểu */
+  padding: 10px 0;
+  border-radius: 4px;
 }
 
-.submenu .show,
-.submenu-coupon.show {
-  display: block;
+.sidebar .dropdown:hover .submenu {
+  display: flex; /* Hiển thị khi hover */
 }
 
-.submenu li,
-.submenu-coupon li {
-    list-style: none;
-    padding: 0 10px;
+/* Hiệu ứng hover */
+.sidebar .submenu li a {
+  font-size: 14px;
+  color: #666; /* Màu chữ nhạt hơn */
+  padding: 10px 15px;
+  text-decoration: none;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.submenu li a,
-.submenu-coupon li a {
-    display: flex;
-    color: #212529;
-    font-size: 14px;
-    text-decoration: none;
-    padding: 10px;
-    transition: color 0.3s ease;
+.sidebar .submenu li a:hover {
+  background-color: #333; /* Nền đen khi hover */
+  color: #fff; /* Chữ trắng khi hover */
 }
 
-.arrow,
-.toggle-link-coupon.arrow {
-  margin-left: 5px;
+/* Mũi tên */
+.arrow {
+  margin-left: auto; /* Đẩy mũi tên sang bên phải */
   transition: transform 0.3s ease;
 }
 
-.toggle-link.active.arrow,
-.toggle-link-coupon.arrow{
+.arrow.up {
   transform: rotate(180deg);
+}
+
+
+/* Highlight menu */
+.menu .menu li:hover,
+.menu .menu li.active {
+  border-left: 4px solid #333; /* Đánh dấu mục đang chọn */
+}
+
+/* Keyframes cho hiệu ứng */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

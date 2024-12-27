@@ -18,6 +18,15 @@
         color: #fff;
         border: 1px solid #000;
     }
+    .card-header {
+    background-color: #000; /* Đầu mục màu đen */
+    color: #fff;
+    font-weight: bold;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    border-radius: 8px 8px 0 0;
+    }
+
 </style>
 <div class="container">
     <div class="button-header">
@@ -132,7 +141,7 @@
             datasets: [{
                 label: 'Doanh thu (VND)',
                 data: @json($dailyRevenue),
-                borderColor: 'rgba(75, 192, 192, 1)',
+                borderColor: 'rgb(35, 179, 179)',
                 backgroundColor: 'rgba(75, 192, 192, 0.2)',
             }]
         },

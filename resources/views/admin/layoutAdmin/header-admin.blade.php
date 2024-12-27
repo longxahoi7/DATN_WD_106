@@ -1,111 +1,53 @@
-<div class="header">
-    <!-- Phần thông tin bên trái và bên phải -->
-    <div class="header-content">
-        <!-- Logo nằm cuối bên trái -->
-        <div class="logo">
-            <a href="http://localhost:8000/admin/dashBoard">
-                <img src="{{ asset('imagePro/image/logo/logo-admin.png') }}" alt="Gentle Manor" style="width: 170px;">
-            </a>
-        </div>
-
-        <!-- Thông tin nằm bên phải trong header -->
-        <div class="header-right">
-            <a href="{{route('home')}}" class="">
-                <span class="icon-home">🏠</span> Quay về trang chủ
-            </a>
-            <div class="dropdown">
-                <a href="{{route('user.profiles.showUserInfo')}}" class="nav-link dropdown-toggle">
-                    <span class="icon-user">👤</span>
-                    @if(Auth::check())
-                    {{ Auth::user()->name }}
-                    @else
-                    Tài Khoản
-                    @endif
-                </a>
-                <div class="dropdown-menu">
-                    @if(Auth::check())
-                    <a href="{{route('home')}}" class="dropdown-item">Thông tin chung</a>
-
-                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                        @csrf
-                    </form>
-                    <a href="#" class="dropdown-item"
-                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Đăng xuất</a>
-                    @else
-                    <a href="/login" class="dropdown-item">Đăng nhập</a>
-                    <a href="/register" class="dropdown-item">Đăng ký</a>
-                    @endif
-                </div>
-            </div>
-        </div>
+<div class="sidebar">
+    <!-- Logo -->
+    <div class="logo">
+        <a href="http://localhost:8000/admin/dashBoard">
+            <img src="{{ asset('imagePro/image/logo/logo-admin.png') }}" alt="Gentle Manor" style="width: 100%;">
+        </a>
     </div>
 
-    <!-- Menu bên dưới Header -->
-    <div class="menu">
-        <ul class="d-flex justify-content-around menu-list">
-            <!-- Thống kê -->
-            <li>
-                <a href="{{ route('admin.dashboard') }}">
-                    <i class="icon-dashboard">📊</i> Thống kê
-                </a>
-            </li>
-
-            <!-- Quản lý với Dropdown -->
-            <li class="dropdown">
-                <a href="#" class="toggle-link dropdown-toggle">
-                    <i class="icon-management">🛠️</i> Quản lý
-                </a>
-                <ul id="managementSubmenu" class="submenu">
-                    <li><a href="{{ route('admin.products.index') }}"><i class="icon-product">🛒</i> Quản lý sản
-                            phẩm</a></li>
-                    <li><a href="{{ route('admin.categories.index') }}"><i class="icon-category">📂</i> Quản lý
-                            danh mục</a></li>
-                    <li><a href="{{ route('admin.sizes.index') }}"><i class="icon-size">📏</i> Quản lý Size</a>
-                    </li>
-                    <li><a href="{{ route('admin.colors.index') }}"><i class="icon-color">🎨</i> Quản lý Màu</a>
-                    </li>
-                    <li><a href="{{ route('admin.brands.index') }}"><i class="icon-tags">🏷️</i> Quản lý thương
-                            hiệu</a></li>
-
-                </ul>
-            </li>
-
-            <!-- Mã giảm giá -->
-            <li class="dropdown-coupon">
-                <a href="#" class="toggle-link-coupon dropdown-toggle">
-                    <i class="icon-management">🏷️</i> Mã giảm giá
-                </a>
-
-                <ul id="managementSubmenu-coupon" class="submenu-coupon">
-                    <li><a href="{{route('admin.coupons.index')}}">Phiếu giảm giá</a></li>
-                    <li><a href="{{route('admin.promotionPeriods.index')}}">Đợt giảm giá</a></li>
-
-                </ul>
-            </li>
-
-            <!-- Quản lý đơn hàng -->
-            <li>
-                <a href="{{ route('admin.orders') }}">
-                    <i class="icon-orders">📦</i> Đơn hàng
-                </a>
-            </li>
-
-            <!-- Quản lý bình luận -->
-            <li>
-                <a href="{{route('admin.reviews.index')}}">
-                    <i class="icon-management">🏷️</i> Bỉnh luận
-                </a>
-            </li>
-
-            <!-- Quản lý tài khoản -->
-            <li>
-                <a href="{{ route('admin.users.listUser') }}">
-                    <i class="icon-account">👥</i> Tài khoản
-                </a>
-            </li>
-        </ul>
-    </div>
+    <!-- Menu -->
+    <ul class="menu">
+        <li>
+            <a href="{{ route('admin.dashboard') }}">
+                <i class="icon-dashboard">📊</i> Thống kê
+            </a>
+        </li>
+        <li class="dropdown">
+            <a href="#" class="toggle-link dropdown-toggle">
+                <i class="icon-management">🛠️</i> Quản lý
+            </a>
+            <ul id="managementSubmenu" class="submenu">
+                <li><a href="{{ route('admin.products.index') }}"><i class="icon-product">🛒</i> Sản phẩm</a></li>
+                <li><a href="{{ route('admin.categories.index') }}"><i class="icon-category">📂</i> Danh mục</a></li>
+                <li><a href="{{ route('admin.sizes.index') }}"><i class="icon-size">📏</i> Size</a></li>
+                <li><a href="{{ route('admin.colors.index') }}"><i class="icon-color">🎨</i> Màu</a></li>
+                <li><a href="{{ route('admin.brands.index') }}"><i class="icon-tags">🏷️</i> Thương hiệu</a></li>
+            </ul>
+        </li>
+        <li>
+            <a href="{{ route('admin.orders') }}">
+                <i class="icon-orders">📦</i> Đơn hàng
+            </a>
+        </li>
+        <li>
+            <a href="{{route('admin.reviews.index')}}">
+                <i class="icon-management">💬</i> Bình luận
+            </a>
+        </li>
+        <li>
+            <a href="{{ route('admin.users.listUser') }}">
+                <i class="icon-account">👥</i> Tài khoản
+            </a>
+        </li>
+        <li>
+            <a href="{{ route('home') }}">
+                <i class="icon-home">🏠</i> Trang chủ
+            </a>
+        </li>
+    </ul>
 </div>
+
 
 <script>
 document.addEventListener("DOMContentLoaded", function() {
