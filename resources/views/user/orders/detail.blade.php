@@ -127,7 +127,7 @@
                                 @foreach ($order->statusHistories as $history)
                                 <li>
                                     <span class="status-timestamp">{{ $history->created_at->format('d/m/Y H:i') }}</span> -
-                                    <span class="status-change">Trạng thái: <strong>{{ $statusTranslations[strtolower($history->new_status)] ?? $history->new_status }}</strong></span>
+                                    <span class="status-change">Trạng thái: <strong>{{ $statusLabels[strtolower($history->new_status)] ?? $history->new_status }}</strong></span>
                                 </li>
                                 @endforeach
                             </ul>
