@@ -58,11 +58,24 @@ class OrderController extends Controller
     
         if ($order) {
             $previousStatus = $order->status; // Lưu trạng thái cũ trước khi cập nhật
-    
             // Cập nhật trạng thái đơn hàng
             $order->status = $request->status;
             $order->save();
-    
+            foreach ($order->orderItems as $orderItem) {
+                $product = $orderItem->product;
+            
+                if ($product && $product->attributeProducts) {
+                    $attributeProduct = $product->attributeProducts
+                        ->where('size_id', $orderItem->size_id)
+                        ->first();
+            
+                    if ($attributeProduct) {
+                        // Cộng lại số lượng vào in_stock
+                        $attributeProduct->in_stock += $orderItem->quantity; // Đổi `qty` thành `quantity`
+                        $attributeProduct->save();
+                    }
+                }
+            }
             // Ghi lại lịch sử thay đổi trạng thái
             OrderStatusHistory::create([
                 'order_id' => $order->order_id,
